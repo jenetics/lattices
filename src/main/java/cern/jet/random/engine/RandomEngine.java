@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random.engine;
 
 /**
@@ -138,7 +140,7 @@ public abstract class RandomEngine extends cern.colt.PersistentObject implements
 		// transform to (0.0,1.0)-interval
 		// 2.3283064365386963E-10 == 1.0 / Math.pow(2,32)
 		return (double) (nextInt & 0xFFFFFFFFL) * 2.3283064365386963E-10;
-	
+
 	/*
 		nextInt == Integer.MAX_VALUE   --> 0.49999999976716936
 		nextInt == Integer.MIN_VALUE   --> 0.5

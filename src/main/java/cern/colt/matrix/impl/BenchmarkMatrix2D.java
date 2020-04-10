@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.impl;
 
 import cern.colt.matrix.DoubleMatrix2D;
@@ -611,7 +613,7 @@ class BenchmarkMatrix2D {
 				double[] r = matrix[row];
 				for (int column = 0; column < columns; column++) {
 					element += r[column];
-					//element += matrix[row][column]; 
+					//element += matrix[row][column];
 				}
 			}
 		}
@@ -686,7 +688,7 @@ class BenchmarkMatrix2D {
 	}
 	emptyLoop.stop();
 	System.out.println(dummy); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	emptyLoop2.start();
 	dummy = 3;
 	int dummy2 = 0;
@@ -708,7 +710,7 @@ class BenchmarkMatrix2D {
 	else if (kind.equals("dense")) matrix = new DenseIntMatrix2D(rows,columns);
 	//else if (kind.equals("denseArray")) matrix = new DoubleArrayMatrix2D(rows,columns);
 	else throw new RuntimeException("unknown kind");
-	
+
 	System.out.println("\nNow filling...");
 	if (kind.equals("sparse")) ((SparseIntMatrix2D)matrix).elements.hashCollisions = 0;
 	for (int i=0; i<runs; i++) {
@@ -727,7 +729,7 @@ class BenchmarkMatrix2D {
 	timer1.display();
 	timer1.minus(emptyLoop).display();
 	System.out.println(size / timer1.minus(emptyLoop).seconds() +" elements / sec");
-	
+
 	Runtime.getRuntime().gc(); // invite gc
 	try { Thread.currentThread().sleep(1000); } catch (InterruptedException exc) {};
 	long after = Runtime.getRuntime().freeMemory();
@@ -742,7 +744,7 @@ class BenchmarkMatrix2D {
 		System.out.println("hashCollisions="+hashCollisions);
 		System.out.println("--> "+ ((double)hashCollisions / (rows*columns)) +" probes/element on average.");
 	}
-	
+
 	System.out.println("\nNow reading...");
 	if (kind.equals("sparse")) ((SparseIntMatrix2D)matrix).elements.hashCollisions = 0;
 	timer2.start();
@@ -752,15 +754,15 @@ class BenchmarkMatrix2D {
 			for (int row=0; row < rows; row++) {
 				element += matrix.getQuick(row,column);
 			}
-		}		
+		}
 	}
-	timer2.stop().display();	
+	timer2.stop().display();
 	timer2.minus(emptyLoop2).display();
 	System.out.println(size / timer2.minus(emptyLoop2).seconds() +" elements / sec");
 	if (print) System.out.println(matrix);
 	if (kind.equals("sparse")) System.out.println("hashCollisions="+((SparseIntMatrix2D)matrix).elements.hashCollisions);
 	System.out.println(element); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	System.out.println("\nNow removing...");
 	before = Runtime.getRuntime().freeMemory();
 	if (kind.equals("sparse")) ((SparseIntMatrix2D)matrix).elements.hashCollisions = 0;
@@ -776,7 +778,7 @@ class BenchmarkMatrix2D {
 			for (int row=0; row < rows; row++) {
 				matrix.setQuick(row,column,0);
 			}
-		}		
+		}
 		timer3.stop();
 	}
 	timer3.display();
@@ -787,7 +789,7 @@ class BenchmarkMatrix2D {
 	after = Runtime.getRuntime().freeMemory();
 	System.out.println("KB needed="+(before-after)/1024);
 	System.out.println("KB free="+(after/1024));
-	
+
 	if (print) System.out.println(matrix);
 	if (kind.equals("sparse")) System.out.println("hashCollisions="+((SparseIntMatrix2D)matrix).elements.hashCollisions);
 
@@ -821,7 +823,7 @@ class BenchmarkMatrix2D {
 	}
 	emptyLoop.stop();
 	System.out.println(dummy); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	emptyLoop2.start();
 	dummy = 3;
 	int dummy2 = 0;
@@ -839,7 +841,7 @@ class BenchmarkMatrix2D {
 	long size = (((long)rows)*columns)*runs;
 
 	int[][] matrix = new int[rows][columns];
-	
+
 	System.out.println("\nNow filling...");
 	for (int i=0; i<runs; i++) {
 		timer1.start();
@@ -854,7 +856,7 @@ class BenchmarkMatrix2D {
 	timer1.display();
 	timer1.minus(emptyLoop).display();
 	System.out.println(size / timer1.minus(emptyLoop).seconds() +" elements / sec");
-	
+
 	Runtime.getRuntime().gc(); // invite gc
 	try { Thread.currentThread().sleep(1000); } catch (InterruptedException exc) {};
 	long after = Runtime.getRuntime().freeMemory();
@@ -864,18 +866,18 @@ class BenchmarkMatrix2D {
 		m.assign(matrix);
 		System.out.println(m);
 	}
-	
+
 	System.out.println("\nNow reading...");
 	timer2.start();
 	int element=0;
 	for (int i=0; i<runs; i++) {
 		for (int column=0; column < columns; column++) {
 			for (int row=0; row < rows; row++) {
-				element += matrix[row][column]; 
+				element += matrix[row][column];
 			}
-		}		
+		}
 	}
-	timer2.stop().display();	
+	timer2.stop().display();
 	timer2.minus(emptyLoop2).display();
 	System.out.println(size / timer2.minus(emptyLoop2).seconds() +" elements / sec");
 	if (print) {
@@ -884,7 +886,7 @@ class BenchmarkMatrix2D {
 		System.out.println(m);
 	}
 	System.out.println(element); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	System.out.println("\nNow removing...");
 	before = Runtime.getRuntime().freeMemory();
 	for (int i=0; i<runs; i++) {
@@ -893,7 +895,7 @@ class BenchmarkMatrix2D {
 			for (int row=0; row < rows; row++) {
 				matrix[row][column] = 0;
 			}
-		}		
+		}
 		timer3.stop();
 	}
 	timer3.display();
@@ -904,7 +906,7 @@ class BenchmarkMatrix2D {
 	after = Runtime.getRuntime().freeMemory();
 	System.out.println("KB needed="+(before-after)/1024);
 	System.out.println("KB free="+(after/1024));
-	
+
 	if (print) {
 		DenseIntMatrix2D m = new DenseIntMatrix2D(rows,columns);
 		m.assign(matrix);
@@ -940,7 +942,7 @@ class BenchmarkMatrix2D {
 	}
 	emptyLoop.stop();
 	System.out.println(dummy); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	int[][] matrix = new int[rows][columns];
 	emptyLoop2.start();
 	dummy = 3;
@@ -959,7 +961,7 @@ class BenchmarkMatrix2D {
 	long before = Runtime.getRuntime().freeMemory();
 	long size = (((long)rows)*columns)*runs;
 
-	
+
 	System.out.println("\nNow filling...");
 	for (int i=0; i<runs; i++) {
 		timer1.start();
@@ -976,7 +978,7 @@ class BenchmarkMatrix2D {
 	timer1.display();
 	timer1.minus(emptyLoop).display();
 	System.out.println(size / timer1.minus(emptyLoop).seconds() +" elements / sec");
-	
+
 	Runtime.getRuntime().gc(); // invite gc
 	try { Thread.currentThread().sleep(1000); } catch (InterruptedException exc) {};
 	long after = Runtime.getRuntime().freeMemory();
@@ -986,7 +988,7 @@ class BenchmarkMatrix2D {
 		m.assign(matrix);
 		System.out.println(m);
 	}
-	
+
 	System.out.println("\nNow reading...");
 	timer2.start();
 	int element=0;
@@ -995,11 +997,11 @@ class BenchmarkMatrix2D {
 			int[] r = matrix[row];
 			for (int column=0; column < columns; column++) {
 				element += r[column];
-				//element += matrix[row][column]; 
+				//element += matrix[row][column];
 			}
-		}		
+		}
 	}
-	timer2.stop().display();	
+	timer2.stop().display();
 	timer2.minus(emptyLoop2).display();
 	System.out.println(size / timer2.minus(emptyLoop2).seconds() +" elements / sec");
 	if (print) {
@@ -1008,7 +1010,7 @@ class BenchmarkMatrix2D {
 		System.out.println(m);
 	}
 	System.out.println(element); // !!! so that the jitter can't optimize away the whole loop
-	
+
 	System.out.println("\nNow removing...");
 	before = Runtime.getRuntime().freeMemory();
 	for (int i=0; i<runs; i++) {
@@ -1019,7 +1021,7 @@ class BenchmarkMatrix2D {
 				r[column] = 0;
 				//matrix[row][column] = 0;
 			}
-		}		
+		}
 		timer3.stop();
 	}
 	timer3.display();
@@ -1030,7 +1032,7 @@ class BenchmarkMatrix2D {
 	after = Runtime.getRuntime().freeMemory();
 	System.out.println("KB needed="+(before-after)/1024);
 	System.out.println("KB free="+(after/1024));
-	
+
 	if (print) {
 		DenseIntMatrix2D m = new DenseIntMatrix2D(rows,columns);
 		m.assign(matrix);

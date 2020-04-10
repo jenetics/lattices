@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -41,7 +43,7 @@ public class PoissonSlow extends AbstractDiscreteDistribution {
 	protected static final double MEAN_MAX = Integer.MAX_VALUE; // for all means larger than that, we don't try to compute a poisson deviation, but return the mean.
 	protected static final double SWITCH_MEAN = 12.0; // switch from method A to method B
 
-	protected static final double[] cof = { // for method logGamma() 
+	protected static final double[] cof = { // for method logGamma()
 		76.18009172947146, -86.50532032941677,
 		24.01409824083091, -1.231739572450155,
 		0.1208650973866179e-2, -0.5395239384953e-5};

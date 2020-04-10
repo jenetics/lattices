@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
@@ -569,7 +571,7 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
 /*
 //
 illegal 2 != 3
-DoubleMatrix2D[][] parts2 = 
+DoubleMatrix2D[][] parts2 =
 {
 	{ null,        make(2,2,1), null        },
 	{ make(4,4,2), null,        make(4,3,3) },
@@ -636,7 +638,7 @@ System.out.println("\n"+make(parts2));
 /*
 //
 illegal 2 != 3
-DoubleMatrix2D[][] parts2 = 
+DoubleMatrix2D[][] parts2 =
 {
 	{ null,        make(2,2,1), null        },
 	{ make(4,4,2), null,        make(4,3,3) },
@@ -646,7 +648,7 @@ System.out.println("\n"+Factory2D.make(parts2));
 */
 
 /*
-DoubleMatrix2D[][] parts3 = 
+DoubleMatrix2D[][] parts3 =
 {
 	{ identity(3),               null,                        },
 	{ null,                      identity(3).viewColumnFlip() },
@@ -659,7 +661,7 @@ DoubleMatrix2D A = ascending(2,2);
 DoubleMatrix2D B = descending(2,2);
 DoubleMatrix2D __ = null;
 
-DoubleMatrix2D[][] parts4 = 
+DoubleMatrix2D[][] parts4 =
 {
 	{ A, __, A, __ },
 	{ __, A, __, B }

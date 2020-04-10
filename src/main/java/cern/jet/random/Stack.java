@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 /**
@@ -29,7 +31,7 @@ new_stack(int N) {
 	stack_t *s;
 	s = (stack_t *)malloc(sizeof(stack_t));
 	s->N = N;
-	s->i = -1;                  // indicates stack is empty 
+	s->i = -1;                  // indicates stack is empty
 	s->v = (int *)malloc(sizeof(int)*N);
 	return s;
 }
@@ -39,7 +41,7 @@ push_stack(stack_t *s, int v)
 	s->i += 1;
 	if ((s->i) >= (s->N)) {
 		fprintf(stderr,"Cannot push stack!\n");
-		exit(0);                // fatal!! 
+		exit(0);                // fatal!!
 	}
 	(s->v)[s->i] = v;
 }

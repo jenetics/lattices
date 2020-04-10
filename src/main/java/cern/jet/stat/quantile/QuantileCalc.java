@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.stat.quantile;
 
 /**
@@ -165,7 +167,7 @@ class QuantileCalc extends Object {
 			b = minB;
 			k = kMinimums[minB - 2];
 		} else {     // epsilon is very small or zero.
-			b = 1; // the only possible solution without violating the 
+			b = 1; // the only possible solution without violating the
 			k = N; // approximation guarantees is exact quantile search.
 		}
 
@@ -189,7 +191,7 @@ class QuantileCalc extends Object {
 	 * @return <tt>long[2]</tt> - <tt>long[0]</tt>=the number of buffers, <tt>long[1]</tt>=the number of elements per buffer, <tt>returnSamplingRate[0]</tt>=the required sampling rate.
 	 */
 	protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, double delta, int quantiles, double[] returnSamplingRate) {
-		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1	
+		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1
 		if (epsilon <= 0.0) {
 			// no way around exact quantile search
 			long[] result = new long[2];
@@ -345,7 +347,7 @@ class QuantileCalc extends Object {
 	 * @return <tt>long[3]</tt> - <tt>long[0]</tt>=the number of buffers, <tt>long[1]</tt>=the number of elements per buffer, <tt>long[2]</tt>=the tree height where sampling shall start.
 	 */
 	public static long[] unknown_N_compute_B_and_K(double epsilon, double delta, int quantiles) {
-		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1	
+		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1
 		if (epsilon <= 0.0 || delta <= 0.0) {
 			// no way around exact quantile search
 			long[] result = new long[3];
@@ -383,11 +385,11 @@ class QuantileCalc extends Object {
 					double c = logDelta / Math.min(Ld, 8.0 * Ls / 3.0);
 
 					// now we have k>=d/alpha.
-					// let's compute d.				
+					// let's compute d.
 					double beta = Ld / Ls;
 					double cc = (beta - 2.0) * (max_H - 2.0) / (beta + pow - 2.0);
 					double d = (h + 3 + cc) / (2.0 * epsilon);
-				
+
 				/*
 				double d = (Ld*(h+max_H-1.0)  +  Ls*((h+1)*pow - 2.0*(h+max_H)))   /   (Ld + Ls*(pow-2.0));
 				d = (d + 2.0) / (2.0*epsilon);
@@ -395,7 +397,7 @@ class QuantileCalc extends Object {
 
 					// now we have c*(1-alpha)^-2 == d/alpha.
 					// we solve this equation for alpha yielding two solutions
-					// alpha_1,2 = (c + 2*d  +-  Sqrt(c*c + 4*c*d))/(2*d)				
+					// alpha_1,2 = (c + 2*d  +-  Sqrt(c*c + 4*c*d))/(2*d)
 					double f = c * c + 4.0 * c * d;
 					if (f < 0.0) continue; // non real solution to equation
 					double root = Math.sqrt(f);

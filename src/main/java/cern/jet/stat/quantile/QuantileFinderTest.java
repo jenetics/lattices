@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.stat.quantile;
 
 import cern.colt.Timer;
@@ -187,9 +189,9 @@ class QuantileFinderTest {
 
 		//if (! known_N) sizes = new long[] {0};
 		System.out.println("\n\n");
-		//if (known_N) 
+		//if (known_N)
 		//	System.out.println("Computing b's and k's for KNOWN N");
-		//else 
+		//else
 		//	System.out.println("Computing b's and k's for UNKNOWN N");
 		System.out.println("mem [Math.round(elements/1000.0)]");
 		System.out.println("***********************************");
@@ -231,13 +233,13 @@ class QuantileFinderTest {
 								long[] resultKnown = QuantileFinderFactory.known_N_compute_B_and_K(N, epsilon, delta, p, returnSamplingRate);
 								long b2 = resultKnown[0];
 								long k2 = resultKnown[1];
-				
+
 								if (b2 * k2 < b1 * k1) { // the KnownFinder is smaller
 									result = resultKnown;
 								}
 							}
 						}
-						
+
 
 						long b = result[0];
 						long k = result[1];

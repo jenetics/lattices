@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random.sampling;
 
 import cern.jet.random.engine.RandomEngine;
@@ -531,8 +533,8 @@ public class RandomSampler extends cern.colt.PersistentObject {
 			int toDo = (int) (n - chunkSize * chunks);
 			if (toDo > 0) { // sample remaining part, if necessary
 				sampler.nextBlock(toDo, values, 0);
-			
-			/*	
+
+			/*
 			Log.print("Chunk #"+chunks+" = [");
 			for (int j=0; j<toDo-1; j++) Log.print(values[j]+", ");
 			Log.print(String.valueOf(values[toDo-1]));

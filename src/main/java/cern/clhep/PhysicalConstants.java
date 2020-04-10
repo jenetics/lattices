@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.clhep;
 
 /**
@@ -38,7 +40,7 @@ public class PhysicalConstants extends Object {
 	public static final PhysicalConstants physicalConstants = new PhysicalConstants();
 
 	//
-// 
+//
 //
 	public static final double pi = Math.PI; //3.14159265358979323846;
 	public static final double twopi = 2 * pi;
@@ -46,13 +48,13 @@ public class PhysicalConstants extends Object {
 	public static final double pi2 = pi * pi;
 
 	//
-// 
+//
 //
 	public static final double Avogadro = 6.0221367e+23 / Units.mole;
 
 	//
 // c   = 299.792458 mm/ns
-// c^2 = 898.7404 (mm/ns)^2 
+// c^2 = 898.7404 (mm/ns)^2
 //
 	public static final double c_light = 2.99792458e+8 * Units.m / Units.s;
 	public static final double c_squared = c_light * c_light;

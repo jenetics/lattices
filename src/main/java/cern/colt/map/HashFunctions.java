@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.map;
 
 /**
@@ -62,7 +64,7 @@ public class HashFunctions extends Object {
 		return value;
 
 		//return value * 0x278DDE6D; // see cern.jet.random.engine.DRand
-	
+
 	/*
 	value &= 0x7FFFFFFF; // make it >=0
 	int hashCode = 0;
@@ -80,7 +82,7 @@ public class HashFunctions extends Object {
 	 */
 	public static int hash(long value) {
 		return (int) (value ^ (value >> 32));
-	/* 
+	/*
 	value &= 0x7FFFFFFFFFFFFFFFL; // make it >=0 (0x7FFFFFFFFFFFFFFFL==Long.MAX_VALUE)
 	int hashCode = 0;
 	do hashCode = 31*hashCode + (int) (value%10);

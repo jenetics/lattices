@@ -1,13 +1,15 @@
 package cern.jet.random.engine;
 
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 
 import java.util.Date;
 
@@ -180,7 +182,7 @@ public class MersenneTwister extends RandomEngine {
 	// ******************** OPTIMIZED **********************
 	// only 5-10% faster ?
 	int y;
-  
+
 	int kk;
 	int[] cache = mt; // cached for speed
 	int kkM;
@@ -258,7 +260,7 @@ public class MersenneTwister extends RandomEngine {
 		mti = N;
 
 	/*
-	old version was:	
+	old version was:
 	for (int i = 0; i < N; i++) {
 		mt[i] = seed & 0xffff0000;
 		seed = 69069 * seed + 1;

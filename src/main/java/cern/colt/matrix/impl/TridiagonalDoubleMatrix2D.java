@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.impl;
 
 import cern.colt.matrix.DoubleMatrix1D;
@@ -231,7 +233,7 @@ class TridiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 			switch (kind) {
 				case 0: {
 					i = 1;
-				} // lower 
+				} // lower
 				// case 1: {   } // diagonal
 				case 2: {
 					j = 1;
@@ -497,7 +499,7 @@ class TridiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
 		if (!ignore) C.assign(cern.jet.math.Functions.mult(beta));
 
-		// cache views	
+		// cache views
 		final DoubleMatrix1D[] Brows = new DoubleMatrix1D[n];
 		for (int i = n; --i >= 0; ) Brows[i] = B.viewRow(i);
 		final DoubleMatrix1D[] Crows = new DoubleMatrix1D[m];

@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.bench;
 
 import cern.colt.matrix.DoubleFactory2D;
@@ -863,13 +865,13 @@ public class BenchmarkMatrix {
 			System.out.println("\n\nExecuting command = " + new cern.colt.list.ObjectArrayList(args) + " ...");
 			handle(args);
 		} else { // batch mode, read commands from file
-		/* 
+		/*
 		parse command file in args[0]
 		one command per line (including parameters)
 		for example:
 		// dgemm dense 2 2.0 false true 0.999 10 30 50 100 250 500 1000
-		dgemm dense 2 2.5 false true 0.999 10 50 
-		dgemm sparse 2 2.5 false true 0.001 500 1000  
+		dgemm dense 2 2.5 false true 0.999 10 50
+		dgemm sparse 2 2.5 false true 0.001 500 1000
 		*/
 			java.io.BufferedReader reader = null;
 			try {

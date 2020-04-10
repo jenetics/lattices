@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.bitvector;
 
 /**
@@ -669,7 +671,7 @@ public class BitVector extends cern.colt.PersistentObject {
 		final long[] theBits = this.bits; // cached for speed.
 		final long[] sourceBits = source.bits; // cached for speed.
 
-	/* 
+	/*
 	This version is equivalent to the version below but 20 times slower...
 	for (int i=from; --length >= 0; i++, sourceFrom++) {
 		QuickBitVector.put(theBits,i,QuickBitVector.get(sourceBits,sourceFrom));

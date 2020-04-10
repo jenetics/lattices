@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.map;
 
 /**
@@ -65,12 +67,12 @@ class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
 	 * <tt>false</tt> if the receiver did already contain such a key - the new value has now replaced the formerly associated value.
 	 */
 	public boolean put(int key, int value) {
-	/* 
+	/*
 	   This is open addressing with double hashing, using "Brent's variation".
 	   Brent's variation slows insertions a bit down (not much) but reduces probes (collisions) for successful searches, in particular for large load factors.
 	   (It does not improve unsuccessful searches.)
 	   See D. Knuth, Searching and Sorting, 3rd ed., p.533-545
-	
+
 	   h1(key) = hash % M
 	   h2(key) = decrement = Max(1, hash/M % M)
 	   M is prime = capacity = table.length
@@ -150,7 +152,7 @@ class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
 				stat[pc] = FULL;
 				values[pc] = values[p0];
 				i = p0; // prepare to insert: table[p0]=key
-				t = 0; // break loop 
+				t = 0; // break loop
 			}
 		}
 

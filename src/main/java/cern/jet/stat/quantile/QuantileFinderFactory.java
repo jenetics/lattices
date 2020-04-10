@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.stat.quantile;
 
 //import cern.it.util.Doubles;
@@ -223,7 +225,7 @@ public class QuantileFinderFactory extends Object {
 			b = minB;
 			k = kMinimums[minB - 2];
 		} else {     // epsilon is very small or zero.
-			b = 1; // the only possible solution without violating the 
+			b = 1; // the only possible solution without violating the
 			k = N; // approximation guarantees is exact quantile search.
 		}
 
@@ -413,19 +415,19 @@ public class QuantileFinderFactory extends Object {
 	public static long[] unknown_N_compute_B_and_K(double epsilon, double delta, int quantiles) {
 		return unknown_N_compute_B_and_K_raw(epsilon, delta, quantiles);
 		// move stuff from _raw(..) here and delete _raw(...)
-	
+
 	/*
 	long[] result_1 = unknown_N_compute_B_and_K_raw(epsilon,delta,quantiles);
 	long b1 = result_1[0];
 	long k1 = result_1[1];
 
-	
+
 	int quantilesToPrecompute = (int) Doubles.ceiling(1.0 / epsilon);
-	
+
 	if (quantiles>quantilesToPrecompute) {
 		// try if precomputing quantiles requires less memory.
 		long[] result_2 = unknown_N_compute_B_and_K_raw(epsilon/2.0,delta,quantilesToPrecompute);
-		
+
 		long b2 = result_2[0];
 		long k2 = result_2[1];
 		if (b2*k2 < b1*k1) {
@@ -448,7 +450,7 @@ public class QuantileFinderFactory extends Object {
 	 * @return <tt>long[4]</tt> - <tt>long[0]</tt>=the number of buffers, <tt>long[1]</tt>=the number of elements per buffer, <tt>long[2]</tt>=the tree height where sampling shall start, <tt>long[3]==1</tt> if precomputing is better, otherwise 0;
 	 */
 	protected static long[] unknown_N_compute_B_and_K_raw(double epsilon, double delta, int quantiles) {
-		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1	
+		// delta can be set to zero, i.e., all quantiles should be approximate with probability 1
 		if (epsilon <= 0.0) {
 			long[] result = new long[4];
 			result[0] = 1;
@@ -504,11 +506,11 @@ public class QuantileFinderFactory extends Object {
 					double c = logDelta / Math.min(Ld, 8.0 * Ls / 3.0);
 
 					// now we have k>=d/alpha.
-					// let's compute d.				
+					// let's compute d.
 					double beta = Ld / Ls;
 					double cc = (beta - 2.0) * (max_H - 2.0) / (beta + pow - 2.0);
 					double d = (h + 3 + cc) / (2.0 * epsilon);
-				
+
 				/*
 				double d = (Ld*(h+max_H-1.0)  +  Ls*((h+1)*pow - 2.0*(h+max_H)))   /   (Ld + Ls*(pow-2.0));
 				d = (d + 2.0) / (2.0*epsilon);
@@ -516,7 +518,7 @@ public class QuantileFinderFactory extends Object {
 
 					// now we have c*(1-alpha)^-2 == d/alpha.
 					// we solve this equation for alpha yielding two solutions
-					// alpha_1,2 = (c + 2*d  +-  Sqrt(c*c + 4*c*d))/(2*d)				
+					// alpha_1,2 = (c + 2*d  +-  Sqrt(c*c + 4*c*d))/(2*d)
 					double f = c * c + 4.0 * c * d;
 					if (f < 0.0) continue; // non real solution to equation
 					double root = Math.sqrt(f);

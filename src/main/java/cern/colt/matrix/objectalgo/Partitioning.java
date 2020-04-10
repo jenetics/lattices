@@ -1,13 +1,15 @@
 package cern.colt.matrix.objectalgo;
 
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 
 import cern.colt.Swapper;
 import cern.colt.function.IntComparator;
@@ -290,14 +292,14 @@ public class Partitioning extends Object {
 	private static void xPartitionOld(ObjectMatrix2D matrix, ObjectMatrix1D column, int from, int to, Object[] splitters, int splitFrom, int splitTo, int[] splitIndexes) {
 	/*
 	Object splitter; // int, Object --> template type dependent
-	
+
 	if (splitFrom>splitTo) return; // nothing to do
 	if (from>to) { // all bins are empty
 		from--;
 		for (int i = splitFrom; i<=splitTo; ) splitIndexes[i++] = from;
 		return;
 	}
-	
+
 	// Choose a partition (pivot) index, m
 	// Ideally, the pivot should be the median, because a median splits a list into two equal sized sublists.
 	// However, computing the median is expensive, so we use an approximation.
@@ -319,12 +321,12 @@ public class Partitioning extends Object {
 		    }
 		    m = med3(column, l, m, n); // Mid-size, pseudomedian of 3
 		}
-		
+
 		// Find the splitter closest to the pivot, i.e. the splitter that best splits the list into two equal sized sublists.
 		medianIndex = cern.colt.Sorting.binarySearchFromTo(splitters,column.getQuick(m),splitFrom,splitTo);
 		if (medianIndex < 0) medianIndex = -medianIndex - 1; // not found
 		if (medianIndex > splitTo) medianIndex = splitTo; // not found, one past the end
-		
+
 	}
 	splitter = splitters[medianIndex];
 
@@ -351,7 +353,7 @@ public class Partitioning extends Object {
 	if (splitFrom <= medianIndex-1) {
 		xPartitionOld(matrix, column, from,         splitIndex, splitters, splitFrom, medianIndex-1,  splitIndexes);
 	}
-	
+
 	// recursively partition right half
 	if (medianIndex+1 <= splitTo) {
 		xPartitionOld(matrix, column, splitIndex+1, to,         splitters, medianIndex+1,  splitTo,   splitIndexes);

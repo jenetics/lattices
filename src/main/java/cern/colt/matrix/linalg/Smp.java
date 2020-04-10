@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.linalg;
 
 import EDU.oswego.cs.dl.util.concurrent.FJTask;
@@ -69,19 +71,19 @@ class Smp {
 	/*
 	determine how to split and parallelize best into blocks
 	if more B.columns than tasks --> split B.columns, as follows:
-	
+
 			xx|xx|xxx B
 			xx|xx|xxx
 			xx|xx|xxx
 	A
-	xxx     xx|xx|xxx C 
+	xxx     xx|xx|xxx C
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 
 	if less B.columns than tasks --> split A.rows, as follows:
-	
+
 			xxxxxxx B
 			xxxxxxx
 			xxxxxxx
@@ -136,19 +138,19 @@ class Smp {
 	/*
 	determine how to split and parallelize best into blocks
 	if more B.columns than tasks --> split B.columns, as follows:
-	
+
 			xx|xx|xxx B
 			xx|xx|xxx
 			xx|xx|xxx
 	A
-	xxx     xx|xx|xxx C 
+	xxx     xx|xx|xxx C
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 	xxx		xx|xx|xxx
 
 	if less B.columns than tasks --> split A.rows, as follows:
-	
+
 			xxxxxxx B
 			xxxxxxx
 			xxxxxxx

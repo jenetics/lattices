@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.math.Arithmetic;
@@ -118,7 +120,7 @@ public class Binomial extends AbstractDiscreteDistribution {
 	 *                                approximation for log(k!)       *
 	 *                                (series in 1/k or table values  *
 	 *                                for small k) with long int k    *
-	 *              - randomGenerator    ... (0,1)-Uniform engine     * 
+	 *              - randomGenerator    ... (0,1)-Uniform engine     *
 	 *                                                                *
 	 ******************************************************************/
 	protected int generateBinomial(int n, double p) {
@@ -131,7 +133,7 @@ public class Binomial extends AbstractDiscreteDistribution {
 		int bh, i, K, Km, nK;
 		double f, rm, U, V, X, T, E;
 
-		if (n != n_last || p != p_last) {                 // set-up 
+		if (n != n_last || p != p_last) {                 // set-up
 			n_last = n;
 			p_last = p;
 			par = Math.min(p, 1.0 - p);
@@ -143,14 +145,14 @@ public class Binomial extends AbstractDiscreteDistribution {
 			if (np <= 0.0) return -1;
 
 			rm = np + par;
-			m = (int) rm;                              // mode, integer 
+			m = (int) rm;                              // mode, integer
 			if (np < 10) {
 				p0 = Math.exp(n * Math.log(q));               // Chop-down
 				bh = (int) (np + 10.0 * Math.sqrt(np * q));
 				b = Math.min(n, bh);
 			} else {
 				rc = (n + 1.0) * (pq = par / q);          // recurr. relat.
-				ss = np * q;                              // variance  
+				ss = np * q;                              // variance
 				i = (int) (2.195 * Math.sqrt(ss) - 4.6 * q); // i = p1 - 0.5
 				xm = m + 0.5;
 				xl = (double) (m - i);                    // limit left

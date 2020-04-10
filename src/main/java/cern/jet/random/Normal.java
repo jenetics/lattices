@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -45,7 +47,7 @@ public class Normal extends AbstractContinousDistribution {
 	protected double variance;
 	protected double standardDeviation;
 
-	protected double cache; // cache for Box-Mueller algorithm 
+	protected double cache; // cache for Box-Mueller algorithm
 	protected boolean cacheFilled; // Box-Mueller
 
 	protected double SQRT_INV; // performance cache

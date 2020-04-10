@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.stat;
 
 import cern.jet.math.Polynomial;
@@ -364,7 +366,7 @@ public class Probability extends cern.jet.math.Constants {
 			2.97886665372100240670E0
 		};
 		double S[] = {
-			//1.00000000000000000000E0, 
+			//1.00000000000000000000E0,
 			2.26052863220117276590E0,
 			9.39603524938001434673E0,
 			1.20489539808096656605E1,

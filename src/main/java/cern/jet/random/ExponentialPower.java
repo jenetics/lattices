@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -65,24 +67,24 @@ public class ExponentialPower extends AbstractContinousDistribution {
 	public double nextDouble(double tau) {
 		double u, u1, v, x, y;
 
-		if (tau != tau_set) { // SET-UP 
+		if (tau != tau_set) { // SET-UP
 			s = 1.0 / tau;
 			sm1 = 1.0 - s;
 
 			tau_set = tau;
 		}
 
-		// GENERATOR 
+		// GENERATOR
 		do {
-			u = randomGenerator.raw();                             // U(0/1)      
-			u = (2.0 * u) - 1.0;                                     // U(-1.0/1.0) 
-			u1 = Math.abs(u);                                      // u1=|u|     
-			v = randomGenerator.raw();                             // U(0/1) 
+			u = randomGenerator.raw();                             // U(0/1)
+			u = (2.0 * u) - 1.0;                                     // U(-1.0/1.0)
+			u1 = Math.abs(u);                                      // u1=|u|
+			v = randomGenerator.raw();                             // U(0/1)
 
-			if (u1 <= sm1) { // Uniform hat-function for x <= (1-1/tau)   
+			if (u1 <= sm1) { // Uniform hat-function for x <= (1-1/tau)
 				x = u1;
-			} else { // Exponential hat-function for x > (1-1/tau) 
-				y = tau * (1.0 - u1);                                // U(0/1) 
+			} else { // Exponential hat-function for x > (1-1/tau)
+				y = tau * (1.0 - u1);                                // U(0/1)
 				x = sm1 - s * Math.log(y);
 				v = v * y;
 			}
@@ -91,7 +93,7 @@ public class ExponentialPower extends AbstractContinousDistribution {
 		// Acceptance/Rejection
 		while (Math.log(v) > -Math.exp(Math.log(x) * tau));
 
-		// Random sign 
+		// Random sign
 		if (u < 0.0)
 			return x;
 		else

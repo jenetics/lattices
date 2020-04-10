@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt;
 
 import cern.colt.function.IntComparator;
@@ -666,11 +668,11 @@ public class Partitioning extends Object {
 		*/
 			//else {
 		/*
-		
+
 			int low = splitFrom;
 			int high = splitTo;
 			int comparison;
-		
+
 			int mid=0;
 			while (low <= high) {
 				mid = (low + high) / 2;
@@ -702,7 +704,7 @@ public class Partitioning extends Object {
 	int head = from;
 	for (int i=from-1; ++i<=to; ) { // swap all elements < splitter to front
 		element = list[i];
-		if (element < splitter) {		
+		if (element < splitter) {
 			list[i] = list[head];
 			list[head++] = element;
 			//swappedElements++;
@@ -788,7 +790,7 @@ public class Partitioning extends Object {
 	 */
 	public static int partition(int[] list, int from, int to, int splitter) {
 		steps += to - from + 1;
-	
+
 	/*
 	System.out.println();
 	if (from<=to) {
@@ -802,7 +804,7 @@ public class Partitioning extends Object {
 
 		// returns index of last element < splitter
 
-	
+
 	/*
 	for (int i=from-1; ++i<=to; ) {
 		if (list[i] < splitter) {
@@ -825,24 +827,24 @@ public class Partitioning extends Object {
 			}
 		}
 		//if (from<=to) System.out.println("Swapped "+(head-from)+" elements");
-	
 
-	/*	
+
+	/*
 	//JAL:
 	int first = from;
 	int last = to+1;
 	--first;
 	while (true) {
 		while (++first < last && list[first] < splitter);
-		while (first < --last && !(list[last] < splitter)); 
+		while (first < --last && !(list[last] < splitter));
 		if (first >= last) return first-1;
 		int tmp = list[first];
 		list[first] = list[last];
 		list[last] = tmp;
 	}
 	*/
-	
-	
+
+
 
 	/*
 	System.out.println("splitter="+splitter);
@@ -853,11 +855,11 @@ public class Partitioning extends Object {
 	while (head<=trail) {
 		head--;
 		while (++head < trail && list[head] < splitter);
-		
+
 		trail++;
 		while (--trail > head && list[trail] >= splitter);
 
-		if (head != trail) {		
+		if (head != trail) {
 			element = list[head];
 			list[head] = list[trail];
 			list[trail] = element;
@@ -867,7 +869,7 @@ public class Partitioning extends Object {
 		System.out.println("after ="+new IntArrayList(list)+", head="+head);
 	}
 	*/
-		
+
 
 	/*
 	//System.out.println("splitter="+splitter);
@@ -887,7 +889,7 @@ public class Partitioning extends Object {
 				//oldHead = list[head];
 				//list[head] = element;
 				//list[i] = oldHead;
-				
+
 				//head++;
 			//}
 			//head++;
@@ -895,7 +897,7 @@ public class Partitioning extends Object {
 		//System.out.println("after ="+new IntArrayList(list)+", head="+head);
 	}
 	*/
-	
+
 	/*
 	int i=from-1;
 	int head = from;
@@ -914,7 +916,7 @@ public class Partitioning extends Object {
 			}
 		}
 		//System.out.println(new IntArrayList(list));
-	
+
 	}
 	*/
 

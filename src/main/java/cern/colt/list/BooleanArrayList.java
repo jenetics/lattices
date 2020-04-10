@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.list;
 
 import cern.colt.function.BooleanProcedure;
@@ -342,15 +344,15 @@ public class BooleanArrayList extends AbstractBooleanList {
 	public boolean removeAll(AbstractBooleanList other) {
 		// overridden for performance only.
 		if (!(other instanceof BooleanArrayList)) return super.removeAll(other);
-	
+
 	/* There are two possibilities to do the thing
 	   a) use other.indexOf(...)
 	   b) sort other, then use other.binarySearch(...)
-	   
+
 	   Let's try to figure out which one is faster. Let M=size, N=other.size, then
 	   a) takes O(M*N) steps
 	   b) takes O(N*logN + M*logN) steps (sorting is O(N*logN) and binarySearch is O(logN))
- 
+
 	   Hence, if N*logN + M*logN < M*N, we use b) otherwise we use a).
 	*/
 		if (other.size() == 0) {
@@ -419,11 +421,11 @@ public class BooleanArrayList extends AbstractBooleanList {
 	public boolean retainAll(AbstractBooleanList other) {
 		// overridden for performance only.
 		if (!(other instanceof BooleanArrayList)) return super.retainAll(other);
-	
+
 	/* There are two possibilities to do the thing
 	   a) use other.indexOf(...)
 	   b) sort other, then use other.binarySearch(...)
-	   
+
 	   Let's try to figure out which one is faster. Let M=size, N=other.size, then
 	   a) takes O(M*N) steps
 	   b) takes O(N*logN + M*logN) steps (sorting is O(N*logN) and binarySearch is O(logN))

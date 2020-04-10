@@ -1,11 +1,13 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.bitvector;
 
 /**
@@ -210,7 +212,7 @@ public class QuickBitVector extends Object {
 		System.out.println((i)+":"+pows[i]);
 	}
 	*/
-	
+
 	/*
 	long[] pows=new long[BITS_PER_UNIT];
 	for (int i=0; i<BITS_PER_UNIT-1; i++) {
@@ -260,7 +262,7 @@ public class QuickBitVector extends Object {
 	this is equivalent to the above, but slower:
 	int fromIndex=from/BITS_PER_UNIT;
 	int toIndex=to/BITS_PER_UNIT;
-	int fromOffset=from%BITS_PER_UNIT;	
+	int fromOffset=from%BITS_PER_UNIT;
 	int toOffset=to%BITS_PER_UNIT;
 	*/
 

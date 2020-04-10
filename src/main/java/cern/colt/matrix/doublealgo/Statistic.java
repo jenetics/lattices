@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.doublealgo;
 
 import cern.colt.function.DoubleDoubleFunction;
@@ -599,7 +601,7 @@ public class Statistic extends Object {
 		int max = ncols;
 		long[] selected = new long[max]; // sampler works on long's, not int's
 
-		// sample 
+		// sample
 		int n = ncols;
 		int N = matrix.size();
 		cern.jet.random.sampling.RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
@@ -850,7 +852,7 @@ public class Statistic extends Object {
 		}
 	};
 	else if (norm==BRAY_CURTIS) function = new VectorVectorFunction() {
-		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {	
+		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.plus, F.chain(F.abs,F.minus)) / a.aggregate(b, F.plus, F.plus);
 		}
 	};
@@ -860,17 +862,17 @@ public class Statistic extends Object {
 				return Math.abs(a-b) / Math.abs(a+b);
 			}
 		};
-		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {	
+		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.plus, fun);
 		}
 	};
 	else if (norm==MAXIMUM) function = new VectorVectorFunction() {
-		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {	
+		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.max, F.chain(F.abs,F.minus));
 		}
 	};
 	else if (norm==MANHATTAN) function = new VectorVectorFunction() {
-		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {	
+		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.plus, F.chain(F.abs,F.minus));
 		}
 	};

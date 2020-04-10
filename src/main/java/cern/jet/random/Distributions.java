@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -93,19 +95,19 @@ public class Distributions {
 		double y;
 		y = Math.exp(Math.log(randomGenerator.raw()) / r);                                /* y=u^(1/r) */
 		switch (nr) {
-			// BURR II   
+			// BURR II
 			case 2:
 				return (-Math.log(1 / y - 1));
 
-			// BURR VII 
+			// BURR VII
 			case 7:
 				return (Math.log(2 * y / (2 - 2 * y)) / 2);
 
-			// BURR VIII 
+			// BURR VIII
 			case 8:
 				return (Math.log(Math.tan(y * Math.PI / 2.0)));
 
-			// BURR X    
+			// BURR X
 			case 10:
 				return (Math.sqrt(-Math.log(1 - y)));
 		}
@@ -145,33 +147,33 @@ public class Distributions {
  *                                                                *
  ******************************************************************/
 		double y, u;
-		u = randomGenerator.raw();                     // U(0/1)       
-		y = Math.exp(-Math.log(u) / r) - 1.0;              // u^(-1/r) - 1 
+		u = randomGenerator.raw();                     // U(0/1)
+		y = Math.exp(-Math.log(u) / r) - 1.0;              // u^(-1/r) - 1
 		switch (nr) {
-			case 3:               // BURR III 
-				return (Math.exp(-Math.log(y) / k));      // y^(-1/k) 
+			case 3:               // BURR III
+				return (Math.exp(-Math.log(y) / k));      // y^(-1/k)
 
-			case 4:               // BURR IV  
-				y = Math.exp(k * Math.log(y)) + 1.0;         // y^k + 1 
+			case 4:               // BURR IV
+				y = Math.exp(k * Math.log(y)) + 1.0;         // y^k + 1
 				y = k / y;
 				return (y);
 
-			case 5:               // BURR V  
-				y = Math.atan(-Math.log(y / k));           // arctan[log(y/k)] 
+			case 5:               // BURR V
+				y = Math.atan(-Math.log(y / k));           // arctan[log(y/k)]
 				return (y);
 
-			case 6:               // BURR VI  
+			case 6:               // BURR VI
 				y = -Math.log(y / k) / r;
 				y = Math.log(y + Math.sqrt(y * y + 1.0));
 				return (y);
 
-			case 9:               // BURR IX  
+			case 9:               // BURR IX
 				y = 1.0 + 2.0 * u / (k * (1.0 - u));
-				y = Math.exp(Math.log(y) / r) - 1.0;         // y^(1/r) -1 
+				y = Math.exp(Math.log(y) / r) - 1.0;         // y^(1/r) -1
 				return Math.log(y);
 
-			case 12:               // BURR XII 
-				return Math.exp(Math.log(y) / k);        // y^(1/k) 
+			case 12:               // BURR XII
+				return Math.exp(Math.log(y) / k);        // y^(1/k)
 		}
 		return 0;
 	}
@@ -260,10 +262,10 @@ public class Distributions {
 	 */
 	public static double nextLambda(double l3, double l4, RandomEngine randomGenerator) {
 		double l_sign;
-		if ((l3 < 0) || (l4 < 0)) l_sign = -1.0;                          // sign(l) 
+		if ((l3 < 0) || (l4 < 0)) l_sign = -1.0;                          // sign(l)
 		else l_sign = 1.0;
 
-		double u = randomGenerator.raw();                           // U(0/1) 
+		double u = randomGenerator.raw();                           // U(0/1)
 		double x = l_sign * (Math.exp(Math.log(u) * l3) - Math.exp(Math.log(1.0 - u) * l4));
 		return x;
 	}

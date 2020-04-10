@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -211,7 +213,7 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
 		u -= c;
 //#endif
 		f = this.F[c];
-		// fprintf(stderr,"c,f,u: %d %.4f %f\n",c,f,u); 
+		// fprintf(stderr,"c,f,u: %d %.4f %f\n",c,f,u);
 		if (f == 1.0) return c;
 		if (u < f) {
 			return c;
@@ -368,7 +370,7 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
 		 * that much faster (I get maybe 20%); that's an upper bound
 		 * on what the optimal preprocessing would give.
 		 */
-/*     
+/*
 	for (k=0; k<size; ++k) {
 		F[k] = 1.0;
 	}

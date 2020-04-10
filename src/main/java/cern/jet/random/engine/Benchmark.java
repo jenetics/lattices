@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random.engine;
 
 /**
@@ -112,7 +114,7 @@ public class Benchmark {
 		for (int i = times; --i >= 0; ) gen.raw();
 		timer.stop().display();
 		System.out.println(times / (timer.elapsedTime() - emptyLoop) + " numbers per second.");
-	
+
 	/*
 	gen = new edu.stanford.mt.MersenneTwister();
 	System.out.println("\n edu.stanford.mt.MersenneTwister:");
@@ -144,8 +146,8 @@ public class Benchmark {
 	timer.reset().start();
 	for (int i=times; --i>=0; ) gen.raw();
 	timer.stop().display();
-	System.out.println(times/(timer.elapsedTime()-emptyLoop)+ " numbers per second.");	
-	
+	System.out.println(times/(timer.elapsedTime()-emptyLoop)+ " numbers per second.");
+
 	gen = new edu.cornell.lassp.houle.RngPack.Ranmar();
 	System.out.println("\nRanmar:");
 	timer.reset().start();

@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.doublealgo;
 
 import cern.colt.matrix.DoubleMatrix1D;
@@ -497,7 +499,7 @@ double[][] values = {
 //String[] columnNames = { "0.1", "0.3" };
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
-//System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values)); 
+//System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values));
 //System.out.println(new Formatter().toSourceCode(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 		System.out.println(new Formatter().toString(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 		System.out.println(new Formatter().toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, "vendor", "density", "title"));
@@ -536,7 +538,7 @@ double[][] values = {
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2", "mean", "median", "sum" };
 //hep.aida.bin.BinFunction1D[] aggr = {F.mean, F.median, F.sum};
 
-//System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values)); 
+//System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values));
 //System.out.println(new Formatter().toSourceCode(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 //System.out.println(new Formatter().toString(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 //System.out.println(new Formatter().toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values),rowNames,columnNames,rowAxisName,columnAxisName,title));

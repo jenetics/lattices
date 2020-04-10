@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.jet.random.engine.RandomEngine;
@@ -38,7 +40,7 @@ public class VonMises extends AbstractContinousDistribution {
 	private double k_set = -1.0;
 	private double tau, rho, r;
 
-	// The uniform random number generated shared by all <b>static</b> methods. 
+	// The uniform random number generated shared by all <b>static</b> methods.
 	protected static VonMises shared = new VonMises(1.0, makeDefaultGenerator());
 
 	/**
@@ -94,14 +96,14 @@ public class VonMises extends AbstractContinousDistribution {
 			k_set = k;
 		}
 
-		// GENERATOR 
+		// GENERATOR
 		do {
-			u = randomGenerator.raw();                                // U(0/1) 
-			v = randomGenerator.raw();                                // U(0/1) 
+			u = randomGenerator.raw();                                // U(0/1)
+			v = randomGenerator.raw();                                // U(0/1)
 			z = Math.cos(Math.PI * u);
 			w = (1.0 + r * z) / (r + z);
 			c = k * (r - w);
-		} while ((c * (2.0 - c) < v) && (Math.log(c / v) + 1.0 < c));         // Acceptance/Rejection 
+		} while ((c * (2.0 - c) < v) && (Math.log(c / v) + 1.0 < c));         // Acceptance/Rejection
 
 		return (randomGenerator.raw() > 0.5) ? Math.acos(w) : -Math.acos(w);        // Random sign //
 		// 0 <= x <= Pi : -Pi <= x <= 0 //

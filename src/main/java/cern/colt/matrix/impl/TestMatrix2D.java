@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.matrix.impl;
 
 import cern.colt.function.DoubleDoubleFunction;
@@ -63,7 +65,7 @@ class TestMatrix2D {
 		System.out.println("\n" + master); // master has not changed
 
 		DoubleMatrix2D view1 = master.viewPart(0, 3, 4, 2); // [0,3] .. [3,4]
-		DoubleMatrix2D view2 = view1.viewPart(0, 0, 4, 1); // a view from a view 
+		DoubleMatrix2D view2 = view1.viewPart(0, 0, 4, 1); // a view from a view
 		System.out.println("\n" + view1);
 		System.out.println("\n" + view2);
 	}
@@ -79,7 +81,7 @@ class TestMatrix2D {
 		int i = 0;
 		for (int column = 0; column < columns; column++) {
 			for (int row = 0; row < rows; row++) {
-				//if (i%1000 == 0) { 
+				//if (i%1000 == 0) {
 				matrix.set(row, column, i);
 				//}
 				i++;
@@ -196,7 +198,7 @@ class TestMatrix2D {
 		DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
 		System.out.println(matrix);
 
-// Sum( x[i]*x[i] ) 
+// Sum( x[i]*x[i] )
 		System.out.println(matrix.viewSelection(
 			new cern.colt.function.DoubleProcedure() {
 				public final boolean apply(double a) {
@@ -206,23 +208,23 @@ class TestMatrix2D {
 		));
 //--> 14
 
-// Sum( x[i]*x[i] ) 
+// Sum( x[i]*x[i] )
 		System.out.println(matrix.aggregate(F.plus, F.square));
 //--> 14
 
-// Sum( x[i]*x[i]*x[i] ) 
+// Sum( x[i]*x[i]*x[i] )
 		System.out.println(matrix.aggregate(F.plus, F.pow(3)));
 //--> 36
 
-// Sum( x[i] ) 
+// Sum( x[i] )
 		System.out.println(matrix.aggregate(F.plus, F.identity));
 //--> 6
 
-// Min( x[i] ) 
+// Min( x[i] )
 		System.out.println(matrix.aggregate(F.min, F.identity));
 //--> 0
 
-// Max( Sqrt(x[i]) / 2 ) 
+// Max( Sqrt(x[i]) / 2 )
 		System.out.println(matrix.aggregate(F.max, F.chain(F.div(2), F.sqrt)));
 //--> 0.8660254037844386
 
@@ -261,7 +263,7 @@ class TestMatrix2D {
 		System.out.println(otherMatrix1D);
 // Sum(Math.PI * Math.log(otherMatrix1D[i] / matrix[i]))
 		System.out.println(matrix.aggregate(otherMatrix1D, F.plus, F.chain(F.mult(Math.PI), F.chain(F.log, F.swapArgs(F.div)))));
-// or, perhaps less error prone and more readable: 
+// or, perhaps less error prone and more readable:
 		System.out.println(matrix.aggregate(otherMatrix1D, F.plus,
 			new DoubleDoubleFunction() {
 				public double apply(double a, double b) {
@@ -274,7 +276,7 @@ class TestMatrix2D {
 		DoubleMatrix3D x = cern.colt.matrix.DoubleFactory3D.dense.ascending(2, 2, 2);
 		System.out.println(x);
 
-// Sum( x[slice,row,col]*x[slice,row,col] ) 
+// Sum( x[slice,row,col]*x[slice,row,col] )
 		System.out.println(x.aggregate(F.plus, F.square));
 //--> 140
 
@@ -1042,18 +1044,18 @@ System.out.println("\n"+cern.colt.matrixpattern.Converting.toHTML(Factory2D.make
 	 */
 	public static void doubleTest29(int size) {
 /*
-	
+
 System.out.println("\n\n");
 System.out.println("initializing...");
 boolean dense = false;
 DoubleMatrix2D A;
 DoubleFactory2D factory;
-if (dense) 
+if (dense)
 	factory = Factory2D.dense;
-else 
+else
 	factory = Factory2D.sparse;
-	
-double value = 0.5;	
+
+double value = 0.5;
 
 DoubleMatrix2D C = Factory2D.dense.sample(size,size,value,1);
 
@@ -1186,7 +1188,7 @@ System.out.println("\n"+copyPart); // has changed
 System.out.println("\n"+master); // master has not changed
 
 DoubleMatrix2D view1 = master.viewPart(0,3,4,2); // [0,3] .. [3,4]
-DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view 
+DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view
 System.out.println("\n"+view1);
 System.out.println("\n"+view2);
 */
@@ -1236,12 +1238,12 @@ System.out.println("initializing...");
 boolean dense = false;
 DoubleMatrix2D A;
 DoubleFactory2D factory;
-if (dense) 
+if (dense)
 	factory = Factory2D.dense;
-else 
+else
 	factory = Factory2D.sparse;
-	
-double value = 0.5;	
+
+double value = 0.5;
 
 DoubleMatrix2D C = Factory2D.dense.sample(size,size,value,0.01);
 
@@ -1315,12 +1317,12 @@ System.out.println("initializing...");
 boolean dense = false;
 DoubleMatrix2D A;
 DoubleFactory2D factory;
-if (dense) 
+if (dense)
 	factory = Factory2D.dense;
-else 
+else
 	factory = Factory2D.sparse;
-	
-double value = 0.5;	
+
+double value = 0.5;
 
 DoubleMatrix2D C = Factory2D.dense.sample(size,size,value,0.01);
 
@@ -1422,7 +1424,7 @@ System.out.println("done.");
 		double[][] data =
 			{{ninf, nan}};
 	/*
-	{ 
+	{
 		{ 1, 4, 0 },
 		{ 6, 2, 5 },
 		{ 0, 7, 3 },
@@ -1478,14 +1480,14 @@ System.out.println("done.");
 	final int DOF = 200;
 	final cern.jet.random.engine.MersenneTwister RANDOM = new cern.jet.random.engine.MersenneTwister();
 	final Algebra ALGEBRA = new Algebra();
-	
+
 	System.out.println("\n\n\nStarting...");
 	double[][] k = randomMatrix(DOF, RANDOM);
 	DoubleMatrix2D kd = new DenseDoubleMatrix2D(k);
 	Jama.Matrix km = new Jama.Matrix(k);
 
 
-	
+
 
 
 	DoubleMatrix2D coltL = new LUDecomposition(kd).getL();
@@ -1577,7 +1579,7 @@ System.out.println("\n"+copyPart); // has changed
 System.out.println("\n"+master); // master has not changed
 
 DoubleMatrix2D view1 = master.viewPart(0,3,4,2); // [0,3] .. [3,4]
-DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view 
+DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view
 System.out.println("\n"+view1);
 System.out.println("\n"+view2);
 */
@@ -1646,7 +1648,7 @@ System.out.println("\n"+copyPart); // has changed
 System.out.println("\n"+master); // master has not changed
 
 DoubleMatrix2D view1 = master.viewPart(0,3,4,2); // [0,3] .. [3,4]
-DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view 
+DoubleMatrix2D view2 = view1.viewPart(0,0,4,1); // a view from a view
 System.out.println("\n"+view1);
 System.out.println("\n"+view2);
 */

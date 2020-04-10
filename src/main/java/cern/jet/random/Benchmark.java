@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.jet.random;
 
 import cern.colt.list.DoubleArrayList;
@@ -98,51 +100,51 @@ public class Benchmark extends cern.colt.PersistentObject {
 */
 
 	/*
-	
+
 	randomInstance(size,print,new Beta(10.0, 10.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Beta(1.0, 1.0, (RandomEngine)gen.clone()));
 	randomInstance(size,print,new Beta(mean, mean, (RandomEngine)gen.clone()));
 	randomInstance(size,print,new Beta(mean, 1/mean, (RandomEngine)gen.clone()));
 	randomInstance(size,print,new Beta(1/mean, mean, (RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Uniform((RandomEngine)gen.clone()));
 	*/
 		randomInstance(size, print, new Poisson(mean, (RandomEngine) gen.clone()));
 	/*
 	randomInstance(size,print,new PoissonSlow(mean,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Poisson(3.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new PoissonSlow(3.0,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Binomial(1,0.5,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Binomial(5,0.3,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Binomial((int)mean,0.999999999,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Binomial((int)mean,1.0/mean,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Exponential(1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Exponential(3.0,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Normal(0.0,1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Normal(3.0,1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Normal(mean,largeVariance,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new BreitWigner(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomEngine)gen.clone()));
 	randomInstance(size,print,new BreitWigner(1.0, 0.2, 1.0, (RandomEngine)gen.clone()));
-	
-	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomEngine)gen.clone()));	
+
+	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomEngine)gen.clone()));
 	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, 1.0, (RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new ChiSquare(1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new ChiSquare(5.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new ChiSquare(mean,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new Gamma(0.2,1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Gamma(1.0,1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Gamma(3.0,0.5,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Gamma(mean,0.5,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Gamma(mean,1.0/mean,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new Gamma(mean,mean,(RandomEngine)gen.clone()));
-	
+
 	randomInstance(size,print,new StudentT(1.0,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new StudentT(2.5,(RandomEngine)gen.clone()));
 	randomInstance(size,print,new StudentT(mean,(RandomEngine)gen.clone()));
@@ -231,7 +233,7 @@ public class Benchmark extends cern.colt.PersistentObject {
 	//System.out.println(distinct);
 	//System.out.println(freq);
 	*/
-	
+
 	/*
 	distinct.shuffle();
 	timer.reset().start();

@@ -1,3 +1,13 @@
+/*
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.map;
 
 /**
@@ -106,13 +116,13 @@ public class PrimeFinder extends Object {
 		13,29,59,127,257,521,1049,2099,4201,8419,16843,33703,67409,134837,269683,
 		539389,1078787,2157587,4315183,8630387,17260781,34521589,69043189,138086407,
 		276172823,552345671,1104691373,
-		
+
 		//chunk #12
 		19,41,83,167,337,677,
 		//1361,2729,5471,10949,21911,43853,87719,175447,350899,
 		//701819,1403641,2807303,5614657,11229331,22458671,44917381,89834777,179669557,
 		//359339171,718678369,1437356741,
-		
+
 		//chunk #13
 		53,107,223,449,907,1823,3659,7321,14653,29311,58631,117269,
 		234539,469099,938207,1876417,3752839,7505681,15011389,30022781,

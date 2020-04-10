@@ -1,11 +1,13 @@
 /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
+ * Copyright © 1999 CERN - European Organization for Nuclear Research.
+ *
+ * Permission to use, copy, modify, distribute and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation. CERN
+ * makes no representations about the suitability of this software for any
+ * purpose. It is provided "as is" without expressed or implied warranty.
+ */
 package cern.colt.map;
 
 import cern.colt.function.DoubleIntProcedure;
@@ -297,9 +299,9 @@ public abstract class AbstractDoubleIntMap extends AbstractMap {
 	 */
 	public void pairsSortedByKey(final DoubleArrayList keyList, final IntArrayList valueList) {
 	/*
-	keys(keyList); 
+	keys(keyList);
 	values(valueList);
-	
+
 	final double[] k = keyList.elements();
 	final int[] v = valueList.elements();
 	cern.colt.Swapper swapper = new cern.colt.Swapper() {
@@ -308,7 +310,7 @@ public abstract class AbstractDoubleIntMap extends AbstractMap {
 			t1 = v[a]; v[a] = v[b]; v[b] = t1;
 			t2 = k[a]; k[a] = k[b];	k[b] = t2;
 		}
-	}; 
+	};
 
 	cern.colt.function.IntComparator comp = new cern.colt.function.IntComparator() {
 		public int compare(int a, int b) {
