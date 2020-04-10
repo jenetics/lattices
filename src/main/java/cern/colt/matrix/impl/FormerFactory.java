@@ -56,21 +56,8 @@ public class FormerFactory {
 	 * @throws IllegalArgumentException if bad format
 	 */
 	public Former create(final String format) {
-		return new Former() {
-			//private FormatStringBuffer f = (format!=null ? new corejava.FormatStringBuffer(format) : null);
-			private corejava.Format f = (format != null ? new corejava.Format(format) : null);
-
-			//private corejava.PrintfFormat f = (format!=null ? new corejava.PrintfFormat(format) : null);
-			public String form(double value) {
-				if (f == null || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY || value != value) {
-					// value != value <==> Double.isNaN(value)
-					// Work around bug in corejava.Format.form() for inf, -inf, NaN
-					return String.valueOf(value);
-				}
-				//return f.format(value).toString();
-				return f.format(value);
-				//return f.sprintf(value);
-			}
-		};
+		return format != null
+			? d -> String.format(format, d)
+			: null;
 	}
 }
