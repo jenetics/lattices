@@ -10,9 +10,13 @@
  */
 package cern.colt.matrix.linalg;
 
-import EDU.oswego.cs.dl.util.concurrent.FJTask;
+//import EDU.oswego.cs.dl.util.concurrent.FJTask;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+
+import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 /**
  * Parallel implementation of the Basic Linear Algebra System for symmetric multi processing boxes.
@@ -70,17 +74,16 @@ public class SmpBlas implements Blas {
 
 	protected Smp smp;
 
-	protected int maxThreads;
+	protected int maxThreads = ForkJoinPool.getCommonPoolParallelism();
 
 	protected static int NN_THRESHOLD = 30000;
 
 	/**
 	 * Constructs a blas using a maximum of <tt>maxThreads<tt> threads; each executing the given sequential algos.
 	 */
-	protected SmpBlas(int maxThreads, Blas seqBlas) {
+	protected SmpBlas(Blas seqBlas) {
 		this.seqBlas = seqBlas;
-		this.maxThreads = maxThreads;
-		this.smp = new Smp(maxThreads);
+		this.smp = new Smp();
 		//Smp.smp = new Smp(maxThreads);
 	}
 
@@ -101,7 +104,7 @@ public class SmpBlas implements Blas {
 		if (maxThreads <= 1)
 			smpBlas = seqBlas;
 		else {
-			smpBlas = new SmpBlas(maxThreads, seqBlas);
+			smpBlas = new SmpBlas(seqBlas);
 		}
 	}
 
@@ -213,7 +216,7 @@ public class SmpBlas implements Blas {
 
 		// set up concurrent tasks
 		int span = width / noOfTasks;
-		final FJTask[] subTasks = new FJTask[noOfTasks];
+		final ForkJoinTask<?>[] subTasks = new ForkJoinTask<?>[noOfTasks];
 		for (int i = 0; i < noOfTasks; i++) {
 			final int offset = i * span;
 			if (i == noOfTasks - 1) span = width - span * i; // last span may be a bit larger
@@ -231,25 +234,13 @@ public class SmpBlas implements Blas {
 				CC = C.viewPart(offset, 0, span, p);
 			}
 
-			subTasks[i] = new FJTask() {
-				public void run() {
-					seqBlas.dgemm(transposeA, transposeB, alpha, AA, BB, beta, CC);
-					//System.out.println("Hello "+offset);
-				}
-			};
+			subTasks[i] = ForkJoinTask.adapt(() ->
+				seqBlas.dgemm(transposeA, transposeB, alpha, AA, BB, beta, CC)
+			);
 		}
 
 		// run tasks and wait for completion
-		try {
-			this.smp.taskGroup.invoke(
-				new FJTask() {
-					public void run() {
-						coInvoke(subTasks);
-					}
-				}
-			);
-		} catch (InterruptedException exc) {
-		}
+		ForkJoinTask.invokeAll(Arrays.asList(subTasks));
 	}
 
 	public void dgemv(final boolean transposeA, final double alpha, DoubleMatrix2D A, final DoubleMatrix1D x, final double beta, DoubleMatrix1D y) {
@@ -287,7 +278,7 @@ public class SmpBlas implements Blas {
 
 		// set up concurrent tasks
 		int span = width / noOfTasks;
-		final FJTask[] subTasks = new FJTask[noOfTasks];
+		final ForkJoinTask<?>[] subTasks = new ForkJoinTask<?>[noOfTasks];
 		for (int i = 0; i < noOfTasks; i++) {
 			final int offset = i * span;
 			if (i == noOfTasks - 1) span = width - span * i; // last span may be a bit larger
@@ -296,25 +287,13 @@ public class SmpBlas implements Blas {
 			final DoubleMatrix2D AA = A.viewPart(offset, 0, span, n);
 			final DoubleMatrix1D yy = y.viewPart(offset, span);
 
-			subTasks[i] = new FJTask() {
-				public void run() {
-					seqBlas.dgemv(transposeA, alpha, AA, x, beta, yy);
-					//System.out.println("Hello "+offset);
-				}
-			};
+			subTasks[i] = ForkJoinTask.adapt(() ->
+				seqBlas.dgemv(transposeA, alpha, AA, x, beta, yy)
+			);
 		}
 
 		// run tasks and wait for completion
-		try {
-			this.smp.taskGroup.invoke(
-				new FJTask() {
-					public void run() {
-						coInvoke(subTasks);
-					}
-				}
-			);
-		} catch (InterruptedException exc) {
-		}
+		ForkJoinTask.invokeAll(Arrays.asList(subTasks));
 	}
 
 	public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
