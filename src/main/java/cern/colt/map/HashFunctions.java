@@ -16,7 +16,7 @@ package cern.colt.map;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class HashFunctions extends Object {
+public class HashFunctions {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

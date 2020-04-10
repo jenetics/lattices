@@ -26,7 +26,7 @@ import cern.colt.matrix.DoubleMatrix3DProcedure;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 01/02/2000
  */
-public class Stencil extends Object {
+public class Stencil {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

@@ -146,7 +146,7 @@ import cern.colt.function.IntComparator;
  * @see cern.colt.Sorting
  * @see cern.colt.matrix.doublealgo.Sorting
  */
-public class GenericSorting extends Object {
+public class GenericSorting {
 	private static final int SMALL = 7;
 	private static final int MEDIUM = 40;
 

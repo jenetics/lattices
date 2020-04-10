@@ -40,7 +40,7 @@ import cern.colt.list.IntArrayList;
  * @version 1.0, 03-Jul-99
  * @see cern.colt.matrix.doublealgo.Partitioning
  */
-public class Partitioning extends Object {
+public class Partitioning {
 	private static final int SMALL = 7;
 	private static final int MEDIUM = 40;
 

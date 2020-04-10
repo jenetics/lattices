@@ -91,7 +91,7 @@ package cern.colt;
  * @see cern.colt.Swapper
  * @see cern.colt.GenericSorting
  */
-public class GenericPermuting extends Object {
+public class GenericPermuting {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

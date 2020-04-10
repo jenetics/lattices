@@ -29,7 +29,7 @@ import cern.colt.matrix.ObjectMatrix2D;
  * @version 1.0, 09/24/99
  * @see cern.colt.Partitioning "Partitioning arrays (provides more documentation)"
  */
-public class Partitioning extends Object {
+public class Partitioning {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

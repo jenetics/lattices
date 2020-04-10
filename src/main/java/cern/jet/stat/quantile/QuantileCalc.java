@@ -13,7 +13,7 @@ package cern.jet.stat.quantile;
 /**
  * Computes b and k vor various parameters.
  */
-class QuantileCalc extends Object {
+class QuantileCalc {
 	/**
 	 * Efficiently computes the binomial coefficient, often also referred to as "n over k" or "n choose k".
 	 * The binomial coefficient is defined as n!/((n-k)!*k!).

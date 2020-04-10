@@ -18,7 +18,7 @@ import cern.colt.function.IntComparator;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 03-Jul-99
  */
-class GenericSortingTest extends Object {
+class GenericSortingTest {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

@@ -24,7 +24,7 @@ import cern.colt.function.IntProcedure;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class IntFunctions extends Object {
+public class IntFunctions {
 	/**
 	 * Little trick to allow for "aliasing", that is, renaming this class.
 	 * Writing code like

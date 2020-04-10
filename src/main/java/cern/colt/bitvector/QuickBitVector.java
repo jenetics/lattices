@@ -30,7 +30,7 @@ package cern.colt.bitvector;
  * @see BitMatrix
  * @see java.util.BitSet
  */
-public class QuickBitVector extends Object {
+public class QuickBitVector {
 	protected final static int ADDRESS_BITS_PER_UNIT = 6; // 64=2^6
 	protected final static int BITS_PER_UNIT = 64; // = 1 << ADDRESS_BITS_PER_UNIT
 	protected final static int BIT_INDEX_MASK = 63; // = BITS_PER_UNIT - 1;

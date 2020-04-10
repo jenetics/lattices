@@ -32,7 +32,7 @@ import java.util.Comparator;
  * @see cern.colt.matrix.doublealgo.Sorting
  * @see java.util.Arrays
  */
-public class Sorting extends Object {
+public class Sorting {
 	private static final int SMALL = 7;
 	private static final int MEDIUM = 40;
 

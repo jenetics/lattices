@@ -150,7 +150,7 @@ import cern.colt.function.DoubleProcedure;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class Functions extends Object {
+public class Functions {
 	/**
 	 * Little trick to allow for "aliasing", that is, renaming this class.
 	 * Writing code like

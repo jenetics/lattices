@@ -19,7 +19,7 @@ package cern.clhep;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class PhysicalConstants extends Object {
+public class PhysicalConstants {
 	/**
 	 * Little trick to allow for "aliasing", that is, renaming this class.
 	 * Normally you would write

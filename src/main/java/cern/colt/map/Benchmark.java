@@ -18,7 +18,7 @@ import cern.colt.Timer;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class Benchmark extends Object {
+public class Benchmark {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

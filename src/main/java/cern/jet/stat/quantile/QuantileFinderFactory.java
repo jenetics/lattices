@@ -91,7 +91,7 @@ import cern.jet.random.engine.RandomEngine;
  * @see KnownDoubleQuantileEstimator
  * @see UnknownDoubleQuantileEstimator
  */
-public class QuantileFinderFactory extends Object {
+public class QuantileFinderFactory {
 	/**
 	 * Make this class non instantiable. Let still allow others to inherit.
 	 */

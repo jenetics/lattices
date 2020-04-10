@@ -8,7 +8,7 @@ package hep.aida.bin;
  * @see cern.colt.matrix.doublealgo.Formatter
  * @see cern.colt.matrix.doublealgo.Statistic
  */
-public class BinFunctions1D extends Object {
+public class BinFunctions1D {
 	/**
 	 * Little trick to allow for "aliasing", that is, renaming this class.
 	 * Using the aliasing you can instead write

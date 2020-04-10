@@ -20,7 +20,7 @@ import cern.colt.list.IntArrayList;
  * @author wolfgang.hoschek@cern.ch
  * @version 0.91, 08-Dec-99
  */
-public class Descriptive extends Object {
+public class Descriptive {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */

@@ -61,7 +61,7 @@ import hep.aida.bin.DynamicBin1D;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class Statistic extends Object {
+public class Statistic {
 	private static final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
 	/**
 	 * Euclidean distance function; <tt>Sqrt(Sum( (x[i]-y[i])^2 ))</tt>.

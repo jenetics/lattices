@@ -18,7 +18,7 @@ package cern.colt;
  * @see java.util.Arrays
  * @see cern.colt.Sorting
  */
-public class Arrays extends Object {
+public class Arrays {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
