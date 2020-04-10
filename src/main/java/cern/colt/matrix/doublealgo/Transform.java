@@ -44,6 +44,7 @@ import cern.colt.matrix.DoubleMatrix2D;
  * @version 1.0, 09/24/99
  * @deprecated
  */
+@Deprecated
 public class Transform extends cern.colt.PersistentObject {
 	/**
 	 * Little trick to allow for "aliasing", that is, renaming this class.

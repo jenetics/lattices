@@ -214,6 +214,7 @@ public class GenericPermuting extends Object {
 	 * @param work    the working storage, must satisfy <tt>work.length >= indexes.length</tt>; set <tt>work==null</tt> if you don't care about performance.
 	 * @deprecated
 	 */
+	@Deprecated
 	public static void permute(int[] indexes, cern.colt.Swapper swapper, int[] work) {
 		permute(indexes, swapper, work, null);
 	}

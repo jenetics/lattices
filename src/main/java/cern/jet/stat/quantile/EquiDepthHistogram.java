@@ -119,6 +119,7 @@ public class EquiDepthHistogram extends cern.colt.PersistentObject {
 	 * @deprecated Deprecated.
 	 * Returns the number of bin boundaries.
 	 */
+	@Deprecated
 	public int size() {
 		return binBoundaries.length;
 	}

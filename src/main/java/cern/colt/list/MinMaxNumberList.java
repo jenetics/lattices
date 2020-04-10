@@ -308,6 +308,7 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	 *
 	 * @deprecated
 	 */
+	@Deprecated
 	public long xminimum() {
 		return this.minValue;
 	}
