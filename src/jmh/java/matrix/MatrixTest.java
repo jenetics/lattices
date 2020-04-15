@@ -95,4 +95,21 @@ public class MatrixTest {
 		bh.consume(sum);
 	}
 
+	@Benchmark
+	public void coltQuick(final Blackhole bh) {
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < cols; ++j) {
+				colt.setQuick(i, j, 0);
+			}
+		}
+
+		double sum = 0;
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < cols; ++j) {
+				sum += colt.getQuick(i, j);
+			}
+		}
+		bh.consume(sum);
+	}
+
 }
