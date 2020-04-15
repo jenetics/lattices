@@ -179,3 +179,69 @@ MatrixTest.matrix        100       1  avgt   15       90,618 ±     2,141  ns/op
 MatrixTest.matrix        100     100  avgt   15    10931,680 ±   179,036  ns/op
 MatrixTest.matrix        100   10000  avgt   15  1162721,384 ± 21912,623  ns/op
  */
+
+/*
+processor       : 6
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 94
+model name      : Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping        : 3
+microcode       : 0xd6
+cpu MHz         : 984.922
+cache size      : 6144 KB
+
+
+Result "matrix.MatrixTest.matrix":
+  1774680.542 ±(99.9%) 66347.450 ns/op [Average]
+  (min, avg, max) = (1710295.550, 1774680.542, 1919662.701), stdev = 62061.446
+  CI (99.9%): [1708333.092, 1841027.992] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:18:32
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark             (cols)  (rows)  Mode  Cnt        Score       Error  Units
+MatrixTest.array           1       1  avgt   15        9.601 ±     0.336  ns/op
+MatrixTest.array           1     100  avgt   15      705.733 ±    16.405  ns/op
+MatrixTest.array           1   10000  avgt   15    65344.538 ±  7685.152  ns/op
+MatrixTest.array          10       1  avgt   15       16.895 ±     1.535  ns/op
+MatrixTest.array          10     100  avgt   15     1823.203 ±    36.220  ns/op
+MatrixTest.array          10   10000  avgt   15   182619.864 ±  4273.418  ns/op
+MatrixTest.array         100       1  avgt   15      157.377 ±     4.039  ns/op
+MatrixTest.array         100     100  avgt   15    16234.799 ±   456.786  ns/op
+MatrixTest.array         100   10000  avgt   15  1764862.722 ± 42367.599  ns/op
+MatrixTest.colt            1       1  avgt   15       11.894 ±     0.345  ns/op
+MatrixTest.colt            1     100  avgt   15      838.357 ±    24.516  ns/op
+MatrixTest.colt            1   10000  avgt   15    73662.542 ± 11614.774  ns/op
+MatrixTest.colt           10       1  avgt   15       27.341 ±     0.752  ns/op
+MatrixTest.colt           10     100  avgt   15     2446.325 ±    78.951  ns/op
+MatrixTest.colt           10   10000  avgt   15   237671.938 ±  7093.016  ns/op
+MatrixTest.colt          100       1  avgt   15      196.238 ±     6.128  ns/op
+MatrixTest.colt          100     100  avgt   15    19309.231 ±   526.637  ns/op
+MatrixTest.colt          100   10000  avgt   15  2053248.248 ± 61216.236  ns/op
+MatrixTest.coltQuick       1       1  avgt   15       10.421 ±     0.371  ns/op
+MatrixTest.coltQuick       1     100  avgt   15      656.002 ±    20.451  ns/op
+MatrixTest.coltQuick       1   10000  avgt   15    62385.988 ±  6407.288  ns/op
+MatrixTest.coltQuick      10       1  avgt   15       24.044 ±     0.610  ns/op
+MatrixTest.coltQuick      10     100  avgt   15     2375.540 ±    45.527  ns/op
+MatrixTest.coltQuick      10   10000  avgt   15   226737.581 ±  6656.479  ns/op
+MatrixTest.coltQuick     100       1  avgt   15      193.418 ±     5.224  ns/op
+MatrixTest.coltQuick     100     100  avgt   15    18668.451 ±   462.020  ns/op
+MatrixTest.coltQuick     100   10000  avgt   15  2050545.547 ± 83492.050  ns/op
+MatrixTest.matrix          1       1  avgt   15        9.436 ±     0.235  ns/op
+MatrixTest.matrix          1     100  avgt   15      717.481 ±    16.669  ns/op
+MatrixTest.matrix          1   10000  avgt   15    58207.848 ±  7143.555  ns/op
+MatrixTest.matrix         10       1  avgt   15       17.620 ±     0.400  ns/op
+MatrixTest.matrix         10     100  avgt   15     1922.187 ±    50.603  ns/op
+MatrixTest.matrix         10   10000  avgt   15   190546.500 ±  4079.639  ns/op
+MatrixTest.matrix        100       1  avgt   15      120.166 ±     3.299  ns/op
+MatrixTest.matrix        100     100  avgt   15    14173.342 ±   355.612  ns/op
+MatrixTest.matrix        100   10000  avgt   15  1774680.542 ± 66347.450  ns/op
+
+ */
