@@ -316,8 +316,8 @@ class QuantileFinderTest {
 		int chunks = Integer.parseInt(args[4]);
 		boolean computeExactQuantilesAlso = args[5].equals("exact");
 		boolean doShuffle = args[6].equals("shuffle");
-		double epsilon = new Double(args[7]).doubleValue();
-		double delta = new Double(args[8]).doubleValue();
+		double epsilon = Double.parseDouble(args[7]);
+		double delta = Double.parseDouble(args[8]);
 		int quantiles = Integer.parseInt(args[9]);
 		long max_N = Long.parseLong(args[10]);
 

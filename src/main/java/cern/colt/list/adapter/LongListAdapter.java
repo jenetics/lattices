@@ -65,8 +65,8 @@ public class LongListAdapter extends java.util.AbstractList implements java.util
 	/**
 	 * Transforms an element of a primitive data type to an object.
 	 */
-	protected static Object object(long element) {
-		return new Long(element);
+	protected static Long object(long element) {
+		return element;
 	}
 
 	/**

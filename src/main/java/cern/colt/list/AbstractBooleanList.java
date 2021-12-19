@@ -692,10 +692,10 @@ public abstract class AbstractBooleanList extends AbstractList {
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList toList() {
+	public java.util.ArrayList<Boolean> toList() {
 		int mySize = size();
-		java.util.ArrayList list = new java.util.ArrayList(mySize);
-		for (int i = 0; i < mySize; i++) list.add(new Boolean(get(i)));
+		var list = new java.util.ArrayList<Boolean>(mySize);
+		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}
 

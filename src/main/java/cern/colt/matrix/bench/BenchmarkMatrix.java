@@ -50,10 +50,10 @@ public class BenchmarkMatrix {
 			int k = 1;
 			types = new String[]{args[k++]};
 			cpus = Integer.parseInt(args[k++]);
-			minSecs = new Double(args[k++]).doubleValue();
-			densities = new double[]{new Double(args[k++]).doubleValue()};
-			transposeA = new Boolean(args[k++]).booleanValue();
-			transposeB = new Boolean(args[k++]).booleanValue();
+			minSecs = Double.parseDouble(args[k++]);
+			densities = new double[]{Double.parseDouble(args[k++])};
+			transposeA = Boolean.parseBoolean(args[k++]);
+			transposeB = Boolean.parseBoolean(args[k++]);
 
 			sizes = new int[args.length - k];
 			for (int i = 0; k < args.length; k++, i++) sizes[i] = Integer.parseInt(args[k]);
@@ -86,9 +86,9 @@ public class BenchmarkMatrix {
 			int k = 1;
 			types = new String[]{args[k++]};
 			cpus = Integer.parseInt(args[k++]);
-			minSecs = new Double(args[k++]).doubleValue();
-			densities = new double[]{new Double(args[k++]).doubleValue()};
-			transposeA = new Boolean(args[k++]).booleanValue();
+			minSecs = Double.parseDouble(args[k++]);
+			densities = new double[]{Double.parseDouble(args[k++])};
+			transposeA = Boolean.parseBoolean(args[k++]);
 
 			sizes = new int[args.length - k];
 			for (int i = 0; k < args.length; k++, i++) sizes[i] = Integer.parseInt(args[k]);
@@ -121,8 +121,8 @@ public class BenchmarkMatrix {
 			int k = 1;
 			types = new String[]{args[k++]};
 			cpus = Integer.parseInt(args[k++]);
-			minSecs = new Double(args[k++]).doubleValue();
-			densities = new double[]{new Double(args[k++]).doubleValue()};
+			minSecs = Double.parseDouble(args[k++]);
+			densities = new double[]{Double.parseDouble(args[k++])};
 			exponent = Integer.parseInt(args[k++]);
 
 			sizes = new int[args.length - k];
@@ -155,8 +155,8 @@ public class BenchmarkMatrix {
 			int k = 1;
 			types = new String[]{args[k++]};
 			cpus = Integer.parseInt(args[k++]);
-			minSecs = new Double(args[k++]).doubleValue();
-			densities = new double[]{new Double(args[k++]).doubleValue()};
+			minSecs = Double.parseDouble(args[k++]);
+			densities = new double[]{Double.parseDouble(args[k++])};
 
 			sizes = new int[args.length - k];
 			for (int i = 0; k < args.length; k++, i++) sizes[i] = Integer.parseInt(args[k]);

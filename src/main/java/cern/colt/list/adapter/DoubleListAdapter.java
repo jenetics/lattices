@@ -65,8 +65,8 @@ public class DoubleListAdapter extends java.util.AbstractList implements java.ut
 	/**
 	 * Transforms an element of a primitive data type to an object.
 	 */
-	protected static Object object(double element) {
-		return new Double(element);
+	protected static Double object(double element) {
+		return element;
 	}
 
 	/**

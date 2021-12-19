@@ -813,10 +813,10 @@ public abstract class AbstractByteList extends AbstractList {
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList toList() {
+	public java.util.ArrayList<Byte> toList() {
 		int mySize = size();
-		java.util.ArrayList list = new java.util.ArrayList(mySize);
-		for (int i = 0; i < mySize; i++) list.add(new Byte(get(i)));
+		var list = new java.util.ArrayList<Byte>(mySize);
+		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}
 

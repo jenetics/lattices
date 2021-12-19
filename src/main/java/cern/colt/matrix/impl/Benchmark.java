@@ -194,10 +194,10 @@ class Benchmark {
 		//boolean isSparse = args[4].equals("sparse");
 		String kind = args[3];
 		int initialCapacity = Integer.parseInt(args[4]);
-		double minLoadFactor = new Double(args[5]).doubleValue();
-		double maxLoadFactor = new Double(args[6]).doubleValue();
+		double minLoadFactor =Double.parseDouble(args[5]);
+		double maxLoadFactor = Double.parseDouble(args[6]);
 		boolean print = args[7].equals("print");
-		double initialValue = new Double(args[8]).doubleValue();
+		double initialValue = Double.parseDouble(args[8]);
 		int size = rows;
 
 		benchmark(runs, size, kind, print, initialCapacity, minLoadFactor, maxLoadFactor, initialValue);

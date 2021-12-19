@@ -823,10 +823,10 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList toList() {
+	public java.util.ArrayList<Integer> toList() {
 		int mySize = size();
-		java.util.ArrayList list = new java.util.ArrayList(mySize);
-		for (int i = 0; i < mySize; i++) list.add(new Integer(get(i)));
+		var list = new java.util.ArrayList<Integer>(mySize);
+		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}
 

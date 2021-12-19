@@ -1054,8 +1054,8 @@ class BenchmarkMatrix2D {
 		//boolean isSparse = args[4].equals("sparse");
 		String kind = args[3];
 		int initialCapacity = Integer.parseInt(args[4]);
-		double minLoadFactor = new Double(args[5]).doubleValue();
-		double maxLoadFactor = new Double(args[6]).doubleValue();
+		double minLoadFactor = Double.parseDouble(args[5]);
+		double maxLoadFactor = Double.parseDouble(args[6]);
 		boolean print = args[7].equals("print");
 		String type = args[8];
 		String command = args[9];

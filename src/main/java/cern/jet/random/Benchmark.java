@@ -66,8 +66,8 @@ public class Benchmark extends cern.colt.PersistentObject {
 	 */
 	public static void main(String args[]) {
 		int size = Integer.parseInt(args[0]);
-		boolean print = new Boolean(args[1]).booleanValue();
-		double mean = new Double(args[2]).doubleValue();
+		boolean print = Boolean.parseBoolean(args[1]);
+		double mean = Double.parseDouble(args[2]);
 		String generatorName = args[3];
 		random(size, print, mean, generatorName);
 	}
