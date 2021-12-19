@@ -1,7 +1,7 @@
 
 plugins {
 	`java-library`
-	//id("me.champeau.jmh") version "0.6.6"
+	id("me.champeau.jmh") version "0.6.6"
 }
 
 group = "io.jenetics"
@@ -13,8 +13,8 @@ tasks.named<Wrapper>("wrapper") {
 }
 
 configure<JavaPluginExtension> {
-	sourceCompatibility = JavaVersion.VERSION_11
-	targetCompatibility = JavaVersion.VERSION_11
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
