@@ -1,7 +1,7 @@
 
 plugins {
 	`java-library`
-	id("me.champeau.jmh") version "0.6.6"
+	//id("me.champeau.jmh") version "0.6.6"
 }
 
 group = "io.jenetics"
@@ -12,8 +12,10 @@ tasks.named<Wrapper>("wrapper") {
 	distributionType = Wrapper.DistributionType.ALL
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+configure<JavaPluginExtension> {
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
 	mavenCentral()
