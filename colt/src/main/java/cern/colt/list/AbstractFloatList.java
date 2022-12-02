@@ -815,7 +815,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 */
 	public java.util.ArrayList<Float> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Float>(mySize);
+		java.util.ArrayList<Float> list = new java.util.ArrayList<Float>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

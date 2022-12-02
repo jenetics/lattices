@@ -1,4 +1,5 @@
 /*
+ * Java Colt Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,9 +52,9 @@ object Env {
  * Information about the library and author.
  */
 object Colt {
-	const val VERSION = "1.0.0-SNAPSHOT"
-	const val ID = "jenetics.colt"
-	const val NAME = "jenetics.colt"
+	const val VERSION = "2.0.0"
+	const val ID = "colt"
+	const val NAME = "colt"
 	const val GROUP = "io.jenetics"
 	const val AUTHOR = "Franz Wilhelmstötter"
 	const val EMAIL = "franz.wilhelmstoetter@gmail.com"

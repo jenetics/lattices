@@ -815,7 +815,7 @@ public abstract class AbstractByteList extends AbstractList {
 	 */
 	public java.util.ArrayList<Byte> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Byte>(mySize);
+		java.util.ArrayList<Byte> list = new java.util.ArrayList<Byte>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

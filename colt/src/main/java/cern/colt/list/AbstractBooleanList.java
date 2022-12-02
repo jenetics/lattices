@@ -694,7 +694,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 */
 	public java.util.ArrayList<Boolean> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Boolean>(mySize);
+		java.util.ArrayList<Boolean> list = new java.util.ArrayList<Boolean>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

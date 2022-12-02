@@ -815,7 +815,7 @@ public abstract class AbstractShortList extends AbstractList {
 	 */
 	public java.util.ArrayList<Short> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Short>(mySize);
+		java.util.ArrayList<Short> list = new java.util.ArrayList<Short>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

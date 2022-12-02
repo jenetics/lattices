@@ -1,5 +1,5 @@
 /*
- * Java GPX Library (@__identifier__@).
+ * Java Colt Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -282,7 +284,7 @@ public final class Colorizer extends SimpleFileVisitor<Path> {
 		private static final String COMMENT_COLOR = "#3F7F5F";
 		private static final String STRING_COLOR = "#0000FF";
 
-		private static final Set<String> IDENTIFIERS = Set.of(
+		private static final Set<String> IDENTIFIERS = new HashSet<>(Arrays.asList(
 			"abstract",
 			"assert",
 			"boolean",
@@ -334,7 +336,7 @@ public final class Colorizer extends SimpleFileVisitor<Path> {
 			"void",
 			"volatile",
 			"while"
-		);
+		));
 	}
 
 

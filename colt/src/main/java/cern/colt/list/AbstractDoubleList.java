@@ -826,7 +826,7 @@ public abstract class AbstractDoubleList extends AbstractList implements cern.co
 	 */
 	public java.util.ArrayList<Double> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Double>(mySize);
+		java.util.ArrayList<Double> list = new java.util.ArrayList<Double>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

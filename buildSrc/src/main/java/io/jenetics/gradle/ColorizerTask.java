@@ -1,5 +1,5 @@
 /*
- * Java GPX Library (@__identifier__@).
+ * Java Colt Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,8 @@ import org.gradle.api.tasks.TaskExecutionException;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 1.4
- * @version 6.1
+ * @since !__version__!
+ * @version !__version__!
  */
 public class ColorizerTask extends DefaultTask {
 

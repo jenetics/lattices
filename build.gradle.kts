@@ -1,5 +1,5 @@
 /*
- * Java GPX Library (@__identifier__@).
+ * Java Colt Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 1.0
- * @version 1.0
+ * @since !__version__!
+ * @version !__version__!
  */
 plugins {
 	base
@@ -63,13 +63,13 @@ gradle.projectsEvaluated {
 		val project = this
 
 		tasks.withType<JavaCompile> {
-			options.compilerArgs.add("-Xlint:" + xlint())
+			//options.compilerArgs.add("-Xlint:" + xlint())
 		}
 
 		plugins.withType<JavaPlugin> {
 			configure<JavaPluginExtension> {
-				sourceCompatibility = JavaVersion.VERSION_17
-				targetCompatibility = JavaVersion.VERSION_17
+				sourceCompatibility = JavaVersion.VERSION_1_8
+				targetCompatibility = JavaVersion.VERSION_1_8
 			}
 
 			configure<JavaPluginExtension> {
@@ -156,7 +156,8 @@ fun setupTestReporting(project: Project) {
 fun setupJavadoc(project: Project) {
 	project.tasks.withType<Javadoc> {
 		val doclet = options as StandardJavadocDocletOptions
-		doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
+		//doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
+		doclet.addBooleanOption("Xdoclint:none", true)
 
 		exclude("**/internal/**")
 
@@ -166,7 +167,7 @@ fun setupJavadoc(project: Project) {
 		doclet.charSet = "UTF-8"
 		doclet.linkSource(true)
 		doclet.linksOffline(
-			"https://docs.oracle.com/en/java/javase/17/docs/api/",
+			"https://docs.oracle.com/javase/8/docs/api",
 			"${project.rootDir}/buildSrc/resources/javadoc/java.se"
 		)
 		doclet.windowTitle = "Colt ${project.version}"
@@ -229,26 +230,26 @@ fun setupJavadoc(project: Project) {
  */
 fun xlint(): String {
 	// See https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html#extra-options
-	return listOf(
-		"auxiliaryclass",
+	return listOf<String>(
+		//"auxiliaryclass",
 		//"cast",
-		"classfile",
-		"dep-ann",
+		//"classfile",
+		//"dep-ann",
 		//"deprecation",
-		"divzero",
-		"empty",
-		"exports",
-		"finally",
-		"module",
-		"opens",
+		//"divzero",
+		//"empty",
+		//"exports",
+		//"finally",
+		//"module",
+		//"opens",
 		//"overrides",
 		//"rawtypes",
-		"removal",
+		//"removal",
 		//"serial",
 		//"static",
-		"try",
+		//"try",
 		//"unchecked",
-		"varargs"
+		//"varargs"
 	).joinToString(separator = ",")
 }
 

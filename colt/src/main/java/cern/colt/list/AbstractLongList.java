@@ -815,7 +815,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 */
 	public java.util.ArrayList<Long> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Long>(mySize);
+		java.util.ArrayList<Long> list = new java.util.ArrayList<Long>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

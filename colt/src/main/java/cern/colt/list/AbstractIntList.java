@@ -825,7 +825,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 */
 	public java.util.ArrayList<Integer> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Integer>(mySize);
+		java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}
