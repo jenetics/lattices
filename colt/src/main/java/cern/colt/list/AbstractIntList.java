@@ -10,14 +10,14 @@
  */
 package cern.colt.list;
 
-import cern.colt.function.LongComparator;
-import cern.colt.function.LongProcedure;
+import cern.colt.function.IntComparator;
+import cern.colt.function.IntProcedure;
 
 /**
- * Abstract base class for resizable lists holding <code>long</code> elements; abstract.
+ * Abstract base class for resizable lists holding <code>int</code> elements; abstract.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public abstract class AbstractLongList extends AbstractList {
+public abstract class AbstractIntList extends AbstractList implements cern.colt.buffer.IntBufferConsumer {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -30,7 +30,7 @@ public abstract class AbstractLongList extends AbstractList {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
-	protected AbstractLongList() {
+	protected AbstractIntList() {
 	}
 
 	/**
@@ -38,8 +38,17 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param element element to be appended to this list.
 	 */
-	public void add(long element) {
+	public void add(int element) {
 		beforeInsert(size, element);
+	}
+
+	/**
+	 * Appends all elements of the specified list to the receiver.
+	 *
+	 * @param list the list of which all elements shall be appended.
+	 */
+	public void addAllOf(IntArrayList other) {
+		addAllOfFromTo(other, 0, other.size() - 1);
 	}
 
 	/**
@@ -50,7 +59,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param to    the index of the last element to be appended (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(AbstractLongList other, int from, int to) {
+	public void addAllOfFromTo(AbstractIntList other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -61,9 +70,9 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param index   index before which the specified element is to be inserted (must be in [0,size]).
 	 * @param element element to be inserted.
-	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsert(int index, long element) {
+	public void beforeInsert(int index, int element) {
 		beforeInsertDummies(index, 1);
 		set(index, element);
 	}
@@ -78,9 +87,9 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param from  the index of the first element to be inserted (inclusive).
 	 * @param to    the index of the last element to be inserted (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
-	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, AbstractLongList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, AbstractIntList other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -126,7 +135,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearch(long key) {
+	public int binarySearch(int key) {
 		return this.binarySearchFromTo(key, 0, size - 1);
 	}
 
@@ -152,12 +161,12 @@ public abstract class AbstractLongList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearchFromTo(long key, int from, int to) {
+	public int binarySearchFromTo(int key, int from, int to) {
 		int low = from;
 		int high = to;
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			long midVal = get(mid);
+			int midVal = get(mid);
 
 			if (midVal < key) low = mid + 1;
 			else if (midVal > key) high = mid - 1;
@@ -180,7 +189,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param element element whose presence in the receiver is to be tested.
 	 */
-	public boolean contains(long elem) {
+	public boolean contains(int elem) {
 		return indexOfFromTo(elem, 0, size - 1) >= 0;
 	}
 
@@ -190,7 +199,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param element the element to be deleted.
 	 */
-	public void delete(long element) {
+	public void delete(int element) {
 		int index = indexOfFromTo(element, 0, size - 1);
 		if (index >= 0) remove(index);
 	}
@@ -203,8 +212,8 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @return the elements currently stored.
 	 */
-	public long[] elements() {
-		long[] myElements = new long[size];
+	public int[] elements() {
+		int[] myElements = new int[size];
 		for (int i = size; --i >= 0; ) myElements[i] = getQuick(i);
 		return myElements;
 	}
@@ -218,9 +227,9 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public AbstractLongList elements(long[] elements) {
+	public AbstractIntList elements(int[] elements) {
 		clear();
-		addAllOfFromTo(new LongArrayList(elements), 0, elements.length - 1);
+		addAllOfFromTo(new IntArrayList(elements), 0, elements.length - 1);
 		return this;
 	}
 
@@ -243,12 +252,12 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
-		if (!(otherObj instanceof AbstractLongList)) {
+		if (!(otherObj instanceof AbstractIntList)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		AbstractLongList other = (AbstractLongList) otherObj;
+		AbstractIntList other = (AbstractIntList) otherObj;
 		if (size() != other.size()) return false;
 
 		for (int i = size(); --i >= 0; ) {
@@ -264,7 +273,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
 	 * @param val  the value to be stored in the specified elements of the receiver.
 	 */
-	public void fillFromToWith(int from, int to, long val) {
+	public void fillFromToWith(int from, int to, int val) {
 		checkRangeFromTo(from, to, this.size);
 		for (int i = from; i <= to; ) setQuick(i++, val);
 	}
@@ -276,7 +285,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
 	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
 	 */
-	public boolean forEach(LongProcedure procedure) {
+	public boolean forEach(IntProcedure procedure) {
 		for (int i = 0; i < size; ) if (!procedure.apply(get(i++))) return false;
 		return true;
 	}
@@ -288,7 +297,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (index
 	 *                                   &lt; 0 || index &gt;= size()).
 	 */
-	public long get(int index) {
+	public int get(int index) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		return getQuick(index);
@@ -305,7 +314,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param index index of element to return.
 	 */
-	protected abstract long getQuick(int index);
+	protected abstract int getQuick(int index);
 
 	/**
 	 * Returns the index of the first occurrence of the specified
@@ -314,7 +323,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int indexOf(long element) { //delta
+	public int indexOf(int element) { //delta
 		return indexOfFromTo(element, 0, size - 1);
 	}
 
@@ -330,7 +339,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int indexOfFromTo(long element, int from, int to) {
+	public int indexOfFromTo(int element, int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		for (int i = from; i <= to; i++) {
@@ -346,7 +355,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int lastIndexOf(long element) {
+	public int lastIndexOf(int element) {
 		return lastIndexOfFromTo(element, 0, size - 1);
 	}
 
@@ -362,7 +371,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int lastIndexOfFromTo(long element, int from, int to) {
+	public int lastIndexOfFromTo(int element, int from, int to) {
 		checkRangeFromTo(from, to, size());
 
 		for (int i = to; i >= from; i--) {
@@ -391,7 +400,7 @@ public abstract class AbstractLongList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		long[] myElements = elements();
+		int[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -426,11 +435,11 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void mergeSortFromTo(int from, int to, LongComparator c) {
+	public void mergeSortFromTo(int from, int to, IntComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		long[] myElements = elements();
+		int[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -444,11 +453,11 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @return a new list
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public AbstractLongList partFromTo(int from, int to) {
+	public AbstractIntList partFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		int length = to - from + 1;
-		LongArrayList part = new LongArrayList(length);
+		IntArrayList part = new IntArrayList(length);
 		part.addAllOfFromTo(this, from, to);
 		return part;
 	}
@@ -473,8 +482,9 @@ public abstract class AbstractLongList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		long[] myElements = elements();
+		int[] myElements = elements();
 		java.util.Arrays.sort(myElements, from, to + 1);
+		//cern.colt.Sorting.mergeSort(myElements, from, to+1); // TODO just for debugging
 		elements(myElements);
 		setSizeRaw(mySize);
 	}
@@ -506,11 +516,11 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void quickSortFromTo(int from, int to, LongComparator c) {
+	public void quickSortFromTo(int from, int to, IntComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		long[] myElements = elements();
+		int[] myElements = elements();
 		cern.colt.Sorting.quickSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -523,7 +533,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param other the other list.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean removeAll(AbstractLongList other) {
+	public boolean removeAll(AbstractIntList other) {
 		if (other.size() == 0) return false; //nothing to do
 		int limit = other.size() - 1;
 		int j = 0;
@@ -568,7 +578,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param other     list holding elements to be copied into the receiver.
 	 * @param otherFrom position of first element within other list to be copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, AbstractLongList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, AbstractIntList other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size());
@@ -629,7 +639,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, AbstractLongList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, AbstractIntList other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -676,7 +686,7 @@ public abstract class AbstractLongList extends AbstractList {
 		int index = from;
 		int limit = Math.min(size() - from, other.size());
 		for (int i = 0; i < limit; i++)
-			set(index++, ((Number) e.next()).longValue()); //delta
+			set(index++, ((Number) e.next()).intValue()); //delta
 	}
 
 	/**
@@ -687,7 +697,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param other the other list to test against.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean retainAll(AbstractLongList other) {
+	public boolean retainAll(AbstractIntList other) {
 		if (other.size() == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -710,7 +720,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * Last becomes first, second last becomes second first, and so on.
 	 */
 	public void reverse() {
-		long tmp;
+		int tmp;
 		int limit = size() / 2;
 		int j = size() - 1;
 
@@ -728,7 +738,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param element element to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
 	 */
-	public void set(int index, long element) {
+	public void set(int index, int element) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		setQuick(index, element);
@@ -746,7 +756,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * @param index   index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
-	protected abstract void setQuick(int index, long element);
+	protected abstract void setQuick(int index, int element);
 
 	/**
 	 * Sets the size of the receiver without modifying it otherwise.
@@ -755,7 +765,7 @@ public abstract class AbstractLongList extends AbstractList {
 	 * If your subclass overrides and delegates size changing methods to some other object,
 	 * you must make sure that those overriding methods not only update the size of the delegate but also of this class.
 	 * For example:
-	 * public DatabaseList extends AbstractLongList {
+	 * public DatabaseList extends AbstractIntList {
 	 * ...
 	 * public void removeFromTo(int from,int to) {
 	 * myDatabase.removeFromTo(from,to);
@@ -782,7 +792,7 @@ public abstract class AbstractLongList extends AbstractList {
 			int random = gen.nextIntFromTo(i, to);
 
 			//swap(i, random)
-			long tmpElement = getQuick(random);
+			int tmpElement = getQuick(random);
 			setQuick(random, getQuick(i));
 			setQuick(i, tmpElement);
 		}
@@ -802,8 +812,8 @@ public abstract class AbstractLongList extends AbstractList {
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public AbstractLongList times(int times) {
-		AbstractLongList newList = new LongArrayList(times * size());
+	public AbstractIntList times(int times) {
+		AbstractIntList newList = new IntArrayList(times * size());
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -813,9 +823,9 @@ public abstract class AbstractLongList extends AbstractList {
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList<Long> toList() {
+	public java.util.ArrayList<Integer> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Long>(mySize);
+		java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

@@ -10,14 +10,14 @@
  */
 package cern.colt.list;
 
-import cern.colt.function.FloatComparator;
-import cern.colt.function.FloatProcedure;
+import cern.colt.function.LongComparator;
+import cern.colt.function.LongProcedure;
 
 /**
- * Abstract base class for resizable lists holding <code>float</code> elements; abstract.
+ * Abstract base class for resizable lists holding <code>long</code> elements; abstract.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public abstract class AbstractFloatList extends AbstractList {
+public abstract class AbstractLongList extends AbstractList {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -30,7 +30,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
-	protected AbstractFloatList() {
+	protected AbstractLongList() {
 	}
 
 	/**
@@ -38,7 +38,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param element element to be appended to this list.
 	 */
-	public void add(float element) {
+	public void add(long element) {
 		beforeInsert(size, element);
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param to    the index of the last element to be appended (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(AbstractFloatList other, int from, int to) {
+	public void addAllOfFromTo(AbstractLongList other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -61,9 +61,9 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param index   index before which the specified element is to be inserted (must be in [0,size]).
 	 * @param element element to be inserted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
+	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
 	 */
-	public void beforeInsert(int index, float element) {
+	public void beforeInsert(int index, long element) {
 		beforeInsertDummies(index, 1);
 		set(index, element);
 	}
@@ -78,9 +78,9 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param from  the index of the first element to be inserted (inclusive).
 	 * @param to    the index of the last element to be inserted (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
+	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
 	 */
-	public void beforeInsertAllOfFromTo(int index, AbstractFloatList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, AbstractLongList other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -126,7 +126,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearch(float key) {
+	public int binarySearch(long key) {
 		return this.binarySearchFromTo(key, 0, size - 1);
 	}
 
@@ -152,12 +152,12 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearchFromTo(float key, int from, int to) {
+	public int binarySearchFromTo(long key, int from, int to) {
 		int low = from;
 		int high = to;
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			float midVal = get(mid);
+			long midVal = get(mid);
 
 			if (midVal < key) low = mid + 1;
 			else if (midVal > key) high = mid - 1;
@@ -180,7 +180,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param element element whose presence in the receiver is to be tested.
 	 */
-	public boolean contains(float elem) {
+	public boolean contains(long elem) {
 		return indexOfFromTo(elem, 0, size - 1) >= 0;
 	}
 
@@ -190,7 +190,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param element the element to be deleted.
 	 */
-	public void delete(float element) {
+	public void delete(long element) {
 		int index = indexOfFromTo(element, 0, size - 1);
 		if (index >= 0) remove(index);
 	}
@@ -203,8 +203,8 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @return the elements currently stored.
 	 */
-	public float[] elements() {
-		float[] myElements = new float[size];
+	public long[] elements() {
+		long[] myElements = new long[size];
 		for (int i = size; --i >= 0; ) myElements[i] = getQuick(i);
 		return myElements;
 	}
@@ -218,9 +218,9 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public AbstractFloatList elements(float[] elements) {
+	public AbstractLongList elements(long[] elements) {
 		clear();
-		addAllOfFromTo(new FloatArrayList(elements), 0, elements.length - 1);
+		addAllOfFromTo(new LongArrayList(elements), 0, elements.length - 1);
 		return this;
 	}
 
@@ -243,12 +243,12 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
-		if (!(otherObj instanceof AbstractFloatList)) {
+		if (!(otherObj instanceof AbstractLongList)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		AbstractFloatList other = (AbstractFloatList) otherObj;
+		AbstractLongList other = (AbstractLongList) otherObj;
 		if (size() != other.size()) return false;
 
 		for (int i = size(); --i >= 0; ) {
@@ -264,7 +264,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
 	 * @param val  the value to be stored in the specified elements of the receiver.
 	 */
-	public void fillFromToWith(int from, int to, float val) {
+	public void fillFromToWith(int from, int to, long val) {
 		checkRangeFromTo(from, to, this.size);
 		for (int i = from; i <= to; ) setQuick(i++, val);
 	}
@@ -276,7 +276,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
 	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
 	 */
-	public boolean forEach(FloatProcedure procedure) {
+	public boolean forEach(LongProcedure procedure) {
 		for (int i = 0; i < size; ) if (!procedure.apply(get(i++))) return false;
 		return true;
 	}
@@ -288,7 +288,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (index
 	 *                                   &lt; 0 || index &gt;= size()).
 	 */
-	public float get(int index) {
+	public long get(int index) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		return getQuick(index);
@@ -305,7 +305,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param index index of element to return.
 	 */
-	protected abstract float getQuick(int index);
+	protected abstract long getQuick(int index);
 
 	/**
 	 * Returns the index of the first occurrence of the specified
@@ -314,7 +314,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int indexOf(float element) { //delta
+	public int indexOf(long element) { //delta
 		return indexOfFromTo(element, 0, size - 1);
 	}
 
@@ -330,7 +330,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int indexOfFromTo(float element, int from, int to) {
+	public int indexOfFromTo(long element, int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		for (int i = from; i <= to; i++) {
@@ -346,7 +346,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int lastIndexOf(float element) {
+	public int lastIndexOf(long element) {
 		return lastIndexOfFromTo(element, 0, size - 1);
 	}
 
@@ -362,7 +362,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int lastIndexOfFromTo(float element, int from, int to) {
+	public int lastIndexOfFromTo(long element, int from, int to) {
 		checkRangeFromTo(from, to, size());
 
 		for (int i = to; i >= from; i--) {
@@ -391,7 +391,7 @@ public abstract class AbstractFloatList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		float[] myElements = elements();
+		long[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -426,11 +426,11 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void mergeSortFromTo(int from, int to, FloatComparator c) {
+	public void mergeSortFromTo(int from, int to, LongComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		float[] myElements = elements();
+		long[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -444,11 +444,11 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @return a new list
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public AbstractFloatList partFromTo(int from, int to) {
+	public AbstractLongList partFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		int length = to - from + 1;
-		FloatArrayList part = new FloatArrayList(length);
+		LongArrayList part = new LongArrayList(length);
 		part.addAllOfFromTo(this, from, to);
 		return part;
 	}
@@ -473,7 +473,7 @@ public abstract class AbstractFloatList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		float[] myElements = elements();
+		long[] myElements = elements();
 		java.util.Arrays.sort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -506,11 +506,11 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void quickSortFromTo(int from, int to, FloatComparator c) {
+	public void quickSortFromTo(int from, int to, LongComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		float[] myElements = elements();
+		long[] myElements = elements();
 		cern.colt.Sorting.quickSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -523,7 +523,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param other the other list.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean removeAll(AbstractFloatList other) {
+	public boolean removeAll(AbstractLongList other) {
 		if (other.size() == 0) return false; //nothing to do
 		int limit = other.size() - 1;
 		int j = 0;
@@ -568,7 +568,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param other     list holding elements to be copied into the receiver.
 	 * @param otherFrom position of first element within other list to be copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, AbstractFloatList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, AbstractLongList other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size());
@@ -629,7 +629,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, AbstractFloatList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, AbstractLongList other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -676,7 +676,7 @@ public abstract class AbstractFloatList extends AbstractList {
 		int index = from;
 		int limit = Math.min(size() - from, other.size());
 		for (int i = 0; i < limit; i++)
-			set(index++, ((Number) e.next()).floatValue()); //delta
+			set(index++, ((Number) e.next()).longValue()); //delta
 	}
 
 	/**
@@ -687,7 +687,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param other the other list to test against.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean retainAll(AbstractFloatList other) {
+	public boolean retainAll(AbstractLongList other) {
 		if (other.size() == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -710,7 +710,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * Last becomes first, second last becomes second first, and so on.
 	 */
 	public void reverse() {
-		float tmp;
+		long tmp;
 		int limit = size() / 2;
 		int j = size() - 1;
 
@@ -728,7 +728,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param element element to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
 	 */
-	public void set(int index, float element) {
+	public void set(int index, long element) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		setQuick(index, element);
@@ -746,7 +746,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * @param index   index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
-	protected abstract void setQuick(int index, float element);
+	protected abstract void setQuick(int index, long element);
 
 	/**
 	 * Sets the size of the receiver without modifying it otherwise.
@@ -755,7 +755,7 @@ public abstract class AbstractFloatList extends AbstractList {
 	 * If your subclass overrides and delegates size changing methods to some other object,
 	 * you must make sure that those overriding methods not only update the size of the delegate but also of this class.
 	 * For example:
-	 * public DatabaseList extends AbstractFloatList {
+	 * public DatabaseList extends AbstractLongList {
 	 * ...
 	 * public void removeFromTo(int from,int to) {
 	 * myDatabase.removeFromTo(from,to);
@@ -782,7 +782,7 @@ public abstract class AbstractFloatList extends AbstractList {
 			int random = gen.nextIntFromTo(i, to);
 
 			//swap(i, random)
-			float tmpElement = getQuick(random);
+			long tmpElement = getQuick(random);
 			setQuick(random, getQuick(i));
 			setQuick(i, tmpElement);
 		}
@@ -802,8 +802,8 @@ public abstract class AbstractFloatList extends AbstractList {
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public AbstractFloatList times(int times) {
-		AbstractFloatList newList = new FloatArrayList(times * size());
+	public AbstractLongList times(int times) {
+		AbstractLongList newList = new LongArrayList(times * size());
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -813,9 +813,9 @@ public abstract class AbstractFloatList extends AbstractList {
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList<Float> toList() {
+	public java.util.ArrayList<Long> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Float>(mySize);
+		java.util.ArrayList<Long> list = new java.util.ArrayList<Long>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

@@ -10,14 +10,14 @@
  */
 package cern.colt.list;
 
-import cern.colt.function.CharComparator;
-import cern.colt.function.CharProcedure;
+import cern.colt.function.ShortComparator;
+import cern.colt.function.ShortProcedure;
 
 /**
- * Abstract base class for resizable lists holding <code>char</code> elements; abstract.
+ * Abstract base class for resizable lists holding <code>short</code> elements; abstract.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public abstract class AbstractCharList extends AbstractList {
+public abstract class AbstractShortList extends AbstractList {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -30,7 +30,7 @@ public abstract class AbstractCharList extends AbstractList {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
-	protected AbstractCharList() {
+	protected AbstractShortList() {
 	}
 
 	/**
@@ -38,7 +38,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @param element element to be appended to this list.
 	 */
-	public void add(char element) {
+	public void add(short element) {
 		beforeInsert(size, element);
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param to    the index of the last element to be appended (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(AbstractCharList other, int from, int to) {
+	public void addAllOfFromTo(AbstractShortList other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -63,7 +63,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param element element to be inserted.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsert(int index, char element) {
+	public void beforeInsert(int index, short element) {
 		beforeInsertDummies(index, 1);
 		set(index, element);
 	}
@@ -80,7 +80,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, AbstractCharList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, AbstractShortList other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -126,7 +126,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearch(char key) {
+	public int binarySearch(short key) {
 		return this.binarySearchFromTo(key, 0, size - 1);
 	}
 
@@ -152,12 +152,12 @@ public abstract class AbstractCharList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearchFromTo(char key, int from, int to) {
+	public int binarySearchFromTo(short key, int from, int to) {
 		int low = from;
 		int high = to;
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			char midVal = get(mid);
+			short midVal = get(mid);
 
 			if (midVal < key) low = mid + 1;
 			else if (midVal > key) high = mid - 1;
@@ -180,7 +180,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @param element element whose presence in the receiver is to be tested.
 	 */
-	public boolean contains(char elem) {
+	public boolean contains(short elem) {
 		return indexOfFromTo(elem, 0, size - 1) >= 0;
 	}
 
@@ -190,7 +190,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @param element the element to be deleted.
 	 */
-	public void delete(char element) {
+	public void delete(short element) {
 		int index = indexOfFromTo(element, 0, size - 1);
 		if (index >= 0) remove(index);
 	}
@@ -203,8 +203,8 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @return the elements currently stored.
 	 */
-	public char[] elements() {
-		char[] myElements = new char[size];
+	public short[] elements() {
+		short[] myElements = new short[size];
 		for (int i = size; --i >= 0; ) myElements[i] = getQuick(i);
 		return myElements;
 	}
@@ -218,9 +218,9 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public AbstractCharList elements(char[] elements) {
+	public AbstractShortList elements(short[] elements) {
 		clear();
-		addAllOfFromTo(new CharArrayList(elements), 0, elements.length - 1);
+		addAllOfFromTo(new ShortArrayList(elements), 0, elements.length - 1);
 		return this;
 	}
 
@@ -243,12 +243,12 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
-		if (!(otherObj instanceof AbstractCharList)) {
+		if (!(otherObj instanceof AbstractShortList)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		AbstractCharList other = (AbstractCharList) otherObj;
+		AbstractShortList other = (AbstractShortList) otherObj;
 		if (size() != other.size()) return false;
 
 		for (int i = size(); --i >= 0; ) {
@@ -264,7 +264,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
 	 * @param val  the value to be stored in the specified elements of the receiver.
 	 */
-	public void fillFromToWith(int from, int to, char val) {
+	public void fillFromToWith(int from, int to, short val) {
 		checkRangeFromTo(from, to, this.size);
 		for (int i = from; i <= to; ) setQuick(i++, val);
 	}
@@ -276,7 +276,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
 	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
 	 */
-	public boolean forEach(CharProcedure procedure) {
+	public boolean forEach(ShortProcedure procedure) {
 		for (int i = 0; i < size; ) if (!procedure.apply(get(i++))) return false;
 		return true;
 	}
@@ -288,7 +288,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (index
 	 *                                   &lt; 0 || index &gt;= size()).
 	 */
-	public char get(int index) {
+	public short get(int index) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		return getQuick(index);
@@ -305,7 +305,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @param index index of element to return.
 	 */
-	protected abstract char getQuick(int index);
+	protected abstract short getQuick(int index);
 
 	/**
 	 * Returns the index of the first occurrence of the specified
@@ -314,7 +314,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int indexOf(char element) { //delta
+	public int indexOf(short element) { //delta
 		return indexOfFromTo(element, 0, size - 1);
 	}
 
@@ -330,7 +330,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int indexOfFromTo(char element, int from, int to) {
+	public int indexOfFromTo(short element, int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		for (int i = from; i <= to; i++) {
@@ -346,7 +346,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int lastIndexOf(char element) {
+	public int lastIndexOf(short element) {
 		return lastIndexOfFromTo(element, 0, size - 1);
 	}
 
@@ -362,7 +362,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int lastIndexOfFromTo(char element, int from, int to) {
+	public int lastIndexOfFromTo(short element, int from, int to) {
 		checkRangeFromTo(from, to, size());
 
 		for (int i = to; i >= from; i--) {
@@ -391,7 +391,7 @@ public abstract class AbstractCharList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		char[] myElements = elements();
+		short[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -426,11 +426,11 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void mergeSortFromTo(int from, int to, CharComparator c) {
+	public void mergeSortFromTo(int from, int to, ShortComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		char[] myElements = elements();
+		short[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -444,11 +444,11 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @return a new list
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public AbstractCharList partFromTo(int from, int to) {
+	public AbstractShortList partFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		int length = to - from + 1;
-		CharArrayList part = new CharArrayList(length);
+		ShortArrayList part = new ShortArrayList(length);
 		part.addAllOfFromTo(this, from, to);
 		return part;
 	}
@@ -473,7 +473,7 @@ public abstract class AbstractCharList extends AbstractList {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		char[] myElements = elements();
+		short[] myElements = elements();
 		java.util.Arrays.sort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -506,11 +506,11 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void quickSortFromTo(int from, int to, CharComparator c) {
+	public void quickSortFromTo(int from, int to, ShortComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		char[] myElements = elements();
+		short[] myElements = elements();
 		cern.colt.Sorting.quickSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -523,7 +523,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param other the other list.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean removeAll(AbstractCharList other) {
+	public boolean removeAll(AbstractShortList other) {
 		if (other.size() == 0) return false; //nothing to do
 		int limit = other.size() - 1;
 		int j = 0;
@@ -568,7 +568,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param other     list holding elements to be copied into the receiver.
 	 * @param otherFrom position of first element within other list to be copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, AbstractCharList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, AbstractShortList other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size());
@@ -629,7 +629,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, AbstractCharList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, AbstractShortList other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -676,7 +676,7 @@ public abstract class AbstractCharList extends AbstractList {
 		int index = from;
 		int limit = Math.min(size() - from, other.size());
 		for (int i = 0; i < limit; i++)
-			set(index++, ((Character) e.next()).charValue()); //delta
+			set(index++, ((Number) e.next()).shortValue()); //delta
 	}
 
 	/**
@@ -687,7 +687,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param other the other list to test against.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean retainAll(AbstractCharList other) {
+	public boolean retainAll(AbstractShortList other) {
 		if (other.size() == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -710,7 +710,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * Last becomes first, second last becomes second first, and so on.
 	 */
 	public void reverse() {
-		char tmp;
+		short tmp;
 		int limit = size() / 2;
 		int j = size() - 1;
 
@@ -728,7 +728,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param element element to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
 	 */
-	public void set(int index, char element) {
+	public void set(int index, short element) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		setQuick(index, element);
@@ -746,7 +746,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * @param index   index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
-	protected abstract void setQuick(int index, char element);
+	protected abstract void setQuick(int index, short element);
 
 	/**
 	 * Sets the size of the receiver without modifying it otherwise.
@@ -755,7 +755,7 @@ public abstract class AbstractCharList extends AbstractList {
 	 * If your subclass overrides and delegates size changing methods to some other object,
 	 * you must make sure that those overriding methods not only update the size of the delegate but also of this class.
 	 * For example:
-	 * public DatabaseList extends AbstractCharList {
+	 * public DatabaseList extends AbstractShortList {
 	 * ...
 	 * public void removeFromTo(int from,int to) {
 	 * myDatabase.removeFromTo(from,to);
@@ -782,7 +782,7 @@ public abstract class AbstractCharList extends AbstractList {
 			int random = gen.nextIntFromTo(i, to);
 
 			//swap(i, random)
-			char tmpElement = getQuick(random);
+			short tmpElement = getQuick(random);
 			setQuick(random, getQuick(i));
 			setQuick(i, tmpElement);
 		}
@@ -802,8 +802,8 @@ public abstract class AbstractCharList extends AbstractList {
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public AbstractCharList times(int times) {
-		AbstractCharList newList = new CharArrayList(times * size());
+	public AbstractShortList times(int times) {
+		AbstractShortList newList = new ShortArrayList(times * size());
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -813,9 +813,9 @@ public abstract class AbstractCharList extends AbstractList {
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList<Character> toList() {
+	public java.util.ArrayList<Short> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Character>(mySize);
+		java.util.ArrayList<Short> list = new java.util.ArrayList<Short>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

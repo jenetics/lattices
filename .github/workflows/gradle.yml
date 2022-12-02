@@ -7,11 +7,12 @@ on:
     push:
         branches:
             - master
-            - features/*
+            - releases/*
+            - issues/*
     pull_request:
         branches:
             - master
-            - r*
+            - releases/*
 
 jobs:
     build:
@@ -19,7 +20,7 @@ jobs:
         strategy:
             matrix:
                 os: [ ubuntu-latest, macos-latest ]
-                java-version: [ 17, 18-ea  ]
+                java-version: [ 8  ]
         steps:
             - uses: actions/checkout@v2
 
@@ -29,4 +30,4 @@ jobs:
                   java-version: ${{ matrix.java-version }}
                   distribution: 'zulu'
             - name: Build with Gradle
-              run: ./gradlew build --stacktrace --info
+              run: ./gradlew clean compileJava --stacktrace --info

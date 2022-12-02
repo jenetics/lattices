@@ -10,14 +10,14 @@
  */
 package cern.colt.list;
 
-import cern.colt.function.IntComparator;
-import cern.colt.function.IntProcedure;
+import cern.colt.function.FloatComparator;
+import cern.colt.function.FloatProcedure;
 
 /**
- * Abstract base class for resizable lists holding <code>int</code> elements; abstract.
+ * Abstract base class for resizable lists holding <code>float</code> elements; abstract.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public abstract class AbstractIntList extends AbstractList implements cern.colt.buffer.IntBufferConsumer {
+public abstract class AbstractFloatList extends AbstractList {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -30,7 +30,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
-	protected AbstractIntList() {
+	protected AbstractFloatList() {
 	}
 
 	/**
@@ -38,17 +38,8 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @param element element to be appended to this list.
 	 */
-	public void add(int element) {
+	public void add(float element) {
 		beforeInsert(size, element);
-	}
-
-	/**
-	 * Appends all elements of the specified list to the receiver.
-	 *
-	 * @param list the list of which all elements shall be appended.
-	 */
-	public void addAllOf(IntArrayList other) {
-		addAllOfFromTo(other, 0, other.size() - 1);
 	}
 
 	/**
@@ -59,7 +50,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param to    the index of the last element to be appended (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(AbstractIntList other, int from, int to) {
+	public void addAllOfFromTo(AbstractFloatList other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -72,7 +63,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param element element to be inserted.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsert(int index, int element) {
+	public void beforeInsert(int index, float element) {
 		beforeInsertDummies(index, 1);
 		set(index, element);
 	}
@@ -89,7 +80,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, AbstractIntList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, AbstractFloatList other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -135,7 +126,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearch(int key) {
+	public int binarySearch(float key) {
 		return this.binarySearchFromTo(key, 0, size - 1);
 	}
 
@@ -161,12 +152,12 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearchFromTo(int key, int from, int to) {
+	public int binarySearchFromTo(float key, int from, int to) {
 		int low = from;
 		int high = to;
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			int midVal = get(mid);
+			float midVal = get(mid);
 
 			if (midVal < key) low = mid + 1;
 			else if (midVal > key) high = mid - 1;
@@ -189,7 +180,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @param element element whose presence in the receiver is to be tested.
 	 */
-	public boolean contains(int elem) {
+	public boolean contains(float elem) {
 		return indexOfFromTo(elem, 0, size - 1) >= 0;
 	}
 
@@ -199,7 +190,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @param element the element to be deleted.
 	 */
-	public void delete(int element) {
+	public void delete(float element) {
 		int index = indexOfFromTo(element, 0, size - 1);
 		if (index >= 0) remove(index);
 	}
@@ -212,8 +203,8 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @return the elements currently stored.
 	 */
-	public int[] elements() {
-		int[] myElements = new int[size];
+	public float[] elements() {
+		float[] myElements = new float[size];
 		for (int i = size; --i >= 0; ) myElements[i] = getQuick(i);
 		return myElements;
 	}
@@ -227,9 +218,9 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public AbstractIntList elements(int[] elements) {
+	public AbstractFloatList elements(float[] elements) {
 		clear();
-		addAllOfFromTo(new IntArrayList(elements), 0, elements.length - 1);
+		addAllOfFromTo(new FloatArrayList(elements), 0, elements.length - 1);
 		return this;
 	}
 
@@ -252,12 +243,12 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
-		if (!(otherObj instanceof AbstractIntList)) {
+		if (!(otherObj instanceof AbstractFloatList)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		AbstractIntList other = (AbstractIntList) otherObj;
+		AbstractFloatList other = (AbstractFloatList) otherObj;
 		if (size() != other.size()) return false;
 
 		for (int i = size(); --i >= 0; ) {
@@ -273,7 +264,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
 	 * @param val  the value to be stored in the specified elements of the receiver.
 	 */
-	public void fillFromToWith(int from, int to, int val) {
+	public void fillFromToWith(int from, int to, float val) {
 		checkRangeFromTo(from, to, this.size);
 		for (int i = from; i <= to; ) setQuick(i++, val);
 	}
@@ -285,7 +276,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
 	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
 	 */
-	public boolean forEach(IntProcedure procedure) {
+	public boolean forEach(FloatProcedure procedure) {
 		for (int i = 0; i < size; ) if (!procedure.apply(get(i++))) return false;
 		return true;
 	}
@@ -297,7 +288,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @throws IndexOutOfBoundsException index is out of range (index
 	 *                                   &lt; 0 || index &gt;= size()).
 	 */
-	public int get(int index) {
+	public float get(int index) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		return getQuick(index);
@@ -314,7 +305,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @param index index of element to return.
 	 */
-	protected abstract int getQuick(int index);
+	protected abstract float getQuick(int index);
 
 	/**
 	 * Returns the index of the first occurrence of the specified
@@ -323,7 +314,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param element the element to be searched for.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int indexOf(int element) { //delta
+	public int indexOf(float element) { //delta
 		return indexOfFromTo(element, 0, size - 1);
 	}
 
@@ -339,7 +330,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int indexOfFromTo(int element, int from, int to) {
+	public int indexOfFromTo(float element, int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		for (int i = from; i <= to; i++) {
@@ -355,7 +346,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param element the element to be searched for.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int lastIndexOf(int element) {
+	public int lastIndexOf(float element) {
 		return lastIndexOfFromTo(element, 0, size - 1);
 	}
 
@@ -371,7 +362,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int lastIndexOfFromTo(int element, int from, int to) {
+	public int lastIndexOfFromTo(float element, int from, int to) {
 		checkRangeFromTo(from, to, size());
 
 		for (int i = to; i >= from; i--) {
@@ -400,7 +391,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		int[] myElements = elements();
+		float[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -435,11 +426,11 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void mergeSortFromTo(int from, int to, IntComparator c) {
+	public void mergeSortFromTo(int from, int to, FloatComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		int[] myElements = elements();
+		float[] myElements = elements();
 		cern.colt.Sorting.mergeSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -453,11 +444,11 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @return a new list
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public AbstractIntList partFromTo(int from, int to) {
+	public AbstractFloatList partFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		int length = to - from + 1;
-		IntArrayList part = new IntArrayList(length);
+		FloatArrayList part = new FloatArrayList(length);
 		part.addAllOfFromTo(this, from, to);
 		return part;
 	}
@@ -482,9 +473,8 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		int[] myElements = elements();
+		float[] myElements = elements();
 		java.util.Arrays.sort(myElements, from, to + 1);
-		//cern.colt.Sorting.mergeSort(myElements, from, to+1); // TODO just for debugging
 		elements(myElements);
 		setSizeRaw(mySize);
 	}
@@ -516,11 +506,11 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 * @see Comparator
 	 */
-	public void quickSortFromTo(int from, int to, IntComparator c) {
+	public void quickSortFromTo(int from, int to, FloatComparator c) {
 		int mySize = size();
 		checkRangeFromTo(from, to, mySize);
 
-		int[] myElements = elements();
+		float[] myElements = elements();
 		cern.colt.Sorting.quickSort(myElements, from, to + 1, c);
 		elements(myElements);
 		setSizeRaw(mySize);
@@ -533,7 +523,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param other the other list.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean removeAll(AbstractIntList other) {
+	public boolean removeAll(AbstractFloatList other) {
 		if (other.size() == 0) return false; //nothing to do
 		int limit = other.size() - 1;
 		int j = 0;
@@ -578,7 +568,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param other     list holding elements to be copied into the receiver.
 	 * @param otherFrom position of first element within other list to be copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, AbstractIntList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, AbstractFloatList other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size());
@@ -639,7 +629,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, AbstractIntList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, AbstractFloatList other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -686,7 +676,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 		int index = from;
 		int limit = Math.min(size() - from, other.size());
 		for (int i = 0; i < limit; i++)
-			set(index++, ((Number) e.next()).intValue()); //delta
+			set(index++, ((Number) e.next()).floatValue()); //delta
 	}
 
 	/**
@@ -697,7 +687,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param other the other list to test against.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean retainAll(AbstractIntList other) {
+	public boolean retainAll(AbstractFloatList other) {
 		if (other.size() == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -720,7 +710,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * Last becomes first, second last becomes second first, and so on.
 	 */
 	public void reverse() {
-		int tmp;
+		float tmp;
 		int limit = size() / 2;
 		int j = size() - 1;
 
@@ -738,7 +728,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param element element to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
 	 */
-	public void set(int index, int element) {
+	public void set(int index, float element) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		setQuick(index, element);
@@ -756,7 +746,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * @param index   index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
-	protected abstract void setQuick(int index, int element);
+	protected abstract void setQuick(int index, float element);
 
 	/**
 	 * Sets the size of the receiver without modifying it otherwise.
@@ -765,7 +755,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 * If your subclass overrides and delegates size changing methods to some other object,
 	 * you must make sure that those overriding methods not only update the size of the delegate but also of this class.
 	 * For example:
-	 * public DatabaseList extends AbstractIntList {
+	 * public DatabaseList extends AbstractFloatList {
 	 * ...
 	 * public void removeFromTo(int from,int to) {
 	 * myDatabase.removeFromTo(from,to);
@@ -792,7 +782,7 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 			int random = gen.nextIntFromTo(i, to);
 
 			//swap(i, random)
-			int tmpElement = getQuick(random);
+			float tmpElement = getQuick(random);
 			setQuick(random, getQuick(i));
 			setQuick(i, tmpElement);
 		}
@@ -812,8 +802,8 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public AbstractIntList times(int times) {
-		AbstractIntList newList = new IntArrayList(times * size());
+	public AbstractFloatList times(int times) {
+		AbstractFloatList newList = new FloatArrayList(times * size());
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -823,9 +813,9 @@ public abstract class AbstractIntList extends AbstractList implements cern.colt.
 	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList<Integer> toList() {
+	public java.util.ArrayList<Float> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Integer>(mySize);
+		java.util.ArrayList<Float> list = new java.util.ArrayList<Float>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

@@ -10,13 +10,14 @@
  */
 package cern.colt.list;
 
-import cern.colt.function.BooleanProcedure;
+import cern.colt.function.CharComparator;
+import cern.colt.function.CharProcedure;
 
 /**
- * Abstract base class for resizable lists holding <code>boolean</code> elements; abstract.
+ * Abstract base class for resizable lists holding <code>char</code> elements; abstract.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public abstract class AbstractBooleanList extends AbstractList {
+public abstract class AbstractCharList extends AbstractList {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -29,7 +30,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	/**
 	 * Makes this class non instantiable, but still let's others inherit from it.
 	 */
-	protected AbstractBooleanList() {
+	protected AbstractCharList() {
 	}
 
 	/**
@@ -37,7 +38,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @param element element to be appended to this list.
 	 */
-	public void add(boolean element) {
+	public void add(char element) {
 		beforeInsert(size, element);
 	}
 
@@ -49,7 +50,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param to    the index of the last element to be appended (inclusive).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(AbstractBooleanList other, int from, int to) {
+	public void addAllOfFromTo(AbstractCharList other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -62,7 +63,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param element element to be inserted.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsert(int index, boolean element) {
+	public void beforeInsert(int index, char element) {
 		beforeInsertDummies(index, 1);
 		set(index, element);
 	}
@@ -79,7 +80,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, AbstractBooleanList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, AbstractCharList other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -125,7 +126,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearch(boolean key) {
+	public int binarySearch(char key) {
 		return this.binarySearchFromTo(key, 0, size - 1);
 	}
 
@@ -151,16 +152,15 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * and only if the key is found.
 	 * @see java.util.Arrays
 	 */
-	public int binarySearchFromTo(boolean key, int from, int to) {
+	public int binarySearchFromTo(char key, int from, int to) {
 		int low = from;
 		int high = to;
-		int intKey = toInt(key);
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			boolean midVal = get(mid);
+			char midVal = get(mid);
 
-			if (toInt(midVal) < intKey) low = mid + 1;
-			else if (toInt(midVal) > intKey) high = mid - 1;
+			if (midVal < key) low = mid + 1;
+			else if (midVal > key) high = mid - 1;
 			else return mid; // key found
 		}
 		return -(low + 1);  // key not found.
@@ -180,7 +180,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @param element element whose presence in the receiver is to be tested.
 	 */
-	public boolean contains(boolean elem) {
+	public boolean contains(char elem) {
 		return indexOfFromTo(elem, 0, size - 1) >= 0;
 	}
 
@@ -190,7 +190,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @param element the element to be deleted.
 	 */
-	public void delete(boolean element) {
+	public void delete(char element) {
 		int index = indexOfFromTo(element, 0, size - 1);
 		if (index >= 0) remove(index);
 	}
@@ -203,8 +203,8 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @return the elements currently stored.
 	 */
-	public boolean[] elements() {
-		boolean[] myElements = new boolean[size];
+	public char[] elements() {
+		char[] myElements = new char[size];
 		for (int i = size; --i >= 0; ) myElements[i] = getQuick(i);
 		return myElements;
 	}
@@ -218,9 +218,9 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public AbstractBooleanList elements(boolean[] elements) {
+	public AbstractCharList elements(char[] elements) {
 		clear();
-		addAllOfFromTo(new BooleanArrayList(elements), 0, elements.length - 1);
+		addAllOfFromTo(new CharArrayList(elements), 0, elements.length - 1);
 		return this;
 	}
 
@@ -243,12 +243,12 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
-		if (!(otherObj instanceof AbstractBooleanList)) {
+		if (!(otherObj instanceof AbstractCharList)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		AbstractBooleanList other = (AbstractBooleanList) otherObj;
+		AbstractCharList other = (AbstractCharList) otherObj;
 		if (size() != other.size()) return false;
 
 		for (int i = size(); --i >= 0; ) {
@@ -264,7 +264,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
 	 * @param val  the value to be stored in the specified elements of the receiver.
 	 */
-	public void fillFromToWith(int from, int to, boolean val) {
+	public void fillFromToWith(int from, int to, char val) {
 		checkRangeFromTo(from, to, this.size);
 		for (int i = from; i <= to; ) setQuick(i++, val);
 	}
@@ -276,7 +276,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
 	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
 	 */
-	public boolean forEach(BooleanProcedure procedure) {
+	public boolean forEach(CharProcedure procedure) {
 		for (int i = 0; i < size; ) if (!procedure.apply(get(i++))) return false;
 		return true;
 	}
@@ -288,7 +288,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @throws IndexOutOfBoundsException index is out of range (index
 	 *                                   &lt; 0 || index &gt;= size()).
 	 */
-	public boolean get(int index) {
+	public char get(int index) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		return getQuick(index);
@@ -305,7 +305,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @param index index of element to return.
 	 */
-	protected abstract boolean getQuick(int index);
+	protected abstract char getQuick(int index);
 
 	/**
 	 * Returns the index of the first occurrence of the specified
@@ -314,7 +314,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int indexOf(boolean element) { //delta
+	public int indexOf(char element) { //delta
 		return indexOfFromTo(element, 0, size - 1);
 	}
 
@@ -330,7 +330,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int indexOfFromTo(boolean element, int from, int to) {
+	public int indexOfFromTo(char element, int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		for (int i = from; i <= to; i++) {
@@ -346,7 +346,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param element the element to be searched for.
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 */
-	public int lastIndexOf(boolean element) {
+	public int lastIndexOf(char element) {
 		return lastIndexOfFromTo(element, 0, size - 1);
 	}
 
@@ -362,13 +362,78 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public int lastIndexOfFromTo(boolean element, int from, int to) {
+	public int lastIndexOfFromTo(char element, int from, int to) {
 		checkRangeFromTo(from, to, size());
 
 		for (int i = to; i >= from; i--) {
 			if (element == getQuick(i)) return i; //found
 		}
 		return -1; //not found
+	}
+
+	/**
+	 * Sorts the specified range of the receiver into ascending order.
+	 * <p>
+	 * The sorting algorithm is a modified mergesort (in which the merge is
+	 * omitted if the highest element in the low sublist is less than the
+	 * lowest element in the high sublist).  This algorithm offers guaranteed
+	 * n*log(n) performance, and can approach linear performance on nearly
+	 * sorted lists.
+	 *
+	 * <p><b>You should never call this method unless you are sure that this particular sorting algorithm is the right one for your data set.</b>
+	 * It is generally better to call <tt>sort()</tt> or <tt>sortFromTo(...)</tt> instead, because those methods automatically choose the best sorting algorithm.
+	 *
+	 * @param from the index of the first element (inclusive) to be sorted.
+	 * @param to   the index of the last element (inclusive) to be sorted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 */
+	public void mergeSortFromTo(int from, int to) {
+		int mySize = size();
+		checkRangeFromTo(from, to, mySize);
+
+		char[] myElements = elements();
+		cern.colt.Sorting.mergeSort(myElements, from, to + 1);
+		elements(myElements);
+		setSizeRaw(mySize);
+	}
+
+	/**
+	 * Sorts the receiver according
+	 * to the order induced by the specified comparator.  All elements in the
+	 * range must be <i>mutually comparable</i> by the specified comparator
+	 * (that is, <tt>c.compare(e1, e2)</tt> must not throw a
+	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
+	 * <tt>e2</tt> in the range).<p>
+	 * <p>
+	 * This sort is guaranteed to be <i>stable</i>:  equal elements will
+	 * not be reordered as a result of the sort.<p>
+	 * <p>
+	 * The sorting algorithm is a modified mergesort (in which the merge is
+	 * omitted if the highest element in the low sublist is less than the
+	 * lowest element in the high sublist).  This algorithm offers guaranteed
+	 * n*log(n) performance, and can approach linear performance on nearly
+	 * sorted lists.
+	 *
+	 * @param from the index of the first element (inclusive) to be
+	 *             sorted.
+	 * @param to   the index of the last element (inclusive) to be sorted.
+	 * @param c    the comparator to determine the order of the receiver.
+	 * @throws ClassCastException             if the array contains elements that are not
+	 *                                        <i>mutually comparable</i> using the specified comparator.
+	 * @throws IllegalArgumentException       if <tt>fromIndex &gt; toIndex</tt>
+	 * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+	 *                                        <tt>toIndex &gt; a.length</tt>
+	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @see Comparator
+	 */
+	public void mergeSortFromTo(int from, int to, CharComparator c) {
+		int mySize = size();
+		checkRangeFromTo(from, to, mySize);
+
+		char[] myElements = elements();
+		cern.colt.Sorting.mergeSort(myElements, from, to + 1, c);
+		elements(myElements);
+		setSizeRaw(mySize);
 	}
 
 	/**
@@ -379,13 +444,76 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @return a new list
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public AbstractBooleanList partFromTo(int from, int to) {
+	public AbstractCharList partFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
 
 		int length = to - from + 1;
-		BooleanArrayList part = new BooleanArrayList(length);
+		CharArrayList part = new CharArrayList(length);
 		part.addAllOfFromTo(this, from, to);
 		return part;
+	}
+
+	/**
+	 * Sorts the specified range of the receiver into
+	 * ascending numerical order.  The sorting algorithm is a tuned quicksort,
+	 * adapted from Jon L. Bentley and M. Douglas McIlroy's "Engineering a
+	 * Sort Function", Software-Practice and Experience, Vol. 23(11)
+	 * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
+	 * performance on many data sets that cause other quicksorts to degrade to
+	 * quadratic performance.
+	 *
+	 * <p><b>You should never call this method unless you are sure that this particular sorting algorithm is the right one for your data set.</b>
+	 * It is generally better to call <tt>sort()</tt> or <tt>sortFromTo(...)</tt> instead, because those methods automatically choose the best sorting algorithm.
+	 *
+	 * @param from the index of the first element (inclusive) to be sorted.
+	 * @param to   the index of the last element (inclusive) to be sorted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 */
+	public void quickSortFromTo(int from, int to) {
+		int mySize = size();
+		checkRangeFromTo(from, to, mySize);
+
+		char[] myElements = elements();
+		java.util.Arrays.sort(myElements, from, to + 1);
+		elements(myElements);
+		setSizeRaw(mySize);
+	}
+
+	/**
+	 * Sorts the receiver according
+	 * to the order induced by the specified comparator.  All elements in the
+	 * range must be <i>mutually comparable</i> by the specified comparator
+	 * (that is, <tt>c.compare(e1, e2)</tt> must not throw a
+	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
+	 * <tt>e2</tt> in the range).<p>
+	 * <p>
+	 * The sorting algorithm is a tuned quicksort,
+	 * adapted from Jon L. Bentley and M. Douglas McIlroy's "Engineering a
+	 * Sort Function", Software-Practice and Experience, Vol. 23(11)
+	 * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
+	 * performance on many data sets that cause other quicksorts to degrade to
+	 * quadratic performance.
+	 *
+	 * @param from the index of the first element (inclusive) to be
+	 *             sorted.
+	 * @param to   the index of the last element (inclusive) to be sorted.
+	 * @param c    the comparator to determine the order of the receiver.
+	 * @throws ClassCastException             if the array contains elements that are not
+	 *                                        <i>mutually comparable</i> using the specified comparator.
+	 * @throws IllegalArgumentException       if <tt>fromIndex &gt; toIndex</tt>
+	 * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+	 *                                        <tt>toIndex &gt; a.length</tt>
+	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @see Comparator
+	 */
+	public void quickSortFromTo(int from, int to, CharComparator c) {
+		int mySize = size();
+		checkRangeFromTo(from, to, mySize);
+
+		char[] myElements = elements();
+		cern.colt.Sorting.quickSort(myElements, from, to + 1, c);
+		elements(myElements);
+		setSizeRaw(mySize);
 	}
 
 	/**
@@ -395,7 +523,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param other the other list.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean removeAll(AbstractBooleanList other) {
+	public boolean removeAll(AbstractCharList other) {
 		if (other.size() == 0) return false; //nothing to do
 		int limit = other.size() - 1;
 		int j = 0;
@@ -413,7 +541,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * Removes from the receiver all elements whose index is between
 	 * <code>from</code>, inclusive and <code>to</code>, inclusive.  Shifts any succeeding
 	 * elements to the left (reduces their index).
-	 * This call booleanens the list by <tt>(to - from + 1)</tt> elements.
+	 * This call shortens the list by <tt>(to - from + 1)</tt> elements.
 	 *
 	 * @param from index of first element to be removed.
 	 * @param to   index of last element to be removed.
@@ -440,7 +568,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param other     list holding elements to be copied into the receiver.
 	 * @param otherFrom position of first element within other list to be copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, AbstractBooleanList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, AbstractCharList other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size());
@@ -501,7 +629,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, AbstractBooleanList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, AbstractCharList other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -548,7 +676,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 		int index = from;
 		int limit = Math.min(size() - from, other.size());
 		for (int i = 0; i < limit; i++)
-			set(index++, ((Boolean) e.next()).booleanValue()); //delta
+			set(index++, ((Character) e.next()).charValue()); //delta
 	}
 
 	/**
@@ -559,7 +687,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param other the other list to test against.
 	 * @return <code>true</code> if the receiver changed as a result of the call.
 	 */
-	public boolean retainAll(AbstractBooleanList other) {
+	public boolean retainAll(AbstractCharList other) {
 		if (other.size() == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -582,7 +710,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * Last becomes first, second last becomes second first, and so on.
 	 */
 	public void reverse() {
-		boolean tmp;
+		char tmp;
 		int limit = size() / 2;
 		int j = size() - 1;
 
@@ -600,7 +728,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param element element to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
 	 */
-	public void set(int index, boolean element) {
+	public void set(int index, char element) {
 		if (index >= size || index < 0)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		setQuick(index, element);
@@ -618,7 +746,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * @param index   index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
-	protected abstract void setQuick(int index, boolean element);
+	protected abstract void setQuick(int index, char element);
 
 	/**
 	 * Sets the size of the receiver without modifying it otherwise.
@@ -627,7 +755,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 * If your subclass overrides and delegates size changing methods to some other object,
 	 * you must make sure that those overriding methods not only update the size of the delegate but also of this class.
 	 * For example:
-	 * public DatabaseList extends AbstractBooleanList {
+	 * public DatabaseList extends AbstractCharList {
 	 * ...
 	 * public void removeFromTo(int from,int to) {
 	 * myDatabase.removeFromTo(from,to);
@@ -654,7 +782,7 @@ public abstract class AbstractBooleanList extends AbstractList {
 			int random = gen.nextIntFromTo(i, to);
 
 			//swap(i, random)
-			boolean tmpElement = getQuick(random);
+			char tmpElement = getQuick(random);
 			setQuick(random, getQuick(i));
 			setQuick(i, tmpElement);
 		}
@@ -674,8 +802,8 @@ public abstract class AbstractBooleanList extends AbstractList {
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public AbstractBooleanList times(int times) {
-		AbstractBooleanList newList = new BooleanArrayList(times * size());
+	public AbstractCharList times(int times) {
+		AbstractCharList newList = new CharArrayList(times * size());
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -683,18 +811,11 @@ public abstract class AbstractBooleanList extends AbstractList {
 	}
 
 	/**
-	 * Transforms a boolean value to an integer (false --> 0, true --> 1)
-	 */
-	protected static int toInt(boolean value) {
-		return value ? 1 : 0;
-	}
-
-	/**
 	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
 	 */
-	public java.util.ArrayList<Boolean> toList() {
+	public java.util.ArrayList<Character> toList() {
 		int mySize = size();
-		var list = new java.util.ArrayList<Boolean>(mySize);
+		java.util.ArrayList<Character> list = new java.util.ArrayList<Character>(mySize);
 		for (int i = 0; i < mySize; i++) list.add(get(i));
 		return list;
 	}

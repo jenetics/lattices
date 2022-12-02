@@ -23,13 +23,4 @@
  * @since 2.0
  * @version 2.0
  */
-pluginManagement {
-	repositories {
-		mavenLocal()
-		gradlePluginPortal()
-	}
-}
-
-rootProject.name = "colt"
-
-include("colt")
+package io.jenetics.gradle;

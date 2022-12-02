@@ -20,16 +20,15 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since 2.1
+ * @version 2.1
  */
-pluginManagement {
-	repositories {
-		mavenLocal()
-		gradlePluginPortal()
-	}
+plugins {
+	`java-gradle-plugin`
+	`kotlin-dsl`
 }
 
-rootProject.name = "colt"
-
-include("colt")
+repositories {
+	mavenLocal()
+	gradlePluginPortal()
+}
