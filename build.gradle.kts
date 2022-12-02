@@ -63,7 +63,7 @@ gradle.projectsEvaluated {
 		val project = this
 
 		tasks.withType<JavaCompile> {
-			//options.compilerArgs.add("-Xlint:" + xlint())
+			options.compilerArgs.add("-Xlint:none" + xlint())
 		}
 
 		plugins.withType<JavaPlugin> {

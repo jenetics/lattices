@@ -30,4 +30,4 @@ jobs:
                   java-version: ${{ matrix.java-version }}
                   distribution: 'zulu'
             - name: Build with Gradle
-              run: ./gradlew build --stacktrace --info
+              run: ./gradlew clean compileJava --stacktrace --info
