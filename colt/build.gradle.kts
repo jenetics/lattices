@@ -17,8 +17,8 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 1.0
- * @version 2.1
+ * @since !__version__!
+ * @version !__version__!
  */
 plugins {
 	`java-library`
