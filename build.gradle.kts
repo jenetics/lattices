@@ -31,7 +31,7 @@ plugins {
 rootProject.version = Colt.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "7.4.2"
+	version = "7.6"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
