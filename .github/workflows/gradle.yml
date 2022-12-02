@@ -7,11 +7,12 @@ on:
     push:
         branches:
             - master
-            - features/*
+            - releases/*
+            - issues/*
     pull_request:
         branches:
             - master
-            - r*
+            - releases/*
 
 jobs:
     build:
