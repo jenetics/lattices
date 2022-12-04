@@ -243,12 +243,12 @@ fun xlint(): String {
 		//"module",
 		//"opens",
 		//"overrides",
-		"rawtypes"
+		"rawtypes",
 		//"removal",
 		//"serial",
 		//"static",
 		//"try",
-		//"unchecked",
+		"unchecked",
 		//"varargs"
 	).joinToString(separator = ",")
 }

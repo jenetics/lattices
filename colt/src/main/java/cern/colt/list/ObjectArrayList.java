@@ -204,6 +204,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @see Comparable
 	 * @see java.util.Arrays
 	 */
+    @SuppressWarnings("unchecked")
 	public int binarySearchFromTo(Object key, int from, int to) {
 		int low = from;
 		int high = to;
@@ -211,7 +212,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 		while (low <= high) {
 			int mid = (low + high) / 2;
 			Object midVal = elements[mid];
-			int cmp = ((Comparable) midVal).compareTo(key);
+			int cmp = ((Comparable<Object>) midVal).compareTo(key);
 
 			if (cmp < 0) low = mid + 1;
 			else if (cmp > 0) high = mid - 1;
