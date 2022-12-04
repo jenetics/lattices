@@ -14,12 +14,13 @@ import cern.colt.function.ShortProcedure;
 
 /**
  * Resizable list holding <code>short</code> elements; implemented with arrays.
- * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
+ * First see the <a href="package-summary.html">package summary</a> and javadoc
+ * <a href="package-tree.html">tree view</a> to get the broad picture.
  */
 public class ShortArrayList extends AbstractShortList {
 	/**
-	 * The array buffer into which the elements of the list are stored.
-	 * The capacity of the list is the length of this array buffer.
+	 * The array buffer into which the elements of the list are stored. The
+	 * capacity of the list is the length of this array buffer.
 	 *
 	 * @serial
 	 */
@@ -33,11 +34,13 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Constructs a list containing the specified elements.
-	 * The initial size and capacity of the list is the length of the array.
+	 * Constructs a list containing the specified elements. The initial size and
+	 * capacity of the list is the length of the array.
 	 *
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the specified array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the specified array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @param elements the array to be backed by the the constructed list
 	 */
@@ -48,7 +51,8 @@ public class ShortArrayList extends AbstractShortList {
 	/**
 	 * Constructs an empty list with the specified initial capacity.
 	 *
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	public ShortArrayList(int initialCapacity) {
 		this(new short[initialCapacity]);
@@ -69,13 +73,15 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Inserts the specified element before the specified position into the receiver.
-	 * Shifts the element currently at that position (if any) and
-	 * any subsequent elements to the right.
+	 * Inserts the specified element before the specified position into the
+	 * receiver. Shifts the element currently at that position (if any) and any
+	 * subsequent elements to the right.
 	 *
-	 * @param index   index before which the specified element is to be inserted (must be in [0,size]).
+	 * @param index index before which the specified element is to be inserted
+	 * (must be in [0,size]).
 	 * @param element element to be inserted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0
+	 * || index &gt; size()</tt>).
 	 */
 	public void beforeInsert(int index, short element) {
 		// overridden for performance only.
@@ -88,25 +94,23 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Searches the receiver for the specified value using
-	 * the binary search algorithm.  The receiver must <strong>must</strong> be
-	 * sorted (as by the sort method) prior to making this call.  If
-	 * it is not sorted, the results are undefined: in particular, the call
-	 * may enter an infinite loop.  If the receiver contains multiple elements
-	 * equal to the specified object, there is no guarantee which instance
-	 * will be found.
+	 * Searches the receiver for the specified value using the binary search
+	 * algorithm.  The receiver must <strong>must</strong> be sorted (as by the
+	 * sort method) prior to making this call.  If it is not sorted, the results
+	 * are undefined: in particular, the call may enter an infinite loop.  If
+	 * the receiver contains multiple elements equal to the specified object,
+	 * there is no guarantee which instance will be found.
 	 *
-	 * @param key  the value to be searched for.
+	 * @param key the value to be searched for.
 	 * @param from the leftmost search position, inclusive.
-	 * @param to   the rightmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
 	 * @return index of the search key, if it is contained in the receiver;
 	 * otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>.  The <i>insertion
-	 * point</i> is defined as the the point at which the value would
-	 * be inserted into the receiver: the index of the first
-	 * element greater than the key, or <tt>receiver.size()</tt>, if all
-	 * elements in the receiver are less than the specified key.  Note
-	 * that this guarantees that the return value will be &gt;= 0 if
-	 * and only if the key is found.
+	 * point</i> is defined as the the point at which the value would be
+	 * inserted into the receiver: the index of the first element greater than
+	 * the key, or <tt>receiver.size()</tt>, if all elements in the receiver are
+	 * less than the specified key.  Note that this guarantees that the return
+	 * value will be &gt;= 0 if and only if the key is found.
 	 * @see cern.colt.Sorting
 	 * @see java.util.Arrays
 	 */
@@ -121,13 +125,14 @@ public class ShortArrayList extends AbstractShortList {
 	 */
 	public Object clone() {
 		// overridden for performance only.
-		ShortArrayList clone = new ShortArrayList((short[]) elements.clone());
+		ShortArrayList clone = new ShortArrayList(elements.clone());
 		clone.setSizeRaw(size);
 		return clone;
 	}
 
 	/**
-	 * Returns a deep copy of the receiver; uses <code>clone()</code> and casts the result.
+	 * Returns a deep copy of the receiver; uses <code>clone()</code> and casts
+	 * the result.
 	 *
 	 * @return a deep copy of the receiver.
 	 */
@@ -136,7 +141,8 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Sorts the specified range of the receiver into ascending numerical order.
+	 * Sorts the specified range of the receiver into ascending numerical
+	 * order.
 	 * <p>
 	 * The sorting algorithm is a count sort. This algorithm offers guaranteed
 	 * <dt>Performance: O(Max(n,max-min+1)).
@@ -145,19 +151,19 @@ public class ShortArrayList extends AbstractShortList {
 	 * But if applicable, it usually outperforms quicksort by a factor of 3-4.
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @param min  the smallest element contained in the range.
-	 * @param max  the largest element contained in the range.
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @param min the smallest element contained in the range.
+	 * @param max the largest element contained in the range.
 	 */
 	protected void countSortFromTo(int from, int to, short min, short max) {
 		if (size == 0) return;
 		checkRangeFromTo(from, to, size);
 
-		final int width = (int) (max - min + 1);
+		final int width = max - min + 1;
 
 		int[] counts = new int[width];
 		short[] theElements = elements;
-		for (int i = from; i <= to; ) counts[(int) (theElements[i++] - min)]++;
+		for (int i = from; i <= to; ) counts[theElements[i++] - min]++;
 
 		int fromIndex = from;
 		short val = min;
@@ -175,10 +181,13 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Returns the elements currently stored, including invalid elements between size and capacity, if any.
+	 * Returns the elements currently stored, including invalid elements between
+	 * size and capacity, if any.
 	 *
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the returned array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the returned array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @return the elements currently stored.
 	 */
@@ -187,11 +196,14 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Sets the receiver's elements to be the specified array (not a copy of it).
+	 * Sets the receiver's elements to be the specified array (not a copy of
+	 * it).
 	 * <p>
 	 * The size and capacity of the list is the length of the array.
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the specified array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the specified array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
@@ -203,8 +215,10 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Ensures that the receiver can hold at least the specified number of elements without needing to allocate new internal memory.
-	 * If necessary, allocates new internal memory and increases the capacity of the receiver.
+	 * Ensures that the receiver can hold at least the specified number of
+	 * elements without needing to allocate new internal memory. If necessary,
+	 * allocates new internal memory and increases the capacity of the
+	 * receiver.
 	 *
 	 * @param minCapacity the desired minimum capacity.
 	 */
@@ -213,18 +227,20 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Compares the specified Object with the receiver.
-	 * Returns true if and only if the specified Object is also an ArrayList of the same type, both Lists have the
-	 * same size, and all corresponding pairs of elements in the two Lists are identical.
-	 * In other words, two Lists are defined to be equal if they contain the
-	 * same elements in the same order.
+	 * Compares the specified Object with the receiver. Returns true if and only
+	 * if the specified Object is also an ArrayList of the same type, both Lists
+	 * have the same size, and all corresponding pairs of elements in the two
+	 * Lists are identical. In other words, two Lists are defined to be equal if
+	 * they contain the same elements in the same order.
 	 *
-	 * @param otherObj the Object to be compared for equality with the receiver.
+	 * @param otherObj the Object to be compared for equality with the
+	 * receiver.
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
 		// overridden for performance only.
-		if (!(otherObj instanceof ShortArrayList)) return super.equals(otherObj);
+		if (!(otherObj instanceof ShortArrayList))
+			return super.equals(otherObj);
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
 		ShortArrayList other = (ShortArrayList) otherObj;
@@ -239,18 +255,21 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Applies a procedure to each element of the receiver, if any.
-	 * Starts at index 0, moving rightwards.
+	 * Applies a procedure to each element of the receiver, if any. Starts at
+	 * index 0, moving rightwards.
 	 *
-	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
-	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
+	 * @param procedure the procedure to be applied. Stops iteration if the
+	 * procedure returns <tt>false</tt>, otherwise continues.
+	 * @return <tt>false</tt> if the procedure stopped before all elements where
+	 * iterated over, <tt>true</tt> otherwise.
 	 */
 	public boolean forEach(ShortProcedure procedure) {
 		// overridden for performance only.
 		short[] theElements = elements;
 		int theSize = size;
 
-		for (int i = 0; i < theSize; ) if (!procedure.apply(theElements[i++])) return false;
+		for (int i = 0; i < theSize; )
+			if (!procedure.apply(theElements[i++])) return false;
 		return true;
 	}
 
@@ -258,8 +277,8 @@ public class ShortArrayList extends AbstractShortList {
 	 * Returns the element at the specified position in the receiver.
 	 *
 	 * @param index index of element to return.
-	 * @throws IndexOutOfBoundsException index is out of range (index
-	 *                                   &lt; 0 || index &gt;= size()).
+	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 ||
+	 * index &gt;= size()).
 	 */
 	public short get(int index) {
 		// overridden for performance only.
@@ -269,9 +288,12 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Returns the element at the specified position in the receiver; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may return invalid elements without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Returns the element at the specified position in the receiver;
+	 * <b>WARNING:</b> Does not check preconditions. Provided with invalid
+	 * parameters this method may return invalid elements without throwing any
+	 * exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
 	 * @param index index of element to return.
@@ -281,16 +303,18 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Returns the index of the first occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
-	 * Searches between <code>from</code>, inclusive and <code>to</code>, inclusive.
-	 * Tests for identity.
+	 * Returns the index of the first occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
+	 * Searches between <code>from</code>, inclusive and <code>to</code>,
+	 * inclusive. Tests for identity.
 	 *
 	 * @param element element to search for.
-	 * @param from    the leftmost search position, inclusive.
-	 * @param to      the rightmost search position, inclusive.
-	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param from the leftmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
+	 * @return the index of the first occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public int indexOfFromTo(short element, int from, int to) {
 		// overridden for performance only.
@@ -307,16 +331,18 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Returns the index of the last occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
-	 * Searches beginning at <code>to</code>, inclusive until <code>from</code>, inclusive.
-	 * Tests for identity.
+	 * Returns the index of the last occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
+	 * Searches beginning at <code>to</code>, inclusive until <code>from</code>,
+	 * inclusive. Tests for identity.
 	 *
 	 * @param element element to search for.
-	 * @param from    the leftmost search position, inclusive.
-	 * @param to      the rightmost search position, inclusive.
-	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param from the leftmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
+	 * @return the index of the last occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public int lastIndexOfFromTo(short element, int from, int to) {
 		// overridden for performance only.
@@ -333,12 +359,14 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Returns a new list of the part of the receiver between <code>from</code>, inclusive, and <code>to</code>, inclusive.
+	 * Returns a new list of the part of the receiver between <code>from</code>,
+	 * inclusive, and <code>to</code>, inclusive.
 	 *
 	 * @param from the index of the first element (inclusive).
-	 * @param to   the index of the last element (inclusive).
+	 * @param to the index of the last element (inclusive).
 	 * @return a new list
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public AbstractShortList partFromTo(int from, int to) {
 		if (size == 0) return new ShortArrayList(0);
@@ -351,11 +379,12 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Removes from the receiver all elements that are contained in the specified list.
-	 * Tests for identity.
+	 * Removes from the receiver all elements that are contained in the
+	 * specified list. Tests for identity.
 	 *
 	 * @param other the other list.
-	 * @return <code>true</code> if the receiver changed as a result of the call.
+	 * @return <code>true</code> if the receiver changed as a result of the
+	 * call.
 	 */
 	public boolean removeAll(AbstractShortList other) {
 		// overridden for performance only.
@@ -379,20 +408,22 @@ public class ShortArrayList extends AbstractShortList {
 		short[] theElements = elements;
 		int mySize = size();
 
-		double N = (double) other.size();
-		double M = (double) mySize;
+		double N = other.size();
+		double M = mySize;
 		if ((N + M) * cern.jet.math.Arithmetic.log2(N) < M * N) {
 			// it is faster to sort other before searching in it
 			ShortArrayList sortedList = (ShortArrayList) other.clone();
 			sortedList.quickSort();
 
 			for (int i = 0; i < mySize; i++) {
-				if (sortedList.binarySearchFromTo(theElements[i], 0, limit) < 0) theElements[j++] = theElements[i];
+				if (sortedList.binarySearchFromTo(theElements[i], 0, limit) < 0)
+					theElements[j++] = theElements[i];
 			}
 		} else {
 			// it is faster to search in other without sorting
 			for (int i = 0; i < mySize; i++) {
-				if (other.indexOfFromTo(theElements[i], 0, limit) < 0) theElements[j++] = theElements[i];
+				if (other.indexOfFromTo(theElements[i], 0, limit) < 0)
+					theElements[j++] = theElements[i];
 			}
 		}
 
@@ -402,14 +433,19 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Replaces a number of elements in the receiver with the same number of elements of another list.
-	 * Replaces elements in the receiver, between <code>from</code> (inclusive) and <code>to</code> (inclusive),
-	 * with elements of <code>other</code>, starting from <code>otherFrom</code> (inclusive).
+	 * Replaces a number of elements in the receiver with the same number of
+	 * elements of another list. Replaces elements in the receiver, between
+	 * <code>from</code> (inclusive) and <code>to</code> (inclusive), with
+	 * elements of <code>other</code>, starting from <code>otherFrom</code>
+	 * (inclusive).
 	 *
-	 * @param from      the position of the first element to be replaced in the receiver
-	 * @param to        the position of the last element to be replaced in the receiver
-	 * @param other     list holding elements to be copied into the receiver.
-	 * @param otherFrom position of first element within other list to be copied.
+	 * @param from the position of the first element to be replaced in the
+	 * receiver
+	 * @param to the position of the last element to be replaced in the
+	 * receiver
+	 * @param other list holding elements to be copied into the receiver.
+	 * @param otherFrom position of first element within other list to be
+	 * copied.
 	 */
 	public void replaceFromToWithFrom(int from, int to, AbstractShortList other, int otherFrom) {
 		// overridden for performance only.
@@ -427,12 +463,13 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Retains (keeps) only the elements in the receiver that are contained in the specified other list.
-	 * In other words, removes from the receiver all of its elements that are not contained in the
-	 * specified other list.
+	 * Retains (keeps) only the elements in the receiver that are contained in
+	 * the specified other list. In other words, removes from the receiver all
+	 * of its elements that are not contained in the specified other list.
 	 *
 	 * @param other the other list to test against.
-	 * @return <code>true</code> if the receiver changed as a result of the call.
+	 * @return <code>true</code> if the receiver changed as a result of the
+	 * call.
 	 */
 	public boolean retainAll(AbstractShortList other) {
 		// overridden for performance only.
@@ -453,20 +490,22 @@ public class ShortArrayList extends AbstractShortList {
 		short[] theElements = elements;
 		int mySize = size();
 
-		double N = (double) other.size();
-		double M = (double) mySize;
+		double N = other.size();
+		double M = mySize;
 		if ((N + M) * cern.jet.math.Arithmetic.log2(N) < M * N) {
 			// it is faster to sort other before searching in it
 			ShortArrayList sortedList = (ShortArrayList) other.clone();
 			sortedList.quickSort();
 
 			for (int i = 0; i < mySize; i++) {
-				if (sortedList.binarySearchFromTo(theElements[i], 0, limit) >= 0) theElements[j++] = theElements[i];
+				if (sortedList.binarySearchFromTo(theElements[i], 0, limit) >= 0)
+					theElements[j++] = theElements[i];
 			}
 		} else {
 			// it is faster to search in other without sorting
 			for (int i = 0; i < mySize; i++) {
-				if (other.indexOfFromTo(theElements[i], 0, limit) >= 0) theElements[j++] = theElements[i];
+				if (other.indexOfFromTo(theElements[i], 0, limit) >= 0)
+					theElements[j++] = theElements[i];
 			}
 		}
 
@@ -476,8 +515,8 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Reverses the elements of the receiver.
-	 * Last becomes first, second last becomes second first, and so on.
+	 * Reverses the elements of the receiver. Last becomes first, second last
+	 * becomes second first, and so on.
 	 */
 	public void reverse() {
 		// overridden for performance only.
@@ -494,12 +533,13 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element.
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
-	 * @throws IndexOutOfBoundsException index is out of range (index
-	 *                                   &lt; 0 || index &gt;= size()).
+	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 ||
+	 * index &gt;= size()).
 	 */
 	public void set(int index, short element) {
 		// overridden for performance only.
@@ -509,12 +549,15 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may access invalid indexes without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element; <b>WARNING:</b> Does not check preconditions. Provided
+	 * with invalid parameters this method may access invalid indexes without
+	 * throwing any exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
 	public void setQuick(int index, short element) {
@@ -522,11 +565,13 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Randomly permutes the part of the receiver between <code>from</code> (inclusive) and <code>to</code> (inclusive).
+	 * Randomly permutes the part of the receiver between <code>from</code>
+	 * (inclusive) and <code>to</code> (inclusive).
 	 *
 	 * @param from the index of the first element (inclusive) to be permuted.
-	 * @param to   the index of the last element (inclusive) to be permuted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be permuted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void shuffleFromTo(int from, int to) {
 		// overridden for performance only.
@@ -552,9 +597,10 @@ public class ShortArrayList extends AbstractShortList {
 	/**
 	 * Sorts the specified range of the receiver into ascending order.
 	 * <p>
-	 * The sorting algorithm is dynamically chosen according to the characteristics of the data set.
-	 * Currently quicksort and countsort are considered.
-	 * Countsort is not always applicable, but if applicable, it usually outperforms quicksort by a factor of 3-4.
+	 * The sorting algorithm is dynamically chosen according to the
+	 * characteristics of the data set. Currently quicksort and countsort are
+	 * considered. Countsort is not always applicable, but if applicable, it
+	 * usually outperforms quicksort by a factor of 3-4.
 	 *
 	 * <p>Best case performance: O(N).
 	 * <dt>Worst case performance: O(N^2) (a degenerated quicksort).
@@ -562,8 +608,9 @@ public class ShortArrayList extends AbstractShortList {
 	 * <dt>Worst case space requirements: 40 KB.
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void sortFromTo(int from, int to) {
 		/*
@@ -601,9 +648,9 @@ public class ShortArrayList extends AbstractShortList {
 	}
 
 	/**
-	 * Trims the capacity of the receiver to be the receiver's current
-	 * size. Releases any superfluos internal memory. An application can use this operation to minimize the
-	 * storage of the receiver.
+	 * Trims the capacity of the receiver to be the receiver's current size.
+	 * Releases any superfluos internal memory. An application can use this
+	 * operation to minimize the storage of the receiver.
 	 */
 	public void trimToSize() {
 		elements = cern.colt.Arrays.trimToCapacity(elements, size());

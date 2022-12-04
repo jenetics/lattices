@@ -11,29 +11,41 @@
 package cern.colt.list;
 
 /**
- * Resizable compressed list holding numbers; based on the fact that a number from a large list with few distinct values need not take more than <tt>log(distinctValues)</tt> bits; implemented with a <tt>MinMaxNumberList</tt>.
- * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
+ * Resizable compressed list holding numbers; based on the fact that a number
+ * from a large list with few distinct values need not take more than
+ * <tt>log(distinctValues)</tt> bits; implemented with a
+ * <tt>MinMaxNumberList</tt>. First see the <a
+ * href="package-summary.html">package summary</a> and javadoc <a
+ * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
- * This class can, for example, be useful when making large lists of numbers persistent.
- * Also useful when very large lists would otherwise consume too much main memory.
+ * This class can, for example, be useful when making large lists of numbers
+ * persistent. Also useful when very large lists would otherwise consume too
+ * much main memory.
  * <p>
- * You can add, get and set elements quite similar to <tt>java.util.ArrayList</tt>.
+ * You can add, get and set elements quite similar to
+ * <tt>java.util.ArrayList</tt>.
  * <p>
- * <b>Applicability:</b> Applicable if data is highly skewed and legal values are known in advance. Robust in the presence of "outliers".
+ * <b>Applicability:</b> Applicable if data is highly skewed and legal values
+ * are known in advance. Robust in the presence of "outliers".
  * <p>
- * <b>Performance:</b> Operations <tt>get()</tt>, <tt>size()</tt> and <tt>clear()</tt> are <tt>O(1)</tt>, i.e. run in constant time.
- * Operations like <tt>add()</tt> and <tt>set()</tt> are <tt>O(log(distinctValues.length))</tt>.
+ * <b>Performance:</b> Operations <tt>get()</tt>, <tt>size()</tt> and
+ * <tt>clear()</tt> are <tt>O(1)</tt>, i.e. run in constant time.
+ * Operations like <tt>add()</tt> and <tt>set()</tt> are
+ * <tt>O(log(distinctValues.length))</tt>.
  * <p>
- * Upon instantiation a contract is signed that defines the distinct values allowed to be hold in this list.
- * It is not legal to store elements other than specified by the contract.
- * Any attempt to violate the contract will throw an <tt>IllegalArgumentException</tt>.
+ * Upon instantiation a contract is signed that defines the distinct values
+ * allowed to be hold in this list. It is not legal to store elements other than
+ * specified by the contract. Any attempt to violate the contract will throw an
+ * <tt>IllegalArgumentException</tt>.
  * <p>
- * Although access methods are only defined on <tt>long</tt> values you can also store
- * all other primitive data types: <tt>boolean</tt>, <tt>byte</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, <tt>float</tt>, <tt>double</tt> and <tt>char</tt>.
- * You can do this by explicitly representing them as <tt>long</tt> values.
- * Use casts for discrete data types.
- * Use the methods of <tt>java.lang.Float</tt> and <tt>java.lang.Double</tt> for floating point data types:
- * Recall that with those methods you can convert any floating point value to a <tt>long</tt> value and back <b>without losing any precision</b>:
+ * Although access methods are only defined on <tt>long</tt> values you can also
+ * store all other primitive data types: <tt>boolean</tt>, <tt>byte</tt>,
+ * <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, <tt>float</tt>, <tt>double</tt>
+ * and <tt>char</tt>. You can do this by explicitly representing them as
+ * <tt>long</tt> values. Use casts for discrete data types. Use the methods of
+ * <tt>java.lang.Float</tt> and <tt>java.lang.Double</tt> for floating point
+ * data types: Recall that with those methods you can convert any floating point
+ * value to a <tt>long</tt> value and back <b>without losing any precision</b>:
  * <p>
  * <b>Example usage:</b><pre>
  * DistinctNumberList list = ... instantiation goes here
@@ -61,10 +73,13 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	protected MinMaxNumberList elements;
 
 	/**
-	 * Constructs an empty list with the specified initial capacity and the specified distinct values allowed to be hold in this list.
+	 * Constructs an empty list with the specified initial capacity and the
+	 * specified distinct values allowed to be hold in this list.
 	 *
-	 * @param distinctValues  an array sorted ascending containing the distinct values allowed to be hold in this list.
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param distinctValues an array sorted ascending containing the distinct
+	 * values allowed to be hold in this list.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	public DistinctNumberList(long[] distinctValues, int initialCapacity) {
 		setUp(distinctValues, initialCapacity);
@@ -92,8 +107,10 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Ensures that the receiver can hold at least the specified number of elements without needing to allocate new internal memory.
-	 * If necessary, allocates new internal memory and increases the capacity of the receiver.
+	 * Ensures that the receiver can hold at least the specified number of
+	 * elements without needing to allocate new internal memory. If necessary,
+	 * allocates new internal memory and increases the capacity of the
+	 * receiver.
 	 *
 	 * @param minCapacity the desired minimum capacity.
 	 */
@@ -102,9 +119,12 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Returns the element at the specified position in the receiver; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may return invalid elements without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Returns the element at the specified position in the receiver;
+	 * <b>WARNING:</b> Does not check preconditions. Provided with invalid
+	 * parameters this method may return invalid elements without throwing any
+	 * exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
 	 * @param index index of element to return.
@@ -115,13 +135,15 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 
 	/**
 	 * Removes from the receiver all elements whose index is between
-	 * <code>from</code>, inclusive and <code>to</code>, inclusive.  Shifts any succeeding
-	 * elements to the left (reduces their index).
-	 * This call shortens the list by <tt>(to - from + 1)</tt> elements.
+	 * <code>from</code>, inclusive and <code>to</code>, inclusive.  Shifts any
+	 * succeeding
+	 * elements to the left (reduces their index). This call shortens the list
+	 * by <tt>(to - from + 1)</tt> elements.
 	 *
 	 * @param from index of first element to be removed.
-	 * @param to   index of last element to be removed.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to index of last element to be removed.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void removeFromTo(int from, int to) {
 		elements.removeFromTo(from, to);
@@ -129,12 +151,15 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may access invalid indexes without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element; <b>WARNING:</b> Does not check preconditions. Provided
+	 * with invalid parameters this method may access invalid indexes without
+	 * throwing any exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
 	public void setQuick(int index, long element) {
@@ -142,8 +167,9 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Sets the size of the receiver without modifying it otherwise.
-	 * This method should not release or allocate new memory but simply set some instance variable like <tt>size</tt>.
+	 * Sets the size of the receiver without modifying it otherwise. This method
+	 * should not release or allocate new memory but simply set some instance
+	 * variable like <tt>size</tt>.
 	 */
 	protected void setSizeRaw(int newSize) {
 		super.setSizeRaw(newSize);
@@ -151,10 +177,13 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Sets the receiver to an empty list with the specified initial capacity and the specified distinct values allowed to be hold in this list.
+	 * Sets the receiver to an empty list with the specified initial capacity
+	 * and the specified distinct values allowed to be hold in this list.
 	 *
-	 * @param distinctValues  an array sorted ascending containing the distinct values allowed to be hold in this list.
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param distinctValues an array sorted ascending containing the distinct
+	 * values allowed to be hold in this list.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	protected void setUp(long[] distinctValues, int initialCapacity) {
 		this.distinctValues = distinctValues;
@@ -163,9 +192,9 @@ public class DistinctNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Trims the capacity of the receiver to be the receiver's current
-	 * size. An application can use this operation to minimize the
-	 * storage of the receiver.
+	 * Trims the capacity of the receiver to be the receiver's current size. An
+	 * application can use this operation to minimize the storage of the
+	 * receiver.
 	 */
 	public void trimToSize() {
 		elements.trimToSize();
