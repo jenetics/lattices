@@ -52,7 +52,7 @@ object Env {
  * Information about the library and author.
  */
 object Colt {
-	const val VERSION = "2.0.0"
+	const val VERSION = "3.0.0-SNAPSHOT"
 	const val ID = "colt"
 	const val NAME = "colt"
 	const val GROUP = "io.jenetics"
