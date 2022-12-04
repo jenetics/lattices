@@ -12,14 +12,19 @@ package cern.colt.list;
 
 import cern.colt.function.ObjectProcedure;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Resizable list holding <code>Object</code> elements; implemented with arrays.
- * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
+ * First see the <a href="package-summary.html">package summary</a> and javadoc
+ * <a href="package-tree.html">tree view</a> to get the broad picture.
  */
-public class ObjectArrayList extends AbstractList {
+public class ObjectArrayList<T> extends AbstractList<T> {
+
 	/**
-	 * The array buffer into which the elements of the list are stored.
-	 * The capacity of the list is the length of this array buffer.
+	 * The array buffer into which the elements of the list are stored. The
+	 * capacity of the list is the length of this array buffer.
 	 *
 	 * @serial
 	 */
@@ -40,11 +45,13 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Constructs a list containing the specified elements.
-	 * The initial size and capacity of the list is the length of the array.
+	 * Constructs a list containing the specified elements. The initial size and
+	 * capacity of the list is the length of the array.
 	 *
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the specified array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the specified array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @param elements the array to be backed by the the constructed list
 	 */
@@ -55,7 +62,8 @@ public class ObjectArrayList extends AbstractList {
 	/**
 	 * Constructs an empty list with the specified initial capacity.
 	 *
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	public ObjectArrayList(int initialCapacity) {
 		this(new Object[initialCapacity]);
@@ -73,25 +81,30 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Appends the part of the specified list between <code>from</code> (inclusive) and <code>to</code> (inclusive) to the receiver.
+	 * Appends the part of the specified list between <code>from</code>
+	 * (inclusive) and <code>to</code> (inclusive) to the receiver.
 	 *
 	 * @param other the list to be added to the receiver.
-	 * @param from  the index of the first element to be appended (inclusive).
-	 * @param to    the index of the last element to be appended (inclusive).
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
+	 * @param from the index of the first element to be appended (inclusive).
+	 * @param to the index of the last element to be appended (inclusive).
+	 * @throws IndexOutOfBoundsException index is out of range
+	 * (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to ||
+	 * to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(ObjectArrayList other, int from, int to) {
+	public void addAllOfFromTo(ObjectArrayList<T> other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
 	/**
-	 * Inserts the specified element before the specified position into the receiver.
-	 * Shifts the element currently at that position (if any) and
-	 * any subsequent elements to the right.
+	 * Inserts the specified element before the specified position into the
+	 * receiver. Shifts the element currently at that position (if any) and any
+	 * subsequent elements to the right.
 	 *
-	 * @param index   index before which the specified element is to be inserted (must be in [0,size]).
+	 * @param index index before which the specified element is to be inserted
+	 * (must be in [0,size]).
 	 * @param element element to be inserted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0
+	 * || index &gt; size()</tt>).
 	 */
 	public void beforeInsert(int index, Object element) {
 		// overridden for performance only.
@@ -104,18 +117,23 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Inserts the part of the specified list between <code>otherFrom</code> (inclusive) and <code>otherTo</code> (inclusive) before the specified position into the receiver.
-	 * Shifts the element currently at that position (if any) and
-	 * any subsequent elements to the right.
+	 * Inserts the part of the specified list between <code>otherFrom</code>
+	 * (inclusive) and <code>otherTo</code> (inclusive) before the specified
+	 * position into the receiver. Shifts the element currently at that position
+	 * (if any) and any subsequent elements to the right.
 	 *
-	 * @param index index before which to insert first element from the specified list (must be in [0,size])..
+	 * @param index index before which to insert first element from the
+	 * specified list (must be in [0,size])..
 	 * @param other list of which a part is to be inserted into the receiver.
-	 * @param from  the index of the first element to be inserted (inclusive).
-	 * @param to    the index of the last element to be inserted (inclusive).
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=other.size())</tt>).
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
+	 * @param from the index of the first element to be inserted (inclusive).
+	 * @param to the index of the last element to be inserted (inclusive).
+	 * @throws IndexOutOfBoundsException index is out of range
+	 * (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to ||
+	 * to&gt;=other.size())</tt>).
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0
+	 * || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, ObjectArrayList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, ObjectArrayList<T> other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -123,10 +141,11 @@ public class ObjectArrayList extends AbstractList {
 
 	/**
 	 * Inserts length dummies before the specified position into the receiver.
-	 * Shifts the element currently at that position (if any) and
-	 * any subsequent elements to the right.
+	 * Shifts the element currently at that position (if any) and any subsequent
+	 * elements to the right.
 	 *
-	 * @param index  index before which to insert dummies (must be in [0,size])..
+	 * @param index index before which to insert dummies (must be in
+	 * [0,size])..
 	 * @param length number of dummies to be inserted.
 	 */
 	protected void beforeInsertDummies(int index, int length) {
@@ -140,24 +159,22 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Searches the receiver for the specified value using
-	 * the binary search algorithm. The receiver must be sorted into ascending order
-	 * according to the <i>natural ordering</i> of its elements (as by the sort method)
-	 * prior to making this call.
-	 * If it is not sorted, the results are undefined: in particular, the call
-	 * may enter an infinite loop.  If the receiver contains multiple elements
-	 * equal to the specified object, there is no guarantee which instance
-	 * will be found.
+	 * Searches the receiver for the specified value using the binary search
+	 * algorithm. The receiver must be sorted into ascending order according to
+	 * the <i>natural ordering</i> of its elements (as by the sort method) prior
+	 * to making this call. If it is not sorted, the results are undefined: in
+	 * particular, the call may enter an infinite loop.  If the receiver
+	 * contains multiple elements equal to the specified object, there is no
+	 * guarantee which instance will be found.
 	 *
 	 * @param key the value to be searched for.
 	 * @return index of the search key, if it is contained in the receiver;
 	 * otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>.  The <i>insertion
-	 * point</i> is defined as the the point at which the value would
-	 * be inserted into the receiver: the index of the first
-	 * element greater than the key, or <tt>receiver.size()</tt>, if all
-	 * elements in the receiver are less than the specified key.  Note
-	 * that this guarantees that the return value will be &gt;= 0 if
-	 * and only if the key is found.
+	 * point</i> is defined as the the point at which the value would be
+	 * inserted into the receiver: the index of the first element greater than
+	 * the key, or <tt>receiver.size()</tt>, if all elements in the receiver are
+	 * less than the specified key.  Note that this guarantees that the return
+	 * value will be &gt;= 0 if and only if the key is found.
 	 * @see Comparable
 	 * @see java.util.Arrays
 	 */
@@ -166,26 +183,24 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Searches the receiver for the specified value using
-	 * the binary search algorithm. The receiver must be sorted into ascending order
-	 * according to the <i>natural ordering</i> of its elements (as by the sort method)
-	 * prior to making this call.
-	 * If it is not sorted, the results are undefined: in particular, the call
-	 * may enter an infinite loop.  If the receiver contains multiple elements
-	 * equal to the specified object, there is no guarantee which instance
-	 * will be found.
+	 * Searches the receiver for the specified value using the binary search
+	 * algorithm. The receiver must be sorted into ascending order according to
+	 * the <i>natural ordering</i> of its elements (as by the sort method) prior
+	 * to making this call. If it is not sorted, the results are undefined: in
+	 * particular, the call may enter an infinite loop.  If the receiver
+	 * contains multiple elements equal to the specified object, there is no
+	 * guarantee which instance will be found.
 	 *
-	 * @param key  the value to be searched for.
+	 * @param key the value to be searched for.
 	 * @param from the leftmost search position, inclusive.
-	 * @param to   the rightmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
 	 * @return index of the search key, if it is contained in the receiver;
 	 * otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>.  The <i>insertion
-	 * point</i> is defined as the the point at which the value would
-	 * be inserted into the receiver: the index of the first
-	 * element greater than the key, or <tt>receiver.size()</tt>, if all
-	 * elements in the receiver are less than the specified key.  Note
-	 * that this guarantees that the return value will be &gt;= 0 if
-	 * and only if the key is found.
+	 * point</i> is defined as the the point at which the value would be
+	 * inserted into the receiver: the index of the first element greater than
+	 * the key, or <tt>receiver.size()</tt>, if all elements in the receiver are
+	 * less than the specified key.  Note that this guarantees that the return
+	 * value will be &gt;= 0 if and only if the key is found.
 	 * @see Comparable
 	 * @see java.util.Arrays
 	 */
@@ -206,88 +221,99 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Searches the receiver for the specified value using
-	 * the binary search algorithm. The receiver must be sorted into ascending order
-	 * according to the specified comparator.  All elements in the
-	 * range must be <i>mutually comparable</i> by the specified comparator
-	 * (that is, <tt>c.compare(e1, e2)</tt> must not throw a
+	 * Searches the receiver for the specified value using the binary search
+	 * algorithm. The receiver must be sorted into ascending order according to
+	 * the specified comparator.  All elements in the range must be <i>mutually
+	 * comparable</i> by the specified comparator (that is, <tt>c.compare(e1,
+	 * e2)</tt> must not throw a
 	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
 	 * <tt>e2</tt> in the range).<p>
 	 * <p>
-	 * If the receiver is not sorted, the results are undefined: in particular, the call
-	 * may enter an infinite loop.  If the receiver contains multiple elements
-	 * equal to the specified object, there is no guarantee which instance
-	 * will be found.
+	 * If the receiver is not sorted, the results are undefined: in particular,
+	 * the call may enter an infinite loop.  If the receiver contains multiple
+	 * elements equal to the specified object, there is no guarantee which
+	 * instance will be found.
 	 *
-	 * @param key        the value to be searched for.
-	 * @param from       the leftmost search position, inclusive.
-	 * @param to         the rightmost search position, inclusive.
+	 * @param key the value to be searched for.
+	 * @param from the leftmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
 	 * @param comparator the comparator by which the receiver is sorted.
 	 * @return index of the search key, if it is contained in the receiver;
 	 * otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>.  The <i>insertion
-	 * point</i> is defined as the the point at which the value would
-	 * be inserted into the receiver: the index of the first
-	 * element greater than the key, or <tt>receiver.size()</tt>, if all
-	 * elements in the receiver are less than the specified key.  Note
-	 * that this guarantees that the return value will be &gt;= 0 if
-	 * and only if the key is found.
-	 * @throws ClassCastException if the receiver contains elements that are not
-	 *                            <i>mutually comparable</i> using the specified comparator.
+	 * point</i> is defined as the the point at which the value would be
+	 * inserted into the receiver: the index of the first element greater than
+	 * the key, or <tt>receiver.size()</tt>, if all elements in the receiver are
+	 * less than the specified key.  Note that this guarantees that the return
+	 * value will be &gt;= 0 if and only if the key is found.
+	 * @throws ClassCastException if the receiver contains elements that are
+	 * not
+	 * <i>mutually comparable</i> using the specified comparator.
 	 * @see cern.colt.Sorting
 	 * @see java.util.Arrays
 	 * @see java.util.Comparator
 	 */
-	public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator comparator) {
+	public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator<? super Object> comparator) {
 		return cern.colt.Sorting.binarySearchFromTo(this.elements, key, from, to, comparator);
 	}
 
 	/**
-	 * Returns a copy of the receiver such that the copy and the receiver <i>share</i> the same elements, but do not share the same array to index them;
-	 * So modifying an object in the copy modifies the object in the receiver and vice versa;
-	 * However, structurally modifying the copy (for example changing its size, setting other objects at indexes, etc.) does not affect the receiver and vice versa.
+	 * Returns a copy of the receiver such that the copy and the receiver
+	 * <i>share</i> the same elements, but do not share the same array to index
+	 * them; So modifying an object in the copy modifies the object in the
+	 * receiver and vice versa; However, structurally modifying the copy (for
+	 * example changing its size, setting other objects at indexes, etc.) does
+	 * not affect the receiver and vice versa.
 	 *
 	 * @return a copy of the receiver.
 	 */
+    @SuppressWarnings({"rawtypes"})
 	public Object clone() {
 		ObjectArrayList v = (ObjectArrayList) super.clone();
-		v.elements = (Object[]) elements.clone();
+		v.elements = elements.clone();
 		return v;
 	}
 
 	/**
-	 * Returns true if the receiver contains the specified element.
-	 * Tests for equality or identity as specified by testForEquality.
+	 * Returns true if the receiver contains the specified element. Tests for
+	 * equality or identity as specified by testForEquality.
 	 *
-	 * @param element         element to search for.
-	 * @param testForEquality if true -> test for equality, otherwise for identity.
+	 * @param elem element to search for.
+	 * @param testForEquality if true -> test for equality, otherwise for
+	 * identity.
 	 */
 	public boolean contains(Object elem, boolean testForEquality) {
 		return indexOfFromTo(elem, 0, size - 1, testForEquality) >= 0;
 	}
 
 	/**
-	 * Returns a copy of the receiver; call <code>clone()</code> and casts the result.
-	 * Returns a copy such that the copy and the receiver <i>share</i> the same elements, but do not share the same array to index them;
-	 * So modifying an object in the copy modifies the object in the receiver and vice versa;
-	 * However, structurally modifying the copy (for example changing its size, setting other objects at indexes, etc.) does not affect the receiver and vice versa.
+	 * Returns a copy of the receiver; call <code>clone()</code> and casts the
+	 * result. Returns a copy such that the copy and the receiver <i>share</i>
+	 * the same elements, but do not share the same array to index them; So
+	 * modifying an object in the copy modifies the object in the receiver and
+	 * vice versa; However, structurally modifying the copy (for example
+	 * changing its size, setting other objects at indexes, etc.) does not
+	 * affect the receiver and vice versa.
 	 *
 	 * @return a copy of the receiver.
 	 */
-	public ObjectArrayList copy() {
-		return (ObjectArrayList) clone();
+    @SuppressWarnings({"unchecked"})
+	public ObjectArrayList<T> copy() {
+		return (ObjectArrayList<T>) clone();
 	}
 
 	/**
-	 * Deletes the first element from the receiver that matches the specified element.
-	 * Does nothing, if no such matching element is contained.
+	 * Deletes the first element from the receiver that matches the specified
+	 * element. Does nothing, if no such matching element is contained.
 	 * <p>
-	 * Tests elements for equality or identity as specified by <tt>testForEquality</tt>.
-	 * When testing for equality, two elements <tt>e1</tt> and
+	 * Tests elements for equality or identity as specified by
+	 * <tt>testForEquality</tt>. When testing for equality, two elements
+	 * <tt>e1</tt> and
 	 * <tt>e2</tt> are <i>equal</i> if <tt>(e1==null ? e2==null :
 	 * e1.equals(e2))</tt>.)
 	 *
-	 * @param testForEquality if true -> tests for equality, otherwise for identity.
-	 * @param element         the element to be deleted.
+	 * @param testForEquality if true -> tests for equality, otherwise for
+	 * identity.
+	 * @param element the element to be deleted.
 	 */
 	public void delete(Object element, boolean testForEquality) {
 		int index = indexOfFromTo(element, 0, size - 1, testForEquality);
@@ -295,10 +321,13 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Returns the elements currently stored, including invalid elements between size and capacity, if any.
+	 * Returns the elements currently stored, including invalid elements between
+	 * size and capacity, if any.
 	 *
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the returned array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the returned array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @return the elements currently stored.
 	 */
@@ -307,24 +336,29 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Sets the receiver's elements to be the specified array (not a copy of it).
+	 * Sets the receiver's elements to be the specified array (not a copy of
+	 * it).
 	 * <p>
 	 * The size and capacity of the list is the length of the array.
-	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low, <b>the array is not copied</b>.
-	 * So if subsequently you modify the specified array directly via the [] operator, be sure you know what you're doing.
+	 * <b>WARNING:</b> For efficiency reasons and to keep memory usage low,
+	 * <b>the array is not copied</b>.
+	 * So if subsequently you modify the specified array directly via the []
+	 * operator, be sure you know what you're doing.
 	 *
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public ObjectArrayList elements(Object[] elements) {
+	public ObjectArrayList<T> elements(Object[] elements) {
 		this.elements = elements;
 		this.size = elements.length;
 		return this;
 	}
 
 	/**
-	 * Ensures that the receiver can hold at least the specified number of elements without needing to allocate new internal memory.
-	 * If necessary, allocates new internal memory and increases the capacity of the receiver.
+	 * Ensures that the receiver can hold at least the specified number of
+	 * elements without needing to allocate new internal memory. If necessary,
+	 * allocates new internal memory and increases the capacity of the
+	 * receiver.
 	 *
 	 * @param minCapacity the desired minimum capacity.
 	 */
@@ -333,16 +367,17 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Compares the specified Object with the receiver for equality.
-	 * Returns true if and only if the specified Object is also an ObjectArrayList, both lists have the
-	 * same size, and all corresponding pairs of elements in the two lists are equal.
-	 * In other words, two lists are defined to be equal if they contain the
-	 * same elements in the same order.
-	 * Two elements <tt>e1</tt> and
+	 * Compares the specified Object with the receiver for equality. Returns
+	 * true if and only if the specified Object is also an ObjectArrayList, both
+	 * lists have the same size, and all corresponding pairs of elements in the
+	 * two lists are equal. In other words, two lists are defined to be equal if
+	 * they contain the same elements in the same order. Two elements
+	 * <tt>e1</tt> and
 	 * <tt>e2</tt> are <i>equal</i> if <tt>(e1==null ? e2==null :
 	 * e1.equals(e2))</tt>.)
 	 *
-	 * @param otherObj the Object to be compared for equality with the receiver.
+	 * @param otherObj the Object to be compared for equality with the
+	 * receiver.
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj) { //delta
@@ -350,27 +385,30 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Compares the specified Object with the receiver for equality.
-	 * Returns true if and only if the specified Object is also an ObjectArrayList, both lists have the
-	 * same size, and all corresponding pairs of elements in the two lists are the same.
-	 * In other words, two lists are defined to be equal if they contain the
-	 * same elements in the same order.
-	 * Tests elements for equality or identity as specified by <tt>testForEquality</tt>.
-	 * When testing for equality, two elements <tt>e1</tt> and
+	 * Compares the specified Object with the receiver for equality. Returns
+	 * true if and only if the specified Object is also an ObjectArrayList, both
+	 * lists have the same size, and all corresponding pairs of elements in the
+	 * two lists are the same. In other words, two lists are defined to be equal
+	 * if they contain the same elements in the same order. Tests elements for
+	 * equality or identity as specified by <tt>testForEquality</tt>. When
+	 * testing for equality, two elements <tt>e1</tt> and
 	 * <tt>e2</tt> are <i>equal</i> if <tt>(e1==null ? e2==null :
 	 * e1.equals(e2))</tt>.)
 	 *
-	 * @param otherObj        the Object to be compared for equality with the receiver.
-	 * @param testForEquality if true -> tests for equality, otherwise for identity.
+	 * @param otherObj the Object to be compared for equality with the
+	 * receiver.
+	 * @param testForEquality if true -> tests for equality, otherwise for
+	 * identity.
 	 * @return true if the specified Object is equal to the receiver.
 	 */
 	public boolean equals(Object otherObj, boolean testForEquality) { //delta
-		if (!(otherObj instanceof ObjectArrayList)) {
+		if (!(otherObj instanceof ObjectArrayList<?>)) {
 			return false;
 		}
 		if (this == otherObj) return true;
 		if (otherObj == null) return false;
-		ObjectArrayList other = (ObjectArrayList) otherObj;
+		@SuppressWarnings("unchecked")
+		ObjectArrayList<T> other = (ObjectArrayList<T>) otherObj;
 		if (elements == other.elements()) return true;
 		if (size != other.size()) return false;
 
@@ -382,7 +420,7 @@ public class ObjectArrayList extends AbstractList {
 			}
 		} else {
 			for (int i = size; --i >= 0; ) {
-				if (!(theElements[i] == null ? otherElements[i] == null : theElements[i].equals(otherElements[i])))
+				if (!(Objects.equals(theElements[i], otherElements[i])))
 					return false;
 			}
 		}
@@ -392,11 +430,15 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Sets the specified range of elements in the specified array to the specified value.
+	 * Sets the specified range of elements in the specified array to the
+	 * specified value.
 	 *
-	 * @param from the index of the first element (inclusive) to be filled with the specified value.
-	 * @param to   the index of the last element (inclusive) to be filled with the specified value.
-	 * @param val  the value to be stored in the specified elements of the receiver.
+	 * @param from the index of the first element (inclusive) to be filled with
+	 * the specified value.
+	 * @param to the index of the last element (inclusive) to be filled with the
+	 * specified value.
+	 * @param val the value to be stored in the specified elements of the
+	 * receiver.
 	 */
 	public void fillFromToWith(int from, int to, Object val) {
 		checkRangeFromTo(from, to, this.size);
@@ -404,17 +446,20 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Applies a procedure to each element of the receiver, if any.
-	 * Starts at index 0, moving rightwards.
+	 * Applies a procedure to each element of the receiver, if any. Starts at
+	 * index 0, moving rightwards.
 	 *
-	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
-	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
+	 * @param procedure the procedure to be applied. Stops iteration if the
+	 * procedure returns <tt>false</tt>, otherwise continues.
+	 * @return <tt>false</tt> if the procedure stopped before all elements where
+	 * iterated over, <tt>true</tt> otherwise.
 	 */
 	public boolean forEach(ObjectProcedure procedure) {
 		Object[] theElements = elements;
 		int theSize = size;
 
-		for (int i = 0; i < theSize; ) if (!procedure.apply(theElements[i++])) return false;
+		for (int i = 0; i < theSize; )
+			if (!procedure.apply(theElements[i++])) return false;
 		return true;
 	}
 
@@ -422,7 +467,8 @@ public class ObjectArrayList extends AbstractList {
 	 * Returns the element at the specified position in the receiver.
 	 *
 	 * @param index index of element to return.
-	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
+	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 ||
+	 * index &gt;= size()).
 	 */
 	public Object get(int index) {
 		if (index >= size || index < 0)
@@ -431,9 +477,12 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Returns the element at the specified position in the receiver; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may return invalid elements without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Returns the element at the specified position in the receiver;
+	 * <b>WARNING:</b> Does not check preconditions. Provided with invalid
+	 * parameters this method may return invalid elements without throwing any
+	 * exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
 	 * @param index index of element to return.
@@ -443,31 +492,38 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Returns the index of the first occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
+	 * Returns the index of the first occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
 	 * <p>
 	 * Tests for equality or identity as specified by testForEquality.
 	 *
-	 * @param testForEquality if <code>true</code> -> test for equality, otherwise for identity.
-	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
+	 * @param testForEquality if <code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return the index of the first occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
 	 */
 	public int indexOf(Object element, boolean testForEquality) {
 		return this.indexOfFromTo(element, 0, size - 1, testForEquality);
 	}
 
 	/**
-	 * Returns the index of the first occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
-	 * Searches between <code>from</code>, inclusive and <code>to</code>, inclusive.
+	 * Returns the index of the first occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
+	 * Searches between <code>from</code>, inclusive and <code>to</code>,
+	 * inclusive.
 	 * <p>
-	 * Tests for equality or identity as specified by <code>testForEquality</code>.
+	 * Tests for equality or identity as specified by
+	 * <code>testForEquality</code>.
 	 *
-	 * @param element         element to search for.
-	 * @param from            the leftmost search position, inclusive.
-	 * @param to              the rightmost search position, inclusive.
-	 * @param testForEquality if </code>true</code> -> test for equality, otherwise for identity.
-	 * @return the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param element element to search for.
+	 * @param from the leftmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
+	 * @param testForEquality if </code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return the index of the first occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public int indexOfFromTo(Object element, int from, int to, boolean testForEquality) {
 		if (size == 0) return -1;
@@ -492,54 +548,66 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Determines whether the receiver is sorted ascending, according to the <i>natural ordering</i> of its
-	 * elements.  All elements in this range must implement the
+	 * Determines whether the receiver is sorted ascending, according to the
+	 * <i>natural ordering</i> of its elements.  All elements in this range must
+	 * implement the
 	 * <tt>Comparable</tt> interface.  Furthermore, all elements in this range
 	 * must be <i>mutually comparable</i> (that is, <tt>e1.compareTo(e2)</tt>
 	 * must not throw a <tt>ClassCastException</tt> for any elements
 	 * <tt>e1</tt> and <tt>e2</tt> in the array).<p>
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @return <tt>true</tt> if the receiver is sorted ascending, <tt>false</tt> otherwise.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @return <tt>true</tt> if the receiver is sorted ascending, <tt>false</tt>
+	 * otherwise.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean isSortedFromTo(int from, int to) {
 		if (size == 0) return true;
 		checkRangeFromTo(from, to, size);
 
 		Object[] theElements = elements;
 		for (int i = from + 1; i <= to; i++) {
-			if (((Comparable) theElements[i]).compareTo((Comparable) theElements[i - 1]) < 0) return false;
+			if (((Comparable<Object>) theElements[i]).compareTo(theElements[i - 1]) < 0)
+				return false;
 		}
 		return true;
 	}
 
 	/**
-	 * Returns the index of the last occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
-	 * Tests for equality or identity as specified by <code>testForEquality</code>.
+	 * Returns the index of the last occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
+	 * Tests for equality or identity as specified by
+	 * <code>testForEquality</code>.
 	 *
-	 * @param element         the element to be searched for.
-	 * @param testForEquality if <code>true</code> -> test for equality, otherwise for identity.
-	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
+	 * @param element the element to be searched for.
+	 * @param testForEquality if <code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return the index of the last occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
 	 */
 	public int lastIndexOf(Object element, boolean testForEquality) {
 		return lastIndexOfFromTo(element, 0, size - 1, testForEquality);
 	}
 
 	/**
-	 * Returns the index of the last occurrence of the specified
-	 * element. Returns <code>-1</code> if the receiver does not contain this element.
-	 * Searches beginning at <code>to</code>, inclusive until <code>from</code>, inclusive.
-	 * Tests for equality or identity as specified by <code>testForEquality</code>.
+	 * Returns the index of the last occurrence of the specified element.
+	 * Returns <code>-1</code> if the receiver does not contain this element.
+	 * Searches beginning at <code>to</code>, inclusive until <code>from</code>,
+	 * inclusive. Tests for equality or identity as specified by
+	 * <code>testForEquality</code>.
 	 *
-	 * @param element         element to search for.
-	 * @param from            the leftmost search position, inclusive.
-	 * @param to              the rightmost search position, inclusive.
-	 * @param testForEquality if <code>true</code> -> test for equality, otherwise for identity.
-	 * @return the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param element element to search for.
+	 * @param from the leftmost search position, inclusive.
+	 * @param to the rightmost search position, inclusive.
+	 * @param testForEquality if <code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return the index of the last occurrence of the element in the receiver;
+	 * returns <code>-1</code> if the element is not found.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public int lastIndexOfFromTo(Object element, int from, int to, boolean testForEquality) {
 		if (size == 0) return -1;
@@ -564,29 +632,32 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Sorts the specified range of the receiver into
-	 * ascending order, according to the <i>natural ordering</i> of its
-	 * elements.  All elements in this range must implement the
+	 * Sorts the specified range of the receiver into ascending order, according
+	 * to the <i>natural ordering</i> of its elements.  All elements in this
+	 * range must implement the
 	 * <tt>Comparable</tt> interface.  Furthermore, all elements in this range
 	 * must be <i>mutually comparable</i> (that is, <tt>e1.compareTo(e2)</tt>
 	 * must not throw a <tt>ClassCastException</tt> for any elements
 	 * <tt>e1</tt> and <tt>e2</tt> in the array).<p>
 	 * <p>
-	 * This sort is guaranteed to be <i>stable</i>:  equal elements will
-	 * not be reordered as a result of the sort.<p>
+	 * This sort is guaranteed to be <i>stable</i>:  equal elements will not be
+	 * reordered as a result of the sort.<p>
 	 * <p>
 	 * The sorting algorithm is a modified mergesort (in which the merge is
-	 * omitted if the highest element in the low sublist is less than the
-	 * lowest element in the high sublist).  This algorithm offers guaranteed
-	 * n*log(n) performance, and can approach linear performance on nearly
-	 * sorted lists.
+	 * omitted if the highest element in the low sublist is less than the lowest
+	 * element in the high sublist).  This algorithm offers guaranteed n*log(n)
+	 * performance, and can approach linear performance on nearly sorted lists.
 	 *
-	 * <p><b>You should never call this method unless you are sure that this particular sorting algorithm is the right one for your data set.</b>
-	 * It is generally better to call <tt>sort()</tt> or <tt>sortFromTo(...)</tt> instead, because those methods automatically choose the best sorting algorithm.
+	 * <p><b>You should never call this method unless you are sure that this
+	 * particular sorting algorithm is the right one for your data set.</b>
+	 * It is generally better to call <tt>sort()</tt> or
+	 * <tt>sortFromTo(...)</tt> instead, because those methods automatically
+	 * choose the best sorting algorithm.
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void mergeSortFromTo(int from, int to) {
 		if (size == 0) return;
@@ -595,80 +666,83 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Sorts the receiver according
-	 * to the order induced by the specified comparator.  All elements in the
-	 * range must be <i>mutually comparable</i> by the specified comparator
-	 * (that is, <tt>c.compare(e1, e2)</tt> must not throw a
+	 * Sorts the receiver according to the order induced by the specified
+	 * comparator.  All elements in the range must be <i>mutually comparable</i>
+	 * by the specified comparator (that is, <tt>c.compare(e1, e2)</tt> must not
+	 * throw a
 	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
 	 * <tt>e2</tt> in the range).<p>
 	 * <p>
-	 * This sort is guaranteed to be <i>stable</i>:  equal elements will
-	 * not be reordered as a result of the sort.<p>
+	 * This sort is guaranteed to be <i>stable</i>:  equal elements will not be
+	 * reordered as a result of the sort.<p>
 	 * <p>
 	 * The sorting algorithm is a modified mergesort (in which the merge is
-	 * omitted if the highest element in the low sublist is less than the
-	 * lowest element in the high sublist).  This algorithm offers guaranteed
-	 * n*log(n) performance, and can approach linear performance on nearly
-	 * sorted lists.
+	 * omitted if the highest element in the low sublist is less than the lowest
+	 * element in the high sublist).  This algorithm offers guaranteed n*log(n)
+	 * performance, and can approach linear performance on nearly sorted lists.
 	 *
-	 * @param from the index of the first element (inclusive) to be
-	 *             sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @param c    the comparator to determine the order of the receiver.
-	 * @throws ClassCastException             if the array contains elements that are not
-	 *                                        <i>mutually comparable</i> using the specified comparator.
-	 * @throws IllegalArgumentException       if <tt>fromIndex &gt; toIndex</tt>
+	 * @param from the index of the first element (inclusive) to be sorted.
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @param c the comparator to determine the order of the receiver.
+	 * @throws ClassCastException if the array contains elements that are not
+	 * <i>mutually comparable</i> using the specified comparator.
+	 * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
 	 * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
-	 *                                        <tt>toIndex &gt; a.length</tt>
-	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
-	 * @see Comparator
+	 * <tt>toIndex &gt; a.length</tt>
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public void mergeSortFromTo(int from, int to, java.util.Comparator c) {
+	public void mergeSortFromTo(int from, int to, java.util.Comparator<? super Object> c) {
 		if (size == 0) return;
 		checkRangeFromTo(from, to, size);
 		java.util.Arrays.sort(elements, from, to + 1, c);
 	}
 
 	/**
-	 * Returns a new list of the part of the receiver between <code>from</code>, inclusive, and <code>to</code>, inclusive.
+	 * Returns a new list of the part of the receiver between <code>from</code>,
+	 * inclusive, and <code>to</code>, inclusive.
 	 *
 	 * @param from the index of the first element (inclusive).
-	 * @param to   the index of the last element (inclusive).
+	 * @param to the index of the last element (inclusive).
 	 * @return a new list
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public ObjectArrayList partFromTo(int from, int to) {
-		if (size == 0) return new ObjectArrayList(0);
+	public ObjectArrayList<T> partFromTo(int from, int to) {
+		if (size == 0) return new ObjectArrayList<>(0);
 
 		checkRangeFromTo(from, to, size);
 
 		Object[] part = new Object[to - from + 1];
 		System.arraycopy(elements, from, part, 0, to - from + 1);
-		return new ObjectArrayList(part);
+		return new ObjectArrayList<>(part);
 	}
 
 	/**
-	 * Sorts the specified range of the receiver into
-	 * ascending order, according to the <i>natural ordering</i> of its
-	 * elements.  All elements in this range must implement the
+	 * Sorts the specified range of the receiver into ascending order, according
+	 * to the <i>natural ordering</i> of its elements.  All elements in this
+	 * range must implement the
 	 * <tt>Comparable</tt> interface.  Furthermore, all elements in this range
 	 * must be <i>mutually comparable</i> (that is, <tt>e1.compareTo(e2)</tt>
 	 * must not throw a <tt>ClassCastException</tt> for any elements
 	 * <tt>e1</tt> and <tt>e2</tt> in the array).<p>
 	 * <p>
-	 * The sorting algorithm is a tuned quicksort,
-	 * adapted from Jon L. Bentley and M. Douglas McIlroy's "Engineering a
-	 * Sort Function", Software-Practice and Experience, Vol. 23(11)
-	 * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
-	 * performance on many data sets that cause other quicksorts to degrade to
-	 * quadratic performance.
+	 * The sorting algorithm is a tuned quicksort, adapted from Jon L. Bentley
+	 * and M. Douglas McIlroy's "Engineering a Sort Function", Software-Practice
+	 * and Experience, Vol. 23(11) P. 1249-1265 (November 1993).  This algorithm
+	 * offers n*log(n) performance on many data sets that cause other quicksorts
+	 * to degrade to quadratic performance.
 	 *
-	 * <p><b>You should never call this method unless you are sure that this particular sorting algorithm is the right one for your data set.</b>
-	 * It is generally better to call <tt>sort()</tt> or <tt>sortFromTo(...)</tt> instead, because those methods automatically choose the best sorting algorithm.
+	 * <p><b>You should never call this method unless you are sure that this
+	 * particular sorting algorithm is the right one for your data set.</b>
+	 * It is generally better to call <tt>sort()</tt> or
+	 * <tt>sortFromTo(...)</tt> instead, because those methods automatically
+	 * choose the best sorting algorithm.
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void quickSortFromTo(int from, int to) {
 		if (size == 0) return;
@@ -677,52 +751,55 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Sorts the receiver according
-	 * to the order induced by the specified comparator.  All elements in the
-	 * range must be <i>mutually comparable</i> by the specified comparator
-	 * (that is, <tt>c.compare(e1, e2)</tt> must not throw a
+	 * Sorts the receiver according to the order induced by the specified
+	 * comparator.  All elements in the range must be <i>mutually comparable</i>
+	 * by the specified comparator (that is, <tt>c.compare(e1, e2)</tt> must not
+	 * throw a
 	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
 	 * <tt>e2</tt> in the range).<p>
 	 * <p>
-	 * The sorting algorithm is a tuned quicksort,
-	 * adapted from Jon L. Bentley and M. Douglas McIlroy's "Engineering a
-	 * Sort Function", Software-Practice and Experience, Vol. 23(11)
-	 * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
-	 * performance on many data sets that cause other quicksorts to degrade to
-	 * quadratic performance.
+	 * The sorting algorithm is a tuned quicksort, adapted from Jon L. Bentley
+	 * and M. Douglas McIlroy's "Engineering a Sort Function", Software-Practice
+	 * and Experience, Vol. 23(11) P. 1249-1265 (November 1993).  This algorithm
+	 * offers n*log(n) performance on many data sets that cause other quicksorts
+	 * to degrade to quadratic performance.
 	 *
 	 * @param from the index of the first element (inclusive) to be sorted.
-	 * @param to   the index of the last element (inclusive) to be sorted.
-	 * @param c    the comparator to determine the order of the receiver.
-	 * @throws ClassCastException             if the array contains elements that are not
-	 *                                        <i>mutually comparable</i> using the specified comparator.
-	 * @throws IllegalArgumentException       if <tt>fromIndex &gt; toIndex</tt>
+	 * @param to the index of the last element (inclusive) to be sorted.
+	 * @param c the comparator to determine the order of the receiver.
+	 * @throws ClassCastException if the array contains elements that are not
+	 * <i>mutually comparable</i> using the specified comparator.
+	 * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
 	 * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
-	 *                                        <tt>toIndex &gt; a.length</tt>
-	 * @throws IndexOutOfBoundsException      index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
-	 * @see Comparator
+	 * <tt>toIndex &gt; a.length</tt>
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public void quickSortFromTo(int from, int to, java.util.Comparator c) {
+	public void quickSortFromTo(int from, int to, java.util.Comparator<? super Object> c) {
 		if (size == 0) return;
 		checkRangeFromTo(from, to, size);
 		cern.colt.Sorting.quickSort(elements, from, to + 1, c);
 	}
 
 	/**
-	 * Removes from the receiver all elements that are contained in the specified list.
-	 * Tests for equality or identity as specified by <code>testForEquality</code>.
+	 * Removes from the receiver all elements that are contained in the
+	 * specified list. Tests for equality or identity as specified by
+	 * <code>testForEquality</code>.
 	 *
-	 * @param other           the other list.
-	 * @param testForEquality if <code>true</code> -> test for equality, otherwise for identity.
-	 * @return <code>true</code> if the receiver changed as a result of the call.
+	 * @param other the other list.
+	 * @param testForEquality if <code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return <code>true</code> if the receiver changed as a result of the
+	 * call.
 	 */
-	public boolean removeAll(ObjectArrayList other, boolean testForEquality) {
+	public boolean removeAll(ObjectArrayList<T> other, boolean testForEquality) {
 		if (other.size == 0) return false; //nothing to do
 		int limit = other.size - 1;
 		int j = 0;
 		Object[] theElements = elements;
 		for (int i = 0; i < size; i++) {
-			if (other.indexOfFromTo(theElements[i], 0, limit, testForEquality) < 0) theElements[j++] = theElements[i];
+			if (other.indexOfFromTo(theElements[i], 0, limit, testForEquality) < 0)
+				theElements[j++] = theElements[i];
 		}
 
 		boolean modified = (j != size);
@@ -732,13 +809,15 @@ public class ObjectArrayList extends AbstractList {
 
 	/**
 	 * Removes from the receiver all elements whose index is between
-	 * <code>from</code>, inclusive and <code>to</code>, inclusive.  Shifts any succeeding
-	 * elements to the left (reduces their index).
-	 * This call shortens the list by <tt>(to - from + 1)</tt> elements.
+	 * <code>from</code>, inclusive and <code>to</code>, inclusive.  Shifts any
+	 * succeeding
+	 * elements to the left (reduces their index). This call shortens the list
+	 * by <tt>(to - from + 1)</tt> elements.
 	 *
 	 * @param from index of first element to be removed.
-	 * @param to   index of last element to be removed.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to index of last element to be removed.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void removeFromTo(int from, int to) {
 		checkRangeFromTo(from, to, size);
@@ -752,16 +831,21 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Replaces a number of elements in the receiver with the same number of elements of another list.
-	 * Replaces elements in the receiver, between <code>from</code> (inclusive) and <code>to</code> (inclusive),
-	 * with elements of <code>other</code>, starting from <code>otherFrom</code> (inclusive).
+	 * Replaces a number of elements in the receiver with the same number of
+	 * elements of another list. Replaces elements in the receiver, between
+	 * <code>from</code> (inclusive) and <code>to</code> (inclusive), with
+	 * elements of <code>other</code>, starting from <code>otherFrom</code>
+	 * (inclusive).
 	 *
-	 * @param from      the position of the first element to be replaced in the receiver
-	 * @param to        the position of the last element to be replaced in the receiver
-	 * @param other     list holding elements to be copied into the receiver.
-	 * @param otherFrom position of first element within other list to be copied.
+	 * @param from the position of the first element to be replaced in the
+	 * receiver
+	 * @param to the position of the last element to be replaced in the
+	 * receiver
+	 * @param other list holding elements to be copied into the receiver.
+	 * @param otherFrom position of first element within other list to be
+	 * copied.
 	 */
-	public void replaceFromToWithFrom(int from, int to, ObjectArrayList other, int otherFrom) {
+	public void replaceFromToWithFrom(int from, int to, ObjectArrayList<T> other, int otherFrom) {
 		int length = to - from + 1;
 		if (length > 0) {
 			checkRangeFromTo(from, to, size);
@@ -771,21 +855,21 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Replaces the part between <code>from</code> (inclusive) and <code>to</code> (inclusive) with the other list's
-	 * part between <code>otherFrom</code> and <code>otherTo</code>.
-	 * Powerful (and tricky) method!
-	 * Both parts need not be of the same size (part A can both be smaller or larger than part B).
-	 * Parts may overlap.
-	 * Receiver and other list may (but most not) be identical.
-	 * If <code>from &gt; to</code>, then inserts other part before <code>from</code>.
+	 * Replaces the part between <code>from</code> (inclusive) and
+	 * <code>to</code> (inclusive) with the other list's part between
+	 * <code>otherFrom</code> and <code>otherTo</code>. Powerful (and tricky)
+	 * method! Both parts need not be of the same size (part A can both be
+	 * smaller or larger than part B). Parts may overlap. Receiver and other
+	 * list may (but most not) be identical. If <code>from &gt; to</code>, then
+	 * inserts other part before <code>from</code>.
 	 *
-	 * @param from      the first element of the receiver (inclusive)
-	 * @param to        the last element of the receiver (inclusive)
-	 * @param other     the other list (may be identical with receiver)
+	 * @param from the first element of the receiver (inclusive)
+	 * @param to the last element of the receiver (inclusive)
+	 * @param other the other list (may be identical with receiver)
 	 * @param otherFrom the first element of the other list (inclusive)
-	 * @param otherTo   the last element of the other list (inclusive)
+	 * @param otherTo the last element of the other list (inclusive)
 	 *
-	 *                  <p><b>Examples:</b><pre>
+	 * <p><b>Examples:</b><pre>
 	 *                  a=[0, 1, 2, 3, 4, 5, 6, 7]
 	 *                  b=[50, 60, 70, 80, 90]
 	 *                  a.R(...)=a.replaceFromToWithFromTo(...)
@@ -813,7 +897,7 @@ public class ObjectArrayList extends AbstractList {
 	 *                  a.R(8,0,a,0,4)-->[0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4]
 	 *                  </pre>
 	 */
-	public void replaceFromToWithFromTo(int from, int to, ObjectArrayList other, int otherFrom, int otherTo) {
+	public void replaceFromToWithFromTo(int from, int to, ObjectArrayList<T> other, int otherFrom, int otherTo) {
 		if (otherFrom > otherTo) {
 			throw new IndexOutOfBoundsException("otherFrom: " + otherFrom + ", otherTo: " + otherTo);
 		}
@@ -849,17 +933,20 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Replaces the part of the receiver starting at <code>from</code> (inclusive) with all the elements of the specified collection.
-	 * Does not alter the size of the receiver.
-	 * Replaces exactly <tt>Math.max(0,Math.min(size()-from, other.size()))</tt> elements.
+	 * Replaces the part of the receiver starting at <code>from</code>
+	 * (inclusive) with all the elements of the specified collection. Does not
+	 * alter the size of the receiver. Replaces exactly
+	 * <tt>Math.max(0,Math.min(size()-from, other.size()))</tt> elements.
 	 *
-	 * @param from  the index at which to copy the first element from the specified collection.
+	 * @param from the index at which to copy the first element from the
+	 * specified collection.
 	 * @param other Collection to replace part of the receiver
-	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
+	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 ||
+	 * index &gt;= size()).
 	 */
-	public void replaceFromWith(int from, java.util.Collection other) {
+	public void replaceFromWith(int from, java.util.Collection<? extends T> other) {
 		checkRange(from, size);
-		java.util.Iterator e = other.iterator();
+		java.util.Iterator<? extends T> e = other.iterator();
 		int index = from;
 		int limit = Math.min(size - from, other.size());
 		for (int i = 0; i < limit; i++)
@@ -867,16 +954,18 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Retains (keeps) only the elements in the receiver that are contained in the specified other list.
-	 * In other words, removes from the receiver all of its elements that are not contained in the
-	 * specified other list.
-	 * Tests for equality or identity as specified by <code>testForEquality</code>.
+	 * Retains (keeps) only the elements in the receiver that are contained in
+	 * the specified other list. In other words, removes from the receiver all
+	 * of its elements that are not contained in the specified other list. Tests
+	 * for equality or identity as specified by <code>testForEquality</code>.
 	 *
-	 * @param other           the other list to test against.
-	 * @param testForEquality if <code>true</code> -> test for equality, otherwise for identity.
-	 * @return <code>true</code> if the receiver changed as a result of the call.
+	 * @param other the other list to test against.
+	 * @param testForEquality if <code>true</code> -> test for equality,
+	 * otherwise for identity.
+	 * @return <code>true</code> if the receiver changed as a result of the
+	 * call.
 	 */
-	public boolean retainAll(ObjectArrayList other, boolean testForEquality) {
+	public boolean retainAll(ObjectArrayList<T> other, boolean testForEquality) {
 		if (other.size == 0) {
 			if (size == 0) return false;
 			setSize(0);
@@ -888,7 +977,8 @@ public class ObjectArrayList extends AbstractList {
 		Object[] theElements = elements;
 
 		for (int i = 0; i < size; i++) {
-			if (other.indexOfFromTo(theElements[i], 0, limit, testForEquality) >= 0) theElements[j++] = theElements[i];
+			if (other.indexOfFromTo(theElements[i], 0, limit, testForEquality) >= 0)
+				theElements[j++] = theElements[i];
 		}
 
 		boolean modified = (j != size);
@@ -897,8 +987,8 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Reverses the elements of the receiver.
-	 * Last becomes first, second last becomes second first, and so on.
+	 * Reverses the elements of the receiver. Last becomes first, second last
+	 * becomes second first, and so on.
 	 */
 	public void reverse() {
 		Object tmp;
@@ -914,12 +1004,13 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element.
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
-	 * @throws IndexOutOfBoundsException index is out of range (index
-	 *                                   &lt; 0 || index &gt;= size()).
+	 * @throws IndexOutOfBoundsException index is out of range (index &lt; 0 ||
+	 * index &gt;= size()).
 	 */
 	public void set(int index, Object element) {
 		if (index >= size || index < 0)
@@ -928,12 +1019,15 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may access invalid indexes without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element; <b>WARNING:</b> Does not check preconditions. Provided
+	 * with invalid parameters this method may access invalid indexes without
+	 * throwing any exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
 	public void setQuick(int index, Object element) {
@@ -941,11 +1035,13 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Randomly permutes the part of the receiver between <code>from</code> (inclusive) and <code>to</code> (inclusive).
+	 * Randomly permutes the part of the receiver between <code>from</code>
+	 * (inclusive) and <code>to</code> (inclusive).
 	 *
 	 * @param from the index of the first element (inclusive) to be permuted.
-	 * @param to   the index of the last element (inclusive) to be permuted.
-	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
+	 * @param to the index of the last element (inclusive) to be permuted.
+	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
+	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
 	public void shuffleFromTo(int from, int to) {
 		if (size == 0) return;
@@ -975,12 +1071,13 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Returns a list which is a concatenation of <code>times</code> times the receiver.
+	 * Returns a list which is a concatenation of <code>times</code> times the
+	 * receiver.
 	 *
 	 * @param times the number of times the receiver shall be copied.
 	 */
-	public ObjectArrayList times(int times) {
-		ObjectArrayList newList = new ObjectArrayList(times * size);
+	public ObjectArrayList<T> times(int times) {
+		ObjectArrayList<T> newList = new ObjectArrayList<>(times * size);
 		for (int i = times; --i >= 0; ) {
 			newList.addAllOfFromTo(this, 0, size() - 1);
 		}
@@ -994,21 +1091,20 @@ public class ObjectArrayList extends AbstractList {
 	 * returned therein.  Otherwise, a new array is allocated with the runtime
 	 * type of the specified array and the size of the receiver.
 	 * <p>
-	 * If the receiver fits in the specified array with room to spare
-	 * (i.e., the array has more elements than the receiver),
-	 * the element in the array immediately following the end of the
-	 * receiver is set to null.  This is useful in determining the length
-	 * of the receiver <em>only</em> if the caller knows that the receiver
-	 * does not contain any null elements.
+	 * If the receiver fits in the specified array with room to spare (i.e., the
+	 * array has more elements than the receiver), the element in the array
+	 * immediately following the end of the receiver is set to null.  This is
+	 * useful in determining the length of the receiver <em>only</em> if the
+	 * caller knows that the receiver does not contain any null elements.
 	 *
-	 * @param array the array into which the elements of the receiver are to
-	 *              be stored, if it is big enough; otherwise, a new array of the
-	 *              same runtime type is allocated for this purpose.
+	 * @param array the array into which the elements of the receiver are to be
+	 * stored, if it is big enough; otherwise, a new array of the same runtime
+	 * type is allocated for this purpose.
 	 * @return an array containing the elements of the receiver.
-	 * @throws ArrayStoreException the runtime type of <tt>array</tt> is not a supertype
-	 *                             of the runtime type of every element in the receiver.
+	 * @throws ArrayStoreException the runtime type of <tt>array</tt> is not a
+	 * supertype of the runtime type of every element in the receiver.
 	 */
-	public Object[] toArray(Object array[]) {
+	public Object[] toArray(Object[] array) {
 		if (array.length < size)
 			array = (Object[]) java.lang.reflect.Array.newInstance(array.getClass().getComponentType(), size);
 
@@ -1021,28 +1117,33 @@ public class ObjectArrayList extends AbstractList {
 	}
 
 	/**
-	 * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
+	 * Returns a <code>java.util.ArrayList</code> containing all the elements in
+	 * the receiver.
 	 */
-	public java.util.ArrayList toList() {
+	public java.util.ArrayList<T> toList() {
 		int mySize = size();
 		Object[] theElements = elements;
-		java.util.ArrayList list = new java.util.ArrayList(mySize);
-		for (int i = 0; i < mySize; i++) list.add(theElements[i]);
+		java.util.ArrayList<T> list = new java.util.ArrayList<>(mySize);
+		for (int i = 0; i < mySize; ++i) {
+			@SuppressWarnings("unchecked")
+			final T element = (T)theElements[i];
+			list.add(element);
+		}
 		return list;
 	}
 
 	/**
-	 * Returns a string representation of the receiver, containing
-	 * the String representation of each element.
+	 * Returns a string representation of the receiver, containing the String
+	 * representation of each element.
 	 */
 	public String toString() {
 		return cern.colt.Arrays.toString(partFromTo(0, size() - 1).elements());
 	}
 
 	/**
-	 * Trims the capacity of the receiver to be the receiver's current
-	 * size. Releases any superfluos internal memory. An application can use this operation to minimize the
-	 * storage of the receiver.
+	 * Trims the capacity of the receiver to be the receiver's current size.
+	 * Releases any superfluos internal memory. An application can use this
+	 * operation to minimize the storage of the receiver.
 	 */
 	public void trimToSize() {
 		elements = cern.colt.Arrays.trimToCapacity(elements, size());

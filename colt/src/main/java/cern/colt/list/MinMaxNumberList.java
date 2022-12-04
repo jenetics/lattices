@@ -14,38 +14,53 @@ import cern.colt.bitvector.BitVector;
 import cern.colt.bitvector.QuickBitVector;
 
 /**
- * Resizable compressed list holding numbers; based on the fact that a value in a given interval need not take more than <tt>log(max-min+1)</tt> bits; implemented with a <tt>cern.colt.bitvector.BitVector</tt>.
- * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
+ * Resizable compressed list holding numbers; based on the fact that a value in
+ * a given interval need not take more than <tt>log(max-min+1)</tt> bits;
+ * implemented with a <tt>cern.colt.bitvector.BitVector</tt>. First see the <a
+ * href="package-summary.html">package summary</a> and javadoc <a
+ * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
- * Numbers can be compressed when minimum and maximum of all values ever to be stored in the list are known.
- * For example, if min=16, max=27, only 4 bits are needed to store a value.
- * No compression is achieved for <tt>float</tt> and <tt>double</tt> values.
+ * Numbers can be compressed when minimum and maximum of all values ever to be
+ * stored in the list are known. For example, if min=16, max=27, only 4 bits are
+ * needed to store a value. No compression is achieved for <tt>float</tt> and
+ * <tt>double</tt> values.
  * <p>
- * You can add, get and set elements quite similar to <tt>java.util.ArrayList</tt>.
+ * You can add, get and set elements quite similar to
+ * <tt>java.util.ArrayList</tt>.
  * <p>
- * <b>Applicability:</b> Applicable if the data is non floating point, highly skewed without "outliers" and minimum and maximum known in advance.
+ * <b>Applicability:</b> Applicable if the data is non floating point, highly
+ * skewed without "outliers" and minimum and maximum known in advance.
  * <p>
- * <b>Performance:</b> Basic operations like <tt>add()</tt>, <tt>get()</tt>, <tt>set()</tt>, <tt>size()</tt> and <tt>clear()</tt> are <tt>O(1)</tt>, i.e. run in constant time.
+ * <b>Performance:</b> Basic operations like <tt>add()</tt>, <tt>get()</tt>,
+ * <tt>set()</tt>, <tt>size()</tt> and <tt>clear()</tt> are <tt>O(1)</tt>, i.e.
+ * run in constant time.
  * <dt>200Mhz Pentium Pro, JDK 1.2, NT:
  * <dt><tt>10^6</tt> calls to <tt>getQuick()</tt> --> <tt>0.5</tt> seconds.
- * (50 times slower than reading from a primitive array of the appropriate type.)
+ * (50 times slower than reading from a primitive array of the appropriate
+ * type.)
  * <dt><tt>10^6</tt> calls to <tt>setQuick()</tt> --> <tt>0.8</tt> seconds.
  * (15 times slower than writing to a primitive array of the appropriate type.)
  * <p>
- * This class can, for example, be useful when making large lists of numbers persistent.
- * Also useful when very large lists would otherwise consume too much main memory.
+ * This class can, for example, be useful when making large lists of numbers
+ * persistent. Also useful when very large lists would otherwise consume too
+ * much main memory.
  * <p>
- * Upon instantiation a contract is signed that defines the interval values may fall into.
- * It is not legal to store values not contained in that interval.
- * WARNING: The contract is not checked. Be sure you do not store illegal values.
- * If you need to store <tt>float</tt> or <tt>double</tt> values, you must set the minimum and maximum to <tt>[Integer.MIN_VALUE,Integer.MAX_VALUE]</tt> or <tt>[Long.MIN_VALUE,Long.MAX_VALUE]</tt>, respectively.
+ * Upon instantiation a contract is signed that defines the interval values may
+ * fall into. It is not legal to store values not contained in that interval.
+ * WARNING: The contract is not checked. Be sure you do not store illegal
+ * values. If you need to store <tt>float</tt> or <tt>double</tt> values, you
+ * must set the minimum and maximum to
+ * <tt>[Integer.MIN_VALUE,Integer.MAX_VALUE]</tt> or
+ * <tt>[Long.MIN_VALUE,Long.MAX_VALUE]</tt>, respectively.
  * <p>
- * Although access methods are only defined on <tt>long</tt> values you can also store
- * all other primitive data types: <tt>boolean</tt>, <tt>byte</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, <tt>float</tt>, <tt>double</tt> and <tt>char</tt>.
- * You can do this by explicitly representing them as <tt>long</tt> values.
- * Use casts for discrete data types.
- * Use the methods of <tt>java.lang.Float</tt> and <tt>java.lang.Double</tt> for floating point data types:
- * Recall that with those methods you can convert any floating point value to a <tt>long</tt> value and back <b>without losing any precision</b>:
+ * Although access methods are only defined on <tt>long</tt> values you can also
+ * store all other primitive data types: <tt>boolean</tt>, <tt>byte</tt>,
+ * <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, <tt>float</tt>, <tt>double</tt>
+ * and <tt>char</tt>. You can do this by explicitly representing them as
+ * <tt>long</tt> values. Use casts for discrete data types. Use the methods of
+ * <tt>java.lang.Float</tt> and <tt>java.lang.Double</tt> for floating point
+ * data types: Recall that with those methods you can convert any floating point
+ * value to a <tt>long</tt> value and back <b>without losing any precision</b>:
  * <p>
  * <b>Example usage:</b><pre>
  * MinMaxNumberList list = ... instantiation goes here
@@ -75,15 +90,35 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	protected int capacity;
 
 	/**
-	 * Constructs an empty list with the specified initial capacity and the specified range of values allowed to be hold in this list.
-	 * Legal values are in the range [minimum,maximum], all inclusive.
+	 * Constructs an empty list with the specified initial capacity and the
+	 * specified range of values allowed to be hold in this list. Legal values
+	 * are in the range [minimum,maximum], all inclusive.
 	 *
-	 * @param minimum         the minimum of values allowed to be hold in this list.
-	 * @param maximum         the maximum of values allowed to be hold in this list.
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param minimum the minimum of values allowed to be hold in this list.
+	 * @param maximum the maximum of values allowed to be hold in this list.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	public MinMaxNumberList(long minimum, long maximum, int initialCapacity) {
 		this.setUp(minimum, maximum, initialCapacity);
+	}
+
+	/**
+	 * Returns the number of bits necessary to store values in the range
+	 * <tt>[minimum,maximum]</tt>.
+	 */
+	public static int bitsPerElement(long minimum, long maximum) {
+		int bits;
+		if (1 + maximum - minimum > 0) {
+			bits = (int) Math.round(Math.ceil(cern.jet.math.Arithmetic.log(2, 1 + maximum - minimum)));
+		} else {
+			// overflow or underflow in calculating "1+maximum-minimum"
+			// happens if signed long representation is too short for doing unsigned calculations
+			// e.g. if minimum==LONG.MIN_VALUE, maximum==LONG.MAX_VALUE
+			// --> in such cases store all bits of values without any compression.
+			bits = 64;
+		}
+		return bits;
 	}
 
 	/**
@@ -102,11 +137,12 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Appends the elements <tt>elements[from]</tt> (inclusive), ..., <tt>elements[to]</tt> (inclusive) to the receiver.
+	 * Appends the elements <tt>elements[from]</tt> (inclusive), ...,
+	 * <tt>elements[to]</tt> (inclusive) to the receiver.
 	 *
 	 * @param elements the elements to be appended to the receiver.
-	 * @param from     the index of the first element to be appended (inclusive)
-	 * @param to       the index of the last element to be appended (inclusive)
+	 * @param from the index of the first element to be appended (inclusive)
+	 * @param to the index of the last element to be appended (inclusive)
 	 */
 	public void addAllOfFromTo(long[] elements, int from, int to) {
 		// cache some vars for speed.
@@ -134,25 +170,10 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Returns the number of bits necessary to store values in the range <tt>[minimum,maximum]</tt>.
-	 */
-	public static int bitsPerElement(long minimum, long maximum) {
-		int bits;
-		if (1 + maximum - minimum > 0) {
-			bits = (int) Math.round(Math.ceil(cern.jet.math.Arithmetic.log(2, 1 + maximum - minimum)));
-		} else {
-			// overflow or underflow in calculating "1+maximum-minimum"
-			// happens if signed long representation is too short for doing unsigned calculations
-			// e.g. if minimum==LONG.MIN_VALUE, maximum==LONG.MAX_VALUE
-			// --> in such cases store all bits of values without any compression.
-			bits = 64;
-		}
-		return bits;
-	}
-
-	/**
-	 * Ensures that the receiver can hold at least the specified number of elements without needing to allocate new internal memory.
-	 * If necessary, allocates new internal memory and increases the capacity of the receiver.
+	 * Ensures that the receiver can hold at least the specified number of
+	 * elements without needing to allocate new internal memory. If necessary,
+	 * allocates new internal memory and increases the capacity of the
+	 * receiver.
 	 *
 	 * @param minCapacity the desired minimum capacity.
 	 */
@@ -169,9 +190,12 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Returns the element at the specified position in the receiver; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may return invalid elements without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Returns the element at the specified position in the receiver;
+	 * <b>WARNING:</b> Does not check preconditions. Provided with invalid
+	 * parameters this method may return invalid elements without throwing any
+	 * exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
 	 * @param index index of element to return.
@@ -182,8 +206,10 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Copies all elements between index <tt>from</tt> (inclusive) and <tt>to</tt> (inclusive) into <tt>part</tt>, starting at index <tt>partFrom</tt> within <tt>part</tt>.
-	 * Elements are only copied if a corresponding flag within <tt>qualificants</tt> is set.
+	 * Copies all elements between index <tt>from</tt> (inclusive) and
+	 * <tt>to</tt> (inclusive) into <tt>part</tt>, starting at index
+	 * <tt>partFrom</tt> within <tt>part</tt>. Elements are only copied if a
+	 * corresponding flag within <tt>qualificants</tt> is set.
 	 * More precisely:<pre>
 	 * for (; from<=to; from++, partFrom++, qualificantsFrom++) {
 	 *    if (qualificants==null || qualificants.get(qualificantsFrom)) {
@@ -219,12 +245,15 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Replaces the element at the specified position in the receiver with the specified element; <b>WARNING:</b> Does not check preconditions.
-	 * Provided with invalid parameters this method may access invalid indexes without throwing any exception!
-	 * <b>You should only use this method when you are absolutely sure that the index is within bounds.</b>
+	 * Replaces the element at the specified position in the receiver with the
+	 * specified element; <b>WARNING:</b> Does not check preconditions. Provided
+	 * with invalid parameters this method may access invalid indexes without
+	 * throwing any exception!
+	 * <b>You should only use this method when you are absolutely sure that the
+	 * index is within bounds.</b>
 	 * Precondition (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
 	 *
-	 * @param index   index of element to replace.
+	 * @param index index of element to replace.
 	 * @param element element to be stored at the specified position.
 	 */
 	public void setQuick(int index, long element) {
@@ -233,20 +262,23 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * Sets the size of the receiver without modifying it otherwise.
-	 * This method should not release or allocate new memory but simply set some instance variable like <tt>size</tt>.
+	 * Sets the size of the receiver without modifying it otherwise. This method
+	 * should not release or allocate new memory but simply set some instance
+	 * variable like <tt>size</tt>.
 	 */
 	protected void setSizeRaw(int newSize) {
 		super.setSizeRaw(newSize);
 	}
 
 	/**
-	 * Sets the receiver to an empty list with the specified initial capacity and the specified range of values allowed to be hold in this list.
-	 * Legal values are in the range [minimum,maximum], all inclusive.
+	 * Sets the receiver to an empty list with the specified initial capacity
+	 * and the specified range of values allowed to be hold in this list. Legal
+	 * values are in the range [minimum,maximum], all inclusive.
 	 *
-	 * @param minimum         the minimum of values allowed to be hold in this list.
-	 * @param maximum         the maximum of values allowed to be hold in this list.
-	 * @param initialCapacity the number of elements the receiver can hold without auto-expanding itself by allocating new internal memory.
+	 * @param minimum the minimum of values allowed to be hold in this list.
+	 * @param maximum the maximum of values allowed to be hold in this list.
+	 * @param initialCapacity the number of elements the receiver can hold
+	 * without auto-expanding itself by allocating new internal memory.
 	 */
 	protected void setUp(long minimum, long maximum, int initialCapacity) {
 		setUpBitsPerEntry(minimum, maximum);
@@ -260,12 +292,11 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	/**
 	 * This method was created in VisualAge.
 	 *
-	 * @param minValue        long
-	 * @param maxValue        long
-	 * @param initialCapacity int
+	 * @param minimum long
+	 * @param maximum long
 	 */
 	protected void setUpBitsPerEntry(long minimum, long maximum) {
-		this.bitsPerElement = this.bitsPerElement(minimum, maximum);
+		this.bitsPerElement = bitsPerElement(minimum, maximum);
 		if (this.bitsPerElement != 64) {
 			this.minValue = minimum;
 			// overflow or underflow in calculating "1+maxValue-minValue"
@@ -275,21 +306,21 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 		} else {
 			this.minValue = 0;
 		}
-		;
 	}
 
 	/**
-	 * Returns the receiver seen as bitvector.
-	 * WARNING: The bitvector and the receiver share the backing bits. Modifying one of them will affect the other.
+	 * Returns the receiver seen as bitvector. WARNING: The bitvector and the
+	 * receiver share the backing bits. Modifying one of them will affect the
+	 * other.
 	 */
 	public BitVector toBitVector() {
 		return new BitVector(this.bits, this.capacity * bitsPerElement);
 	}
 
 	/**
-	 * Trims the capacity of the receiver to be the receiver's current
-	 * size. An application can use this operation to minimize the
-	 * storage of the receiver.
+	 * Trims the capacity of the receiver to be the receiver's current size. An
+	 * application can use this operation to minimize the storage of the
+	 * receiver.
 	 */
 	public void trimToSize() {
 		int oldCapacity = capacity;
@@ -302,9 +333,9 @@ public class MinMaxNumberList extends cern.colt.list.AbstractLongList {
 	}
 
 	/**
-	 * deprecated
-	 * Returns the minimum element legal to the stored in the receiver.
-	 * Remark: This does not mean that such a minimum element is currently contained in the receiver.
+	 * deprecated Returns the minimum element legal to the stored in the
+	 * receiver. Remark: This does not mean that such a minimum element is
+	 * currently contained in the receiver.
 	 *
 	 * @deprecated
 	 */

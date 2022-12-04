@@ -77,7 +77,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected AbstractIntObjectMap elements;
+	protected AbstractIntObjectMap<Object> elements;
 
 	/**
 	 * Constructs a matrix with a copy of the given values.
@@ -122,7 +122,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 	 */
 	public SparseObjectMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
 		setUp(rows, columns);
-		this.elements = new OpenIntObjectHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
+		this.elements = new OpenIntObjectHashMap<>(initialCapacity, minLoadFactor, maxLoadFactor);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 	 * @param columnStride the number of elements between two columns, i.e. <tt>index(i,j+1)-index(i,j)</tt>.
 	 * @throws IllegalArgumentException if <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt> or flip's are illegal.
 	 */
-	protected SparseObjectMatrix2D(int rows, int columns, AbstractIntObjectMap elements, int rowZero, int columnZero, int rowStride, int columnStride) {
+	protected SparseObjectMatrix2D(int rows, int columns, AbstractIntObjectMap<Object> elements, int rowZero, int columnZero, int rowStride, int columnStride) {
 		setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 		this.elements = elements;
 		this.isNoView = false;
@@ -159,7 +159,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 	 * Calling this method before tt>set()</tt>ing a large number of non-zero values boosts performance,
 	 * because the receiver will grow only once instead of potentially many times and hash collisions get less probable.
 	 *
-	 * @param minNonZeros the desired minimum number of non-zero cells.
+	 * @param minCapacity the desired minimum number of non-zero cells.
 	 */
 	public void ensureCapacity(int minCapacity) {
 		this.elements.ensureCapacity(minCapacity);

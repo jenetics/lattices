@@ -14,16 +14,17 @@ import cern.colt.list.DoubleArrayList;
 import cern.colt.list.ObjectArrayList;
 
 /**
- * The abstract base class for approximate quantile finders computing quantiles over a sequence of <tt>double</tt> elements.
+ * The abstract base class for approximate quantile finders computing quantiles
+ * over a sequence of <tt>double</tt> elements.
  */
-//abstract class ApproximateDoubleQuantileFinder extends Object implements DoubleQuantileFinder {
 abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implements DoubleQuantileFinder {
 	protected DoubleBufferSet bufferSet;
 	protected DoubleBuffer currentBufferToFill;
 	protected int totalElementsFilled;
 
 	/**
-	 * Makes this class non instantiable, but still let's others inherit from it.
+	 * Makes this class non instantiable, but still let's others inherit from
+	 * it.
 	 */
 	protected DoubleQuantileEstimator() {
 	}
@@ -58,11 +59,12 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Adds the part of the specified list between indexes <tt>from</tt> (inclusive) and <tt>to</tt> (inclusive) to the receiver.
+	 * Adds the part of the specified list between indexes <tt>from</tt>
+	 * (inclusive) and <tt>to</tt> (inclusive) to the receiver.
 	 *
 	 * @param values the list of which elements shall be added.
-	 * @param from   the index of the first element to be added (inclusive).
-	 * @param to     the index of the last element to be added (inclusive).
+	 * @param from the index of the first element to be added (inclusive).
+	 * @param to the index of the last element to be added (inclusive).
 	 */
 	public void addAllOfFromTo(DoubleArrayList values, int from, int to) {
 	/*
@@ -86,7 +88,8 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 				if (bufferSize == k) { // full
 					if (bufferSet._getFirstEmptyBuffer() == null) collapse();
 					newBuffer();
-					if (!currentBufferToFill.isAllocated) currentBufferToFill.allocate();
+					if (!currentBufferToFill.isAllocated)
+						currentBufferToFill.allocate();
 					currentBufferToFill.isSorted = false;
 					bufferValues = currentBufferToFill.values.elements();
 					bufferSize = 0;
@@ -115,8 +118,8 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Removes all elements from the receiver.  The receiver will
-	 * be empty after this call returns, and its memory requirements will be close to zero.
+	 * Removes all elements from the receiver.  The receiver will be empty after
+	 * this call returns, and its memory requirements will be close to zero.
 	 */
 	public void clear() {
 		this.totalElementsFilled = 0;
@@ -134,7 +137,7 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 		if (this.bufferSet != null) {
 			copy.bufferSet = (DoubleBufferSet) copy.bufferSet.clone();
 			if (this.currentBufferToFill != null) {
-				int index = new ObjectArrayList(this.bufferSet.buffers).indexOf(this.currentBufferToFill, true);
+				int index = new ObjectArrayList<>(this.bufferSet.buffers).indexOf(this.currentBufferToFill, true);
 				copy.currentBufferToFill = copy.bufferSet.buffers[index];
 			}
 		}
@@ -162,19 +165,22 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Applies a procedure to each element of the receiver, if any.
-	 * Iterates over the receiver in no particular order.
+	 * Applies a procedure to each element of the receiver, if any. Iterates
+	 * over the receiver in no particular order.
 	 *
-	 * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues.
-	 * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise.
+	 * @param procedure the procedure to be applied. Stops iteration if the
+	 * procedure returns <tt>false</tt>, otherwise continues.
+	 * @return <tt>false</tt> if the procedure stopped before all elements where
+	 * iterated over, <tt>true</tt> otherwise.
 	 */
 	public boolean forEach(cern.colt.function.DoubleProcedure procedure) {
 		return this.bufferSet.forEach(procedure);
 	}
 
 	/**
-	 * Returns the number of elements currently needed to store all contained elements.
-	 * This number usually differs from the results of method <tt>size()</tt>, according to the underlying datastructure.
+	 * Returns the number of elements currently needed to store all contained
+	 * elements. This number usually differs from the results of method
+	 * <tt>size()</tt>, according to the underlying datastructure.
 	 */
 	public long memory() {
 		return bufferSet.memory();
@@ -186,11 +192,13 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	protected abstract void newBuffer();
 
 	/**
-	 * Returns how many percent of the elements contained in the receiver are <tt>&lt;= element</tt>.
-	 * Does linear interpolation if the element is not contained but lies in between two contained elements.
+	 * Returns how many percent of the elements contained in the receiver are
+	 * <tt>&lt;= element</tt>. Does linear interpolation if the element is not
+	 * contained but lies in between two contained elements.
 	 *
-	 * @param the element to search for.
-	 * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt> (<tt>0.0 &lt;= p &lt;=1.0)</tt>.
+	 * @param element element to search for.
+	 * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt>
+	 * (<tt>0.0 &lt;= p &lt;=1.0)</tt>.
 	 */
 	public double phi(double element) {
 		return bufferSet.phi(element);
@@ -209,9 +217,12 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Computes the specified quantile elements over the values previously added.
+	 * Computes the specified quantile elements over the values previously
+	 * added.
 	 *
-	 * @param phis the quantiles for which elements are to be computed. Each phi must be in the interval [0.0,1.0]. <tt>phis</tt> must be sorted ascending.
+	 * @param phis the quantiles for which elements are to be computed. Each phi
+	 * must be in the interval [0.0,1.0]. <tt>phis</tt> must be sorted
+	 * ascending.
 	 * @return the approximate quantile elements.
 	 */
 	public DoubleArrayList quantileElements(DoubleArrayList phis) {
@@ -262,7 +273,8 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Returns the number of elements currently contained in the receiver (identical to the number of values added so far).
+	 * Returns the number of elements currently contained in the receiver
+	 * (identical to the number of values added so far).
 	 */
 	public long size() {
 		return totalElementsFilled;
@@ -280,10 +292,11 @@ abstract class DoubleQuantileEstimator extends cern.colt.PersistentObject implem
 	}
 
 	/**
-	 * Returns the number of elements currently needed to store all contained elements.
-	 * This number usually differs from the results of method <tt>size()</tt>, according to the underlying datastructure.
+	 * Returns the number of elements currently needed to store all contained
+	 * elements. This number usually differs from the results of method
+	 * <tt>size()</tt>, according to the underlying datastructure.
 	 */
 	public long totalMemory() {
-		return bufferSet.b() * bufferSet.k();
+		return (long) bufferSet.b() * bufferSet.k();
 	}
 }
