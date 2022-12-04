@@ -17,53 +17,55 @@ package cern.colt.map;
  * @version 1.0, 09/24/99
  */
 public class HashFunctions {
-	/**
-	 * Makes this class non instantiable, but still let's others inherit from it.
-	 */
-	protected HashFunctions() {
-	}
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(char value) {
-		return (int) value;
-	}
+    /**
+     * Makes this class non instantiable, but still let's others inherit from
+     * it.
+     */
+    protected HashFunctions() {
+    }
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(double value) {
-		long bits = Double.doubleToLongBits(value);
-		return (int) (bits ^ (bits >>> 32));
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(char value) {
+        return value;
+    }
 
-		//return (int) Double.doubleToLongBits(value*663608941.737);
-		// this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
-	}
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(double value) {
+        long bits = Double.doubleToLongBits(value);
+        return (int) (bits ^ (bits >>> 32));
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(float value) {
-		return Float.floatToIntBits(value * 663608941.737f);
-		// this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
-	}
+        //return (int) Double.doubleToLongBits(value*663608941.737);
+        // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
+    }
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(int value) {
-		return value;
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(float value) {
+        return Float.floatToIntBits(value * 663608941.737f);
+        // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
+    }
 
-		//return value * 0x278DDE6D; // see cern.jet.random.engine.DRand
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(int value) {
+        return value;
+
+        //return value * 0x278DDE6D; // see cern.jet.random.engine.DRand
 
 	/*
 	value &= 0x7FFFFFFF; // make it >=0
@@ -73,15 +75,15 @@ public class HashFunctions {
 
 	return 28629151*hashCode; // spread even further; h*31^5
 	*/
-	}
+    }
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(long value) {
-		return (int) (value ^ (value >> 32));
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(long value) {
+        return (int) (value ^ (value >> 32));
 	/*
 	value &= 0x7FFFFFFFFFFFFFFFL; // make it >=0 (0x7FFFFFFFFFFFFFFFL==Long.MAX_VALUE)
 	int hashCode = 0;
@@ -90,32 +92,32 @@ public class HashFunctions {
 
 	return 28629151*hashCode; // spread even further; h*31^5
 	*/
-	}
+    }
 
-	/**
-	 * Returns a hashcode for the specified object.
-	 *
-	 * @return a hash code value for the specified object.
-	 */
-	public static int hash(Object object) {
-		return object == null ? 0 : object.hashCode();
-	}
+    /**
+     * Returns a hashcode for the specified object.
+     *
+     * @return a hash code value for the specified object.
+     */
+    public static int hash(Object object) {
+        return object == null ? 0 : object.hashCode();
+    }
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(short value) {
-		return (int) value;
-	}
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(short value) {
+        return value;
+    }
 
-	/**
-	 * Returns a hashcode for the specified value.
-	 *
-	 * @return a hash code value for the specified value.
-	 */
-	public static int hash(boolean value) {
-		return value ? 1231 : 1237;
-	}
+    /**
+     * Returns a hashcode for the specified value.
+     *
+     * @return a hash code value for the specified value.
+     */
+    public static int hash(boolean value) {
+        return value ? 1231 : 1237;
+    }
 }

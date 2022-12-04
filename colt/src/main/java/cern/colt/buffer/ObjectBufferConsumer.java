@@ -18,11 +18,11 @@ import cern.colt.list.ObjectArrayList;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public interface ObjectBufferConsumer {
+public interface ObjectBufferConsumer<T> {
 	/**
 	 * Adds all elements of the specified list to the receiver.
 	 *
 	 * @param list the list of which all elements shall be added.
 	 */
-	public void addAllOf(ObjectArrayList list);
+	public void addAllOf(ObjectArrayList<T> list);
 }

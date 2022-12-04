@@ -115,7 +115,7 @@ public class ObjectFactory1D extends cern.colt.PersistentObject {
 	 * @param values The values to be filled into the new matrix.
 	 * @return a new matrix.
 	 */
-	public ObjectMatrix1D make(cern.colt.list.ObjectArrayList values) {
+	public ObjectMatrix1D make(cern.colt.list.ObjectArrayList<?> values) {
 		int size = values.size();
 		ObjectMatrix1D vector = make(size);
 		for (int i = size; --i >= 0; ) vector.set(i, values.get(i));
@@ -147,9 +147,9 @@ public class ObjectFactory1D extends cern.colt.PersistentObject {
 	 * @param values The values to be filled into the new list.
 	 * @return a new list.
 	 */
-	public cern.colt.list.ObjectArrayList toList(ObjectMatrix1D values) {
+	public cern.colt.list.ObjectArrayList<Object> toList(ObjectMatrix1D values) {
 		int size = values.size();
-		cern.colt.list.ObjectArrayList list = new cern.colt.list.ObjectArrayList(size);
+		cern.colt.list.ObjectArrayList<Object> list = new cern.colt.list.ObjectArrayList<>(size);
 		list.setSize(size);
 		for (int i = size; --i >= 0; ) list.set(i, values.get(i));
 		return list;

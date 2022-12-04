@@ -18,21 +18,27 @@ import cern.colt.matrix.impl.AbstractMatrix1D;
 import cern.colt.matrix.impl.AbstractMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.Former;
+import hep.aida.bin.BinFunctions1D;
 
 /**
- * Flexible, well human readable matrix print formatting; By default decimal point aligned. Build on top of the C-like <i>sprintf</i> functionality
+ * Flexible, well human readable matrix print formatting; By default decimal
+ * point aligned. Build on top of the C-like <i>sprintf</i> functionality
  * provided by the {@link corejava.Format} class written by Cay Horstmann.
- * Currenly works on 1-d, 2-d and 3-d matrices.
- * Note that in most cases you will not need to get familiar with this class; just call <tt>matrix.toString()</tt> and be happy with the default formatting.
- * This class is for advanced requirements.
- * <p> Can't exactly remember the syntax of printf format strings? See {@link corejava.Format}
- * or <a href="http://www.braju.com/docs/index.html">Henrik
- * Nordberg's documentation</a>, or the <a href="http://www.dinkumware.com/htm_cl/lib_prin.html#Print%20Functions">Dinkumware's
+ * Currenly works on 1-d, 2-d and 3-d matrices. Note that in most cases you will
+ * not need to get familiar with this class; just call
+ * <tt>matrix.toString()</tt> and be happy with the default formatting. This
+ * class is for advanced requirements.
+ * <p> Can't exactly remember the syntax of printf format strings? See
+ * {@link corejava.Format} or <a
+ * href="http://www.braju.com/docs/index.html">Henrik Nordberg's
+ * documentation</a>, or the <a
+ * href="http://www.dinkumware.com/htm_cl/lib_prin.html#Print%20Functions">Dinkumware's
  * C Library Reference</a>.
  *
  * <p><b>Examples:</b>
  * <p>
- * Examples demonstrate usage on 2-d matrices. 1-d and 3-d matrices formatting works very similar.
+ * Examples demonstrate usage on 2-d matrices. 1-d and 3-d matrices formatting
+ * works very similar.
  * <table border="1" cellspacing="0">
  * <tr align="center">
  * <td>Original matrix</td>
@@ -270,163 +276,151 @@ import cern.colt.matrix.impl.Former;
  * @version 1.2, 11/30/99
  */
 public class Formatter extends AbstractFormatter {
-	/**
-	 * Constructs and returns a matrix formatter with format <tt>"%G"</tt>.
-	 */
-	public Formatter() {
-		this("%G");
-	}
+    /**
+     * Constructs and returns a matrix formatter with format <tt>"%G"</tt>.
+     */
+    public Formatter() {
+        this("%G");
+    }
 
-	/**
-	 * Constructs and returns a matrix formatter.
-	 *
-	 * @param format the given format used to convert a single cell value.
-	 */
-	public Formatter(String format) {
-		setFormat(format);
-		setAlignment(DECIMAL);
-	}
+    /**
+     * Constructs and returns a matrix formatter.
+     *
+     * @param format the given format used to convert a single cell value.
+     */
+    public Formatter(String format) {
+        setFormat(format);
+        setAlignment(DECIMAL);
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo1() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo1() {
 // parameters
-		double[][] values = {
-			{3, 0, -3.4, 0},
-			{5.1, 0, +3.0123456789, 0},
-			{16.37, 0.0, 2.5, 0},
-			{-16.3, 0, -3.012345678E-4, -1},
-			{1236.3456789, 0, 7, -1.2}
-		};
-		String[] formats = {"%G", "%1.10G", "%f", "%1.2f", "%0.2e", null};
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0}, {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
+        String[] formats = {"%G", "%1.10G", "%f", "%1.2f", "%0.2e", null};
 
 
 // now the processing
-		int size = formats.length;
-		DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(values);
-		String[] strings = new String[size];
-		String[] sourceCodes = new String[size];
-		String[] htmlStrings = new String[size];
-		String[] htmlSourceCodes = new String[size];
+        int size = formats.length;
+        DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(values);
+        String[] strings = new String[size];
+        String[] sourceCodes = new String[size];
+        String[] htmlStrings = new String[size];
+        String[] htmlSourceCodes = new String[size];
 
-		for (int i = 0; i < size; i++) {
-			String format = formats[i];
-			strings[i] = new Formatter(format).toString(matrix);
-			sourceCodes[i] = new Formatter(format).toSourceCode(matrix);
+        for (int i = 0; i < size; i++) {
+            String format = formats[i];
+            strings[i] = new Formatter(format).toString(matrix);
+            sourceCodes[i] = new Formatter(format).toSourceCode(matrix);
 
-			// may not compile because of packages not included in the distribution
-			//htmlStrings[i] = cern.colt.matrixpattern.Converting.toHTML(strings[i]);
-			//htmlSourceCodes[i] = cern.colt.matrixpattern.Converting.toHTML(sourceCodes[i]);
-		}
+            // may not compile because of packages not included in the distribution
+            //htmlStrings[i] = cern.colt.matrixpattern.Converting.toHTML(strings[i]);
+            //htmlSourceCodes[i] = cern.colt.matrixpattern.Converting.toHTML(sourceCodes[i]);
+        }
 
-		System.out.println("original:\n" + new Formatter().toString(matrix));
+        System.out.println("original:\n" + new Formatter().toString(matrix));
 
 // may not compile because of packages not included in the distribution
-		for (int i = 0; i < size; i++) {
-			//System.out.println("\nhtmlString("+formats[i]+"):\n"+htmlStrings[i]);
-			//System.out.println("\nhtmlSourceCode("+formats[i]+"):\n"+htmlSourceCodes[i]);
-		}
+        for (int i = 0; i < size; i++) {
+            //System.out.println("\nhtmlString("+formats[i]+"):\n"+htmlStrings[i]);
+            //System.out.println("\nhtmlSourceCode("+formats[i]+"):\n"+htmlSourceCodes[i]);
+        }
 
-		for (int i = 0; i < size; i++) {
-			System.out.println("\nstring(" + formats[i] + "):\n" + strings[i]);
-			System.out.println("\nsourceCode(" + formats[i] + "):\n" + sourceCodes[i]);
-		}
+        for (int i = 0; i < size; i++) {
+            System.out.println("\nstring(" + formats[i] + "):\n" + strings[i]);
+            System.out.println("\nsourceCode(" + formats[i] + "):\n" + sourceCodes[i]);
+        }
 
-	}
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo2() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo2() {
 // parameters
-		double[] values = {
-			//5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0/0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.MIN_VALUE, Double.MAX_VALUE
-			5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0 / 0.0, Double.MIN_VALUE, Double.MAX_VALUE, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
-			//Double.MIN_VALUE, Double.MAX_VALUE //, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
-		};
+        double[] values = {
+            //5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0/0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.MIN_VALUE, Double.MAX_VALUE
+            5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0 / 0.0, Double.MIN_VALUE, Double.MAX_VALUE, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
+            //Double.MIN_VALUE, Double.MAX_VALUE //, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
+        };
 //String[] formats =         {"%G", "%1.10G", "%f", "%1.2f", "%0.2e"};
-		String[] formats = {"%G", "%1.19G"};
+        String[] formats = {"%G", "%1.19G"};
 
 
 // now the processing
-		int size = formats.length;
-		DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
+        int size = formats.length;
+        DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
 
-		String[] strings = new String[size];
+        String[] strings = new String[size];
 //String[] javaStrings = new String[size];
 
-		for (int i = 0; i < size; i++) {
-			String format = formats[i];
-			strings[i] = new Formatter(format).toString(matrix);
-			for (int j = 0; j < matrix.size(); j++) {
-				System.out.println(String.valueOf(matrix.get(j)));
-			}
-		}
+        for (int i = 0; i < size; i++) {
+            String format = formats[i];
+            strings[i] = new Formatter(format).toString(matrix);
+            for (int j = 0; j < matrix.size(); j++) {
+                System.out.println(matrix.get(j));
+            }
+        }
 
-		System.out.println("original:\n" + new Formatter().toString(matrix));
+        System.out.println("original:\n" + new Formatter().toString(matrix));
 
-		for (int i = 0; i < size; i++) {
-			System.out.println("\nstring(" + formats[i] + "):\n" + strings[i]);
-		}
+        for (int i = 0; i < size; i++) {
+            System.out.println("\nstring(" + formats[i] + "):\n" + strings[i]);
+        }
 
-	}
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo3(int size, double value) {
-		cern.colt.Timer timer = new cern.colt.Timer();
-		String s;
-		StringBuffer buf;
-		DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(size, size, value);
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo3(int size, double value) {
+        cern.colt.Timer timer = new cern.colt.Timer();
+        String s;
+        StringBuffer buf;
+        DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(size, size, value);
 
-		timer.reset().start();
-		buf = new StringBuffer();
-		for (int i = size; --i >= 0; ) {
-			for (int j = size; --j >= 0; ) {
-				buf.append(matrix.getQuick(i, j));
-			}
-		}
-		buf = null;
-		timer.stop().display();
+        timer.reset().start();
+        buf = new StringBuffer();
+        for (int i = size; --i >= 0; ) {
+            for (int j = size; --j >= 0; ) {
+                buf.append(matrix.getQuick(i, j));
+            }
+        }
+        buf = null;
+        timer.stop().display();
 
-		timer.reset().start();
-		cern.colt.matrix.impl.Former format = new cern.colt.matrix.impl.FormerFactory().create("%G");
-		buf = new StringBuffer();
-		for (int i = size; --i >= 0; ) {
-			for (int j = size; --j >= 0; ) {
-				buf.append(format.form(matrix.getQuick(i, j)));
-			}
-		}
-		buf = null;
-		timer.stop().display();
+        timer.reset().start();
+        cern.colt.matrix.impl.Former format = new cern.colt.matrix.impl.FormerFactory().create("%G");
+        buf = new StringBuffer();
+        for (int i = size; --i >= 0; ) {
+            for (int j = size; --j >= 0; ) {
+                buf.append(format.form(matrix.getQuick(i, j)));
+            }
+        }
+        buf = null;
+        timer.stop().display();
 
-		timer.reset().start();
-		s = new Formatter(null).toString(matrix);
-		//System.out.println(s);
-		s = null;
-		timer.stop().display();
+        timer.reset().start();
+        s = new Formatter(null).toString(matrix);
+        //System.out.println(s);
+        s = null;
+        timer.stop().display();
 
-		timer.reset().start();
-		s = new Formatter("%G").toString(matrix);
-		//System.out.println(s);
-		s = null;
-		timer.stop().display();
-	}
+        timer.reset().start();
+        s = new Formatter("%G").toString(matrix);
+        //System.out.println(s);
+        s = null;
+        timer.stop().display();
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo4() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo4() {
 // parameters
-		double[][] values = {
-			{3, 0, -3.4, 0},
-			{5.1, 0, +3.0123456789, 0},
-			{16.37, 0.0, 2.5, 0},
-			{-16.3, 0, -3.012345678E-4, -1},
-			{1236.3456789, 0, 7, -1.2}
-		};
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0}, {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
 /*
 double[][] values = {
 	{3,     1,      },
@@ -435,27 +429,21 @@ double[][] values = {
 */
 //String[] columnNames = { "he",   "",  "he", "four" };
 //String[] rowNames = { "hello", "du", null, "abcdef", "five" };
-		String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
-		String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
+        String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
 //String[] columnNames = { "0.1", "0.3" };
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
-		DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(values);
-		System.out.println("\n\n" + new Formatter("%G").toTitleString(matrix, rowNames, columnNames, "rowAxis", "colAxis", "VM Performance: Provider vs. matrix density"));
-	}
+        DoubleMatrix2D matrix = cern.colt.matrix.DoubleFactory2D.dense.make(values);
+        System.out.println("\n\n" + new Formatter("%G").toTitleString(matrix, rowNames, columnNames, "rowAxis", "colAxis", "VM Performance: Provider vs. matrix density"));
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo5() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo5() {
 // parameters
-		double[][] values = {
-			{3, 0, -3.4, 0},
-			{5.1, 0, +3.0123456789, 0},
-			{16.37, 0.0, 2.5, 0},
-			{-16.3, 0, -3.012345678E-4, -1},
-			{1236.3456789, 0, 7, -1.2}
-		};
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0}, {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
 /*
 double[][] values = {
 	{3,     1,      },
@@ -464,27 +452,21 @@ double[][] values = {
 */
 //String[] columnNames = { "he",   "",  "he", "four" };
 //String[] rowNames = { "hello", "du", null, "abcdef", "five" };
-		String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
-		String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
+        String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
 //String[] columnNames = { "0.1", "0.3" };
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
-		System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values));
-		System.out.println(new Formatter("%G").toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, "vendor", "density", "title"));
-	}
+        System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values));
+        System.out.println(new Formatter("%G").toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, "vendor", "density", "title"));
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo6() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo6() {
 // parameters
-		double[][] values = {
-			{3, 0, -3.4, 0},
-			{5.1, 0, +3.0123456789, 0},
-			{16.37, 0.0, 2.5, 0},
-			{-16.3, 0, -3.012345678E-4, -1},
-			{1236.3456789, 0, 7, -1.2}
-		};
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0}, {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
 /*
 double[][] values = {
 	{3,     1,      },
@@ -494,21 +476,21 @@ double[][] values = {
 //String[] columnNames = { "he",   "",  "he", "four" };
 //String[] rowNames = { "hello", "du", null, "abcdef", "five" };
 //String[] columnNames = { "0.1", "0.3", "0.5", "0.7" };
-		String[] columnNames = {"W", "X", "Y", "Z"};
-		String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
+        String[] columnNames = {"W", "X", "Y", "Z"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
 //String[] columnNames = { "0.1", "0.3" };
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
 //System.out.println(cern.colt.matrix.DoubleFactory2D.dense.make(values));
 //System.out.println(new Formatter().toSourceCode(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
-		System.out.println(new Formatter().toString(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
-		System.out.println(new Formatter().toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, "vendor", "density", "title"));
-	}
+        System.out.println(new Formatter().toString(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
+        System.out.println(new Formatter().toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, "vendor", "density", "title"));
+    }
 
-	/**
-	 * Demonstrates how to use this class.
-	 */
-	public static void demo7() {
+    /**
+     * Demonstrates how to use this class.
+     */
+    public static void demo7() {
 // parameters
 /*
 double[][] values = {
@@ -519,20 +501,15 @@ double[][] values = {
 	{1236.3456789, 0,  7, -1.2}
 };
 */
-		double[][] values = {
-			{5, 10, 20, 40},
-			{7, 8, 6, 7},
-			{12, 10, 20, 19},
-			{3, 1, 5, 6}
-		};
-		String[] columnNames = {"1996", "1997", "1998", "1999"};
-		String[] rowNames = {"PowerBar", "Benzol", "Mercedes", "Sparcling"};
-		String rowAxisName = "CPU";
-		String columnAxisName = "Year";
-		String title = "CPU performance over time [nops/sec]";
-		hep.aida.bin.BinFunctions1D F = hep.aida.bin.BinFunctions1D.functions;
-		hep.aida.bin.BinFunction1D[] aggr = {F.mean, F.rms, F.quantile(0.25), F.median, F.quantile(0.75), F.stdDev, F.min, F.max};
-		String format = "%1.2G";
+        double[][] values = {{5, 10, 20, 40}, {7, 8, 6, 7}, {12, 10, 20, 19}, {3, 1, 5, 6}};
+        String[] columnNames = {"1996", "1997", "1998", "1999"};
+        String[] rowNames = {"PowerBar", "Benzol", "Mercedes", "Sparcling"};
+        String rowAxisName = "CPU";
+        String columnAxisName = "Year";
+        String title = "CPU performance over time [nops/sec]";
+        hep.aida.bin.BinFunctions1D F = hep.aida.bin.BinFunctions1D.functions;
+        hep.aida.bin.BinFunction1D[] aggr = {BinFunctions1D.mean, BinFunctions1D.rms, BinFunctions1D.quantile(0.25), BinFunctions1D.median, BinFunctions1D.quantile(0.75), BinFunctions1D.stdDev, BinFunctions1D.min, BinFunctions1D.max};
+        String format = "%1.2G";
 
 //String[] columnNames = { "W", "X", "Y", "Z", "mean", "median", "sum"};
 //String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2", "mean", "median", "sum" };
@@ -542,307 +519,335 @@ double[][] values = {
 //System.out.println(new Formatter().toSourceCode(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 //System.out.println(new Formatter().toString(cern.colt.matrix.DoubleFactory2D.dense.make(values)));
 //System.out.println(new Formatter().toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values),rowNames,columnNames,rowAxisName,columnAxisName,title));
-		System.out.println(new Formatter(format).toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, rowAxisName, columnAxisName, title, aggr));
+        System.out.println(new Formatter(format).toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values), rowNames, columnNames, rowAxisName, columnAxisName, title, aggr));
 //System.out.println(cern.colt.matrixpattern.Converting.toHTML(new Formatter(format).toTitleString(cern.colt.matrix.DoubleFactory2D.dense.make(values),rowNames,columnNames,rowAxisName,columnAxisName,title, aggr)));
-	}
+    }
 
-	/**
-	 * Converts a given cell to a String; no alignment considered.
-	 */
-	protected String form(DoubleMatrix1D matrix, int index, Former formatter) {
-		return formatter.form(matrix.get(index));
-	}
+    /**
+     * Converts a given cell to a String; no alignment considered.
+     */
+    protected String form(DoubleMatrix1D matrix, int index, Former formatter) {
+        return formatter.form(matrix.get(index));
+    }
 
-	/**
-	 * Converts a given cell to a String; no alignment considered.
-	 */
-	protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
-		return this.form((DoubleMatrix1D) matrix, index, formatter);
-	}
+    /**
+     * Converts a given cell to a String; no alignment considered.
+     */
+    protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
+        return this.form((DoubleMatrix1D) matrix, index, formatter);
+    }
 
-	/**
-	 * Returns a string representations of all cells; no alignment considered.
-	 */
-	public String[][] format(DoubleMatrix2D matrix) {
-		String[][] strings = new String[matrix.rows()][matrix.columns()];
-		for (int row = matrix.rows(); --row >= 0; ) strings[row] = formatRow(matrix.viewRow(row));
-		return strings;
-	}
+    /**
+     * Returns a string representations of all cells; no alignment considered.
+     */
+    public String[][] format(DoubleMatrix2D matrix) {
+        String[][] strings = new String[matrix.rows()][matrix.columns()];
+        for (int row = matrix.rows(); --row >= 0; )
+            strings[row] = formatRow(matrix.viewRow(row));
+        return strings;
+    }
 
-	/**
-	 * Returns a string representations of all cells; no alignment considered.
-	 */
-	protected String[][] format(AbstractMatrix2D matrix) {
-		return this.format((DoubleMatrix2D) matrix);
-	}
+    /**
+     * Returns a string representations of all cells; no alignment considered.
+     */
+    protected String[][] format(AbstractMatrix2D matrix) {
+        return this.format((DoubleMatrix2D) matrix);
+    }
 
-	/**
-	 * Returns the index of the decimal point.
-	 */
-	protected int indexOfDecimalPoint(String s) {
-		int i = s.lastIndexOf('.');
-		if (i < 0) i = s.lastIndexOf('e');
-		if (i < 0) i = s.lastIndexOf('E');
-		if (i < 0) i = s.length();
-		return i;
-	}
+    /**
+     * Returns the index of the decimal point.
+     */
+    protected int indexOfDecimalPoint(String s) {
+        int i = s.lastIndexOf('.');
+        if (i < 0) i = s.lastIndexOf('e');
+        if (i < 0) i = s.lastIndexOf('E');
+        if (i < 0) i = s.length();
+        return i;
+    }
 
-	/**
-	 * Returns the number of characters before the decimal point.
-	 */
-	protected int lead(String s) {
-		if (alignment.equals(DECIMAL)) return indexOfDecimalPoint(s);
-		return super.lead(s);
-	}
+    /**
+     * Returns the number of characters before the decimal point.
+     */
+    protected int lead(String s) {
+        if (alignment.equals(DECIMAL)) return indexOfDecimalPoint(s);
+        return super.lead(s);
+    }
 
-	/**
-	 * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal Java statement.
-	 *
-	 * @param matrix the matrix to format.
-	 */
-	public String toSourceCode(DoubleMatrix1D matrix) {
-		Formatter copy = (Formatter) this.clone();
-		copy.setPrintShape(false);
-		copy.setColumnSeparator(", ");
-		String lead = "{";
-		String trail = "};";
-		return lead + copy.toString(matrix) + trail;
-	}
+    /**
+     * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
+     * Java statement.
+     *
+     * @param matrix the matrix to format.
+     */
+    public String toSourceCode(DoubleMatrix1D matrix) {
+        Formatter copy = (Formatter) this.clone();
+        copy.setPrintShape(false);
+        copy.setColumnSeparator(", ");
+        String lead = "{";
+        String trail = "};";
+        return lead + copy.toString(matrix) + trail;
+    }
 
-	/**
-	 * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal Java statement.
-	 *
-	 * @param matrix the matrix to format.
-	 */
-	public String toSourceCode(DoubleMatrix2D matrix) {
-		Formatter copy = (Formatter) this.clone();
-		String b3 = blanks(3);
-		copy.setPrintShape(false);
-		copy.setColumnSeparator(", ");
-		copy.setRowSeparator("},\n" + b3 + "{");
-		String lead = "{\n" + b3 + "{";
-		String trail = "}\n};";
-		return lead + copy.toString(matrix) + trail;
-	}
+    /**
+     * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
+     * Java statement.
+     *
+     * @param matrix the matrix to format.
+     */
+    public String toSourceCode(DoubleMatrix2D matrix) {
+        Formatter copy = (Formatter) this.clone();
+        String b3 = blanks(3);
+        copy.setPrintShape(false);
+        copy.setColumnSeparator(", ");
+        copy.setRowSeparator("},\n" + b3 + "{");
+        String lead = "{\n" + b3 + "{";
+        String trail = "}\n};";
+        return lead + copy.toString(matrix) + trail;
+    }
 
-	/**
-	 * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal Java statement.
-	 *
-	 * @param matrix the matrix to format.
-	 */
-	public String toSourceCode(DoubleMatrix3D matrix) {
-		Formatter copy = (Formatter) this.clone();
-		String b3 = blanks(3);
-		String b6 = blanks(6);
-		copy.setPrintShape(false);
-		copy.setColumnSeparator(", ");
-		copy.setRowSeparator("},\n" + b6 + "{");
-		copy.setSliceSeparator("}\n" + b3 + "},\n" + b3 + "{\n" + b6 + "{");
-		String lead = "{\n" + b3 + "{\n" + b6 + "{";
-		String trail = "}\n" + b3 + "}\n}";
-		return lead + copy.toString(matrix) + trail;
-	}
+    /**
+     * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
+     * Java statement.
+     *
+     * @param matrix the matrix to format.
+     */
+    public String toSourceCode(DoubleMatrix3D matrix) {
+        Formatter copy = (Formatter) this.clone();
+        String b3 = blanks(3);
+        String b6 = blanks(6);
+        copy.setPrintShape(false);
+        copy.setColumnSeparator(", ");
+        copy.setRowSeparator("},\n" + b6 + "{");
+        copy.setSliceSeparator("}\n" + b3 + "},\n" + b3 + "{\n" + b6 + "{");
+        String lead = "{\n" + b3 + "{\n" + b6 + "{";
+        String trail = "}\n" + b3 + "}\n}";
+        return lead + copy.toString(matrix) + trail;
+    }
 
-	/**
-	 * Returns a string representation of the given matrix.
-	 *
-	 * @param matrix the matrix to convert.
-	 */
-	public String toString(DoubleMatrix1D matrix) {
-		DoubleMatrix2D easy = matrix.like2D(1, matrix.size());
-		easy.viewRow(0).assign(matrix);
-		return toString(easy);
-	}
+    /**
+     * Returns a string representation of the given matrix.
+     *
+     * @param matrix the matrix to convert.
+     */
+    public String toString(DoubleMatrix1D matrix) {
+        DoubleMatrix2D easy = matrix.like2D(1, matrix.size());
+        easy.viewRow(0).assign(matrix);
+        return toString(easy);
+    }
 
-	/**
-	 * Returns a string representation of the given matrix.
-	 *
-	 * @param matrix the matrix to convert.
-	 */
-	public String toString(DoubleMatrix2D matrix) {
-		return super.toString(matrix);
-	}
+    /**
+     * Returns a string representation of the given matrix.
+     *
+     * @param matrix the matrix to convert.
+     */
+    public String toString(DoubleMatrix2D matrix) {
+        return super.toString(matrix);
+    }
 
-	/**
-	 * Returns a string representation of the given matrix.
-	 *
-	 * @param matrix the matrix to convert.
-	 */
-	public String toString(DoubleMatrix3D matrix) {
-		StringBuffer buf = new StringBuffer();
-		boolean oldPrintShape = this.printShape;
-		this.printShape = false;
-		for (int slice = 0; slice < matrix.slices(); slice++) {
-			if (slice != 0) buf.append(sliceSeparator);
-			buf.append(toString(matrix.viewSlice(slice)));
-		}
-		this.printShape = oldPrintShape;
-		if (printShape) buf.insert(0, shape(matrix) + "\n");
-		return buf.toString();
-	}
+    /**
+     * Returns a string representation of the given matrix.
+     *
+     * @param matrix the matrix to convert.
+     */
+    public String toString(DoubleMatrix3D matrix) {
+        StringBuffer buf = new StringBuffer();
+        boolean oldPrintShape = this.printShape;
+        this.printShape = false;
+        for (int slice = 0; slice < matrix.slices(); slice++) {
+            if (slice != 0) buf.append(sliceSeparator);
+            buf.append(toString(matrix.viewSlice(slice)));
+        }
+        this.printShape = oldPrintShape;
+        if (printShape) buf.insert(0, shape(matrix) + "\n");
+        return buf.toString();
+    }
 
-	/**
-	 * Returns a string representation of the given matrix.
-	 *
-	 * @param matrix the matrix to convert.
-	 */
-	protected String toString(AbstractMatrix2D matrix) {
-		return this.toString((DoubleMatrix2D) matrix);
-	}
+    /**
+     * Returns a string representation of the given matrix.
+     *
+     * @param matrix the matrix to convert.
+     */
+    protected String toString(AbstractMatrix2D matrix) {
+        return this.toString((DoubleMatrix2D) matrix);
+    }
 
-	/**
-	 * Returns a string representation of the given matrix with axis as well as rows and columns labeled.
-	 * Pass <tt>null</tt> to one or more parameters to indicate that the corresponding decoration element shall not appear in the string converted matrix.
-	 *
-	 * @param matrix         The matrix to format.
-	 * @param rowNames       The headers of all rows (to be put to the left of the matrix).
-	 * @param columnNames    The headers of all columns (to be put to above the matrix).
-	 * @param rowAxisName    The label of the y-axis.
-	 * @param columnAxisName The label of the x-axis.
-	 * @param title          The overall title of the matrix to be formatted.
-	 * @return the matrix converted to a string.
-	 */
-	protected String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName, String columnAxisName, String title) {
-		if (matrix.size() == 0) return "Empty matrix";
-		String[][] s = format(matrix);
-		//String oldAlignment = this.alignment;
-		//this.alignment = DECIMAL;
-		align(s);
-		//this.alignment = oldAlignment;
-		return new cern.colt.matrix.objectalgo.Formatter().toTitleString(cern.colt.matrix.ObjectFactory2D.dense.make(s), rowNames, columnNames, rowAxisName, columnAxisName, title);
-	}
+    /**
+     * Returns a string representation of the given matrix with axis as well as
+     * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
+     * indicate that the corresponding decoration element shall not appear in
+     * the string converted matrix.
+     *
+     * @param matrix The matrix to format.
+     * @param rowNames The headers of all rows (to be put to the left of the
+     * matrix).
+     * @param columnNames The headers of all columns (to be put to above the
+     * matrix).
+     * @param rowAxisName The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title The overall title of the matrix to be formatted.
+     * @return the matrix converted to a string.
+     */
+    protected String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName, String columnAxisName, String title) {
+        if (matrix.size() == 0) return "Empty matrix";
+        String[][] s = format(matrix);
+        //String oldAlignment = this.alignment;
+        //this.alignment = DECIMAL;
+        align(s);
+        //this.alignment = oldAlignment;
+        return new cern.colt.matrix.objectalgo.Formatter().toTitleString(cern.colt.matrix.ObjectFactory2D.dense.make(s), rowNames, columnNames, rowAxisName, columnAxisName, title);
+    }
 
-	/**
-	 * Same as <tt>toTitleString</tt> except that additionally statistical aggregates (mean, median, sum, etc.) of rows and columns are printed.
-	 * Pass <tt>null</tt> to one or more parameters to indicate that the corresponding decoration element shall not appear in the string converted matrix.
-	 *
-	 * @param matrix         The matrix to format.
-	 * @param rowNames       The headers of all rows (to be put to the left of the matrix).
-	 * @param columnNames    The headers of all columns (to be put to above the matrix).
-	 * @param rowAxisName    The label of the y-axis.
-	 * @param columnAxisName The label of the x-axis.
-	 * @param title          The overall title of the matrix to be formatted.
-	 * @param aggr           the aggregation functions to be applied to columns and rows.
-	 * @return the matrix converted to a string.
-	 * @see hep.aida.bin.BinFunction1D
-	 * @see hep.aida.bin.BinFunctions1D
-	 */
-	public String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName, String columnAxisName, String title, hep.aida.bin.BinFunction1D[] aggr) {
-		if (matrix.size() == 0) return "Empty matrix";
-		if (aggr == null || aggr.length == 0)
-			return toTitleString(matrix, rowNames, columnNames, rowAxisName, columnAxisName, title);
+    /**
+     * Same as <tt>toTitleString</tt> except that additionally statistical
+     * aggregates (mean, median, sum, etc.) of rows and columns are printed.
+     * Pass <tt>null</tt> to one or more parameters to indicate that the
+     * corresponding decoration element shall not appear in the string converted
+     * matrix.
+     *
+     * @param matrix The matrix to format.
+     * @param rowNames The headers of all rows (to be put to the left of the
+     * matrix).
+     * @param columnNames The headers of all columns (to be put to above the
+     * matrix).
+     * @param rowAxisName The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title The overall title of the matrix to be formatted.
+     * @param aggr the aggregation functions to be applied to columns and rows.
+     * @return the matrix converted to a string.
+     * @see hep.aida.bin.BinFunction1D
+     * @see hep.aida.bin.BinFunctions1D
+     */
+    @SuppressWarnings({"rawtypes"})
+    public String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName, String columnAxisName, String title, hep.aida.bin.BinFunction1D[] aggr) {
+        if (matrix.size() == 0) return "Empty matrix";
+        if (aggr == null || aggr.length == 0)
+            return toTitleString(matrix, rowNames, columnNames, rowAxisName, columnAxisName, title);
 
-		DoubleMatrix2D rowStats = matrix.like(matrix.rows(), aggr.length); // hold row aggregations
-		DoubleMatrix2D colStats = matrix.like(aggr.length, matrix.columns()); // hold column aggregations
+        DoubleMatrix2D rowStats = matrix.like(matrix.rows(), aggr.length); // hold row aggregations
+        DoubleMatrix2D colStats = matrix.like(aggr.length, matrix.columns()); // hold column aggregations
 
-		cern.colt.matrix.doublealgo.Statistic.aggregate(matrix, aggr, colStats); // aggregate an entire column at a time
-		cern.colt.matrix.doublealgo.Statistic.aggregate(matrix.viewDice(), aggr, rowStats.viewDice()); // aggregate an entire row at a time
+        cern.colt.matrix.doublealgo.Statistic.aggregate(matrix, aggr, colStats); // aggregate an entire column at a time
+        cern.colt.matrix.doublealgo.Statistic.aggregate(matrix.viewDice(), aggr, rowStats.viewDice()); // aggregate an entire row at a time
 
-		// turn into strings
-		// tmp holds "matrix" plus "colStats" below (needed so that numbers in a columns can be decimal point aligned)
-		DoubleMatrix2D tmp = matrix.like(matrix.rows() + aggr.length, matrix.columns());
-		tmp.viewPart(0, 0, matrix.rows(), matrix.columns()).assign(matrix);
-		tmp.viewPart(matrix.rows(), 0, aggr.length, matrix.columns()).assign(colStats);
-		colStats = null;
+        // turn into strings
+        // tmp holds "matrix" plus "colStats" below (needed so that numbers in a columns can be decimal point aligned)
+        DoubleMatrix2D tmp = matrix.like(matrix.rows() + aggr.length, matrix.columns());
+        tmp.viewPart(0, 0, matrix.rows(), matrix.columns()).assign(matrix);
+        tmp.viewPart(matrix.rows(), 0, aggr.length, matrix.columns()).assign(colStats);
+        colStats = null;
 
-		String[][] s1 = format(tmp);
-		align(s1);
-		tmp = null;
-		String[][] s2 = format(rowStats);
-		align(s2);
-		rowStats = null;
+        String[][] s1 = format(tmp);
+        align(s1);
+        tmp = null;
+        String[][] s2 = format(rowStats);
+        align(s2);
+        rowStats = null;
 
-		// copy strings into a large matrix holding the source matrix and all aggregations
-		cern.colt.matrix.ObjectMatrix2D allStats = cern.colt.matrix.ObjectFactory2D.dense.make(matrix.rows() + aggr.length, matrix.columns() + aggr.length + 1);
-		allStats.viewPart(0, 0, matrix.rows() + aggr.length, matrix.columns()).assign(s1);
-		allStats.viewColumn(matrix.columns()).assign("|");
-		allStats.viewPart(0, matrix.columns() + 1, matrix.rows(), aggr.length).assign(s2);
-		s1 = null;
-		s2 = null;
+        // copy strings into a large matrix holding the source matrix and all aggregations
+        cern.colt.matrix.ObjectMatrix2D allStats = cern.colt.matrix.ObjectFactory2D.dense.make(matrix.rows() + aggr.length, matrix.columns() + aggr.length + 1);
+        allStats.viewPart(0, 0, matrix.rows() + aggr.length, matrix.columns()).assign(s1);
+        allStats.viewColumn(matrix.columns()).assign("|");
+        allStats.viewPart(0, matrix.columns() + 1, matrix.rows(), aggr.length).assign(s2);
+        s1 = null;
+        s2 = null;
 
-		// append a vertical "|" separator plus names of aggregation functions to line holding columnNames
-		if (columnNames != null) {
-			cern.colt.list.ObjectArrayList list = new cern.colt.list.ObjectArrayList(columnNames);
-			list.add("|");
-			for (int i = 0; i < aggr.length; i++) list.add(aggr[i].name()); // add names of aggregation functions
-			columnNames = new String[list.size()];
-			list.toArray(columnNames);
-		}
+        // append a vertical "|" separator plus names of aggregation functions to line holding columnNames
+        if (columnNames != null) {
+            cern.colt.list.ObjectArrayList list = new cern.colt.list.ObjectArrayList(columnNames);
+            list.add("|");
+            for (int i = 0; i < aggr.length; i++)
+                list.add(aggr[i].name()); // add names of aggregation functions
+            columnNames = new String[list.size()];
+            list.toArray(columnNames);
+        }
 
-		// append names of aggregation functions to line holding rowNames
-		if (rowNames != null) {
-			cern.colt.list.ObjectArrayList list = new cern.colt.list.ObjectArrayList(rowNames);
-			for (int i = 0; i < aggr.length; i++) list.add(aggr[i].name()); // add names of aggregation functions
-			rowNames = new String[list.size()];
-			list.toArray(rowNames);
-		}
+        // append names of aggregation functions to line holding rowNames
+        if (rowNames != null) {
+            cern.colt.list.ObjectArrayList list = new cern.colt.list.ObjectArrayList(rowNames);
+            for (int i = 0; i < aggr.length; i++)
+                list.add(aggr[i].name()); // add names of aggregation functions
+            rowNames = new String[list.size()];
+            list.toArray(rowNames);
+        }
 
-		// turn large matrix into string
-		String s = new cern.colt.matrix.objectalgo.Formatter().toTitleString(allStats, rowNames, columnNames, rowAxisName, columnAxisName, title);
+        // turn large matrix into string
+        String s = new cern.colt.matrix.objectalgo.Formatter().toTitleString(allStats, rowNames, columnNames, rowAxisName, columnAxisName, title);
 
-		// insert a horizontal "----------------------" separation line above the column stats
-		// determine insertion position and line width
-		int last = s.length() + 1;
-		int secondLast = last;
-		int v = Math.max(0, rowAxisName == null ? 0 : rowAxisName.length() - matrix.rows() - aggr.length);
-		for (int k = 0; k < aggr.length + 1 + v; k++) { // scan "aggr.length+1+v" lines backwards
-			secondLast = last;
-			last = s.lastIndexOf(rowSeparator, last - 1);
-		}
-		StringBuffer buf = new StringBuffer(s);
-		buf.insert(secondLast, rowSeparator + repeat('-', secondLast - last - 1));
+        // insert a horizontal "----------------------" separation line above the column stats
+        // determine insertion position and line width
+        int last = s.length() + 1;
+        int secondLast = last;
+        int v = Math.max(0, rowAxisName == null ? 0 : rowAxisName.length() - matrix.rows() - aggr.length);
+        for (int k = 0; k < aggr.length + 1 + v; k++) { // scan "aggr.length+1+v" lines backwards
+            secondLast = last;
+            last = s.lastIndexOf(rowSeparator, last - 1);
+        }
+        StringBuffer buf = new StringBuffer(s);
+        buf.insert(secondLast, rowSeparator + repeat('-', secondLast - last - 1));
 
-		return buf.toString();
-	}
+        return buf.toString();
+    }
 
-	/**
-	 * Returns a string representation of the given matrix with axis as well as rows and columns labeled.
-	 * Pass <tt>null</tt> to one or more parameters to indicate that the corresponding decoration element shall not appear in the string converted matrix.
-	 *
-	 * @param matrix         The matrix to format.
-	 * @param sliceNames     The headers of all slices (to be put above each slice).
-	 * @param rowNames       The headers of all rows (to be put to the left of the matrix).
-	 * @param columnNames    The headers of all columns (to be put to above the matrix).
-	 * @param sliceAxisName  The label of the z-axis (to be put above each slice).
-	 * @param rowAxisName    The label of the y-axis.
-	 * @param columnAxisName The label of the x-axis.
-	 * @param title          The overall title of the matrix to be formatted.
-	 * @param aggr           the aggregation functions to be applied to columns, rows.
-	 * @return the matrix converted to a string.
-	 * @see hep.aida.bin.BinFunction1D
-	 * @see hep.aida.bin.BinFunctions1D
-	 */
-	public String toTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames, String sliceAxisName, String rowAxisName, String columnAxisName, String title, hep.aida.bin.BinFunction1D[] aggr) {
-		if (matrix.size() == 0) return "Empty matrix";
-		StringBuffer buf = new StringBuffer();
-		for (int i = 0; i < matrix.slices(); i++) {
-			if (i != 0) buf.append(sliceSeparator);
-			buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title + "\n" + sliceAxisName + "=" + sliceNames[i], aggr));
-		}
-		return buf.toString();
-	}
+    /**
+     * Returns a string representation of the given matrix with axis as well as
+     * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
+     * indicate that the corresponding decoration element shall not appear in
+     * the string converted matrix.
+     *
+     * @param matrix The matrix to format.
+     * @param sliceNames The headers of all slices (to be put above each
+     * slice).
+     * @param rowNames The headers of all rows (to be put to the left of the
+     * matrix).
+     * @param columnNames The headers of all columns (to be put to above the
+     * matrix).
+     * @param sliceAxisName The label of the z-axis (to be put above each
+     * slice).
+     * @param rowAxisName The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title The overall title of the matrix to be formatted.
+     * @param aggr the aggregation functions to be applied to columns, rows.
+     * @return the matrix converted to a string.
+     * @see hep.aida.bin.BinFunction1D
+     * @see hep.aida.bin.BinFunctions1D
+     */
+    public String toTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames, String sliceAxisName, String rowAxisName, String columnAxisName, String title, hep.aida.bin.BinFunction1D[] aggr) {
+        if (matrix.size() == 0) return "Empty matrix";
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < matrix.slices(); i++) {
+            if (i != 0) buf.append(sliceSeparator);
+            buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title + "\n" + sliceAxisName + "=" + sliceNames[i], aggr));
+        }
+        return buf.toString();
+    }
 
-	/**
-	 * Returns a string representation of the given matrix with axis as well as rows and columns labeled.
-	 * Pass <tt>null</tt> to one or more parameters to indicate that the corresponding decoration element shall not appear in the string converted matrix.
-	 *
-	 * @param matrix         The matrix to format.
-	 * @param sliceNames     The headers of all slices (to be put above each slice).
-	 * @param rowNames       The headers of all rows (to be put to the left of the matrix).
-	 * @param columnNames    The headers of all columns (to be put to above the matrix).
-	 * @param sliceAxisName  The label of the z-axis (to be put above each slice).
-	 * @param rowAxisName    The label of the y-axis.
-	 * @param columnAxisName The label of the x-axis.
-	 * @param title          The overall title of the matrix to be formatted.
-	 * @return the matrix converted to a string.
-	 */
-	private String xtoTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames, String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
-		if (matrix.size() == 0) return "Empty matrix";
-		StringBuffer buf = new StringBuffer();
-		for (int i = 0; i < matrix.slices(); i++) {
-			if (i != 0) buf.append(sliceSeparator);
-			buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title + "\n" + sliceAxisName + "=" + sliceNames[i]));
-		}
-		return buf.toString();
-	}
+    /**
+     * Returns a string representation of the given matrix with axis as well as
+     * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
+     * indicate that the corresponding decoration element shall not appear in
+     * the string converted matrix.
+     *
+     * @param matrix The matrix to format.
+     * @param sliceNames The headers of all slices (to be put above each
+     * slice).
+     * @param rowNames The headers of all rows (to be put to the left of the
+     * matrix).
+     * @param columnNames The headers of all columns (to be put to above the
+     * matrix).
+     * @param sliceAxisName The label of the z-axis (to be put above each
+     * slice).
+     * @param rowAxisName The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title The overall title of the matrix to be formatted.
+     * @return the matrix converted to a string.
+     */
+    private String xtoTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames, String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
+        if (matrix.size() == 0) return "Empty matrix";
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < matrix.slices(); i++) {
+            if (i != 0) buf.append(sliceSeparator);
+            buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title + "\n" + sliceAxisName + "=" + sliceNames[i]));
+        }
+        return buf.toString();
+    }
 }

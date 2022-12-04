@@ -91,7 +91,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * (<tt>other.size()&gt;0 && (from&lt;0 || from&gt;to ||
 	 * to&gt;=other.size())</tt>).
 	 */
-	public void addAllOfFromTo(ObjectArrayList other, int from, int to) {
+	public void addAllOfFromTo(ObjectArrayList<T> other, int from, int to) {
 		beforeInsertAllOfFromTo(size, other, from, to);
 	}
 
@@ -133,7 +133,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt; 0
 	 * || index &gt; size()</tt>).
 	 */
-	public void beforeInsertAllOfFromTo(int index, ObjectArrayList other, int from, int to) {
+	public void beforeInsertAllOfFromTo(int index, ObjectArrayList<T> other, int from, int to) {
 		int length = to - from + 1;
 		this.beforeInsertDummies(index, length);
 		this.replaceFromToWithFrom(index, index + length - 1, other, from);
@@ -252,7 +252,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @see java.util.Arrays
 	 * @see java.util.Comparator
 	 */
-	public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator comparator) {
+	public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator<? super Object> comparator) {
 		return cern.colt.Sorting.binarySearchFromTo(this.elements, key, from, to, comparator);
 	}
 
@@ -266,6 +266,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 *
 	 * @return a copy of the receiver.
 	 */
+    @SuppressWarnings({"rawtypes"})
 	public Object clone() {
 		ObjectArrayList v = (ObjectArrayList) super.clone();
 		v.elements = elements.clone();
@@ -276,7 +277,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * Returns true if the receiver contains the specified element. Tests for
 	 * equality or identity as specified by testForEquality.
 	 *
-	 * @param element element to search for.
+	 * @param elem element to search for.
 	 * @param testForEquality if true -> test for equality, otherwise for
 	 * identity.
 	 */
@@ -295,8 +296,9 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 *
 	 * @return a copy of the receiver.
 	 */
-	public ObjectArrayList copy() {
-		return (ObjectArrayList) clone();
+    @SuppressWarnings({"unchecked"})
+	public ObjectArrayList<T> copy() {
+		return (ObjectArrayList<T>) clone();
 	}
 
 	/**
@@ -346,7 +348,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @param elements the new elements to be stored.
 	 * @return the receiver itself.
 	 */
-	public ObjectArrayList elements(Object[] elements) {
+	public ObjectArrayList<T> elements(Object[] elements) {
 		this.elements = elements;
 		this.size = elements.length;
 		return this;
@@ -690,7 +692,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
 	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public void mergeSortFromTo(int from, int to, java.util.Comparator c) {
+	public void mergeSortFromTo(int from, int to, java.util.Comparator<? super Object> c) {
 		if (size == 0) return;
 		checkRangeFromTo(from, to, size);
 		java.util.Arrays.sort(elements, from, to + 1, c);
@@ -706,14 +708,14 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
 	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public ObjectArrayList partFromTo(int from, int to) {
-		if (size == 0) return new ObjectArrayList(0);
+	public ObjectArrayList<T> partFromTo(int from, int to) {
+		if (size == 0) return new ObjectArrayList<>(0);
 
 		checkRangeFromTo(from, to, size);
 
 		Object[] part = new Object[to - from + 1];
 		System.arraycopy(elements, from, part, 0, to - from + 1);
-		return new ObjectArrayList(part);
+		return new ObjectArrayList<>(part);
 	}
 
 	/**
@@ -773,7 +775,7 @@ public class ObjectArrayList<T> extends AbstractList<T> {
 	 * @throws IndexOutOfBoundsException index is out of range (<tt>size()&gt;0
 	 * && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
 	 */
-	public void quickSortFromTo(int from, int to, java.util.Comparator c) {
+	public void quickSortFromTo(int from, int to, java.util.Comparator<? super Object> c) {
 		if (size == 0) return;
 		checkRangeFromTo(from, to, size);
 		cern.colt.Sorting.quickSort(elements, from, to + 1, c);
