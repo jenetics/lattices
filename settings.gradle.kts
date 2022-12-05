@@ -1,5 +1,5 @@
 /*
- * Java Colt Library (@__identifier__@).
+ * Java Linear Algebra Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,10 @@
  * @version 2.0
  */
 pluginManagement {
-	repositories {
-		mavenLocal()
-		gradlePluginPortal()
-	}
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
 }
 
 rootProject.name = "colt"

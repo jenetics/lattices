@@ -50,9 +50,9 @@ allprojects {
 		mavenCentral()
 	}
 
-	configurations.all {
-		resolutionStrategy.failOnVersionConflict()
-	}
+    configurations.all {
+        resolutionStrategy.preferProjectModules()
+    }
 }
 
 /**

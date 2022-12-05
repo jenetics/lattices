@@ -21,12 +21,19 @@
  * @version 2.0
  */
 plugins {
-	`java-library`
-	idea
-	`maven-publish`
+    `java-library`
+    idea
+    `maven-publish`
+    id("me.champeau.jmh")
 }
 
 extra["moduleName"] = "io.jenetics.linealgebra"
 
 dependencies {
+    implementation(project(":colt"))
+
+    testImplementation("org.assertj:assertj-core:3.20.2")
+    testImplementation("org.apache.commons:commons-math3:3.6.1")
+    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
+    testImplementation("org.testng:testng:7.4.0")
 }
