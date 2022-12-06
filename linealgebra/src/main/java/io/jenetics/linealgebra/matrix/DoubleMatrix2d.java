@@ -101,7 +101,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     @Override
     public DoubleMatrix2d copy(final Structure struct) {
         final var elems = elements.newArrayOfSize(size());
-        dim().forEach((r, c) -> elems.set(order().index(r, c), get(r, c)));
+        dim().forEach((r, c) -> elems.set(struct.order().index(r, c), get(r, c)));
+
         return new DoubleMatrix2d(struct, elems);
     }
 
