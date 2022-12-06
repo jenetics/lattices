@@ -1,6 +1,7 @@
 package io.jenetics.linealgebra;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 public final class ColtMatrices {

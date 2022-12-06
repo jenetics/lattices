@@ -19,12 +19,12 @@
  */
 package io.jenetics.linealgebra;
 
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
+import static java.util.Objects.requireNonNull;
 
 import java.util.random.RandomGenerator;
 
-import static java.util.Objects.requireNonNull;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrix2d;
 
 public class DenseDoubleMatrix2dRandom {
 

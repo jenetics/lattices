@@ -20,8 +20,10 @@
 package io.jenetics.linealgebra;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
+
+import java.util.concurrent.TimeUnit;
+import java.util.random.RandomGenerator;
+
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -30,8 +32,8 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
-import java.util.concurrent.TimeUnit;
-import java.util.random.RandomGenerator;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrix2d;
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
