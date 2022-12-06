@@ -31,7 +31,7 @@ import java.util.function.DoubleUnaryOperator;
  * @since !__version__!
  * @version !__version__!
  */
-public interface DoubleMatrix2D extends Matrix2D<double[], DoubleMatrix2D> {
+public interface DoubleMatrix2D extends Matrix2D<DoubleMatrix2D> {
 
     /**
      * Returns the matrix cell value at coordinate {@code [row,col]}.
@@ -42,9 +42,7 @@ public interface DoubleMatrix2D extends Matrix2D<double[], DoubleMatrix2D> {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default double get(final int row, final int col) {
-        return elements()[order().index(row, col)];
-    }
+    double get(final int row, final int col);
 
     /**
      * Sets the matrix cell at coordinate {@code [row,col]} to the specified
@@ -56,9 +54,12 @@ public interface DoubleMatrix2D extends Matrix2D<double[], DoubleMatrix2D> {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(final int row, final int col, final double value) {
-        elements()[order().index(row, col)] = value;
-    }
+    void set(final int row, final int col, final double value);
+
+
+    /* *************************************************************************
+     * Default implementation of this double-matrix.
+     * ************************************************************************/
 
     /**
      * Sets all cells to the state specified by given {@code values}. The

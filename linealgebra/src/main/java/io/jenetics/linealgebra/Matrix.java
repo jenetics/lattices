@@ -28,7 +28,7 @@ package io.jenetics.linealgebra;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix<ARRAY_TYPE> {
+public interface Matrix {
 
     /**
      * Return the number of cells of {@code this} matrix.
@@ -36,12 +36,5 @@ public interface Matrix<ARRAY_TYPE> {
      * @return the number of cells of {@code this} matrix
      */
     int size();
-
-    /**
-     * Return the underlying data array. The data are not copied by this method.
-     *
-     * @return the underlying data array
-     */
-    ARRAY_TYPE elements();
 
 }

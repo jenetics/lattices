@@ -41,4 +41,12 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
         return elements.length;
     }
 
+    public DenseDoubleArray copy() {
+        return new DenseDoubleArray(elements.clone());
+    }
+
+    public static DenseDoubleArray ofSize(final int size) {
+        return new DenseDoubleArray(new double[size]);
+    }
+
 }

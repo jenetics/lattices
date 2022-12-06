@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra;
 
+import io.jenetics.linealgebra.array.DenseDoubleArray;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -28,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @since !__version__!
  * @version !__version__!
  */
-public record DenseDoubleMatrix2D(Structure structure, double[] elements)
+public record DenseDoubleMatrix2D(Structure structure, DenseDoubleArray elements)
     implements DoubleMatrix2D
 {
 
@@ -40,7 +42,7 @@ public record DenseDoubleMatrix2D(Structure structure, double[] elements)
     public DenseDoubleMatrix2D(final Dimension dimension) {
         this(
             new Structure(dimension, RowMajor.of(dimension)),
-            new double[dimension.size()]
+            DenseDoubleArray.ofSize(dimension.size())
         );
     }
 
@@ -53,17 +55,15 @@ public record DenseDoubleMatrix2D(Structure structure, double[] elements)
         assign(values);
     }
 
-    /*
     @Override
     public double get(final int row, final int col) {
-        return elements[order().index(row, col)];
+        return elements.get(order().index(row, col));
     }
 
     @Override
     public void set(final int row, final int col, final double value) {
-        elements[order().index(row, col)] = value;
+        elements.set(order().index(row, col),  value);
     }
-     */
 
     @Override
     public DenseDoubleMatrix2D view(final Structure structure) {
@@ -72,7 +72,7 @@ public record DenseDoubleMatrix2D(Structure structure, double[] elements)
 
     @Override
     public DenseDoubleMatrix2D copy(final Structure structure) {
-        return new DenseDoubleMatrix2D(structure, elements.clone());
+        return new DenseDoubleMatrix2D(structure, elements.copy());
     }
 
 }
