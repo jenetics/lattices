@@ -23,7 +23,6 @@
 plugins {
     `java-library`
     idea
-    `maven-publish`
     id("me.champeau.jmh")
 }
 
