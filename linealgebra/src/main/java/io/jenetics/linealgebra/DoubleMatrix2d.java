@@ -197,12 +197,12 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     /**
-     * <b>Linear algebraic matrix-matrix multiplication:</b>
+     * <em>Linear algebraic matrix-matrix multiplication:</em>
      * <pre>
      *     C = alpha * A x B + beta*C
      *     C[i, j] = alpha*Sum(A[i, k] * B[k, j]) + beta*C[i, j], k = 0..n-1
      * </pre>
-     * <b>Matrix shapes:</b>
+     * <em>Matrix shapes:</em>
      * <pre>
      *     A(m x n), B(n x p), C(m x p)
      * </pre>
@@ -279,6 +279,25 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         }
 
         return C;
+    }
+
+    /**
+     * Linear algebraic matrix-matrix multiplication {@code C = A x B}, which is
+     * equivalent to {@code A.zMult(B, C, 1, 0, false, false)}.
+     *
+     * @see #zMult(DoubleMatrix2d, DoubleMatrix2d, double, double, boolean, boolean)
+     *
+     * @param B the second source matrix.
+     * @param C the matrix where results are to be stored. Set this parameter to
+     *          {@code null} to indicate that a new result matrix should be
+     *          constructed.
+     * @return C, or a newly created result matrix.
+     * @throws IllegalArgumentException if {@code B.rows() != A.columns()} or
+     *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
+     *         {@code A == C || B == C}
+     */
+    public DoubleMatrix2d zMult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
+        return zMult(B, C, 1, (C == null ? 1 : 0), false, false);
     }
 
     /**
