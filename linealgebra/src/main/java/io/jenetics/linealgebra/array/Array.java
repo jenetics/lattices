@@ -28,7 +28,7 @@ package io.jenetics.linealgebra.array;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Array {
+public interface Array<A extends Array<A>> {
 
     /**
      * Return the size of {@code this} array.
@@ -36,4 +36,20 @@ public interface Array {
      * @return the size of {@code this} array
      */
     int size();
+
+    /**
+     * Return a new copy of the given double array.
+     *
+     * @return a new copy of the given double array
+     */
+    A copy();
+
+    /**
+     * Return a new array of the same type with the given {@code size}.
+     *
+     * @param size the size of the new array
+     * @return a new array of the same type with the given {@code size}
+     */
+    A newArrayOfSize(final int size);
+
 }

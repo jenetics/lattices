@@ -130,9 +130,54 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
             requireNonNull(order);
         }
 
+        public Structure(final Dimension dimension) {
+            this(dimension, RowMajor.of(dimension));
+        }
+
         public Structure transpose() {
             return new Structure(dimension.transpose(), order.transpose());
         }
+    }
+
+    /**
+     * Factory interface for creating 2-d matrices.
+     *
+     * @param <M> the matrix type created by the factory
+     */
+    @FunctionalInterface
+    interface Factory<M extends Matrix2d<M>> {
+
+        /**
+         * Create a new matrix with the given {@code structure}.
+         *
+         * @param structure the structure of the new matrix
+         * @return a new matrix with the given {@code structure}
+         */
+        M newMatrix(final Structure structure);
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param dimension the dimension of the created array
+         * @return a new matrix with the given {@code dimension}
+         */
+        default M newMatrix(final Dimension dimension) {
+            return newMatrix(new Structure(dimension, RowMajor.of(dimension)));
+        }
+
+        /**
+         * Create a new matrix with the given number of {@code rows} and
+         * {@code cols}.
+         *
+         * @param rows the number of rows of the created matrix
+         * @param cols the number of columns of the created matrix
+         * @return a new matrix with the given size
+         */
+        default M newMatrix(final int rows, final int cols) {
+            return newMatrix(new Dimension(rows, cols));
+        }
+
     }
 
     /**

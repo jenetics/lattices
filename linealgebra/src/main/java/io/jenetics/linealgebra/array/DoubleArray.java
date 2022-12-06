@@ -26,7 +26,7 @@ package io.jenetics.linealgebra.array;
  * @since !__version__!
  * @version !__version__!
  */
-public interface DoubleArray extends Array {
+public interface DoubleArray extends Array<DoubleArray> {
 
     /**
      * Return the array value at the given {@code index}.

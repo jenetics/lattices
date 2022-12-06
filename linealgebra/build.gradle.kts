@@ -44,6 +44,8 @@ dependencies {
     jmh(testFixtures(project(":linealgebra")))
 }
 
+tasks.test { dependsOn(tasks.compileJmhJava) }
+
 jmh {
     includes.add(".*DenseDoubleMatrix2dPerf.*")
 }

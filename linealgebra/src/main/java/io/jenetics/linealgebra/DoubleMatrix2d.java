@@ -19,19 +19,49 @@
  */
 package io.jenetics.linealgebra;
 
+import io.jenetics.linealgebra.array.DenseDoubleArray;
+import io.jenetics.linealgebra.array.DoubleArray;
+
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Interface for 2-d matrices holding {@code double} elements.
+ * Generic class for 2-d matrices holding {@code double} elements.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
+public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
+
+    public static final Factory<DoubleMatrix2d> DENSE_FACTORY = struct ->
+        new DoubleMatrix2d(
+            struct,
+            DenseDoubleArray.ofSize(struct.dimension().size())
+        );
+
+    private final Structure structure;
+    private final DoubleArray elements;
+
+    public DoubleMatrix2d(final Structure structure, final DoubleArray elements) {
+        if (structure.dimension().size() < elements.size()) {
+            throw new IllegalArgumentException(
+                "The number of available elements is smaller than the number of " +
+                    "required matrix cells: %d < %d."
+                        .formatted(structure.dimension().size(), elements.size())
+            );
+        }
+
+        this.structure = structure;
+        this.elements = elements;
+    }
+
+    @Override
+    public Structure structure() {
+        return structure;
+    }
 
     /**
      * Returns the matrix cell value at coordinate {@code [row,col]}.
@@ -42,7 +72,9 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    double get(final int row, final int col);
+    public double get(final int row, final int col) {
+        return elements.get(order().index(row, col));
+    }
 
     /**
      * Sets the matrix cell at coordinate {@code [row,col]} to the specified
@@ -54,8 +86,19 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    void set(final int row, final int col, final double value);
+    public void set(final int row, final int col, final double value) {
+        elements.set(order().index(row, col),  value);
+    }
 
+    @Override
+    public DoubleMatrix2d view(final Structure structure) {
+        return new DoubleMatrix2d(structure, elements);
+    }
+
+    @Override
+    public DoubleMatrix2d copy(final Structure structure) {
+        return new DoubleMatrix2d(structure, elements.copy());
+    }
 
     /* *************************************************************************
      * Default implementation of this double-matrix.
@@ -74,7 +117,7 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
      * @throws IllegalArgumentException if {@code values.length != rows()} or
      *         for any {@code 0 <= row <= rows(): values[row].length != columns()}
      */
-    default void assign(final double[][] values) {
+    public void assign(final double[][] values) {
         if (values.length != rows()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of rows: " +
@@ -98,7 +141,7 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
         }
     }
 
-    default void assign(final DoubleUnaryOperator f) {
+    public void assign(final DoubleUnaryOperator f) {
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
                 set(r, c, f.applyAsDouble(get(r, c)));
@@ -128,7 +171,7 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
      * @param f a function transforming the current cell value
      * @return the aggregated value
      */
-    default double reduce(
+    public double reduce(
         final DoubleBinaryOperator reducer,
         final DoubleUnaryOperator f
     ) {
@@ -151,7 +194,7 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
         return a;
     }
 
-    default DoubleMatrix2d zMult(
+    public DoubleMatrix2d zMult(
         final DoubleMatrix2d B,
         DoubleMatrix2d C,
         final double alpha,
@@ -177,7 +220,9 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
         final int p = B.cols();
 
         if (C == null) {
-            C = new DenseDoubleMatrix2d(m, p);
+            final var struct = new Structure(new Dimension(m, p));
+            final var elems = elements.newArrayOfSize(struct.dimension().size());
+            C = new DoubleMatrix2d(structure, elems);
         }
 
         if (B.rows() != n) {
@@ -215,7 +260,7 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
      *
      * @return the sum of all cells
      */
-    default double zSum() {
+    public double zSum() {
         if (size() == 0) {
             return 0;
         } else {
