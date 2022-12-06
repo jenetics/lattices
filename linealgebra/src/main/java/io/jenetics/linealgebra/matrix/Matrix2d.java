@@ -236,6 +236,15 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
     M copy(final Structure structure);
 
     /**
+     * Return a new minimal copy of the underlying element array.
+     *
+     * @return a new minimal copy of the underlying element array
+     */
+    default M copy() {
+        return copy(structure());
+    }
+
+    /**
      * Return a matrix factory which is able to creates matrices from the same
      * kind.
      *
@@ -244,14 +253,6 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
      */
     Factory<M> factory();
 
-    /**
-     * Return a new minimal copy of the underlying element array.
-     *
-     * @return a new minimal copy of the underlying element array
-     */
-    default M copy() {
-        return copy(structure());
-    }
 
     /**
      * Return the dimension of {@code this} 2-d matrix.

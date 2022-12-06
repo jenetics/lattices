@@ -61,25 +61,12 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         this.elements = elements;
     }
 
-    @Override
-    public Structure structure() {
-        return structure;
-    }
-
-    @Override
-    public Factory<DoubleMatrix2d> factory() {
-        return struct -> new DoubleMatrix2d(
-            struct,
-            elements.newArrayOfSize(struct.dim().size())
-        );
-    }
-
     /**
      * Returns the matrix cell value at coordinate {@code [row,col]}.
      *
-     * @param row the index of the row-coordinate.
-     * @param col the index of the column-coordinate.
-     * @return the value of the specified cell.
+     * @param row the index of the row-coordinate
+     * @param col the index of the column-coordinate
+     * @return the value of the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
@@ -91,14 +78,19 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * Sets the matrix cell at coordinate {@code [row,col]} to the specified
      * {@code value}.
      *
-     * @param row the index of the row-coordinate.
-     * @param col the index of the column-coordinate.
-     * @param value  the value to be filled into the specified cell.
+     * @param row the index of the row-coordinate
+     * @param col the index of the column-coordinate
+     * @param value  the value to be filled into the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
     public void set(final int row, final int col, final double value) {
         elements.set(order().index(row, col),  value);
+    }
+
+    @Override
+    public Structure structure() {
+        return structure;
     }
 
     @Override
@@ -109,6 +101,14 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     @Override
     public DoubleMatrix2d copy(final Structure structure) {
         return new DoubleMatrix2d(structure, elements.copy());
+    }
+
+    @Override
+    public Factory<DoubleMatrix2d> factory() {
+        return struct -> new DoubleMatrix2d(
+            struct,
+            elements.newArrayOfSize(struct.dim().size())
+        );
     }
 
     /* *************************************************************************
