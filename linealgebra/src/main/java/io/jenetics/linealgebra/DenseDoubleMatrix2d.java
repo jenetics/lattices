@@ -30,27 +30,27 @@ import static java.util.Objects.requireNonNull;
  * @since !__version__!
  * @version !__version__!
  */
-public record DenseDoubleMatrix2D(Structure structure, DenseDoubleArray elements)
-    implements DoubleMatrix2D
+public record DenseDoubleMatrix2d(Structure structure, DenseDoubleArray elements)
+    implements DoubleMatrix2d
 {
 
-    public DenseDoubleMatrix2D{
+    public DenseDoubleMatrix2d {
         requireNonNull(structure);
         requireNonNull(elements);
     }
 
-    public DenseDoubleMatrix2D(final Dimension dimension) {
+    public DenseDoubleMatrix2d(final Dimension dimension) {
         this(
             new Structure(dimension, RowMajor.of(dimension)),
             DenseDoubleArray.ofSize(dimension.size())
         );
     }
 
-    public DenseDoubleMatrix2D(final int rows, final int cols) {
+    public DenseDoubleMatrix2d(final int rows, final int cols) {
         this(new Dimension(rows, cols));
     }
 
-    public DenseDoubleMatrix2D(final double[][] values) {
+    public DenseDoubleMatrix2d(final double[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
         assign(values);
     }
@@ -66,13 +66,13 @@ public record DenseDoubleMatrix2D(Structure structure, DenseDoubleArray elements
     }
 
     @Override
-    public DenseDoubleMatrix2D view(final Structure structure) {
-        return new DenseDoubleMatrix2D(structure, elements);
+    public DenseDoubleMatrix2d view(final Structure structure) {
+        return new DenseDoubleMatrix2d(structure, elements);
     }
 
     @Override
-    public DenseDoubleMatrix2D copy(final Structure structure) {
-        return new DenseDoubleMatrix2D(structure, elements.copy());
+    public DenseDoubleMatrix2d copy(final Structure structure) {
+        return new DenseDoubleMatrix2d(structure, elements.copy());
     }
 
 }

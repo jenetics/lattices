@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @since !__version__!
  * @version !__version__!
  */
-public interface DoubleMatrix2D extends Matrix2D<DoubleMatrix2D> {
+public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
 
     /**
      * Returns the matrix cell value at coordinate {@code [row,col]}.
@@ -143,9 +143,9 @@ public interface DoubleMatrix2D extends Matrix2D<DoubleMatrix2D> {
         return a;
     }
 
-    default DoubleMatrix2D zMult(
-        final DoubleMatrix2D B,
-        DoubleMatrix2D C,
+    default DoubleMatrix2d zMult(
+        final DoubleMatrix2d B,
+        DoubleMatrix2d C,
         final double alpha,
         final double beta,
         final boolean transposeA,
@@ -169,7 +169,7 @@ public interface DoubleMatrix2D extends Matrix2D<DoubleMatrix2D> {
         final int p = B.cols();
 
         if (C == null) {
-            C = new DenseDoubleMatrix2D(m, p);
+            C = new DenseDoubleMatrix2d(m, p);
         }
 
         if (B.rows() != n) {

@@ -27,7 +27,7 @@ public class DoubleMatrix2DTest {
 
     @Test
     public void assign() {
-        final var matrix = new DenseDoubleMatrix2D(4, 3);
+        final var matrix = new DenseDoubleMatrix2d(4, 3);
         matrix.assign(new double[][] {
             {1, 2, 3},
             {4, 5, 6},
@@ -43,7 +43,7 @@ public class DoubleMatrix2DTest {
 
     @Test
     public void reduce() {
-        final var matrix = new DenseDoubleMatrix2D(new double[][] {
+        final var matrix = new DenseDoubleMatrix2d(new double[][] {
             {1, 2, 3},
             {4, 5, 6},
             {7, 8, 9},
@@ -56,7 +56,7 @@ public class DoubleMatrix2DTest {
 
     @Test
     public void zSum() {
-        final var matrix = new DenseDoubleMatrix2D(new double[][] {
+        final var matrix = new DenseDoubleMatrix2d(new double[][] {
             {1, 2, 3},
             {4, 5, 6},
             {7, 8, 9},

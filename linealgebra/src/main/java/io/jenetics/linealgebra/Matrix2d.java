@@ -29,10 +29,10 @@ import static java.util.Objects.requireNonNull;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix2D<M extends Matrix2D<M>> extends Matrix {
+public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
 
     /**
-     * The dimension of the {@link Matrix2D} object.
+     * The dimension of the {@link Matrix2d} object.
      *
      * @param rows the number of rows
      * @param cols the number of columns
