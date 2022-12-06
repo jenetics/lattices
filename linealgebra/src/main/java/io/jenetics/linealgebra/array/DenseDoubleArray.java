@@ -27,12 +27,12 @@ package io.jenetics.linealgebra.array;
 public record DenseDoubleArray(double[] elements) implements DoubleArray {
 
     @Override
-    public double get(int index) {
+    public double get(final int index) {
         return elements[index];
     }
 
     @Override
-    public void set(int index, double value) {
+    public void set(final int index, final double value) {
         elements[index] = value;
     }
 
@@ -47,7 +47,7 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public DoubleArray newArrayOfSize(int size) {
+    public DoubleArray newArrayOfSize(final int size) {
         return ofSize(size);
     }
 

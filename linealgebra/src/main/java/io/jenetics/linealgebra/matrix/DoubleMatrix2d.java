@@ -66,6 +66,14 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         return structure;
     }
 
+    @Override
+    public Factory<DoubleMatrix2d> factory() {
+        return struct -> new DoubleMatrix2d(
+            struct,
+            elements.newArrayOfSize(struct.dim().size())
+        );
+    }
+
     /**
      * Returns the matrix cell value at coordinate {@code [row,col]}.
      *
@@ -144,6 +152,71 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         }
     }
 
+    /**
+     * Assigns the result of a function to each cell {@code x[row, col] =
+     * f(x[row, col], y[row, col])}.
+     *
+     * @param y the secondary matrix to operate on.
+     * @param f a function object taking as first argument the current cell's
+     *          value of {@code this}, and as second argument the current cell's
+     *          value of {@code y}
+     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
+     *         rows() != other.rows()}
+     */
+    public void assign(
+        final DoubleMatrix2d y,
+        final DoubleBinaryOperator f
+    ) {
+        requireNonNull(f);
+
+        if (cols() != y.cols() || rows() != y.rows()) {
+            throw new IllegalArgumentException(
+                "Incompatible dimensions: " + toStringShort() + " and " +
+                    y.toStringShort()
+            );
+        }
+
+        for (int r = rows(); --r >= 0; ) {
+            for (int c = cols(); --c >= 0; ) {
+                set(r, c, f.applyAsDouble(get(r, c), y.get(r, c)));
+            }
+        }
+    }
+
+    /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
+     *         rows() != other.rows()}
+     */
+    public void assign(final DoubleMatrix2d other) {
+        if (other == this) {
+            return;
+        }
+
+        if (cols() != other.cols() || rows() != other.rows()) {
+            throw new IllegalArgumentException(
+                "Incompatible dimensions: " + toStringShort() + " and " +
+                    other.toStringShort()
+            );
+        }
+
+        for (int r = rows(); --r >= 0; ) {
+            for (int c = cols(); --c >= 0; ) {
+                set(r, c, other.get(r, c));
+            }
+        }
+    }
+
+    /**
+     * Assigns the result of a function to each cell
+     * {@code x[row, col] = f(x[row, col])}.
+     *
+     * @param f a function object taking as argument the current cell's value.
+     */
     public void assign(final DoubleUnaryOperator f) {
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {

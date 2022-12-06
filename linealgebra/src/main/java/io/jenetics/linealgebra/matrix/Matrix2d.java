@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
+public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
 
     /**
      * Defines the structure of a 2-d matrix, which is defined by the dimension
@@ -234,6 +234,15 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
      * @return a new minimal copy of the underlying element array
      */
     M copy(final Structure structure);
+
+    /**
+     * Return a matrix factory which is able to creates matrices from the same
+     * kind.
+     *
+     * @return a matrix factory which is able to creates matrices from the same
+     *        kind
+     */
+    Factory<M> factory();
 
     /**
      * Return a new minimal copy of the underlying element array.

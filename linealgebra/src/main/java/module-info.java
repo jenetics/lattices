@@ -23,7 +23,6 @@
  * @since !__version__!
  */
 module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
     exports io.jenetics.linealgebra.array;
     exports io.jenetics.linealgebra.matrix;
 }

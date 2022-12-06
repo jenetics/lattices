@@ -28,7 +28,7 @@ package io.jenetics.linealgebra.matrix;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix {
+public interface Matrix<M extends Matrix<M>> {
 
     /**
      * Return the number of cells of {@code this} matrix.
