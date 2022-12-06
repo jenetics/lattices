@@ -86,7 +86,7 @@ public class DoubleMatrix2dTest {
             {10, 11, 12}
         });
 
-        final var result = matrix.zSum();
+        final var result = matrix.sum();
         assertThat(result).isEqualTo(78);
     }
 
@@ -99,7 +99,7 @@ public class DoubleMatrix2dTest {
 
         final var A = random.next(dimension);
         final var B = random.next(dimension);
-        final var C = A.zMult(B, null, 2, 3, false, false);
+        final var C = A.mult(B, null, 2, 3, false, false);
 
         final var coltA = ColtMatrices.of(A);
         final var coltB = ColtMatrices.of(B);

@@ -58,7 +58,7 @@ public class DenseDoubleMatrix2dPerf {
 
     @Benchmark
     public Object linealgebraMult() {
-        return linealgebraA.zMult(linealgebraB, null, 2, 3, false, false);
+        return linealgebraA.mult(linealgebraB, null, 2, 3, false, false);
     }
 
     @Benchmark

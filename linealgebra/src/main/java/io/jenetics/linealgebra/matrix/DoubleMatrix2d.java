@@ -286,7 +286,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @throws IllegalArgumentException if {@code A.cols() != y.size() ||
      *         A.rows() > z.size())}.
      */
-    public DoubleMatrix1d zMult(
+    public DoubleMatrix1d mult(
         final DoubleMatrix1d y,
         DoubleMatrix1d z,
         final double alpha,
@@ -295,7 +295,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     ) {
         if (transposeA) {
             return view(structure().transpose())
-                .zMult(y, z, alpha, beta, false);
+                .mult(y, z, alpha, beta, false);
         }
 
         if (z == null) {
@@ -323,9 +323,9 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
     /**
      * Linear algebraic matrix-vector multiplication; {@code z = A * y};
-     * Equivalent to {@code return A.zMult(y, z, 1, 0);}
+     * Equivalent to {@code return A.mult(y, z, 1, 0);}
      *
-     * @see #zMult(DoubleMatrix1d, DoubleMatrix1d, double, double, boolean)
+     * @see #mult(DoubleMatrix1d, DoubleMatrix1d, double, double, boolean)
      *
      * @param y the source vector.
      * @param z the vector where results are to be stored. Set this parameter to
@@ -333,8 +333,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      *          constructed.
      * @return z, or a newly created result matrix
      */
-    public DoubleMatrix1d zMult(final DoubleMatrix1d y, final DoubleMatrix1d z) {
-        return zMult(y, z, 1, (z == null ? 1 : 0), false);
+    public DoubleMatrix1d mult(final DoubleMatrix1d y, final DoubleMatrix1d z) {
+        return mult(y, z, 1, (z == null ? 1 : 0), false);
     }
 
     /**
@@ -361,7 +361,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */
-    public DoubleMatrix2d zMult(
+    public DoubleMatrix2d mult(
         final DoubleMatrix2d B,
         DoubleMatrix2d C,
         final double alpha,
@@ -373,10 +373,10 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
         if (transposeA) {
             return view(structure().transpose())
-                .zMult(B, C, alpha, beta, false, transposeB);
+                .mult(B, C, alpha, beta, false, transposeB);
         }
         if (transposeB) {
-            return zMult(
+            return mult(
                 B.view(B.structure().transpose()), C,
                 alpha, beta, transposeA, false
             );
@@ -424,9 +424,9 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
     /**
      * Linear algebraic matrix-matrix multiplication {@code C = A x B}, which is
-     * equivalent to {@code A.zMult(B, C, 1, 0, false, false)}.
+     * equivalent to {@code A.mult(B, C, 1, 0, false, false)}.
      *
-     * @see #zMult(DoubleMatrix2d, DoubleMatrix2d, double, double, boolean, boolean)
+     * @see #mult(DoubleMatrix2d, DoubleMatrix2d, double, double, boolean, boolean)
      *
      * @param B the second source matrix.
      * @param C the matrix where results are to be stored. Set this parameter to
@@ -437,8 +437,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */
-    public DoubleMatrix2d zMult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
-        return zMult(B, C, 1, (C == null ? 1 : 0), false, false);
+    public DoubleMatrix2d mult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
+        return mult(B, C, 1, (C == null ? 1 : 0), false, false);
     }
 
     /**
@@ -446,7 +446,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      *
      * @return the sum of all cells
      */
-    public double zSum() {
+    public double sum() {
         if (size() == 0) {
             return 0;
         } else {

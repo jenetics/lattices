@@ -188,7 +188,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
      * @param length the number of cells to be considered
      * @return the sum of products, zero if {@code from<0 || length<0}
      */
-    public double zDotProduct(
+    public double dotProduct(
         final DoubleMatrix1d y,
         final int from,
         final int length
@@ -219,7 +219,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
      *
      * @return the sum
      */
-    public double zSum() {
+    public double sum() {
         if (size() == 0) {
             return 0;
         } else {
