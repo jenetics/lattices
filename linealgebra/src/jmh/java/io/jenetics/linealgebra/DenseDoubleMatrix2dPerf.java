@@ -22,21 +22,15 @@ package io.jenetics.linealgebra;
 import cern.colt.matrix.DoubleMatrix2D;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 import java.util.random.RandomGenerator;
 
-//@Warmup(iterations = 1, time = 1)
-//@Measurement(iterations = 12, time = 1)
-//@Fork(value = 1)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -69,3 +63,9 @@ public class DenseDoubleMatrix2dPerf {
     }
 
 }
+
+/*
+Benchmark                                Mode  Cnt  Score   Error  Units
+DenseDoubleMatrix2dPerf.coltMult         avgt   25  1,225 ± 0,021  us/op
+DenseDoubleMatrix2dPerf.linealgebraMult  avgt   25  1,328 ± 0,015  us/op
+ */
