@@ -36,6 +36,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
+    /**
+     * Factory for creating dense 2-d double matrices.
+     */
     public static final Factory<DoubleMatrix2d> DENSE_FACTORY = struct ->
         new DoubleMatrix2d(
             struct,
@@ -101,7 +104,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     /* *************************************************************************
-     * Default implementation of this double-matrix.
+     * Additional matrix methods.
      * ************************************************************************/
 
     /**
@@ -161,8 +164,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * 2 3
      *
      * // Sum(x[row, col]*x[row, col])
-     * matrix.aggregate(Double::sum, a -> a*a);
-     * --> 14
+     * matrix.aggregate(Double::sum, a -> a*a) --> 14
      * </pre>
      *
      * @param reducer an aggregation function taking as first argument the
@@ -194,6 +196,30 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         return a;
     }
 
+    /**
+     * <b>Linear algebraic matrix-matrix multiplication:</b>
+     * <pre>
+     *     C = alpha * A x B + beta*C
+     *     C[i, j] = alpha*Sum(A[i, k] * B[k, j]) + beta*C[i, j], k = 0..n-1
+     * </pre>
+     * <b>Matrix shapes:</b>
+     * <pre>
+     *     A(m x n), B(n x p), C(m x p)
+     * </pre>
+     *
+     * @implNote
+     * Matrix shape conformance is checked <em>after</em> potential
+     * transpositions.
+     *
+     * @param B the second source matrix.
+     * @param C the matrix where results are to be stored. Set this parameter to
+     *          {@code null} to indicate that a new result matrix should be
+     *          constructed.
+     * @return C, or a newly created result matrix.
+     * @throws IllegalArgumentException if {@code B.rows() != A.columns()} or
+     *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
+     *         {@code A == C || B == C}
+     */
     public DoubleMatrix2d zMult(
         final DoubleMatrix2d B,
         DoubleMatrix2d C,
@@ -227,13 +253,13 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
-                "Matrix2D inner dimensions must agree:" +
+                "2-d matrix inner dimensions must equal:" +
                     toStringShort() + ", " + B.toStringShort()
             );
         }
         if (C.rows() != m || C.cols() != p) {
             throw new IllegalArgumentException(
-                "Incompatibel result matrix: " +
+                "Incompatible result matrix: " +
                     toStringShort() + ", " + B.toStringShort() + ", " + C.toStringShort()
             );
         }
