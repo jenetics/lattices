@@ -17,12 +17,21 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.array;
 
 /**
+ * Base interface of all array implementations.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
+ * @version !__version__!
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
-    exports io.jenetics.linealgebra.array;
+public interface Array {
+
+    /**
+     * Return the size of {@code this} array.
+     *
+     * @return the size of {@code this} array
+     */
+    int size();
 }

@@ -17,12 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.array;
 
 /**
+ * Definition of an array with {@code double} values.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
+ * @version !__version__!
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
-    exports io.jenetics.linealgebra.array;
+public interface DoubleArray extends Array {
+
+    /**
+     * Return the array value at the given {@code index}.
+     *
+     * @param index the array index of the returned element
+     * @return the element at the given {@code index}
+     */
+    double get(final int index);
+
+    /**
+     * Set the given {@code value} at the given {@code index}.
+     *
+     * @param index the array index of the new value
+     * @param value the value to be set at the given index
+     */
+    void set(final int index, final double value);
+
 }

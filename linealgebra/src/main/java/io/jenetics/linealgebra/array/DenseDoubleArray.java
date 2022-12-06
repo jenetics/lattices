@@ -17,12 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.array;
 
 /**
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
+ * Implementation of a <em>dense</em> array of {@code double} values.
+ *
+ * @param elements the underlying {@code double} element values
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
-    exports io.jenetics.linealgebra.array;
+public record DenseDoubleArray(double[] elements) implements DoubleArray {
+
+    @Override
+    public double get(int index) {
+        return elements[index];
+    }
+
+    @Override
+    public void set(int index, double value) {
+        elements[index] = value;
+    }
+
+    @Override
+    public int size() {
+        return elements.length;
+    }
+
 }
