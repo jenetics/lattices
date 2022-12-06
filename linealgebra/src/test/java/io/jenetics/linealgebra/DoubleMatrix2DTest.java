@@ -19,9 +19,13 @@
  */
 package io.jenetics.linealgebra;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import cern.colt.matrix.DoubleMatrix2D;
+import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
+
+import java.util.random.RandomGeneratorFactory;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DoubleMatrix2DTest {
 
@@ -65,6 +69,35 @@ public class DoubleMatrix2DTest {
 
         final var result = matrix.zSum();
         assertThat(result).isEqualTo(78);
+    }
+
+    @Test
+    public void zMult() {
+        final var generator = RandomGeneratorFactory.getDefault().create(1234);
+        final var random = new DenseDoubleMatrix2dRandom(generator);
+
+        final var dimension = new Matrix2d.Dimension(10, 10);
+
+        final var A = random.next(dimension);
+        final var B = random.next(dimension);
+        final var C = A.zMult(B, null, 2, 3, false, false);
+
+        final var coltA = ColtMatrices.of(A);
+        final var coltB = ColtMatrices.of(B);
+        final var coltC = coltA.zMult(coltB, null, 2, 3, false, false);
+
+        assertEquals(C, coltC);
+    }
+
+    private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
+        final var epsilon = Percentage.withPercentage(0.01);
+
+        for (int r = a.rows(); --r >= 0;) {
+            for (int c = a.cols(); --c >= 0;) {
+                assertThat(a.get(r, c))
+                    .isCloseTo(coltA.getQuick(r, c), epsilon);
+            }
+        }
     }
 
 }

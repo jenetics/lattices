@@ -22,6 +22,7 @@
  */
 plugins {
     `java-library`
+    `java-test-fixtures`
     idea
     `maven-publish`
     id("me.champeau.jmh")
@@ -37,4 +38,6 @@ dependencies {
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
     testImplementation("org.testng:testng:7.6.1")
     testImplementation("colt:colt:1.2.0")
+
+    testFixturesApi("colt:colt:1.2.0")
 }

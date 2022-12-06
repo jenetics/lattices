@@ -98,6 +98,14 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
         }
     }
 
+    default void assign(final DoubleUnaryOperator f) {
+        for (int r = rows(); --r >= 0; ) {
+            for (int c = cols(); --c >= 0; ) {
+                set(r, c, f.applyAsDouble(get(r, c)));
+            }
+        }
+    }
+
     /**
      * Applies a function to each cell and aggregates the results. Returns a
      * value <em>v</em> such that <em>v==a(size())</em> where
@@ -188,7 +196,6 @@ public interface DoubleMatrix2d extends Matrix2d<DoubleMatrix2d> {
         if (this == C || B == C) {
             throw new IllegalArgumentException("Matrices must not be identical");
         }
-
 
         for (int j = p; --j >= 0; ) {
             for (int i = m; --i >= 0; ) {
