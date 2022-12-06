@@ -265,6 +265,79 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     /**
+     * Linear algebraic matrix-vector multiplication
+     * <pre>
+     *     z = alpha * A * y + beta*z
+     *     z[i] = alpha*Sum(A[i, j] * y[j]) + beta*z[i],
+     *           i = 0..A.rows() - 1, j = 0..y.size() - 1
+     *     where
+     *     A == this
+     * </pre>
+     *
+     * @implNote
+     * Matrix shape conformance is checked <em>after</em> potential
+     * transpositions.
+     *
+     * @param y the source vector.
+     * @param z the vector where results are to be stored. Set this parameter to
+     *          {@code null} to indicate that a new result vector should be
+     *          constructed.
+     * @return z, or a newly created result matrix
+     * @throws IllegalArgumentException if {@code A.cols() != y.size() ||
+     *         A.rows() > z.size())}.
+     */
+    public DoubleMatrix1d zMult(
+        final DoubleMatrix1d y,
+        DoubleMatrix1d z,
+        final double alpha,
+        final double beta,
+        final boolean transposeA
+    ) {
+        if (transposeA) {
+            return view(structure().transpose())
+                .zMult(y, z, alpha, beta, false);
+        }
+
+        if (z == null) {
+            final var struct = new Matrix1d.Structure(new Matrix1d.Dim(rows()));
+            final var elems = elements.newArrayOfSize(struct.dim().size());
+            z = new DoubleMatrix1d(struct, elems);
+        }
+
+        if (cols() != y.size() || rows() > z.size()) {
+            throw new IllegalArgumentException(
+                "Incompatible args: " + dim() + ", " + y.dim() + ", " + z.dim()
+            );
+        }
+
+        for (int i = rows(); --i >= 0; ) {
+            double s = 0;
+            for (int j = cols(); --j >= 0;) {
+                s += get(i, j) * y.get(j);
+            }
+            z.set(i, alpha * s + beta * z.get(i));
+        }
+
+        return z;
+    }
+
+    /**
+     * Linear algebraic matrix-vector multiplication; {@code z = A * y};
+     * Equivalent to {@code return A.zMult(y, z, 1, 0);}
+     *
+     * @see #zMult(DoubleMatrix1d, DoubleMatrix1d, double, double, boolean)
+     *
+     * @param y the source vector.
+     * @param z the vector where results are to be stored. Set this parameter to
+     *          {@code null} to indicate that a new result vector should be
+     *          constructed.
+     * @return z, or a newly created result matrix
+     */
+    public DoubleMatrix1d zMult(final DoubleMatrix1d y, final DoubleMatrix1d z) {
+        return zMult(y, z, 1, (z == null ? 1 : 0), false);
+    }
+
+    /**
      * <em>Linear algebraic matrix-matrix multiplication:</em>
      * <pre>
      *     C = alpha * A x B + beta*C
@@ -283,7 +356,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @param C the matrix where results are to be stored. Set this parameter to
      *          {@code null} to indicate that a new result matrix should be
      *          constructed.
-     * @return C, or a newly created result matrix.
+     * @return C, or a newly created result matrix
      * @throws IllegalArgumentException if {@code B.rows() != A.columns()} or
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
@@ -316,7 +389,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         if (C == null) {
             final var struct = new Structure(new Dim(m, p));
             final var elems = elements.newArrayOfSize(struct.dim().size());
-            C = new DoubleMatrix2d(structure, elems);
+            C = new DoubleMatrix2d(struct, elems);
         }
 
         if (B.rows() != n) {

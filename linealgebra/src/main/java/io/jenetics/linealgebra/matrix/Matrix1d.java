@@ -68,6 +68,11 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
                 );
             }
         }
+
+        @Override
+        public String toString() {
+            return "[%s]".formatted(size());
+        }
     }
 
     /**
