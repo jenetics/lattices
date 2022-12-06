@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
+import java.util.random.RandomGenerator;
 import java.util.random.RandomGeneratorFactory;
 
 import org.assertj.core.data.Percentage;
@@ -63,6 +64,36 @@ public class DoubleMatrix2dTest {
     }
 
     @Test
+    public void columnView() {
+        final var generator = RandomGenerator.getDefault();
+        final var random = new DenseDoubleMatrix2dRandom(generator);
+        final var dimension = new Matrix2d.Dim(23, 54);
+
+        final var A = random.next(dimension);
+        final var column23 = A.col(23);
+
+        assertThat(column23.size()).isEqualTo(dimension.rows());
+        for (int i = 0; i < dimension.rows(); ++i) {
+            assertThat(column23.get(i)).isEqualTo(A.get(i, 23));
+        }
+    }
+
+    @Test
+    public void rowView() {
+        final var generator = RandomGenerator.getDefault();
+        final var random = new DenseDoubleMatrix2dRandom(generator);
+        final var dimension = new Matrix2d.Dim(23, 54);
+
+        final var A = random.next(dimension);
+        final var row12 = A.row(12);
+
+        assertThat(row12.size()).isEqualTo(dimension.cols());
+        for (int i = 0; i < dimension.cols(); ++i) {
+            assertThat(row12.get(i)).isEqualTo(A.get(12, i));
+        }
+    }
+
+    @Test
     public void reduce() {
         final var matrix = DoubleMatrix2d.DENSE_FACTORY.newMatrix(4, 3);
         matrix.assign(new double[][] {
@@ -77,7 +108,7 @@ public class DoubleMatrix2dTest {
     }
 
     @Test
-    public void zSum() {
+    public void sum() {
         final var matrix = DoubleMatrix2d.DENSE_FACTORY.newMatrix(4, 3);
         matrix.assign(new double[][] {
             {1, 2, 3},
@@ -91,10 +122,9 @@ public class DoubleMatrix2dTest {
     }
 
     @Test
-    public void zMult() {
+    public void mult() {
         final var generator = RandomGeneratorFactory.getDefault().create(1234);
         final var random = new DenseDoubleMatrix2dRandom(generator);
-
         final var dimension = new Matrix2d.Dim(10, 10);
 
         final var A = random.next(dimension);

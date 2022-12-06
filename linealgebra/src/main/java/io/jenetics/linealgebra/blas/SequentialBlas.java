@@ -50,8 +50,8 @@ public class SequentialBlas implements Blas {
     }
 
     @Override
-    public double ddot(DoubleMatrix1d x, DoubleMatrix1d y) {
-        return 0;
+    public double ddot(final DoubleMatrix1d x, final DoubleMatrix1d y) {
+        return x.dotProduct(y);
     }
 
     @Override

@@ -49,10 +49,10 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     private final DoubleArray elements;
 
     public DoubleMatrix2d(final Structure structure, final DoubleArray elements) {
-        if (structure.dim().size() < elements.size()) {
+        if (structure.dim().size() > elements.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
-                    "required matrix cells: %d < %d."
+                    "required matrix cells: %d > %d."
                         .formatted(structure.dim().size(), elements.size())
             );
         }
@@ -62,7 +62,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     /**
-     * Returns the matrix cell value at coordinate {@code [row,col]}.
+     * Returns the matrix cell value at coordinate {@code [row, col]}.
      *
      * @param row the index of the row-coordinate
      * @param col the index of the column-coordinate
@@ -75,7 +75,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [row,col]} to the specified
+     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
      * {@code value}.
      *
      * @param row the index of the row-coordinate
@@ -94,13 +94,15 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     @Override
-    public DoubleMatrix2d view(final Structure structure) {
-        return new DoubleMatrix2d(structure, elements);
+    public DoubleMatrix2d view(final Structure struct) {
+        return new DoubleMatrix2d(struct, elements);
     }
 
     @Override
-    public DoubleMatrix2d copy(final Structure structure) {
-        return new DoubleMatrix2d(structure, elements.copy());
+    public DoubleMatrix2d copy(final Structure struct) {
+        final var elems = elements.newArrayOfSize(size());
+        dim().forEach((r, c) -> elems.set(order().index(r, c), get(r, c)));
+        return new DoubleMatrix2d(struct, elems);
     }
 
     @Override
@@ -109,6 +111,40 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
             struct,
             elements.newArrayOfSize(struct.dim().size())
         );
+    }
+
+    /* *************************************************************************
+     * Matrix view methods.
+     * ************************************************************************/
+
+    /**
+     * Constructs and returns a <em>view</em> representing the rows of the given
+     * column. The returned view is backed by this matrix, so changes in the
+     * returned view are reflected in this matrix, and vice-versa.
+     *
+     * @param index the column index.
+     * @return a new column view.
+     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link RowMajor}
+     */
+    public DoubleMatrix1d col(final int index) {
+        return new DoubleMatrix1d(structure.col(index), elements);
+    }
+
+    /**
+     * Constructs and returns a <em>view</em> representing the columns of the
+     * given row. The returned view is backed by this matrix, so changes in the
+     * returned view are reflected in this matrix, and vice-versa.
+     *
+     * @param index the row index.
+     * @return a new row view.
+     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link RowMajor}
+     */
+    public DoubleMatrix1d row(final int index) {
+        return new DoubleMatrix1d(structure.row(index), elements);
     }
 
     /* *************************************************************************

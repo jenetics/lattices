@@ -54,7 +54,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
          * @param dim the matrix dimension
          */
         public Structure(final Dim dim) {
-            this(dim, RowMajor.of(dim));
+            this(dim, new RowMajor(dim));
         }
 
         /**
@@ -65,6 +65,71 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
         public Structure transpose() {
             return new Structure(dim.transpose(), order.transpose());
         }
+
+        /**
+         * Create a new {@link Matrix1d.Structure} object which can be used to
+         * create a column view {@link Matrix1d}.
+         *
+         * @param index the column index
+         * @return a new {@link Matrix1d.Structure} object
+         * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
+         * @throws UnsupportedOperationException if the {@link #order()} function
+         *         is not an instance of {@link RowMajor}
+         */
+        public Matrix1d.Structure col(final int index) {
+            if (index < 0 || index >= dim().cols()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + dim() + " at column=" + index
+                );
+            }
+
+            if (order instanceof RowMajor rm) {
+                return new Matrix1d.Structure(
+                    new Matrix1d.Dim(dim().rows()),
+                    new Matrix1d.RowMajor(
+                        rm.index(0, index),
+                        rm.rowStride()
+                    )
+                );
+            } else {
+                throw new UnsupportedOperationException(
+                    "Column view structure not supported by " + order
+                );
+            }
+        }
+
+        /**
+         * Create a new {@link Matrix1d.Structure} object which can be used to
+         * create a row view {@link Matrix1d}.
+         *
+         * @param index the row index
+         * @return a new {@link Matrix1d.Structure} object
+         * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
+         * @throws UnsupportedOperationException if the {@link #order()} function
+         *         is not an instance of {@link RowMajor}
+         */
+        public Matrix1d.Structure row(final int index) {
+            if (index < 0 || index >= dim().rows()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + dim() + " at row=" + index
+                );
+            }
+
+            if (order instanceof RowMajor rm) {
+                return new Matrix1d.Structure(
+                    new Matrix1d.Dim(dim().cols()),
+                    new Matrix1d.RowMajor(
+                        rm.index(index, 0),
+                        rm.colStride()
+                    )
+                );
+            } else {
+                throw new UnsupportedOperationException(
+                    "Row view structure not supported by " + order
+                );
+            }
+        }
+
     }
 
     /**
@@ -246,6 +311,18 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
     )
         implements Order
     {
+
+        /**
+         * Create a new row-major {@link Order} object for the given matrix
+         * dimension. This is the default implementation for the element order
+         * of the matrix.
+         *
+         * @param dim the matrix dimension
+         */
+        public RowMajor(final Dim dim) {
+            this(0, 0, dim.cols(), 1);
+        }
+
         @Override
         public int index(final int row, final int col) {
             return rowZero + row*rowStride + colZero + col*colStride;
@@ -256,17 +333,6 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
             return new RowMajor(colZero, rowZero, colStride, rowStride);
         }
 
-        /**
-         * Create a new row-major {@link Order} object for the given matrix
-         * dimension. This is the default implementation for the element order
-         * of the matrix.
-         *
-         * @param dim the matrix dimension
-         * @return a new row-major {@link Order} object
-         */
-        public static RowMajor of(final Dim dim) {
-            return new RowMajor(0, 0, dim.cols(), 1);
-        }
     }
 
     /**
@@ -293,7 +359,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
          * @return a new matrix with the given {@code dimension}
          */
         default M newMatrix(final Dim dim) {
-            return newMatrix(new Structure(dim, RowMajor.of(dim)));
+            return newMatrix(new Structure(dim, new RowMajor(dim)));
         }
 
         /**

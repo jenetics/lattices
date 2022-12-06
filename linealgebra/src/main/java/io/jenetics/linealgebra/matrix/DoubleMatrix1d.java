@@ -47,7 +47,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     private final DoubleArray elements;
 
     public DoubleMatrix1d(final Structure structure, final DoubleArray elements) {
-        if (structure.dim().size() < elements.size()) {
+        if (structure.dim().size() > elements.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d < %d."
@@ -212,6 +212,18 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
             sum += get(i) * y.get(i);
         }
         return sum;
+    }
+
+    /**
+     * Returns the dot product of two vectors x and y, which is {
+     * @code Sum(x[i]*y[i])}, where {@code x == this}.
+     * Operates on cells at indexes {@code 0 .. Math.min(size(), y.size())}.
+     *
+     * @param y the second vector
+     * @return the sum of products
+     */
+    public double dotProduct(final DoubleMatrix1d y) {
+        return dotProduct(y, 0, size());
     }
 
     /**
