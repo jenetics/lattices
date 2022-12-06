@@ -31,8 +31,8 @@ public class DenseDoubleMatrix2dRandom {
         this.random = requireNonNull(random);
     }
 
-    public DoubleMatrix2d next(final Matrix2d.Dimension dimension) {
-        final var result = DoubleMatrix2d.DENSE_FACTORY.newMatrix(dimension);
+    public DoubleMatrix2d next(final Matrix2d.Dim dim) {
+        final var result = DoubleMatrix2d.DENSE_FACTORY.newMatrix(dim);
         result.assign(a -> random.nextInt(1000)/100.0);
         return result;
     }

@@ -27,7 +27,7 @@ import java.util.random.RandomGeneratorFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DoubleMatrix2DTest {
+public class DoubleMatrix2dTest {
 
     @Test
     public void assign() {
@@ -78,7 +78,7 @@ public class DoubleMatrix2DTest {
         final var generator = RandomGeneratorFactory.getDefault().create(1234);
         final var random = new DenseDoubleMatrix2dRandom(generator);
 
-        final var dimension = new Matrix2d.Dimension(10, 10);
+        final var dimension = new Matrix2d.Dim(10, 10);
 
         final var A = random.next(dimension);
         final var B = random.next(dimension);

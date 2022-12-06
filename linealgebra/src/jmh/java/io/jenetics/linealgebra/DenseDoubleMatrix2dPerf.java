@@ -44,7 +44,7 @@ public class DenseDoubleMatrix2dPerf {
     @Setup
     public void setup() {
         final var random = new DenseDoubleMatrix2dRandom(RandomGenerator.getDefault());
-        final var dimension = new Matrix2d.Dimension(10, 10);
+        final var dimension = new Matrix2d.Dim(10, 10);
 
         linealgebraA = random.next(dimension);
         linealgebraB = random.next(dimension);

@@ -32,13 +32,46 @@ import static java.util.Objects.requireNonNull;
 public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
 
     /**
+     * Defines the structure of a 2-d matrix, which is defined by the dimension
+     * of the matrix and the index order of the underlying element array.
+     *
+     * @param dim the dimension of the matrix
+     * @param order the element order
+     */
+    record Structure(Dim dim, Order order) {
+        public Structure {
+            requireNonNull(dim);
+            requireNonNull(order);
+        }
+
+        /**
+         * Create a new matrix structure with the given dimension and the default
+         * element order.
+         *
+         * @param dim the matrix dimension
+         */
+        public Structure(final Dim dim) {
+            this(dim, RowMajor.of(dim));
+        }
+
+        /**
+         * Transposes the matrix structure without copying any matrix elements.
+         *
+         * @return the transposed matrix structure
+         */
+        public Structure transpose() {
+            return new Structure(dim.transpose(), order.transpose());
+        }
+    }
+
+    /**
      * The dimension of the {@link Matrix2d} object.
      *
      * @param rows the number of rows
      * @param cols the number of columns
      */
-    record Dimension(int rows, int cols) {
-        public Dimension {
+    record Dim(int rows, int cols) {
+        public Dim {
             if (rows < 0) {
                 throw new IllegalArgumentException(
                     "Number of rows must greater or equal than zero: " + rows
@@ -51,12 +84,23 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
             }
         }
 
+        /**
+         * The number of matrix elements (cells) a matrix with {@code this}
+         * dimensions consists of.
+         *
+         * @return the number of cells for {@code this} matrix dimension
+         */
         public int size() {
             return rows*cols;
         }
 
-        public Dimension transpose() {
-            return new Dimension(cols, rows);
+        /**
+         * Swaps the dimensions of rows and columns.
+         *
+         * @return a new transposed dimension object
+         */
+        public Dim transpose() {
+            return new Dim(cols, rows);
         }
     }
 
@@ -112,30 +156,16 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
             return new RowMajor(colZero, rowZero, colStride, rowStride);
         }
 
-        public static RowMajor of(final Dimension dimension) {
-            return new RowMajor(0, 0, dimension.cols(), 1);
-        }
-    }
-
-    /**
-     * Defines the structure of a 2-d matrix, which is defined by the dimension
-     * of the matrix and the index order of the underlying element array.
-     *
-     * @param dimension the dimension of the matrix
-     * @param order the element order
-     */
-    record Structure(Dimension dimension, Order order) {
-        public Structure {
-            requireNonNull(dimension);
-            requireNonNull(order);
-        }
-
-        public Structure(final Dimension dimension) {
-            this(dimension, RowMajor.of(dimension));
-        }
-
-        public Structure transpose() {
-            return new Structure(dimension.transpose(), order.transpose());
+        /**
+         * Create a new row-major {@link Order} object for the given matrix
+         * dimension. This is the default implementation for the element order
+         * of the matrix.
+         *
+         * @param dim the matrix dimension
+         * @return a new row-major {@link Order} object
+         */
+        public static RowMajor of(final Dim dim) {
+            return new RowMajor(0, 0, dim.cols(), 1);
         }
     }
 
@@ -159,11 +189,11 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
          * Create a new matrix with the given {@code dimension} and default
          * <em>order</em>.
          *
-         * @param dimension the dimension of the created array
+         * @param dim the dimension of the created array
          * @return a new matrix with the given {@code dimension}
          */
-        default M newMatrix(final Dimension dimension) {
-            return newMatrix(new Structure(dimension, RowMajor.of(dimension)));
+        default M newMatrix(final Dim dim) {
+            return newMatrix(new Structure(dim, RowMajor.of(dim)));
         }
 
         /**
@@ -175,7 +205,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
          * @return a new matrix with the given size
          */
         default M newMatrix(final int rows, final int cols) {
-            return newMatrix(new Dimension(rows, cols));
+            return newMatrix(new Dim(rows, cols));
         }
 
     }
@@ -219,8 +249,8 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
      *
      * @return the dimension of {@code this} 2-d matrix
      */
-    default Dimension dimension() {
-        return structure().dimension();
+    default Dim dim() {
+        return structure().dim();
     }
 
     /**
@@ -234,15 +264,25 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix {
 
     @Override
     default int size() {
-        return dimension().size();
+        return dim().size();
     }
 
+    /**
+     * Return the number of rows of {@code this} matrix.
+     *
+     * @return the number of rows of {@code this} matrix
+     */
     default int rows() {
-        return dimension().rows();
+        return dim().rows();
     }
 
+    /**
+     * Return the number of columns of {@code this} matrix.
+     *
+     * @return the number of columns of {@code this} matrix
+     */
     default int cols() {
-        return dimension().cols();
+        return dim().cols();
     }
 
     default String toStringShort() {

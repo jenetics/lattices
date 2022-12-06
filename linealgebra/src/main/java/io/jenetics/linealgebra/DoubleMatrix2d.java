@@ -39,18 +39,18 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     public static final Factory<DoubleMatrix2d> DENSE_FACTORY = struct ->
         new DoubleMatrix2d(
             struct,
-            DenseDoubleArray.ofSize(struct.dimension().size())
+            DenseDoubleArray.ofSize(struct.dim().size())
         );
 
     private final Structure structure;
     private final DoubleArray elements;
 
     public DoubleMatrix2d(final Structure structure, final DoubleArray elements) {
-        if (structure.dimension().size() < elements.size()) {
+        if (structure.dim().size() < elements.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d < %d."
-                        .formatted(structure.dimension().size(), elements.size())
+                        .formatted(structure.dim().size(), elements.size())
             );
         }
 
@@ -220,8 +220,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         final int p = B.cols();
 
         if (C == null) {
-            final var struct = new Structure(new Dimension(m, p));
-            final var elems = elements.newArrayOfSize(struct.dimension().size());
+            final var struct = new Structure(new Dim(m, p));
+            final var elems = elements.newArrayOfSize(struct.dim().size());
             C = new DoubleMatrix2d(structure, elems);
         }
 
