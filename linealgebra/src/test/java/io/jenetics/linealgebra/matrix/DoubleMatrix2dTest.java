@@ -17,9 +17,13 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra;
+package io.jenetics.linealgebra.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
+import io.jenetics.linealgebra.ColtMatrices;
+import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrix2d;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 

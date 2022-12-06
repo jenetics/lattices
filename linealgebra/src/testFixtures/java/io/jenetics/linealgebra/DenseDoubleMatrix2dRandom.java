@@ -19,6 +19,9 @@
  */
 package io.jenetics.linealgebra;
 
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrix2d;
+
 import java.util.random.RandomGenerator;
 
 import static java.util.Objects.requireNonNull;

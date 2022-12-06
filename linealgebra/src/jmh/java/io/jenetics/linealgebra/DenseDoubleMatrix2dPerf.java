@@ -20,6 +20,8 @@
 package io.jenetics.linealgebra;
 
 import cern.colt.matrix.DoubleMatrix2D;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrix2d;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;

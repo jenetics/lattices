@@ -17,10 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.matrix;
 
 /**
+ * Base interface of all matrix implementations. An matrix is a container of
+ * elements, which can be accessed by a <em>multidimensional index</em> and has
+ * a fixed number of elements (<em>size</em>).
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-package io.jenetics.linealgebra;
+public interface Matrix {
+
+    /**
+     * Return the number of cells of {@code this} matrix.
+     *
+     * @return the number of cells of {@code this} matrix
+     */
+    int size();
+
+}
