@@ -200,4 +200,8 @@ public interface Matrix2D<M extends Matrix2D<M>> extends Matrix {
         return dimension().cols();
     }
 
+    default String toStringShort() {
+        return rows() + " x " + cols() + " matrix";
+    }
+
 }

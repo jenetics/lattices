@@ -19,10 +19,10 @@
  */
 package io.jenetics.linealgebra;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Interface for 2-d matrices holding {@code double} elements.
@@ -141,6 +141,66 @@ public interface DoubleMatrix2D extends Matrix2D<DoubleMatrix2D> {
         }
 
         return a;
+    }
+
+    default DoubleMatrix2D zMult(
+        final DoubleMatrix2D B,
+        DoubleMatrix2D C,
+        final double alpha,
+        final double beta,
+        final boolean transposeA,
+        final boolean transposeB
+    ) {
+        requireNonNull(B);
+
+        if (transposeA) {
+            return view(structure().transpose())
+                .zMult(B, C, alpha, beta, false, transposeB);
+        }
+        if (transposeB) {
+            return zMult(
+                B.view(B.structure().transpose()), C,
+                alpha, beta, transposeA, false
+            );
+        }
+
+        final int m = rows();
+        final int n = cols();
+        final int p = B.cols();
+
+        if (C == null) {
+            C = new DenseDoubleMatrix2D(m, p);
+        }
+
+        if (B.rows() != n) {
+            throw new IllegalArgumentException(
+                "Matrix2D inner dimensions must agree:" +
+                    toStringShort() + ", " + B.toStringShort()
+            );
+        }
+        if (C.rows() != m || C.cols() != p) {
+            throw new IllegalArgumentException(
+                "Incompatibel result matrix: " +
+                    toStringShort() + ", " + B.toStringShort() + ", " + C.toStringShort()
+            );
+        }
+
+        if (this == C || B == C) {
+            throw new IllegalArgumentException("Matrices must not be identical");
+        }
+
+
+        for (int j = p; --j >= 0; ) {
+            for (int i = m; --i >= 0; ) {
+                double s = 0;
+                for (int k = n; --k >= 0; ) {
+                    s += get(i, k) * B.get(k, j);
+                }
+                C.set(i, j, alpha * s + beta * C.get(i, j));
+            }
+        }
+
+        return C;
     }
 
     /**
