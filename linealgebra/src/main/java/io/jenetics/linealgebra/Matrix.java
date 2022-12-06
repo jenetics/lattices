@@ -20,6 +20,10 @@
 package io.jenetics.linealgebra;
 
 /**
+ * Base interface of all matrix implementations. An matrix is a container of
+ * elements, which can be accessed by a <em>multidimensional index</em> and has
+ * a fixed number of elements (<em>size</em>).
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
