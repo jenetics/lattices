@@ -23,7 +23,6 @@
 plugins {
     `java-library`
     idea
-    id("me.champeau.jmh")
 }
 
 description = "Colt - CERN Open Source Libraries for High Performance Scientific and Technical Computing"

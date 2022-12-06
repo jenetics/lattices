@@ -40,4 +40,10 @@ dependencies {
     testImplementation("colt:colt:1.2.0")
 
     testFixturesApi("colt:colt:1.2.0")
+
+    jmh(testFixtures(project(":linealgebra")))
+}
+
+jmh {
+    includes.add(".*DenseDoubleMatrix2dPerf.*")
 }
