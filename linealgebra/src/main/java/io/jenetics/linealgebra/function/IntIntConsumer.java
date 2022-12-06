@@ -17,13 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.function;
 
 /**
+ * Represents an operation that accepts an (int, int)-valued argument and
+ * returns no result.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
+ * @version !__version__!
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra.array;
-    exports io.jenetics.linealgebra.function;
-    exports io.jenetics.linealgebra.matrix;
+@FunctionalInterface
+public interface IntIntConsumer {
+
+    /**
+     * Performs this operation on the given arguments.
+     *
+     * @param i first value
+     * @param j second value
+     */
+    void accept(final int i, final int j);
 }

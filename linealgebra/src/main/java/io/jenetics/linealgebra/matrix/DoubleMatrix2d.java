@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import io.jenetics.linealgebra.array.DenseDoubleArray;
-import io.jenetics.linealgebra.array.DoubleArray;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import static java.util.Objects.requireNonNull;
+import io.jenetics.linealgebra.array.DenseDoubleArray;
+import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements.
@@ -160,26 +160,27 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @param f a function object taking as first argument the current cell's
      *          value of {@code this}, and as second argument the current cell's
      *          value of {@code y}
-     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
-     *         rows() != other.rows()}
+     * @throws IllegalArgumentException if {@code !dim().equals(y.dim())}
      */
     public void assign(
         final DoubleMatrix2d y,
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-
-        if (cols() != y.cols() || rows() != y.rows()) {
-            throw new IllegalArgumentException(
-                "Incompatible dimensions: " + toStringShort() + " and " +
-                    y.toStringShort()
-            );
-        }
+        checkDim(y.dim());
 
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
                 set(r, c, f.applyAsDouble(get(r, c), y.get(r, c)));
             }
+        }
+    }
+
+    private void checkDim(final Dim other) {
+        if (!dim().equals(other)) {
+            throw new IllegalArgumentException(
+                "Incompatible dimensions: %s != %s.".formatted(dim(), dim())
+            );
         }
     }
 
@@ -196,13 +197,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         if (other == this) {
             return;
         }
-
-        if (cols() != other.cols() || rows() != other.rows()) {
-            throw new IllegalArgumentException(
-                "Incompatible dimensions: " + toStringShort() + " and " +
-                    other.toStringShort()
-            );
-        }
+        checkDim(other.dim());
 
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
@@ -327,18 +322,18 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         if (B.rows() != n) {
             throw new IllegalArgumentException(
                 "2-d matrix inner dimensions must equal:" +
-                    toStringShort() + ", " + B.toStringShort()
+                    dim() + ", " + B.dim()
             );
         }
         if (C.rows() != m || C.cols() != p) {
             throw new IllegalArgumentException(
                 "Incompatible result matrix: " +
-                    toStringShort() + ", " + B.toStringShort() + ", " + C.toStringShort()
+                    dim() + ", " + B.dim() + ", " + C.dim()
             );
         }
 
         if (this == C || B == C) {
-            throw new IllegalArgumentException("Matrices must not be identical");
+            throw new IllegalArgumentException("Matrices must not be identical.");
         }
 
         for (int j = p; --j >= 0; ) {
@@ -384,6 +379,48 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         } else {
             return reduce(Double::sum, DoubleUnaryOperator.identity());
         }
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof DoubleMatrix2d m &&
+            equals(this, m, 0.0);
+    }
+
+    /* *************************************************************************
+     * Static matrix helper methods.
+     * ************************************************************************/
+
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param a the first matrix
+     * @param b the second matrix
+     * @param error the allowed relative error
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public static boolean equals(
+        final DoubleMatrix2d a,
+        final DoubleMatrix2d b,
+        final double error
+    ) {
+        return a.dim().equals(b.dim()) &&
+            a.dim().allMatch((r, c) -> equals(r, c, a, b, error));
+    }
+
+    private static boolean equals(
+        final int r,
+        final int c,
+        final DoubleMatrix2d a,
+        final DoubleMatrix2d b,
+        final double error
+    ) {
+        final double v1 = a.get(r, c);
+        final double v2 = b.get(r, c);
+
+        return Math.abs(v1 - v2) <= Math.abs(v1*error);
     }
 
 }

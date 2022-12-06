@@ -19,19 +19,32 @@
  */
 package io.jenetics.linealgebra.matrix;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import cern.colt.matrix.DoubleMatrix2D;
-import io.jenetics.linealgebra.ColtMatrices;
-import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
-import org.assertj.core.data.Percentage;
-import org.testng.annotations.Test;
 
 import java.util.random.RandomGeneratorFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.assertj.core.data.Percentage;
+import org.testng.annotations.Test;
+
+import io.jenetics.linealgebra.ColtMatrices;
+import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 
 public class DoubleMatrix2dTest {
+
+    @Test
+    public void equals() {
+        final var generator = RandomGeneratorFactory.getDefault().create();
+        final var random = new DenseDoubleMatrix2dRandom(generator);
+
+        final var dimension = new Matrix2d.Dim(100, 34);
+        final var a = random.next(dimension);
+        final var b = a.copy();
+
+        assertThat(b).isNotSameAs(a);
+        assertThat(b).isEqualTo(a);
+    }
 
     @Test
     public void assign() {
@@ -98,12 +111,9 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        for (int r = a.rows(); --r >= 0;) {
-            for (int c = a.cols(); --c >= 0;) {
-                assertThat(a.get(r, c))
-                    .isCloseTo(coltA.getQuick(r, c), epsilon);
-            }
-        }
+        a.dim().forEach((r, c) ->
+            assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
+        );
     }
 
 }

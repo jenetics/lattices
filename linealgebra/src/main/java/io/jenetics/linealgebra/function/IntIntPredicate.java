@@ -17,13 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.function;
 
 /**
+ * Represents a predicate (boolean-valued function) of an (int, int)-valued
+ * argument.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
+ * @version !__version__!
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra.array;
-    exports io.jenetics.linealgebra.function;
-    exports io.jenetics.linealgebra.matrix;
+@FunctionalInterface
+public interface IntIntPredicate {
+
+    /**
+     * Tests whether the two arguments are treated equals.
+     *
+     * @param i the first value
+     * @param j the second value
+     * @return {@code true} if the values are treated as equal, {@code false}
+     *         otherwise
+     */
+    boolean test(final int i, final int j);
 }
