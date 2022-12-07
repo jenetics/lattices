@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import io.jenetics.linealgebra.ColtMatrices;
 import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.structure.Loop2d;
 
 public class DoubleMatrix2dTest {
 
@@ -142,7 +143,7 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        a.extent().forEach((r, c) ->
+        new Loop2d.RowMajor(a.extent()).forEach((r, c) ->
             assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
         );
     }

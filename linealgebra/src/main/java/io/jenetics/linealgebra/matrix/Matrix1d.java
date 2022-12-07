@@ -177,7 +177,6 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
         return structure().order();
     }
 
-    @Override
     default int size() {
         return dim().size();
     }

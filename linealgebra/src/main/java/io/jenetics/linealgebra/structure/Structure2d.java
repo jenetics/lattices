@@ -19,17 +19,20 @@
  */
 package io.jenetics.linealgebra.structure;
 
-import io.jenetics.linealgebra.matrix.Matrix1d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
-
 import static java.util.Objects.requireNonNull;
 
+import io.jenetics.linealgebra.matrix.Matrix1d;
+
 /**
- * Defines the structure of a 2-d matrix, which is defined by the dimension
- * of the matrix and the index order of the underlying element array.
+ * Defines a 2-d structure, which is defined by the extent of the structure and
+ * the index order of the underlying 1-d structure.
  *
- * @param extent the dimension of the matrix
+ * @param extent the extent of the structure
  * @param order the element order
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
  */
 public record Structure2d(Extent2d extent, Order2d order) {
 
@@ -39,13 +42,12 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order.
+     * Create a new structure with the given extent and the default element order.
      *
-     * @param dim the matrix dimension
+     * @param extent the extent of the structure
      */
-    public Structure2d(final Extent2d dim) {
-        this(dim, new MajorOrder2d(dim));
+    public Structure2d(final Extent2d extent) {
+        this(extent, new StrideOrder2d(extent));
     }
 
     /**
@@ -54,7 +56,10 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @return the transposed matrix structure
      */
     public Structure2d transpose() {
-        return new Structure2d(extent.transpose(), order.transpose());
+        return new Structure2d(
+            new Extent2d(extent.cols(), extent.rows()),
+            order.transpose()
+        );
     }
 
     /**
@@ -65,7 +70,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @return a new {@link Matrix1d.Structure} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link MajorOrder2d}
+     *         is not an instance of {@link StrideOrder2d}
      */
     public Matrix1d.Structure col(final int index) {
         if (index < 0 || index >= extent().cols()) {
@@ -74,7 +79,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof MajorOrder2d mo) {
+        if (order instanceof StrideOrder2d mo) {
             return new Matrix1d.Structure(
                 new Matrix1d.Dim(extent().rows()),
                 new Matrix1d.MajorOrder(
@@ -97,7 +102,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @return a new {@link Matrix1d.Structure} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link MajorOrder2d}
+     *         is not an instance of {@link StrideOrder2d}
      */
     public Matrix1d.Structure row(final int index) {
         if (index < 0 || index >= extent().rows()) {
@@ -106,7 +111,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof MajorOrder2d mo) {
+        if (order instanceof StrideOrder2d mo) {
             return new Matrix1d.Structure(
                 new Matrix1d.Dim(extent().cols()),
                 new Matrix1d.MajorOrder(

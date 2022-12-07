@@ -20,15 +20,19 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * Represents the <em>row-major</em> order.
+ * Implements a structure order by defining start indexes and strides.
  *
- * @param rowZero the index of the first row element
- * @param colZero the index of the first column element
+ * @param rowStart the index of the first row element
+ * @param colStart the index of the first column element
  * @param rowStride the number of elements between two rows
  * @param colStride the number of elements between two columns
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
  */
-public record MajorOrder2d(
-    int rowZero, int colZero,
+public record StrideOrder2d(
+    int rowStart, int colStart,
     int rowStride, int colStride
 )
     implements Order2d
@@ -39,20 +43,20 @@ public record MajorOrder2d(
      * dimension. This is the default implementation for the element order
      * of the matrix.
      *
-     * @param dim the matrix dimension
+     * @param extent the structure extent
      */
-    public MajorOrder2d(final Extent2d dim) {
-        this(0, 0, dim.cols(), 1);
+    public StrideOrder2d(final Extent2d extent) {
+        this(0, 0, extent.cols(), 1);
     }
 
     @Override
     public int index(final int row, final int col) {
-        return rowZero + row*rowStride + colZero + col*colStride;
+        return rowStart + row*rowStride + colStart + col*colStride;
     }
 
     @Override
-    public MajorOrder2d transpose() {
-        return new MajorOrder2d(colZero, rowZero, colStride, rowStride);
+    public StrideOrder2d transpose() {
+        return new StrideOrder2d(colStart, rowStart, colStride, rowStride);
     }
 
 }

@@ -20,7 +20,6 @@
 package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.Self;
-import io.jenetics.linealgebra.structure.Structural;
 
 /**
  * Base interface of all matrix implementations. An matrix is a container of
@@ -31,5 +30,5 @@ import io.jenetics.linealgebra.structure.Structural;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix<M extends Matrix<M>> extends Self<M>, Structural {
+public interface Matrix<M extends Matrix<M>> extends Self<M> {
 }

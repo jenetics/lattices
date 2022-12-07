@@ -27,6 +27,8 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.structure.Loop2d;
+import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
@@ -103,7 +105,9 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     @Override
     public DoubleMatrix2d copy(final Structure2d struct) {
         final var elems = elements.newArrayOfSize(size());
-        extent().forEach((r, c) -> elems.set(struct.order().index(r, c), get(r, c)));
+        new Loop2d.RowMajor(extent()).forEach((r, c) ->
+            elems.set(struct.order().index(r, c), get(r, c))
+        );
 
         return new DoubleMatrix2d(struct, elems);
     }
@@ -129,7 +133,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link io.jenetics.linealgebra.structure.MajorOrder2d}
+     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d col(final int index) {
         return new DoubleMatrix1d(structure.col(index), elements);
@@ -144,7 +148,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link io.jenetics.linealgebra.structure.MajorOrder2d}
+     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d row(final int index) {
         return new DoubleMatrix1d(structure.row(index), elements);
@@ -519,7 +523,9 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         final double error
     ) {
         return a.extent().equals(b.extent()) &&
-            a.extent().allMatch((r, c) -> equals(r, c, a, b, error));
+            new Loop2d.RowMajor(a.extent()).allMatch((r, c) ->
+                equals(r, c, a, b, error)
+            );
     }
 
     private static boolean equals(

@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * Represents the order for accessing the linearly stored matrix data.
+ * Represents the order for accessing the linearly stored element data.
  */
 @FunctionalInterface
 public interface Order2d {

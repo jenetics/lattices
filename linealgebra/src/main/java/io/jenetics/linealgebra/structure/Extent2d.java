@@ -19,16 +19,15 @@
  */
 package io.jenetics.linealgebra.structure;
 
-import io.jenetics.linealgebra.function.IntIntConsumer;
-import io.jenetics.linealgebra.function.IntIntPredicate;
-
-import static java.util.Objects.requireNonNull;
-
 /**
- * The dimension object for two dimension.
+ * The extent of 2-d structures.
  *
  * @param rows the number of rows
  * @param cols the number of columns
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
  */
 public record Extent2d(int rows, int cols) {
 
@@ -53,106 +52,6 @@ public record Extent2d(int rows, int cols) {
      */
     public int size() {
         return rows*cols;
-    }
-
-    /**
-     * Swaps the dimensions of rows and columns.
-     *
-     * @return a new transposed dimension object
-     */
-    public Extent2d transpose() {
-        return new Extent2d(cols, rows);
-    }
-
-    /**
-     * Performs an action for each position of {@code this} dimension.
-     *
-     * @param action an action to perform on the positions
-     */
-    public void forEach(final IntIntConsumer action) {
-        requireNonNull(action);
-
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                action.accept(i, j);
-            }
-        }
-    }
-
-    /**
-     * Returns whether any position of this dimension match the provided
-     * predicate.  May not evaluate the predicate on all positions if not
-     * necessary for determining the result. If the dimension is empty then
-     * {@code false} is returned and the predicate is not evaluated.
-     *
-     * @param predicate predicate to apply to elements of this dimension
-     * @return {@code true} if any position of the dimension match the
-     *         provided predicate, otherwise {@code false}
-     */
-    public boolean anyMatch(final IntIntPredicate predicate) {
-        requireNonNull(predicate);
-
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (predicate.test(i, j)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns whether all positions of {@code this} dimension match the
-     * provided {@code predicate}. May not evaluate the predicate on all
-     * positions if not necessary for determining the result. If the
-     * dimension is empty then {@code true} is returned and the
-     * {@code predicate} is not evaluated.
-     *
-     * @param predicate a non-interfering, stateless predicate to apply to
-     *        positions of {@code this} dimension
-     * @return {@code true} if either all positions of the dimension match
-     *         the provided {@code predicate} or the dimension is empty,
-     *         otherwise {@code false}
-     */
-    public boolean allMatch(final IntIntPredicate predicate) {
-        requireNonNull(predicate);
-
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (!predicate.test(i, j)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns whether no position of this dimension match the provided
-     * predicate. May not evaluate the predicate on all positions if not
-     * necessary for determining the result.  If the dimension is empty then
-     * {@code true} is returned and the predicate is not evaluated.
-     *
-     * @param predicate predicate to apply to positions of this dimension
-     * @return {@code true} if either no position of the dimension match the
-     *         provided predicate or the dimension is empty, otherwise
-     *         {@code false}
-     */
-    public boolean nonMatch(final IntIntPredicate predicate) {
-        requireNonNull(predicate);
-
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (predicate.test(i, j)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override

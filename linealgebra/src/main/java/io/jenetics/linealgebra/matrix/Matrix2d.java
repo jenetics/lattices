@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.structure.Extent2d;
-import io.jenetics.linealgebra.structure.MajorOrder2d;
+import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structural2d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
@@ -58,7 +58,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M>, Structural2d
          * @return a new matrix with the given {@code dimension}
          */
         default M newMatrix(final Extent2d dim) {
-            return newMatrix(new Structure2d(dim, new MajorOrder2d(dim)));
+            return newMatrix(new Structure2d(dim, new StrideOrder2d(dim)));
         }
 
         /**
