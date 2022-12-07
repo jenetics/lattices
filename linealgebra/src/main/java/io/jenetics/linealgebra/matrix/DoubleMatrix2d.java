@@ -351,7 +351,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
         if (cols() != y.size() || rows() > z.size()) {
             throw new IllegalArgumentException(
-                "Incompatible args: " + extent() + ", " + y.dim() + ", " + z.dim()
+                "Incompatible args: " + extent() + ", " + y.extent() + ", " + z.extent()
             );
         }
 

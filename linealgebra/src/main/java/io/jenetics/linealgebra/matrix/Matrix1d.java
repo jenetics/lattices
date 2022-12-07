@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.structure.Extent1d;
-import io.jenetics.linealgebra.structure.Order1d;
+import io.jenetics.linealgebra.structure.Structural1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
@@ -31,7 +31,9 @@ import io.jenetics.linealgebra.structure.Structure1d;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
+public interface Matrix1d<M extends Matrix1d<M>>
+    extends Matrix<M>, Structural1d
+{
 
     /**
      * Factory interface for creating 2-d matrices.
@@ -69,39 +71,6 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
         default M newMatrix(final int size) {
             return newMatrix(new Extent1d(size));
         }
-    }
-
-    /* *************************************************************************
-     * Structural methods.
-     * ************************************************************************/
-
-    /**
-     * Return the structure of {@code this} 1-d matrix.
-     *
-     * @return the structure of {@code this} 1-d matrix
-     */
-    Structure1d structure();
-
-    /**
-     * Return the dimension of {@code this} 1-d matrix.
-     *
-     * @return the dimension of {@code this} 1-d matrix
-     */
-    default Extent1d dim() {
-        return structure().extent();
-    }
-
-    /**
-     * Return the defined order of {@code this} 1-d matrix.
-     *
-     * @return the defined order of {@code this} 1-d matrix
-     */
-    default Order1d order() {
-        return structure().order();
-    }
-
-    default int size() {
-        return dim().size();
     }
 
     void assign(final M source);

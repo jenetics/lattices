@@ -20,27 +20,27 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * 2-d structural mixin interface.
+ * 1-d structural mixin interface.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural2d {
+public interface Structural1d {
 
     /**
      * Return the structure for 2-d structures.
      *
      * @return the structure for 2-d structures
      */
-    Structure2d structure();
+    Structure1d structure();
 
     /**
      * Return the dimension of {@code this} 2-d structures.
      *
      * @return the dimension of {@code this} 2-d structures
      */
-    default Extent2d extent() {
+    default Extent1d extent() {
         return structure().extent();
     }
 
@@ -49,7 +49,7 @@ public interface Structural2d {
      *
      * @return the defined order of {@code this} 2-d structures
      */
-    default Order2d order() {
+    default Order1d order() {
         return structure().order();
     }
 
@@ -60,24 +60,6 @@ public interface Structural2d {
      */
     default int size() {
         return extent().size();
-    }
-
-    /**
-     * Return the number of rows of {@code this} structures.
-     *
-     * @return the number of rows of {@code this} structures
-     */
-    default int rows() {
-        return extent().rows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} structures.
-     *
-     * @return the number of columns of {@code this} structures
-     */
-    default int cols() {
-        return extent().cols();
     }
 
 }

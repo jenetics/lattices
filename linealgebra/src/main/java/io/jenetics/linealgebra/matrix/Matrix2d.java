@@ -32,7 +32,9 @@ import io.jenetics.linealgebra.structure.Structure2d;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M>, Structural2d {
+public interface Matrix2d<M extends Matrix2d<M>>
+    extends Matrix<M>, Structural2d
+{
 
     /**
      * Factory interface for creating 2-d matrices.
