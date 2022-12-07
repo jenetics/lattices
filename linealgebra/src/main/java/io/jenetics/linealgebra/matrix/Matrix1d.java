@@ -51,7 +51,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
          * @param dim the matrix dimension
          */
         public Structure(final Dim dim) {
-            this(dim, RowMajor.DEFAULT);
+            this(dim, MajorOrder.DEFAULT);
         }
     }
 
@@ -98,11 +98,11 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      * @param zero the index of the first element
      * @param stride the number of indexes between any two elements
      */
-    record RowMajor(int zero, int stride)
+    record MajorOrder(int zero, int stride)
         implements Order
     {
 
-        public static final RowMajor DEFAULT = new RowMajor(0, 1);
+        public static final MajorOrder DEFAULT = new MajorOrder(0, 1);
 
         @Override
         public int index(final int rank) {
@@ -148,48 +148,16 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
         }
     }
 
+    /* *************************************************************************
+     * Structural methods.
+     * ************************************************************************/
+
     /**
      * Return the structure of {@code this} 1-d matrix.
      *
      * @return the structure of {@code this} 1-d matrix
      */
     Structure structure();
-
-    /**
-     * Return a new view of the underlying element array with the given
-     * {@code structure}. The data are unchanged and not copied.
-     *
-     * @param structure the structure definition of the data array
-     * @return a new view of the underlying element array
-     */
-    M view(final Structure structure);
-
-    /**
-     * Return a new minimal copy of the underlying element array with the given
-     * {@code structure}.
-     *
-     * @param structure the structure definition of the data array
-     * @return a new minimal copy of the underlying element array
-     */
-    M copy(final Structure structure);
-
-    /**
-     * Return a new minimal copy of the underlying element array.
-     *
-     * @return a new minimal copy of the underlying element array
-     */
-    default M copy() {
-        return copy(structure());
-    }
-
-    /**
-     * Return a matrix factory which is able to creates matrices from the same
-     * kind.
-     *
-     * @return a matrix factory which is able to creates matrices from the same
-     *        kind
-     */
-    Factory<M> factory();
 
     /**
      * Return the dimension of {@code this} 1-d matrix.
@@ -213,5 +181,84 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
     default int size() {
         return dim().size();
     }
+
+    void assign(final M source);
+
+    /* *************************************************************************
+     * Creation methods.
+     * ************************************************************************/
+
+    /**
+     * Return a matrix factory which is able to creates matrices from the same
+     * kind.
+     *
+     * @return a matrix factory which is able to creates matrices from the same
+     *        kind
+     */
+    Factory<M> factory();
+
+    /**
+     * Return a new matrix which is like this one, but with the given new
+     * {@code structure}.
+     *
+     * @param structure the structure of the new matrix
+     * @return a new matrix which is like this one
+     */
+    default M like(final Structure structure) {
+        return factory().newMatrix(structure);
+    }
+
+    default M like(final Dim dim) {
+        return factory().newMatrix(dim);
+    }
+
+    default M like(final int size) {
+        return factory().newMatrix(size);
+    }
+
+    default M like() {
+        return like(structure());
+    }
+
+    /* *************************************************************************
+     * View methods.
+     * ************************************************************************/
+
+    /**
+     * Return a new view of the underlying element array with the given
+     * {@code structure}. The data are unchanged and not copied.
+     *
+     * @param structure the structure definition of the data array
+     * @return a new view of the underlying element array
+     */
+    M view(final Structure structure);
+
+    /* *************************************************************************
+     * Copy methods.
+     * ************************************************************************/
+
+    /**
+     * Return a new minimal copy of the underlying element array with the given
+     * {@code structure}.
+     *
+     * @param structure the structure definition of the data array
+     * @return a new minimal copy of the underlying element array
+     */
+    default M copy(final Structure structure) {
+        final var copy = like(structure);
+        copy.assign(self());
+        return copy;
+    }
+
+    /**
+     * Return a new minimal copy of the underlying element array.
+     *
+     * @return a new minimal copy of the underlying element array
+     */
+    default M copy() {
+        return copy(structure());
+    }
+
+
 
 }

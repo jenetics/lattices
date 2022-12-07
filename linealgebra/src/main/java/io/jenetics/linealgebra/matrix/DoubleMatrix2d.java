@@ -127,7 +127,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link RowMajor}
+     *         is not an instance of {@link MajorOrder}
      */
     public DoubleMatrix1d col(final int index) {
         return new DoubleMatrix1d(structure.col(index), elements);
@@ -142,7 +142,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link RowMajor}
+     *         is not an instance of {@link MajorOrder}
      */
     public DoubleMatrix1d row(final int index) {
         return new DoubleMatrix1d(structure.row(index), elements);

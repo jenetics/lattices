@@ -19,5 +19,127 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+
 class LU {
+
+    protected DoubleMatrix2d LU;
+
+    protected int pivsign;
+
+    protected int[] piv;
+
+    protected boolean isNonSingular;
+
+    //protected Algebra algebra;
+
+    transient protected double[] workDouble;
+    transient protected int[] work1;
+    transient protected int[] work2;
+
+    public void decompose(DoubleMatrix2d A) {
+        final int CUT_OFF = 10;
+
+        // Setup
+        LU = A;
+        final int m = A.rows();
+        final int n = A.cols();
+
+        // Setup pivot vector
+        if (piv == null || piv.length != m) {
+            piv = new int[m];
+        }
+        for (int i = m; --i >= 0; ) {
+            piv[i] = i;
+        }
+        pivsign = 1;
+
+        if (m*n == 0) {
+            setLU(LU);
+            return; // nothing to do
+        }
+
+        // Precompute and cache some views to avoid regenerating them time and again
+        final var LUrows = new DoubleMatrix1d[m];
+        for (int i = 0; i < m; i++) {
+            LUrows[i] = LU.row(i);
+        }
+
+//        cern.colt.list.IntArrayList nonZeroIndexes = new cern.colt.list.IntArrayList(); // sparsity
+//        DoubleMatrix1d LUcolj = LU.viewColumn(0).like();  // blocked column j
+//        cern.jet.math.Mult multFunction = cern.jet.math.Mult.mult(0);
+//
+//        // Outer loop.
+//        for (int j = 0; j < n; j++) {
+//            // blocking (make copy of j-th column to localize references)
+//            LUcolj.assign(LU.viewColumn(j));
+//
+//            // sparsity detection
+//            int maxCardinality = m / CUT_OFF; // == heuristic depending on speedup
+//            LUcolj.getNonZeros(nonZeroIndexes, null, maxCardinality);
+//            int cardinality = nonZeroIndexes.size();
+//            boolean sparse = (cardinality < maxCardinality);
+//
+//            // Apply previous transformations.
+//            for (int i = 0; i < m; i++) {
+//                int kmax = Math.min(i, j);
+//                double s;
+//                if (sparse) {
+//                    s = LUrows[i].zDotProduct(LUcolj, 0, kmax, nonZeroIndexes);
+//                } else {
+//                    s = LUrows[i].zDotProduct(LUcolj, 0, kmax);
+//                }
+//                double before = LUcolj.getQuick(i);
+//                double after = before - s;
+//                LUcolj.setQuick(i, after); // LUcolj is a copy
+//                LU.setQuick(i, j, after);   // this is the original
+//                if (sparse) {
+//                    if (before == 0 && after != 0) { // nasty bug fixed!
+//                        int pos = nonZeroIndexes.binarySearch(i);
+//                        pos = -pos - 1;
+//                        nonZeroIndexes.beforeInsert(pos, i);
+//                    }
+//                    if (before != 0 && after == 0) {
+//                        nonZeroIndexes.remove(nonZeroIndexes.binarySearch(i));
+//                    }
+//                }
+//            }
+//
+//            // Find pivot and exchange if necessary.
+//            int p = j;
+//            if (p < m) {
+//                double max = Math.abs(LUcolj.getQuick(p));
+//                for (int i = j + 1; i < m; i++) {
+//                    double v = Math.abs(LUcolj.getQuick(i));
+//                    if (v > max) {
+//                        p = i;
+//                        max = v;
+//                    }
+//                }
+//            }
+//            if (p != j) {
+//                LUrows[p].swap(LUrows[j]);
+//                int k = piv[p];
+//                piv[p] = piv[j];
+//                piv[j] = k;
+//                pivsign = -pivsign;
+//            }
+//
+//            // Compute multipliers.
+//            double jj;
+//            if (j < m && (jj = LU.getQuick(j, j)) != 0.0) {
+//                multFunction.multiplicator = 1 / jj;
+//                LU.viewColumn(j).viewPart(j + 1, m - (j + 1)).assign(multFunction);
+//            }
+//
+//        }
+//        setLU(LU);
+    }
+
+    public void setLU(DoubleMatrix2d LU) {
+        this.LU = LU;
+        //this.isNonSingular = isNonsingular(LU);
+    }
+
 }

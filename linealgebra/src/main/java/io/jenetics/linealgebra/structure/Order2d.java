@@ -17,16 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.linealgebra.structure;
 
 /**
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
+ * Represents the order for accessing the linearly stored matrix data.
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
-    exports io.jenetics.linealgebra.array;
-    exports io.jenetics.linealgebra.blas;
-    exports io.jenetics.linealgebra.function;
-    exports io.jenetics.linealgebra.matrix;
-    exports io.jenetics.linealgebra.structure;
+@FunctionalInterface
+public interface Order2d {
+
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-dimensional array.
+     *
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code row} and {@code col}
+     */
+    int index(final int row, final int col);
+
+    /**
+     * Return a new order function which swaps row index with column index.
+     *
+     * @return a new transposed order function
+     */
+    default Order2d transpose() {
+        return (row, col) -> index(col, row);
+    }
+
 }

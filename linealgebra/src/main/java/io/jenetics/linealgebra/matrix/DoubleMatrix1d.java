@@ -111,6 +111,10 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
      * Additional matrix methods.
      * ************************************************************************/
 
+    public void assign(final DoubleMatrix1d source) {
+
+    }
+
     /**
      * Sets all cells to the state specified by {@code values}.
      *

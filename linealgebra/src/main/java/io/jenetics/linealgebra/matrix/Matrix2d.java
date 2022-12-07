@@ -19,10 +19,10 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import static java.util.Objects.requireNonNull;
-
-import io.jenetics.linealgebra.function.IntIntConsumer;
-import io.jenetics.linealgebra.function.IntIntPredicate;
+import io.jenetics.linealgebra.structure.Dim2d;
+import io.jenetics.linealgebra.structure.MajorOrder2d;
+import io.jenetics.linealgebra.structure.Structural2d;
+import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
  * This interface defines the structure for 2-d matrices holding objects or
@@ -32,308 +32,7 @@ import io.jenetics.linealgebra.function.IntIntPredicate;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
-
-    /**
-     * Defines the structure of a 2-d matrix, which is defined by the dimension
-     * of the matrix and the index order of the underlying element array.
-     *
-     * @param dim the dimension of the matrix
-     * @param order the element order
-     */
-    record Structure(Dim dim, Order order) {
-        public Structure {
-            requireNonNull(dim);
-            requireNonNull(order);
-        }
-
-        /**
-         * Create a new matrix structure with the given dimension and the default
-         * element order.
-         *
-         * @param dim the matrix dimension
-         */
-        public Structure(final Dim dim) {
-            this(dim, new RowMajor(dim));
-        }
-
-        /**
-         * Transposes the matrix structure without copying any matrix elements.
-         *
-         * @return the transposed matrix structure
-         */
-        public Structure transpose() {
-            return new Structure(dim.transpose(), order.transpose());
-        }
-
-        /**
-         * Create a new {@link Matrix1d.Structure} object which can be used to
-         * create a column view {@link Matrix1d}.
-         *
-         * @param index the column index
-         * @return a new {@link Matrix1d.Structure} object
-         * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
-         * @throws UnsupportedOperationException if the {@link #order()} function
-         *         is not an instance of {@link RowMajor}
-         */
-        public Matrix1d.Structure col(final int index) {
-            if (index < 0 || index >= dim().cols()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + dim() + " at column=" + index
-                );
-            }
-
-            if (order instanceof RowMajor rm) {
-                return new Matrix1d.Structure(
-                    new Matrix1d.Dim(dim().rows()),
-                    new Matrix1d.RowMajor(
-                        rm.index(0, index),
-                        rm.rowStride()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Column view structure not supported by " + order
-                );
-            }
-        }
-
-        /**
-         * Create a new {@link Matrix1d.Structure} object which can be used to
-         * create a row view {@link Matrix1d}.
-         *
-         * @param index the row index
-         * @return a new {@link Matrix1d.Structure} object
-         * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-         * @throws UnsupportedOperationException if the {@link #order()} function
-         *         is not an instance of {@link RowMajor}
-         */
-        public Matrix1d.Structure row(final int index) {
-            if (index < 0 || index >= dim().rows()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + dim() + " at row=" + index
-                );
-            }
-
-            if (order instanceof RowMajor rm) {
-                return new Matrix1d.Structure(
-                    new Matrix1d.Dim(dim().cols()),
-                    new Matrix1d.RowMajor(
-                        rm.index(index, 0),
-                        rm.colStride()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Row view structure not supported by " + order
-                );
-            }
-        }
-
-    }
-
-    /**
-     * The dimension of the {@link Matrix2d} object.
-     *
-     * @param rows the number of rows
-     * @param cols the number of columns
-     */
-    record Dim(int rows, int cols) {
-        public Dim {
-            if (rows < 0) {
-                throw new IllegalArgumentException(
-                    "Number of rows must greater or equal than zero: " + rows
-                );
-            }
-            if (cols < 0) {
-                throw new IllegalArgumentException(
-                    "Number of columns must greater or equal than zero: " + cols
-                );
-            }
-        }
-
-        /**
-         * The number of matrix elements (cells) a matrix with {@code this}
-         * dimensions consists of.
-         *
-         * @return the number of cells for {@code this} matrix dimension
-         */
-        public int size() {
-            return rows*cols;
-        }
-
-        /**
-         * Swaps the dimensions of rows and columns.
-         *
-         * @return a new transposed dimension object
-         */
-        public Dim transpose() {
-            return new Dim(cols, rows);
-        }
-
-        /**
-         * Performs an action for each position of {@code this} dimension.
-         *
-         * @param action an action to perform on the positions
-         */
-        public void forEach(final IntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int i = 0; i < rows; ++i) {
-                for (int j = 0; j < cols; ++j) {
-                    action.accept(i, j);
-                }
-            }
-        }
-
-        /**
-         * Returns whether any position of this dimension match the provided
-         * predicate.  May not evaluate the predicate on all positions if not
-         * necessary for determining the result. If the dimension is empty then
-         * {@code false} is returned and the predicate is not evaluated.
-         *
-         * @param predicate predicate to apply to elements of this dimension
-         * @return {@code true} if any position of the dimension match the
-         *         provided predicate, otherwise {@code false}
-         */
-        public boolean anyMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = 0; i < rows; ++i) {
-                for (int j = 0; j < cols; ++j) {
-                    if (predicate.test(i, j)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /**
-         * Returns whether all positions of {@code this} dimension match the
-         * provided {@code predicate}. May not evaluate the predicate on all
-         * positions if not necessary for determining the result. If the
-         * dimension is empty then {@code true} is returned and the
-         * {@code predicate} is not evaluated.
-         *
-         * @param predicate a non-interfering, stateless predicate to apply to
-         *        positions of {@code this} dimension
-         * @return {@code true} if either all positions of the dimension match
-         *         the provided {@code predicate} or the dimension is empty,
-         *         otherwise {@code false}
-         */
-        public boolean allMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = 0; i < rows; ++i) {
-                for (int j = 0; j < cols; ++j) {
-                    if (!predicate.test(i, j)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /**
-         * Returns whether no position of this dimension match the provided
-         * predicate. May not evaluate the predicate on all positions if not
-         * necessary for determining the result.  If the dimension is empty then
-         * {@code true} is returned and the predicate is not evaluated.
-         *
-         * @param predicate predicate to apply to positions of this dimension
-         * @return {@code true} if either no position of the dimension match the
-         *         provided predicate or the dimension is empty, otherwise
-         *         {@code false}
-         */
-        public boolean nonMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = 0; i < rows; ++i) {
-                for (int j = 0; j < cols; ++j) {
-                    if (predicate.test(i, j)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "[%s x %s]".formatted(rows(), cols());
-        }
-
-    }
-
-    /**
-     * Represents the order for accessing the linearly stored matrix data.
-     */
-    @FunctionalInterface
-    interface Order {
-
-        /**
-         * Return the position of the given coordinate within the (virtual or
-         * non-virtual) internal 1-dimensional array.
-         *
-         * @param row the row index
-         * @param col the column index
-         * @return the (linearized) index of the given {@code row} and {@code col}
-         */
-        int index(final int row, final int col);
-
-        /**
-         * Return a new order function which swaps row index with column index.
-         *
-         * @return a new transposed order function
-         */
-        default Order transpose() {
-            return (row, col) -> index(col, row);
-        }
-    }
-
-    /**
-     * Represents the <em>row-major</em> order.
-     *
-     * @param rowZero the index of the first row element
-     * @param colZero the index of the first column element
-     * @param rowStride the number of elements between two rows
-     * @param colStride the number of elements between two columns
-     */
-    record RowMajor(
-        int rowZero,
-        int colZero,
-        int rowStride,
-        int colStride
-    )
-        implements Order
-    {
-
-        /**
-         * Create a new row-major {@link Order} object for the given matrix
-         * dimension. This is the default implementation for the element order
-         * of the matrix.
-         *
-         * @param dim the matrix dimension
-         */
-        public RowMajor(final Dim dim) {
-            this(0, 0, dim.cols(), 1);
-        }
-
-        @Override
-        public int index(final int row, final int col) {
-            return rowZero + row*rowStride + colZero + col*colStride;
-        }
-
-        @Override
-        public RowMajor transpose() {
-            return new RowMajor(colZero, rowZero, colStride, rowStride);
-        }
-
-    }
+public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M>, Structural2d {
 
     /**
      * Factory interface for creating 2-d matrices.
@@ -349,7 +48,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
          * @param structure the structure of the new matrix
          * @return a new matrix with the given {@code structure}
          */
-        M newMatrix(final Structure structure);
+        M newMatrix(final Structure2d structure);
 
         /**
          * Create a new matrix with the given {@code dimension} and default
@@ -358,8 +57,8 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
          * @param dim the dimension of the created array
          * @return a new matrix with the given {@code dimension}
          */
-        default M newMatrix(final Dim dim) {
-            return newMatrix(new Structure(dim, new RowMajor(dim)));
+        default M newMatrix(final Dim2d dim) {
+            return newMatrix(new Structure2d(dim, new MajorOrder2d(dim)));
         }
 
         /**
@@ -371,17 +70,10 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
          * @return a new matrix with the given size
          */
         default M newMatrix(final int rows, final int cols) {
-            return newMatrix(new Dim(rows, cols));
+            return newMatrix(new Dim2d(rows, cols));
         }
 
     }
-
-    /**
-     * Return the structure of {@code this} 2-d matrix.
-     *
-     * @return the structure of {@code this} 2-d matrix
-     */
-    Structure structure();
 
     /**
      * Return a new view of the underlying element array with the given
@@ -390,7 +82,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
      * @param structure the structure definition of the data array
      * @return a new view of the underlying element array
      */
-    M view(final Structure structure);
+    M view(final Structure2d structure);
 
     /**
      * Return a new minimal copy of the underlying element array with the given
@@ -399,7 +91,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
      * @param structure the structure definition of the data array
      * @return a new minimal copy of the underlying element array
      */
-    M copy(final Structure structure);
+    M copy(final Structure2d structure);
 
     /**
      * Return a new minimal copy of the underlying element array.
@@ -418,47 +110,5 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M> {
      *        kind
      */
     Factory<M> factory();
-
-
-    /**
-     * Return the dimension of {@code this} 2-d matrix.
-     *
-     * @return the dimension of {@code this} 2-d matrix
-     */
-    default Dim dim() {
-        return structure().dim();
-    }
-
-    /**
-     * Return the defined order of {@code this} 2-d matrix.
-     *
-     * @return the defined order of {@code this} 2-d matrix
-     */
-    default Order order() {
-        return structure().order();
-    }
-
-    @Override
-    default int size() {
-        return dim().size();
-    }
-
-    /**
-     * Return the number of rows of {@code this} matrix.
-     *
-     * @return the number of rows of {@code this} matrix
-     */
-    default int rows() {
-        return dim().rows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} matrix.
-     *
-     * @return the number of columns of {@code this} matrix
-     */
-    default int cols() {
-        return dim().cols();
-    }
 
 }

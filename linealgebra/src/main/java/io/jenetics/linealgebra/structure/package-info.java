@@ -21,12 +21,6 @@
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
+ * @version !__version__!
  */
-module io.jenetics.linealgebra {
-    exports io.jenetics.linealgebra;
-    exports io.jenetics.linealgebra.array;
-    exports io.jenetics.linealgebra.blas;
-    exports io.jenetics.linealgebra.function;
-    exports io.jenetics.linealgebra.matrix;
-    exports io.jenetics.linealgebra.structure;
-}
+package io.jenetics.linealgebra.structure;
