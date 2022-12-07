@@ -71,14 +71,4 @@ public interface Matrix2d<M extends Matrix2d<M>>
         return copy(structure());
     }
 
-    /**
-     * Replaces all cell values of the receiver with the values of another
-     * matrix. Both matrices must have the same number of rows and columns.
-     *
-     * @param other the source matrix to copy from (maybe identical to the
-     *        receiver).
-     * @throws IllegalArgumentException if {@code !extent().equals(other)}
-     */
-    void assign(final M other);
-
 }
