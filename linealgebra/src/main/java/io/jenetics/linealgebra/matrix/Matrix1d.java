@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.structure.Extent1d;
+import io.jenetics.linealgebra.structure.Factory1d;
 import io.jenetics.linealgebra.structure.Structural1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
@@ -35,44 +36,6 @@ public interface Matrix1d<M extends Matrix1d<M>>
     extends Matrix<M>, Structural1d
 {
 
-    /**
-     * Factory interface for creating 2-d matrices.
-     *
-     * @param <M> the matrix type created by the factory
-     */
-    @FunctionalInterface
-    interface Factory<M extends Matrix1d<M>> {
-
-        /**
-         * Create a new matrix with the given {@code structure}.
-         *
-         * @param structure the structure of the new matrix
-         * @return a new matrix with the given {@code structure}
-         */
-        M newMatrix(final Structure1d structure);
-
-        /**
-         * Create a new matrix with the given {@code dimension} and default
-         * <em>order</em>.
-         *
-         * @param dim the dimension of the created array
-         * @return a new matrix with the given {@code dimension}
-         */
-        default M newMatrix(final Extent1d dim) {
-            return newMatrix(new Structure1d(dim));
-        }
-
-        /**
-         * Create a new matrix with the given {@code size}.
-         *
-         * @param size the number of matrix elements
-         * @return a new matrix with the given size
-         */
-        default M newMatrix(final int size) {
-            return newMatrix(new Extent1d(size));
-        }
-    }
-
     void assign(final M source);
 
     /* *************************************************************************
@@ -86,7 +49,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
      * @return a matrix factory which is able to creates matrices from the same
      *        kind
      */
-    Factory<M> factory();
+    Factory1d<M> factory();
 
     /**
      * Return a new matrix which is like this one, but with the given new

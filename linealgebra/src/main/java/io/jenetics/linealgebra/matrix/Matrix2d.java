@@ -19,8 +19,7 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import io.jenetics.linealgebra.structure.Extent2d;
-import io.jenetics.linealgebra.structure.StrideOrder2d;
+import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Structural2d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
@@ -37,45 +36,13 @@ public interface Matrix2d<M extends Matrix2d<M>>
 {
 
     /**
-     * Factory interface for creating 2-d matrices.
+     * Return a matrix factory which is able to creates matrices from the same
+     * kind.
      *
-     * @param <M> the matrix type created by the factory
+     * @return a matrix factory which is able to creates matrices from the same
+     *        kind
      */
-    @FunctionalInterface
-    interface Factory<M extends Matrix2d<M>> {
-
-        /**
-         * Create a new matrix with the given {@code structure}.
-         *
-         * @param structure the structure of the new matrix
-         * @return a new matrix with the given {@code structure}
-         */
-        M newMatrix(final Structure2d structure);
-
-        /**
-         * Create a new matrix with the given {@code dimension} and default
-         * <em>order</em>.
-         *
-         * @param dim the dimension of the created array
-         * @return a new matrix with the given {@code dimension}
-         */
-        default M newMatrix(final Extent2d dim) {
-            return newMatrix(new Structure2d(dim, new StrideOrder2d(dim)));
-        }
-
-        /**
-         * Create a new matrix with the given number of {@code rows} and
-         * {@code cols}.
-         *
-         * @param rows the number of rows of the created matrix
-         * @param cols the number of columns of the created matrix
-         * @return a new matrix with the given size
-         */
-        default M newMatrix(final int rows, final int cols) {
-            return newMatrix(new Extent2d(rows, cols));
-        }
-
-    }
+    Factory2d<M> factory();
 
     /**
      * Return a new view of the underlying element array with the given
@@ -105,12 +72,13 @@ public interface Matrix2d<M extends Matrix2d<M>>
     }
 
     /**
-     * Return a matrix factory which is able to creates matrices from the same
-     * kind.
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
      *
-     * @return a matrix factory which is able to creates matrices from the same
-     *        kind
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code !extent().equals(other)}
      */
-    Factory<M> factory();
+    void assign(final M other);
 
 }

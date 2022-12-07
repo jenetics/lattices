@@ -28,6 +28,7 @@ import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structure1d;
@@ -45,7 +46,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     /**
      * Factory for creating dense 2-d double matrices.
      */
-    public static final Factory<DoubleMatrix2d> DENSE_FACTORY = struct ->
+    public static final Factory2d<DoubleMatrix2d> DENSE_FACTORY = struct ->
         new DoubleMatrix2d(
             struct,
             DenseDoubleArray.ofSize(struct.extent().size())
@@ -100,6 +101,14 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     @Override
+    public Factory2d<DoubleMatrix2d> factory() {
+        return struct -> new DoubleMatrix2d(
+            struct,
+            elements.newArrayOfSize(struct.extent().size())
+        );
+    }
+
+    @Override
     public DoubleMatrix2d view(final Structure2d struct) {
         return new DoubleMatrix2d(struct, elements);
     }
@@ -112,14 +121,6 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         );
 
         return new DoubleMatrix2d(struct, elems);
-    }
-
-    @Override
-    public Factory<DoubleMatrix2d> factory() {
-        return struct -> new DoubleMatrix2d(
-            struct,
-            elements.newArrayOfSize(struct.extent().size())
-        );
     }
 
     /* *************************************************************************
@@ -159,6 +160,29 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     /* *************************************************************************
      * Additional matrix methods.
      * ************************************************************************/
+
+    /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
+     *         rows() != other.rows()}
+     */
+    @Override
+    public void assign(final DoubleMatrix2d other) {
+        if (other == this) {
+            return;
+        }
+        checkExtent(other.extent());
+
+        for (int r = rows(); --r >= 0; ) {
+            for (int c = cols(); --c >= 0; ) {
+                set(r, c, other.get(r, c));
+            }
+        }
+    }
 
     /**
      * Sets all cells to the state specified by given {@code values}. The
@@ -212,7 +236,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        checkDim(y.extent());
+        checkExtent(y.extent());
 
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
@@ -221,33 +245,11 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         }
     }
 
-    private void checkDim(final Extent2d other) {
+    private void checkExtent(final Extent2d other) {
         if (!extent().equals(other)) {
             throw new IllegalArgumentException(
                 "Incompatible dimensions: %s != %s.".formatted(extent(), extent())
             );
-        }
-    }
-
-    /**
-     * Replaces all cell values of the receiver with the values of another
-     * matrix. Both matrices must have the same number of rows and columns.
-     *
-     * @param other the source matrix to copy from (maybe identical to the
-     *        receiver).
-     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
-     *         rows() != other.rows()}
-     */
-    public void assign(final DoubleMatrix2d other) {
-        if (other == this) {
-            return;
-        }
-        checkDim(other.extent());
-
-        for (int r = rows(); --r >= 0; ) {
-            for (int c = cols(); --c >= 0; ) {
-                set(r, c, other.get(r, c));
-            }
         }
     }
 

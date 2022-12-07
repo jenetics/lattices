@@ -26,6 +26,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
+import io.jenetics.linealgebra.structure.Factory1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
@@ -38,7 +39,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory<DoubleMatrix1d> DENSE_FACTORY = struct ->
+    public static final Factory1d<DoubleMatrix1d> DENSE_FACTORY = struct ->
         new DoubleMatrix1d(
             struct,
             DenseDoubleArray.ofSize(struct.extent().size())
@@ -101,7 +102,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     }
 
     @Override
-    public Factory<DoubleMatrix1d> factory() {
+    public Factory1d<DoubleMatrix1d> factory() {
         return struct -> new DoubleMatrix1d(
             struct,
             elements.newArrayOfSize(struct.extent().size())
