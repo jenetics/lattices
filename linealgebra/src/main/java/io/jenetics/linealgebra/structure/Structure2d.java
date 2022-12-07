@@ -63,16 +63,16 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     /**
-     * Create a new {@link Matrix1d.Structure} object which can be used to
+     * Create a new {@link Structure1d} object which can be used to
      * create a column view {@link Matrix1d}.
      *
      * @param index the column index
-     * @return a new {@link Matrix1d.Structure} object
+     * @return a new {@link Structure1d} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public Matrix1d.Structure col(final int index) {
+    public Structure1d col(final int index) {
         if (index < 0 || index >= extent().cols()) {
             throw new IndexOutOfBoundsException(
                 "Attempted to access " + extent() + " at column=" + index
@@ -80,9 +80,9 @@ public record Structure2d(Extent2d extent, Order2d order) {
         }
 
         if (order instanceof StrideOrder2d mo) {
-            return new Matrix1d.Structure(
-                new Matrix1d.Dim(extent().rows()),
-                new Matrix1d.MajorOrder(
+            return new Structure1d(
+                new Extent1d(extent().rows()),
+                new StrideOrder1d(
                     mo.index(0, index),
                     mo.rowStride()
                 )
@@ -95,16 +95,16 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     /**
-     * Create a new {@link Matrix1d.Structure} object which can be used to
+     * Create a new {@link Structure1d} object which can be used to
      * create a row view {@link Matrix1d}.
      *
      * @param index the row index
-     * @return a new {@link Matrix1d.Structure} object
+     * @return a new {@link Structure1d} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public Matrix1d.Structure row(final int index) {
+    public Structure1d row(final int index) {
         if (index < 0 || index >= extent().rows()) {
             throw new IndexOutOfBoundsException(
                 "Attempted to access " + extent() + " at row=" + index
@@ -112,9 +112,9 @@ public record Structure2d(Extent2d extent, Order2d order) {
         }
 
         if (order instanceof StrideOrder2d mo) {
-            return new Matrix1d.Structure(
-                new Matrix1d.Dim(extent().cols()),
-                new Matrix1d.MajorOrder(
+            return new Structure1d(
+                new Extent1d(extent().cols()),
+                new StrideOrder1d(
                     mo.index(index, 0),
                     mo.colStride()
                 )

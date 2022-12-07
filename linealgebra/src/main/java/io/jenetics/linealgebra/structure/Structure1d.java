@@ -19,33 +19,34 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Defines the structure of a 1-d matrix, which is defined by the dimension of
+ * the matrix and the index order of the underlying element array.
+ *
+ * @param extent the extent of the structure
+ * @param order the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-@FunctionalInterface
-public interface Order2d {
+public record Structure1d(Extent1d extent, Order1d order) {
+
+    public Structure1d {
+        requireNonNull(extent);
+        requireNonNull(order);
+    }
 
     /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
+     * Create a new matrix structure with the given dimension and the default
+     * element order.
      *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @param extent the extent of the structure
      */
-    int index(final int row, final int col);
-
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
+    public Structure1d(final Extent1d extent) {
+        this(extent, StrideOrder1d.DEFAULT);
     }
 
 }

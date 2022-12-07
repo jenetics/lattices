@@ -34,12 +34,12 @@ public record Extent2d(int rows, int cols) {
     public Extent2d {
         if (rows < 0) {
             throw new IllegalArgumentException(
-                "Number of rows must greater or equal than zero: " + rows
+                "Number of rows must greater or equal than start: " + rows
             );
         }
         if (cols < 0) {
             throw new IllegalArgumentException(
-                "Number of columns must greater or equal than zero: " + cols
+                "Number of columns must greater or equal than start: " + cols
             );
         }
     }

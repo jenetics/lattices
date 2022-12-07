@@ -19,7 +19,9 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import static java.util.Objects.requireNonNull;
+import io.jenetics.linealgebra.structure.Extent1d;
+import io.jenetics.linealgebra.structure.Order1d;
+import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
  * This interface defines the structure for 1-d matrices holding objects or
@@ -30,85 +32,6 @@ import static java.util.Objects.requireNonNull;
  * @version !__version__!
  */
 public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
-
-    /**
-     * Defines the structure of a 1-d matrix, which is defined by the dimension
-     * of the matrix and the index order of the underlying element array.
-     *
-     * @param dim the dimension of the matrix
-     * @param order the element order
-     */
-    record Structure(Dim dim, Order order) {
-        public Structure {
-            requireNonNull(dim);
-            requireNonNull(order);
-        }
-
-        /**
-         * Create a new matrix structure with the given dimension and the default
-         * element order.
-         *
-         * @param dim the matrix dimension
-         */
-        public Structure(final Dim dim) {
-            this(dim, MajorOrder.DEFAULT);
-        }
-    }
-
-    /**
-     * The dimension of the {@link Matrix1d} object.
-     *
-     * @param size the number of elements
-     */
-    record Dim(int size) {
-        public Dim {
-            if (size < 0) {
-                throw new IllegalArgumentException(
-                    "Size must greater or equal than zero: " + size
-                );
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "[%s]".formatted(size());
-        }
-    }
-
-    /**
-     * Represents the order for accessing the linearly stored matrix data.
-     */
-    @FunctionalInterface
-    interface Order {
-
-        /**
-         * Return the position of the element with the given relative
-         * {@code rank} within the (virtual or non-virtual) internal 1-d array.
-         *
-         * @param rank the rank of the element.
-         * @return the (linearized) index of the given {@code rank}
-         */
-        int index(final int rank);
-
-    }
-
-    /**
-     * Represents the <em>row-major</em> order.
-     *
-     * @param zero the index of the first element
-     * @param stride the number of indexes between any two elements
-     */
-    record MajorOrder(int zero, int stride)
-        implements Order
-    {
-
-        public static final MajorOrder DEFAULT = new MajorOrder(0, 1);
-
-        @Override
-        public int index(final int rank) {
-            return zero + rank*stride;
-        }
-    }
 
     /**
      * Factory interface for creating 2-d matrices.
@@ -124,7 +47,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
          * @param structure the structure of the new matrix
          * @return a new matrix with the given {@code structure}
          */
-        M newMatrix(final Structure structure);
+        M newMatrix(final Structure1d structure);
 
         /**
          * Create a new matrix with the given {@code dimension} and default
@@ -133,8 +56,8 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
          * @param dim the dimension of the created array
          * @return a new matrix with the given {@code dimension}
          */
-        default M newMatrix(final Dim dim) {
-            return newMatrix(new Structure(dim));
+        default M newMatrix(final Extent1d dim) {
+            return newMatrix(new Structure1d(dim));
         }
 
         /**
@@ -144,7 +67,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
          * @return a new matrix with the given size
          */
         default M newMatrix(final int size) {
-            return newMatrix(new Dim(size));
+            return newMatrix(new Extent1d(size));
         }
     }
 
@@ -157,15 +80,15 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      *
      * @return the structure of {@code this} 1-d matrix
      */
-    Structure structure();
+    Structure1d structure();
 
     /**
      * Return the dimension of {@code this} 1-d matrix.
      *
      * @return the dimension of {@code this} 1-d matrix
      */
-    default Dim dim() {
-        return structure().dim();
+    default Extent1d dim() {
+        return structure().extent();
     }
 
     /**
@@ -173,7 +96,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      *
      * @return the defined order of {@code this} 1-d matrix
      */
-    default Order order() {
+    default Order1d order() {
         return structure().order();
     }
 
@@ -203,11 +126,11 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      * @param structure the structure of the new matrix
      * @return a new matrix which is like this one
      */
-    default M like(final Structure structure) {
+    default M like(final Structure1d structure) {
         return factory().newMatrix(structure);
     }
 
-    default M like(final Dim dim) {
+    default M like(final Extent1d dim) {
         return factory().newMatrix(dim);
     }
 
@@ -230,7 +153,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      * @param structure the structure definition of the data array
      * @return a new view of the underlying element array
      */
-    M view(final Structure structure);
+    M view(final Structure1d structure);
 
     /* *************************************************************************
      * Copy methods.
@@ -243,7 +166,7 @@ public interface Matrix1d<M extends Matrix1d<M>> extends Matrix<M> {
      * @param structure the structure definition of the data array
      * @return a new minimal copy of the underlying element array
      */
-    default M copy(final Structure structure) {
+    default M copy(final Structure1d structure) {
         final var copy = like(structure);
         copy.assign(self());
         return copy;

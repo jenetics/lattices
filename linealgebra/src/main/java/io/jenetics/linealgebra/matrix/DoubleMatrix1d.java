@@ -26,6 +26,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
+import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -40,18 +41,18 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     public static final Factory<DoubleMatrix1d> DENSE_FACTORY = struct ->
         new DoubleMatrix1d(
             struct,
-            DenseDoubleArray.ofSize(struct.dim().size())
+            DenseDoubleArray.ofSize(struct.extent().size())
         );
 
-    private final Structure structure;
+    private final Structure1d structure;
     private final DoubleArray elements;
 
-    public DoubleMatrix1d(final Structure structure, final DoubleArray elements) {
-        if (structure.dim().size() > elements.size()) {
+    public DoubleMatrix1d(final Structure1d structure, final DoubleArray elements) {
+        if (structure.extent().size() > elements.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d < %d."
-                        .formatted(structure.dim().size(), elements.size())
+                        .formatted(structure.extent().size(), elements.size())
             );
         }
 
@@ -85,17 +86,17 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     }
 
     @Override
-    public Structure structure() {
+    public Structure1d structure() {
         return structure;
     }
 
     @Override
-    public DoubleMatrix1d view(final Structure structure) {
+    public DoubleMatrix1d view(final Structure1d structure) {
         return new DoubleMatrix1d(structure, elements);
     }
 
     @Override
-    public DoubleMatrix1d copy(final Structure structure) {
+    public DoubleMatrix1d copy(final Structure1d structure) {
         return new DoubleMatrix1d(structure, elements.copy());
     }
 
@@ -103,7 +104,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
     public Factory<DoubleMatrix1d> factory() {
         return struct -> new DoubleMatrix1d(
             struct,
-            elements.newArrayOfSize(struct.dim().size())
+            elements.newArrayOfSize(struct.extent().size())
         );
     }
 
@@ -190,7 +191,7 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
      * @param y the second vector
      * @param from the first index to be considered
      * @param length the number of cells to be considered
-     * @return the sum of products, zero if {@code from<0 || length<0}
+     * @return the sum of products, start if {@code from<0 || length<0}
      */
     public double dotProduct(
         final DoubleMatrix1d y,

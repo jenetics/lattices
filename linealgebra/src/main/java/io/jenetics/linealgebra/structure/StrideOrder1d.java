@@ -20,32 +20,22 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Represents the <em>row-major</em> order.
+ *
+ * @param start the index of the first element
+ * @param stride the number of indexes between any two elements
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-@FunctionalInterface
-public interface Order2d {
+public record StrideOrder1d(int start, int stride) implements Order1d {
 
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
-     */
-    int index(final int row, final int col);
+    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
 
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
+    @Override
+    public int index(final int rank) {
+        return start + rank * stride;
     }
 
 }

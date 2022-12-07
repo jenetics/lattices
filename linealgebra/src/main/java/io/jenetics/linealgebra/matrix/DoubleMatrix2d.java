@@ -26,9 +26,11 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
+import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.StrideOrder2d;
+import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
@@ -342,8 +344,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         }
 
         if (z == null) {
-            final var struct = new Matrix1d.Structure(new Matrix1d.Dim(rows()));
-            final var elems = elements.newArrayOfSize(struct.dim().size());
+            final var struct = new Structure1d(new Extent1d(rows()));
+            final var elems = elements.newArrayOfSize(struct.extent().size());
             z = new DoubleMatrix1d(struct, elems);
         }
 

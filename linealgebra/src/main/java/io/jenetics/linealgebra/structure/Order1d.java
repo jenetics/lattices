@@ -20,32 +20,22 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Represents the order for accessing the linearly stored matrix data.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
 @FunctionalInterface
-public interface Order2d {
+public interface Order1d {
 
     /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
      *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @param rank the rank of the element.
+     * @return the (linearized) index of the given {@code rank}
      */
-    int index(final int row, final int col);
-
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
-    }
+    int index(final int rank);
 
 }
