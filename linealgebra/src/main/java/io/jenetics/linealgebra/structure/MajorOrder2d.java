@@ -41,7 +41,7 @@ public record MajorOrder2d(
      *
      * @param dim the matrix dimension
      */
-    public MajorOrder2d(final Dim2d dim) {
+    public MajorOrder2d(final Extent2d dim) {
         this(0, 0, dim.cols(), 1);
     }
 

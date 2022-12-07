@@ -24,7 +24,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.random.RandomGenerator;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
+import io.jenetics.linealgebra.structure.Extent2d;
 
 public class DenseDoubleMatrix2dRandom {
 
@@ -34,8 +34,8 @@ public class DenseDoubleMatrix2dRandom {
         this.random = requireNonNull(random);
     }
 
-    public DoubleMatrix2d next(final Matrix2d.Dim dim) {
-        final var result = DoubleMatrix2d.DENSE_FACTORY.newMatrix(dim);
+    public DoubleMatrix2d next(final Extent2d extent) {
+        final var result = DoubleMatrix2d.DENSE_FACTORY.newMatrix(extent);
         result.assign(a -> random.nextInt(1000)/100.0);
         return result;
     }

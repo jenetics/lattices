@@ -27,7 +27,7 @@ public interface Order2d {
 
     /**
      * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-dimensional array.
+     * non-virtual) internal 1-d array.
      *
      * @param row the row index
      * @param col the column index

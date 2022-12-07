@@ -30,9 +30,9 @@ import static java.util.Objects.requireNonNull;
  * @param rows the number of rows
  * @param cols the number of columns
  */
-public record Dim2d(int rows, int cols) {
+public record Extent2d(int rows, int cols) {
 
-    public Dim2d {
+    public Extent2d {
         if (rows < 0) {
             throw new IllegalArgumentException(
                 "Number of rows must greater or equal than zero: " + rows
@@ -60,8 +60,8 @@ public record Dim2d(int rows, int cols) {
      *
      * @return a new transposed dimension object
      */
-    public Dim2d transpose() {
-        return new Dim2d(cols, rows);
+    public Extent2d transpose() {
+        return new Extent2d(cols, rows);
     }
 
     /**

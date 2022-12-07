@@ -33,7 +33,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrix2d;
+import io.jenetics.linealgebra.structure.Extent2d;
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
@@ -48,7 +48,7 @@ public class DenseDoubleMatrix2dPerf {
     @Setup
     public void setup() {
         final var random = new DenseDoubleMatrix2dRandom(RandomGenerator.getDefault());
-        final var dimension = new Matrix2d.Dim(10, 10);
+        final var dimension = new Extent2d(10, 10);
 
         linealgebraA = random.next(dimension);
         linealgebraB = random.next(dimension);

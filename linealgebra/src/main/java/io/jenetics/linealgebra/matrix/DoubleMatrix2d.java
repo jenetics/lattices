@@ -26,6 +26,8 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
+import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements.
@@ -42,18 +44,18 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     public static final Factory<DoubleMatrix2d> DENSE_FACTORY = struct ->
         new DoubleMatrix2d(
             struct,
-            DenseDoubleArray.ofSize(struct.dim().size())
+            DenseDoubleArray.ofSize(struct.extent().size())
         );
 
-    private final Structure structure;
+    private final Structure2d structure;
     private final DoubleArray elements;
 
-    public DoubleMatrix2d(final Structure structure, final DoubleArray elements) {
-        if (structure.dim().size() > elements.size()) {
+    public DoubleMatrix2d(final Structure2d structure, final DoubleArray elements) {
+        if (structure.extent().size() > elements.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d > %d."
-                        .formatted(structure.dim().size(), elements.size())
+                        .formatted(structure.extent().size(), elements.size())
             );
         }
 
@@ -89,19 +91,19 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     }
 
     @Override
-    public Structure structure() {
+    public Structure2d structure() {
         return structure;
     }
 
     @Override
-    public DoubleMatrix2d view(final Structure struct) {
+    public DoubleMatrix2d view(final Structure2d struct) {
         return new DoubleMatrix2d(struct, elements);
     }
 
     @Override
-    public DoubleMatrix2d copy(final Structure struct) {
+    public DoubleMatrix2d copy(final Structure2d struct) {
         final var elems = elements.newArrayOfSize(size());
-        dim().forEach((r, c) -> elems.set(struct.order().index(r, c), get(r, c)));
+        extent().forEach((r, c) -> elems.set(struct.order().index(r, c), get(r, c)));
 
         return new DoubleMatrix2d(struct, elems);
     }
@@ -110,7 +112,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
     public Factory<DoubleMatrix2d> factory() {
         return struct -> new DoubleMatrix2d(
             struct,
-            elements.newArrayOfSize(struct.dim().size())
+            elements.newArrayOfSize(struct.extent().size())
         );
     }
 
@@ -127,7 +129,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link MajorOrder}
+     *         is not an instance of {@link io.jenetics.linealgebra.structure.MajorOrder2d}
      */
     public DoubleMatrix1d col(final int index) {
         return new DoubleMatrix1d(structure.col(index), elements);
@@ -142,7 +144,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link MajorOrder}
+     *         is not an instance of {@link io.jenetics.linealgebra.structure.MajorOrder2d}
      */
     public DoubleMatrix1d row(final int index) {
         return new DoubleMatrix1d(structure.row(index), elements);
@@ -197,14 +199,14 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
      * @param f a function object taking as first argument the current cell's
      *          value of {@code this}, and as second argument the current cell's
      *          value of {@code y}
-     * @throws IllegalArgumentException if {@code !dim().equals(y.dim())}
+     * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
     public void assign(
         final DoubleMatrix2d y,
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        checkDim(y.dim());
+        checkDim(y.extent());
 
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
@@ -213,10 +215,10 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         }
     }
 
-    private void checkDim(final Dim other) {
-        if (!dim().equals(other)) {
+    private void checkDim(final Extent2d other) {
+        if (!extent().equals(other)) {
             throw new IllegalArgumentException(
-                "Incompatible dimensions: %s != %s.".formatted(dim(), dim())
+                "Incompatible dimensions: %s != %s.".formatted(extent(), extent())
             );
         }
     }
@@ -234,7 +236,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         if (other == this) {
             return;
         }
-        checkDim(other.dim());
+        checkDim(other.extent());
 
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
@@ -343,7 +345,7 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
 
         if (cols() != y.size() || rows() > z.size()) {
             throw new IllegalArgumentException(
-                "Incompatible args: " + dim() + ", " + y.dim() + ", " + z.dim()
+                "Incompatible args: " + extent() + ", " + y.dim() + ", " + z.dim()
             );
         }
 
@@ -424,21 +426,21 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         final int p = B.cols();
 
         if (C == null) {
-            final var struct = new Structure(new Dim(m, p));
-            final var elems = elements.newArrayOfSize(struct.dim().size());
+            final var struct = new Structure2d(new Extent2d(m, p));
+            final var elems = elements.newArrayOfSize(struct.extent().size());
             C = new DoubleMatrix2d(struct, elems);
         }
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
                 "2-d matrix inner dimensions must equal:" +
-                    dim() + ", " + B.dim()
+                    extent() + ", " + B.extent()
             );
         }
         if (C.rows() != m || C.cols() != p) {
             throw new IllegalArgumentException(
                 "Incompatible result matrix: " +
-                    dim() + ", " + B.dim() + ", " + C.dim()
+                    extent() + ", " + B.extent() + ", " + C.extent()
             );
         }
 
@@ -516,8 +518,8 @@ public class DoubleMatrix2d implements Matrix2d<DoubleMatrix2d> {
         final DoubleMatrix2d b,
         final double error
     ) {
-        return a.dim().equals(b.dim()) &&
-            a.dim().allMatch((r, c) -> equals(r, c, a, b, error));
+        return a.extent().equals(b.extent()) &&
+            a.extent().allMatch((r, c) -> equals(r, c, a, b, error));
     }
 
     private static boolean equals(

@@ -28,13 +28,13 @@ import static java.util.Objects.requireNonNull;
  * Defines the structure of a 2-d matrix, which is defined by the dimension
  * of the matrix and the index order of the underlying element array.
  *
- * @param dim the dimension of the matrix
+ * @param extent the dimension of the matrix
  * @param order the element order
  */
-public record Structure2d(Dim2d dim, Order2d order) {
+public record Structure2d(Extent2d extent, Order2d order) {
 
     public Structure2d {
-        requireNonNull(dim);
+        requireNonNull(extent);
         requireNonNull(order);
     }
 
@@ -44,7 +44,7 @@ public record Structure2d(Dim2d dim, Order2d order) {
      *
      * @param dim the matrix dimension
      */
-    public Structure2d(final Dim2d dim) {
+    public Structure2d(final Extent2d dim) {
         this(dim, new MajorOrder2d(dim));
     }
 
@@ -54,7 +54,7 @@ public record Structure2d(Dim2d dim, Order2d order) {
      * @return the transposed matrix structure
      */
     public Structure2d transpose() {
-        return new Structure2d(dim.transpose(), order.transpose());
+        return new Structure2d(extent.transpose(), order.transpose());
     }
 
     /**
@@ -65,18 +65,18 @@ public record Structure2d(Dim2d dim, Order2d order) {
      * @return a new {@link Matrix1d.Structure} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link Matrix2d.MajorOrder}
+     *         is not an instance of {@link MajorOrder2d}
      */
     public Matrix1d.Structure col(final int index) {
-        if (index < 0 || index >= dim().cols()) {
+        if (index < 0 || index >= extent().cols()) {
             throw new IndexOutOfBoundsException(
-                "Attempted to access " + dim() + " at column=" + index
+                "Attempted to access " + extent() + " at column=" + index
             );
         }
 
         if (order instanceof MajorOrder2d mo) {
             return new Matrix1d.Structure(
-                new Matrix1d.Dim(dim().rows()),
+                new Matrix1d.Dim(extent().rows()),
                 new Matrix1d.MajorOrder(
                     mo.index(0, index),
                     mo.rowStride()
@@ -97,18 +97,18 @@ public record Structure2d(Dim2d dim, Order2d order) {
      * @return a new {@link Matrix1d.Structure} object
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link Matrix2d.MajorOrder}
+     *         is not an instance of {@link MajorOrder2d}
      */
     public Matrix1d.Structure row(final int index) {
-        if (index < 0 || index >= dim().rows()) {
+        if (index < 0 || index >= extent().rows()) {
             throw new IndexOutOfBoundsException(
-                "Attempted to access " + dim() + " at row=" + index
+                "Attempted to access " + extent() + " at row=" + index
             );
         }
 
         if (order instanceof MajorOrder2d mo) {
             return new Matrix1d.Structure(
-                new Matrix1d.Dim(dim().cols()),
+                new Matrix1d.Dim(extent().cols()),
                 new Matrix1d.MajorOrder(
                     mo.index(index, 0),
                     mo.colStride()

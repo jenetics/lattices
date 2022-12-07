@@ -19,7 +19,7 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import io.jenetics.linealgebra.structure.Dim2d;
+import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.MajorOrder2d;
 import io.jenetics.linealgebra.structure.Structural2d;
 import io.jenetics.linealgebra.structure.Structure2d;
@@ -57,7 +57,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M>, Structural2d
          * @param dim the dimension of the created array
          * @return a new matrix with the given {@code dimension}
          */
-        default M newMatrix(final Dim2d dim) {
+        default M newMatrix(final Extent2d dim) {
             return newMatrix(new Structure2d(dim, new MajorOrder2d(dim)));
         }
 
@@ -70,7 +70,7 @@ public interface Matrix2d<M extends Matrix2d<M>> extends Matrix<M>, Structural2d
          * @return a new matrix with the given size
          */
         default M newMatrix(final int rows, final int cols) {
-            return newMatrix(new Dim2d(rows, cols));
+            return newMatrix(new Extent2d(rows, cols));
         }
 
     }

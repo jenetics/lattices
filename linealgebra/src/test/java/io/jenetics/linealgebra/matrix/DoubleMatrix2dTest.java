@@ -31,6 +31,7 @@ import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.ColtMatrices;
 import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
+import io.jenetics.linealgebra.structure.Extent2d;
 
 public class DoubleMatrix2dTest {
 
@@ -39,7 +40,7 @@ public class DoubleMatrix2dTest {
         final var generator = RandomGeneratorFactory.getDefault().create();
         final var random = new DenseDoubleMatrix2dRandom(generator);
 
-        final var dimension = new Matrix2d.Dim(100, 34);
+        final var dimension = new Extent2d(100, 34);
         final var a = random.next(dimension);
         final var b = a.copy();
 
@@ -67,7 +68,7 @@ public class DoubleMatrix2dTest {
     public void columnView() {
         final var generator = RandomGenerator.getDefault();
         final var random = new DenseDoubleMatrix2dRandom(generator);
-        final var dimension = new Matrix2d.Dim(23, 54);
+        final var dimension = new Extent2d(23, 54);
 
         final var A = random.next(dimension);
         final var column23 = A.col(23);
@@ -82,7 +83,7 @@ public class DoubleMatrix2dTest {
     public void rowView() {
         final var generator = RandomGenerator.getDefault();
         final var random = new DenseDoubleMatrix2dRandom(generator);
-        final var dimension = new Matrix2d.Dim(23, 54);
+        final var dimension = new Extent2d(23, 54);
 
         final var A = random.next(dimension);
         final var row12 = A.row(12);
@@ -125,7 +126,7 @@ public class DoubleMatrix2dTest {
     public void mult() {
         final var generator = RandomGeneratorFactory.getDefault().create(1234);
         final var random = new DenseDoubleMatrix2dRandom(generator);
-        final var dimension = new Matrix2d.Dim(10, 10);
+        final var dimension = new Extent2d(10, 10);
 
         final var A = random.next(dimension);
         final var B = random.next(dimension);
@@ -141,7 +142,7 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        a.dim().forEach((r, c) ->
+        a.extent().forEach((r, c) ->
             assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
         );
     }

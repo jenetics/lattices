@@ -14,8 +14,8 @@ public interface Structural2d extends Structural {
      *
      * @return the dimension of {@code this} 2-d matrix
      */
-    default Dim2d dim() {
-        return structure().dim();
+    default Extent2d extent() {
+        return structure().extent();
     }
 
     /**
@@ -29,7 +29,7 @@ public interface Structural2d extends Structural {
 
     @Override
     default int size() {
-        return dim().size();
+        return extent().size();
     }
 
     /**
@@ -38,7 +38,7 @@ public interface Structural2d extends Structural {
      * @return the number of rows of {@code this} matrix
      */
     default int rows() {
-        return dim().rows();
+        return extent().rows();
     }
 
     /**
@@ -47,7 +47,7 @@ public interface Structural2d extends Structural {
      * @return the number of columns of {@code this} matrix
      */
     default int cols() {
-        return dim().cols();
+        return extent().cols();
     }
 
 }
