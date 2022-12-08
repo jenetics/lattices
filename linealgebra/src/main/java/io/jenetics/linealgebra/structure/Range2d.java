@@ -32,6 +32,7 @@ package io.jenetics.linealgebra.structure;
  * @version !__version__!
  */
 public record Range2d(int row, int column, int height, int width) {
+
     public Range2d {
         if (row < 0 || column < 0 || height < 0 || width < 0) {
             throw new IllegalArgumentException(
@@ -40,4 +41,19 @@ public record Range2d(int row, int column, int height, int width) {
             );
         }
     }
+
+    /**
+     * Create a new range from the given extent. The start indices ({@link #row}
+     * and {@link #column()}) are set to zero.
+     *
+     * @param extent the extent of the new range
+     */
+    public Range2d(final Extent2d extent) {
+        this(0, 0, extent.rows(), extent.cols());
+    }
+
+    public int size() {
+        return height*width;
+    }
+
 }

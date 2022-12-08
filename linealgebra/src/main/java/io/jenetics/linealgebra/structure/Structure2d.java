@@ -59,11 +59,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      *         fit into the current structure
      */
     public Structure2d view(final Range2d range) {
-        if (range.column() + range.width() > extent.cols() ||
-            range.row() + range.height() > extent.rows())
-        {
-            throw new IndexOutOfBoundsException(extent + " : " + range);
-        }
+        checkRange(range);
 
         if (order instanceof StrideOrder2d stride) {
             return new Structure2d(
@@ -75,6 +71,35 @@ public record Structure2d(Extent2d extent, Order2d order) {
                     stride.colStride()
                 )
             );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    private void checkRange(final Range2d range) {
+        if (range.column() + range.width() > extent.cols() ||
+            range.row() + range.height() > extent.rows())
+        {
+            throw new IndexOutOfBoundsException(extent + " : " + range);
+        }
+    }
+
+    /**
+     * Return a new structure which defines a copy with the given range.
+     *
+     * @param range the view range
+     * @return a new structure which defines a view with the given range
+     * @throws IndexOutOfBoundsException if the created view structure doesn't
+     *         fit into the current structure
+     */
+    public Structure2d copy(final Range2d range) {
+        checkRange(range);
+
+        if (order instanceof StrideOrder2d) {
+            final var ext = new Extent2d(range);
+            return new Structure2d(ext, new StrideOrder2d(ext));
         } else {
             throw new UnsupportedOperationException(
                 "Range view structure not supported by " + order
@@ -104,7 +129,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public Structure1d col(final int index) {
+    public Structure1d columnView(final int index) {
         if (index < 0 || index >= extent().cols()) {
             throw new IndexOutOfBoundsException(
                 "Attempted to access " + extent() + " at column=" + index
@@ -136,7 +161,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public Structure1d row(final int index) {
+    public Structure1d rowView(final int index) {
         if (index < 0 || index >= extent().rows()) {
             throw new IndexOutOfBoundsException(
                 "Attempted to access " + extent() + " at row=" + index

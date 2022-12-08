@@ -72,7 +72,7 @@ public class DoubleMatrix2dTest {
         final var dimension = new Extent2d(23, 54);
 
         final var A = random.next(dimension);
-        final var column23 = A.col(23);
+        final var column23 = A.columnAt(23);
 
         assertThat(column23.size()).isEqualTo(dimension.rows());
         for (int i = 0; i < dimension.rows(); ++i) {
@@ -87,7 +87,7 @@ public class DoubleMatrix2dTest {
         final var dimension = new Extent2d(23, 54);
 
         final var A = random.next(dimension);
-        final var row12 = A.row(12);
+        final var row12 = A.rowAt(12);
 
         assertThat(row12.size()).isEqualTo(dimension.cols());
         for (int i = 0; i < dimension.cols(); ++i) {

@@ -44,6 +44,10 @@ public record Extent2d(int rows, int cols) {
         }
     }
 
+    public Extent2d(final Range2d range) {
+        this(range.height(), range.width());
+    }
+
     /**
      * The number of matrix elements (cells) a matrix with {@code this}
      * dimensions consists of.

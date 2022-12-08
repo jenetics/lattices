@@ -63,11 +63,11 @@ class LU {
         // Precompute and cache some views to avoid regenerating them time and again
         final var LUrows = new DoubleMatrix1d[m];
         for (int i = 0; i < m; i++) {
-            LUrows[i] = LU.row(i);
+            LUrows[i] = LU.rowAt(i);
         }
 
 //        cern.colt.list.IntArrayList nonZeroIndexes = new cern.colt.list.IntArrayList(); // sparsity
-        DoubleMatrix1d LUcolj = LU.col(0).like();  // blocked column j
+        DoubleMatrix1d LUcolj = LU.columnAt(0).like();  // blocked column j
 //        cern.jet.math.Mult multFunction = cern.jet.math.Mult.mult(0);
 //
 //        // Outer loop.

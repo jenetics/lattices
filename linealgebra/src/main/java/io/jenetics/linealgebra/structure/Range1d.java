@@ -30,6 +30,7 @@ package io.jenetics.linealgebra.structure;
  * @version !__version__!
  */
 public record Range1d(int index, int size) {
+
     public Range1d {
         if (index < 0 || size < 0) {
             throw new IllegalArgumentException(
@@ -37,4 +38,15 @@ public record Range1d(int index, int size) {
             );
         }
     }
+
+    /**
+     * Create a new range from the given extent. The start indices ({@link #index}
+     * is set to zero.
+     *
+     * @param extent the extent of the new range
+     */
+    public Range1d(final Extent1d extent) {
+        this(0, extent.size());
+    }
+
 }

@@ -19,11 +19,10 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
+import io.jenetics.linealgebra.structure.Range2d;
 import io.jenetics.linealgebra.structure.Structural2d;
-import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
@@ -74,19 +73,30 @@ public interface Matrix2d<M extends Matrix2d<M>>
      * Return a new view of the underlying element array with the given
      * {@code structure}. The data are unchanged and not copied.
      *
-     * @param structure the structure definition of the data array
+     * @param structure the structure of the returned view
      * @return a new view of the underlying element array
      */
     M view(final Structure2d structure);
 
     /**
-     * Return a new minimal copy of the underlying element array with the given
-     * {@code structure}.
+     * Return a new view of the underlying element array with the given
+     * {@code structure}. The data are unchanged and not copied.
      *
-     * @param structure the structure definition of the data array
+     * @param range the range of the returned view
+     * @return a new view of the underlying element array
+     */
+    default M view(final Range2d range) {
+        return view(structure().view(range));
+    }
+
+    /**
+     * Return a new minimal copy of the underlying element array with the given
+     * {@code range}.
+     *
+     * @param range the range definition of the data array
      * @return a new minimal copy of the underlying element array
      */
-    M copy(final Structure2d structure);
+    M copy(final Range2d range);
 
     /**
      * Return a new minimal copy of the underlying element array.
@@ -94,7 +104,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
      * @return a new minimal copy of the underlying element array
      */
     default M copy() {
-        return copy(structure());
+        return copy(new Range2d(extent()));
     }
 
 }

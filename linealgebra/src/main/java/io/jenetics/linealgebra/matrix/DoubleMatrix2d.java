@@ -30,6 +30,7 @@ import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Loop2d;
+import io.jenetics.linealgebra.structure.Range2d;
 import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
@@ -68,13 +69,15 @@ public class DoubleMatrix2d
     }
 
     @Override
-    public DoubleMatrix2d view(final Structure2d struct) {
-        return new DoubleMatrix2d(struct, elements);
+    public DoubleMatrix2d view(final Structure2d structure) {
+        return new DoubleMatrix2d(structure, elements);
     }
 
     @Override
-    public DoubleMatrix2d copy(final Structure2d struct) {
-        final var elems = elements.newArrayOfSize(size());
+    public DoubleMatrix2d copy(final Range2d range) {
+        final var elems = elements.newArrayOfSize(range.size());
+        final var struct = structure.copy(range);
+
         new Loop2d.RowMajor(extent()).forEach((r, c) ->
             elems.set(struct.order().index(r, c), get(r, c))
         );
@@ -97,8 +100,8 @@ public class DoubleMatrix2d
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public DoubleMatrix1d col(final int index) {
-        return new DoubleMatrix1d(structure.col(index), elements);
+    public DoubleMatrix1d columnAt(final int index) {
+        return new DoubleMatrix1d(structure.columnView(index), elements);
     }
 
     /**
@@ -112,8 +115,8 @@ public class DoubleMatrix2d
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public DoubleMatrix1d row(final int index) {
-        return new DoubleMatrix1d(structure.row(index), elements);
+    public DoubleMatrix1d rowAt(final int index) {
+        return new DoubleMatrix1d(structure.rowView(index), elements);
     }
 
     /* *************************************************************************
