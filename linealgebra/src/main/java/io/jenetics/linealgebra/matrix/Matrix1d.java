@@ -36,12 +36,6 @@ public interface Matrix1d<M extends Matrix1d<M>>
     extends Matrix<M>, Structural1d
 {
 
-    void assign(final M source);
-
-    /* *************************************************************************
-     * Creation methods.
-     * ************************************************************************/
-
     /**
      * Return a matrix factory which is able to creates matrices from the same
      * kind.
@@ -74,10 +68,6 @@ public interface Matrix1d<M extends Matrix1d<M>>
         return like(structure());
     }
 
-    /* *************************************************************************
-     * View methods.
-     * ************************************************************************/
-
     /**
      * Return a new view of the underlying element array with the given
      * {@code structure}. The data are unchanged and not copied.
@@ -87,10 +77,6 @@ public interface Matrix1d<M extends Matrix1d<M>>
      */
     M view(final Structure1d structure);
 
-    /* *************************************************************************
-     * Copy methods.
-     * ************************************************************************/
-
     /**
      * Return a new minimal copy of the underlying element array with the given
      * {@code structure}.
@@ -98,11 +84,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
      * @param structure the structure definition of the data array
      * @return a new minimal copy of the underlying element array
      */
-    default M copy(final Structure1d structure) {
-        final var copy = like(structure);
-        copy.assign(self());
-        return copy;
-    }
+    M copy(final Structure1d structure);
 
     /**
      * Return a new minimal copy of the underlying element array.

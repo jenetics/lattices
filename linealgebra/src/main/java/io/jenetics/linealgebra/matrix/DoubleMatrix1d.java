@@ -26,6 +26,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
+import io.jenetics.linealgebra.structure.DoubleGrid1d;
 import io.jenetics.linealgebra.structure.Factory1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
@@ -34,7 +35,10 @@ import io.jenetics.linealgebra.structure.Structure1d;
  * @since !__version__!
  * @version !__version__!
  */
-public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
+public class DoubleMatrix1d
+    extends DoubleGrid1d
+    implements Matrix1d<DoubleMatrix1d>
+{
 
     /**
      * Factory for creating dense 1-d double matrices.
@@ -45,50 +49,16 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
             DenseDoubleArray.ofSize(struct.extent().size())
         );
 
-    private final Structure1d structure;
-    private final DoubleArray elements;
-
     public DoubleMatrix1d(final Structure1d structure, final DoubleArray elements) {
-        if (structure.extent().size() > elements.size()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required matrix cells: %d < %d."
-                        .formatted(structure.extent().size(), elements.size())
-            );
-        }
-
-        this.structure = structure;
-        this.elements = elements;
-    }
-
-    /**
-     * Returns the matrix cell value at coordinate {@code index}.
-     *
-     * @param index the index of the cell
-     * @return the value of the specified cell
-     * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
-     */
-    public double get(final int index) {
-        return elements.get(order().index(index));
-    }
-
-    /**
-     * Sets the matrix cell at coordinate {@code index} to the specified
-     * {@code value}.
-     *
-     * @param index the index of the cell
-     * @param value  the value to be filled into the specified cell
-     * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
-     */
-    public void set(final int index, final double value) {
-        elements.set(order().index(index),  value);
+        super(structure, elements);
     }
 
     @Override
-    public Structure1d structure() {
-        return structure;
+    public Factory1d<DoubleMatrix1d> factory() {
+        return struct -> new DoubleMatrix1d(
+            struct,
+            elements.newArrayOfSize(struct.extent().size())
+        );
     }
 
     @Override
@@ -101,87 +71,9 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
         return new DoubleMatrix1d(structure, elements.copy());
     }
 
-    @Override
-    public Factory1d<DoubleMatrix1d> factory() {
-        return struct -> new DoubleMatrix1d(
-            struct,
-            elements.newArrayOfSize(struct.extent().size())
-        );
-    }
-
     /* *************************************************************************
      * Additional matrix methods.
      * ************************************************************************/
-
-    public void assign(final DoubleMatrix1d source) {
-
-    }
-
-    /**
-     * Sets all cells to the state specified by {@code values}.
-     *
-     * @param values the values to be filled into the cells
-     */
-    public void assign(final double[] values) {
-        for (int i = 0; i < Math.min(values.length, size()); ++i) {
-            set(i, values[i]);
-        }
-    }
-
-    /**
-     * Sets all cells to the state specified by {@code values}.
-     *
-     * @param value the value to be filled into the cells
-     */
-    public void assign(final double value) {
-        for (int i = size(); --i >= 0;) {
-            set(i, value);
-        }
-    }
-
-    /**
-     * Assigns the result of a function to each cell: {@code x[i] = f(x[i])}.
-     *
-     * @param f a function object taking as argument the current cell's value.
-     */
-    public void assign(final DoubleUnaryOperator f) {
-        requireNonNull(f);
-
-        for (int i = size(); --i >= 0;) {
-            set(i, f.applyAsDouble(get(i)));
-        }
-    }
-
-    /**
-     * Applies a function to each cell and aggregates the results.
-     * Returns a value {@code v} such that {@code v == a(size())} where
-     * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
-     *
-     * @param reducer an aggregation function taking as first argument the
-     *        current aggregation and as second argument the transformed current
-     *        cell value
-     * @param f a function transforming the current cell value
-     * @return the aggregated measure
-     */
-    public double reduce(
-        final DoubleBinaryOperator reducer,
-        final DoubleUnaryOperator f
-    ) {
-        requireNonNull(reducer);
-        requireNonNull(f);
-
-        if (size() == 0) {
-            return Double.NaN;
-        }
-
-        double a = f.applyAsDouble(get(size() - 1));
-        for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
-        }
-
-        return a;
-    }
 
     /**
      * Returns the dot product of two vectors x and y, which is
@@ -244,5 +136,49 @@ public class DoubleMatrix1d implements Matrix1d<DoubleMatrix1d> {
             return reduce(Double::sum, DoubleUnaryOperator.identity());
         }
     }
+
+//    /**
+//     * Fills the coordinates and values of cells having non-zero values into the specified lists.
+//     * Fills into the lists, starting at index 0.
+//     * After this call returns the specified lists all have a new size, the number of non-zero values.
+//     * <p>
+//     * In general, fill order is <i>unspecified</i>.
+//     * This implementation fills like: <tt>for (index = 0..size()-1)  do ... </tt>.
+//     * However, subclasses are free to us any other order, even an order that may change over time as cell values are changed.
+//     * (Of course, result lists indexes are guaranteed to correspond to the same cell).
+//     * <p>
+//     * <b>Example:</b>
+//     * <br>
+//     * <pre>
+//     * 0, 0, 8, 0, 7
+//     * -->
+//     * indexList  = (2,4)
+//     * valueList  = (8,7)
+//     * </pre>
+//     * In other words, <tt>get(2)==8, get(4)==7</tt>.
+//     *
+//     * @param indexList the list to be filled with indexes, can have any size.
+//     * @param valueList the list to be filled with values, can have any size.
+//     */
+//    public void getNonZeros(IntArrayList indexList, DoubleArrayList valueList, int maxCardinality) {
+//        boolean fillIndexList = indexList != null;
+//        boolean fillValueList = valueList != null;
+//        int card = cardinality(maxCardinality);
+//        if (fillIndexList) indexList.setSize(card);
+//        if (fillValueList) valueList.setSize(card);
+//        if (!(card < maxCardinality)) return;
+//
+//        if (fillIndexList) indexList.setSize(0);
+//        if (fillValueList) valueList.setSize(0);
+//        int s = size;
+//
+//        for (int i = 0; i < s; i++) {
+//            double value = getQuick(i);
+//            if (value != 0) {
+//                if (fillIndexList) indexList.add(i);
+//                if (fillValueList) valueList.add(value);
+//            }
+//        }
+//    }
 
 }

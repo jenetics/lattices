@@ -27,7 +27,7 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
- * Generic class for 2-d structures holding {@code double} elements.
+ * Generic class for 2-d grids holding {@code double} elements.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -92,8 +92,7 @@ public class DoubleGrid2d implements Structural2d {
      *
      * @param other the source matrix to copy from (maybe identical to the
      *        receiver).
-     * @throws IllegalArgumentException if {@code cols() != other.cols() ||
-     *         rows() != other.rows()}
+     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
     public void assign(final DoubleGrid2d other) {
         if (other == this) {
@@ -118,8 +117,7 @@ public class DoubleGrid2d implements Structural2d {
      * are not reflected in the matrix, and vice-versa
      *
      * @param values the values to be filled into the cells.
-     * @throws IllegalArgumentException if {@code values.length != rows()} or
-     *         for any {@code 0 <= row <= rows(): values[row].length != columns()}
+     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
     public void assign(final double[][] values) {
         if (values.length != rows()) {
@@ -141,6 +139,19 @@ public class DoubleGrid2d implements Structural2d {
 
             for (int c = cols(); --c >= 0;) {
                 set(r, c, row[c]);
+            }
+        }
+    }
+
+    /**
+     * Sets all cells to the state specified by {@code values}.
+     *
+     * @param value the value to be filled into the cells
+     */
+    public void assign(final double value) {
+        for (int r = rows(); --r >= 0; ) {
+            for (int c = cols(); --c >= 0; ) {
+                set(r, c, value);
             }
         }
     }

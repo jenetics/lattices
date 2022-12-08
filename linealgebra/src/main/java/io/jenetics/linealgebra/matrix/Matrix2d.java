@@ -19,8 +19,11 @@
  */
 package io.jenetics.linealgebra.matrix;
 
+import io.jenetics.linealgebra.structure.Extent1d;
+import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Structural2d;
+import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
 /**
@@ -43,6 +46,29 @@ public interface Matrix2d<M extends Matrix2d<M>>
      *        kind
      */
     Factory2d<M> factory();
+
+    /**
+     * Return a new matrix which is like this one, but with the given new
+     * {@code structure}.
+     *
+     * @param structure the structure of the new matrix
+     * @return a new matrix which is like this one
+     */
+    default M like(final Structure2d structure) {
+        return factory().newMatrix(structure);
+    }
+
+    default M like(final Extent2d dim) {
+        return factory().newMatrix(dim);
+    }
+
+    default M like(final int rows, final int cols) {
+        return factory().newMatrix(rows, cols);
+    }
+
+    default M like() {
+        return like(structure());
+    }
 
     /**
      * Return a new view of the underlying element array with the given

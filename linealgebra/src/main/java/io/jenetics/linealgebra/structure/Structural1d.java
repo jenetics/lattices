@@ -36,6 +36,22 @@ public interface Structural1d {
     Structure1d structure();
 
     /**
+     * Checks whether the extent of this structural object is the same as the
+     * given {@code other} extent.
+     *
+     * @param other the other extent to check
+     * @throws IllegalArgumentException if the given {@code other} extent doesn't
+     *         match
+     */
+    default void requireSameExtent(final Extent1d other) {
+        if (!extent().equals(other)) {
+            throw new IllegalArgumentException(
+                "Incompatible extent: %s != %s.".formatted(extent(), extent())
+            );
+        }
+    }
+
+    /**
      * Return the dimension of {@code this} 2-d structures.
      *
      * @return the dimension of {@code this} 2-d structures
