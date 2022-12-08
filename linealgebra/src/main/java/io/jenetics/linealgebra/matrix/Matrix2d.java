@@ -22,6 +22,7 @@ package io.jenetics.linealgebra.matrix;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Range2d;
+import io.jenetics.linealgebra.structure.Stride2d;
 import io.jenetics.linealgebra.structure.Structural2d;
 import io.jenetics.linealgebra.structure.Structure2d;
 
@@ -47,46 +48,74 @@ public interface Matrix2d<M extends Matrix2d<M>>
     Factory2d<M> factory();
 
     /**
-     * Return a new matrix which is like this one, but with the given new
+     * Return a new matrix which is like this one, but with the given
      * {@code structure}.
      *
-     * @param structure the structure of the new matrix
+     * @param structure the structure of the created matrix
      * @return a new matrix which is like this one
      */
     default M like(final Structure2d structure) {
         return factory().newMatrix(structure);
     }
 
-    default M like(final Extent2d dim) {
-        return factory().newMatrix(dim);
+    /**
+     * Return a new matrix which is like this one, but with the given
+     * {@code extent}.
+     *
+     * @param extent the extent of the created matrix
+     * @return a new matrix which is like this one
+     */
+    default M like(final Extent2d extent) {
+        return factory().newMatrix(extent);
     }
 
+    /**
+     * Return a new matrix which is like this one, but with the given
+     * {@code extent}.
+     *
+     * @param rows the number of rows of the created matrix
+     * @param cols the number of columns of the created matrix
+     * @return a new matrix which is like this one
+     */
     default M like(final int rows, final int cols) {
         return factory().newMatrix(rows, cols);
     }
 
+    /**
+     * Return a new matrix with is like this one.
+     *
+     * @return a new matrix which is like this one
+     */
     default M like() {
         return like(structure());
     }
 
     /**
-     * Return a new view of the underlying element array with the given
-     * {@code structure}. The data are unchanged and not copied.
+     * Return a new view of this matrix with the given new {@code structure}.
      *
-     * @param structure the structure of the returned view
+     * @param structure the structure of the created view
      * @return a new view of the underlying element array
      */
     M view(final Structure2d structure);
 
     /**
-     * Return a new view of the underlying element array with the given
-     * {@code structure}. The data are unchanged and not copied.
+     * Return a new view of this matrix for the given {@code range}.
      *
      * @param range the range of the returned view
      * @return a new view of the underlying element array
      */
     default M view(final Range2d range) {
         return view(structure().view(range));
+    }
+
+    /**
+     * Return a new view of this matrix for the given {@code stride}.
+     *
+     * @param stride the range of the returned view
+     * @return a new view of the underlying element array
+     */
+    default M view(final Stride2d stride) {
+        return view(structure().view(stride));
     }
 
     /**
