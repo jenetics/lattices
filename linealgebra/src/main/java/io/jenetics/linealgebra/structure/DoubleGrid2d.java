@@ -186,7 +186,7 @@ public class DoubleGrid2d implements Structural2d {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final DoubleUnaryOperator f) {
+    public void update(final DoubleUnaryOperator f) {
         for (int r = rows(); --r >= 0; ) {
             for (int c = cols(); --c >= 0; ) {
                 set(r, c, f.applyAsDouble(get(r, c)));

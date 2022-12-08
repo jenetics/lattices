@@ -63,14 +63,14 @@ public record Structure2d(Extent2d extent, Order2d order) {
     public Structure2d view(final Range2d range) {
         checkRange(range);
 
-        if (order instanceof StrideOrder2d stride) {
+        if (order instanceof StrideOrder2d ord) {
             return new Structure2d(
                 new Extent2d(range.height(), range.width()),
                 new StrideOrder2d(
-                    stride.rowStride()*range.row(),
-                    stride.colStride()*range.column(),
-                    stride.rowStride(),
-                    stride.colStride()
+                    ord.rowStride()*range.row(),
+                    ord.colStride()*range.column(),
+                    ord.rowStride(),
+                    ord.colStride()
                 )
             );
         } else {
@@ -175,12 +175,12 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof StrideOrder2d stride) {
+        if (order instanceof StrideOrder2d ord) {
             return new Structure1d(
                 new Extent1d(extent().rows()),
                 new StrideOrder1d(
-                    stride.index(0, index),
-                    stride.rowStride()
+                    ord.index(0, index),
+                    ord.rowStride()
                 )
             );
         } else {
@@ -207,12 +207,12 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof StrideOrder2d stride) {
+        if (order instanceof StrideOrder2d ord) {
             return new Structure1d(
                 new Extent1d(extent().cols()),
                 new StrideOrder1d(
-                    stride.index(index, 0),
-                    stride.colStride()
+                    ord.index(index, 0),
+                    ord.colStride()
                 )
             );
         } else {

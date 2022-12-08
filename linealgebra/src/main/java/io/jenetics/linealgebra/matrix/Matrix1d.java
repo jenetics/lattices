@@ -21,6 +21,8 @@ package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Factory1d;
+import io.jenetics.linealgebra.structure.Range1d;
+import io.jenetics.linealgebra.structure.Stride1d;
 import io.jenetics.linealgebra.structure.Structural1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
@@ -53,17 +55,36 @@ public interface Matrix1d<M extends Matrix1d<M>>
      * @return a new matrix which is like this one
      */
     default M like(final Structure1d structure) {
-        return factory().newMatrix(structure);
+        return factory().newInstance(structure);
     }
 
-    default M like(final Extent1d dim) {
-        return factory().newMatrix(dim);
+    /**
+     * Return a new matrix which is like this one, but with the given
+     * {@code extent}.
+     *
+     * @param extent the extent of the created matrix
+     * @return a new matrix which is like this one
+     */
+    default M like(final Extent1d extent) {
+        return factory().newInstance(extent);
     }
 
+    /**
+     * Return a new matrix which is like this one, but with the given
+     * {@code extent}.
+     *
+     * @param size the number of elements
+     * @return a new matrix which is like this one
+     */
     default M like(final int size) {
-        return factory().newMatrix(size);
+        return factory().newInstance(size);
     }
 
+    /**
+     * Return a new matrix with is like this one.
+     *
+     * @return a new matrix which is like this one
+     */
     default M like() {
         return like(structure());
     }
@@ -78,13 +99,33 @@ public interface Matrix1d<M extends Matrix1d<M>>
     M view(final Structure1d structure);
 
     /**
-     * Return a new minimal copy of the underlying element array with the given
-     * {@code structure}.
+     * Return a new view of this matrix for the given {@code range}.
      *
-     * @param structure the structure definition of the data array
+     * @param range the range of the returned view
+     * @return a new view of the underlying element array
+     */
+    default M view(final Range1d range) {
+        return view(structure().view(range));
+    }
+
+    /**
+     * Return a new view of this matrix for the given {@code stride}.
+     *
+     * @param stride the range of the returned view
+     * @return a new view of the underlying element array
+     */
+    default M view(final Stride1d stride) {
+        return view(structure().view(stride));
+    }
+
+    /**
+     * Return a new minimal copy of the underlying element array with the given
+     * {@code range}.
+     *
+     * @param range the range definition of the data array
      * @return a new minimal copy of the underlying element array
      */
-    M copy(final Structure1d structure);
+    M copy(final Range1d range);
 
     /**
      * Return a new minimal copy of the underlying element array.
@@ -92,7 +133,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
      * @return a new minimal copy of the underlying element array
      */
     default M copy() {
-        return copy(structure());
+        return copy(new Range1d(extent()));
     }
 
 

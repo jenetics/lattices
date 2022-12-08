@@ -21,6 +21,8 @@ package io.jenetics.linealgebra.blas;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.structure.Range1d;
+import io.jenetics.linealgebra.structure.Range2d;
 
 class LU {
 
@@ -129,8 +131,9 @@ class LU {
 //            // Compute multipliers.
             double jj;
             if (j < m && (jj = LU.get(j, j)) != 0.0) {
-                //multFunction.multiplicator = 1 / jj;
-                //LU.col(j).view(j + 1, m - (j + 1)).assign(multFunction);
+                final var range = new Range1d(j + 1, m - (j + 1));
+                final var multiplier = 1.0/jj;
+                LU.columnAt(j).view(range).update(v -> v*multiplier);
             }
 //
         }
@@ -140,6 +143,27 @@ class LU {
     public void setLU(DoubleMatrix2d LU) {
         this.LU = LU;
         //this.isNonSingular = isNonsingular(LU);
+    }
+
+    static DoubleMatrix2d lowerTriangular(DoubleMatrix2d A) {
+        int rows = A.rows();
+        int columns = A.cols();
+        int min = Math.min(rows, columns);
+
+        for (int r = min; --r >= 0; ) {
+            for (int c = min; --c >= 0; ) {
+                if (r < c) {
+                    A.set(r, c, 0);
+                } else if (r == c) {
+                    A.set(r, c, 1);
+                }
+            }
+        }
+        if (columns > rows) {
+            A.view(new Range2d(0, min, rows, columns - min)).assign(0);
+        }
+
+        return A;
     }
 
 }

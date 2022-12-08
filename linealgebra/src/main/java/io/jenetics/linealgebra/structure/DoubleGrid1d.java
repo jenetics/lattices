@@ -130,7 +130,7 @@ public class DoubleGrid1d implements Structural1d {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final DoubleUnaryOperator f) {
+    public void update(final DoubleUnaryOperator f) {
         requireNonNull(f);
 
         for (int i = 0; i < size(); ++i) {

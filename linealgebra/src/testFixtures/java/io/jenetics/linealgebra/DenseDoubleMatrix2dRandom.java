@@ -35,8 +35,8 @@ public class DenseDoubleMatrix2dRandom {
     }
 
     public DoubleMatrix2d next(final Extent2d extent) {
-        final var result = DoubleMatrix2d.DENSE_FACTORY.newMatrix(extent);
-        result.assign(a -> random.nextInt(1000)/100.0);
+        final var result = DoubleMatrix2d.DENSE_FACTORY.newInstance(extent);
+        result.update(a -> random.nextInt(1000)/100.0);
         return result;
     }
 

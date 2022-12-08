@@ -37,7 +37,7 @@ public interface Factory2d<T> {
      * @param structure the structure of the new structure
      * @return a new structure with the given {@code structure}
      */
-    T newMatrix(final Structure2d structure);
+    T newInstance(final Structure2d structure);
 
     /**
      * Create a new structure with the given {@code extent} and default
@@ -46,8 +46,8 @@ public interface Factory2d<T> {
      * @param extent the extent of the created structure
      * @return a new structure with the given {@code extent}
      */
-    default T newMatrix(final Extent2d extent) {
-        return newMatrix(new Structure2d(extent, new StrideOrder2d(extent)));
+    default T newInstance(final Extent2d extent) {
+        return newInstance(new Structure2d(extent, new StrideOrder2d(extent)));
     }
 
     /**
@@ -58,8 +58,8 @@ public interface Factory2d<T> {
      * @param cols the number of columns of the created structure
      * @return a new matrix with the given size
      */
-    default T newMatrix(final int rows, final int cols) {
-        return newMatrix(new Extent2d(rows, cols));
+    default T newInstance(final int rows, final int cols) {
+        return newInstance(new Extent2d(rows, cols));
     }
 
 }

@@ -107,4 +107,35 @@ public record Structure1d(Extent1d extent, Order1d order) {
         }
     }
 
+    /**
+     * Return a new structure which defines a copy with the given range.
+     *
+     * @param range the view range
+     * @return a new structure which defines a view with the given range
+     * @throws IndexOutOfBoundsException if the created view structure doesn't
+     *         fit into the current structure
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder1d}
+     */
+    public Structure1d copy(final Range1d range) {
+        checkRange(range);
+
+        if (order instanceof StrideOrder1d) {
+            return new Structure1d(
+                new Extent1d(range.size()),
+                StrideOrder1d.DEFAULT
+            );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    private void checkRange(final Range1d range) {
+        if (range.size() > extent.size()) {
+            throw new IndexOutOfBoundsException(extent + " : " + range);
+        }
+    }
+
 }

@@ -20,16 +20,19 @@
 package io.jenetics.linealgebra.matrix;
 
 import java.util.function.DoubleUnaryOperator;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.structure.DoubleGrid1d;
 import io.jenetics.linealgebra.structure.Factory1d;
+import io.jenetics.linealgebra.structure.Range1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
+ * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}
+ * elements.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
@@ -66,8 +69,15 @@ public class DoubleMatrix1d
     }
 
     @Override
-    public DoubleMatrix1d copy(final Structure1d structure) {
-        return new DoubleMatrix1d(structure, elements.copy());
+    public DoubleMatrix1d copy(final Range1d range) {
+        final var elems = elements.newArrayOfSize(range.size());
+        final var struct = structure.copy(range);
+
+        for (int i = 0; i < range.size(); ++i) {
+            elems.set(i, get(i + range.index()));
+        }
+
+        return new DoubleMatrix1d(struct, elems);
     }
 
     /* *************************************************************************
