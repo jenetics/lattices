@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
-import io.jenetics.linealgebra.structure.DoubleStructure2d;
+import io.jenetics.linealgebra.structure.DoubleGrid2d;
 import io.jenetics.linealgebra.structure.Extent1d;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
@@ -40,7 +40,7 @@ import io.jenetics.linealgebra.structure.Structure2d;
  * @version !__version__!
  */
 public class DoubleMatrix2d
-    extends DoubleStructure2d
+    extends DoubleGrid2d
     implements Matrix2d<DoubleMatrix2d>
 {
 

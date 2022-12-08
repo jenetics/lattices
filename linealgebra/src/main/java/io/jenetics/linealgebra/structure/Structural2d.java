@@ -29,9 +29,9 @@ package io.jenetics.linealgebra.structure;
 public interface Structural2d {
 
     /**
-     * Return the structure for 2-d structures.
+     * Return the structure for 2-d grid.
      *
-     * @return the structure for 2-d structures
+     * @return the structure for 2-d grid
      */
     Structure2d structure();
 

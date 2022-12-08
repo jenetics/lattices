@@ -33,12 +33,12 @@ import io.jenetics.linealgebra.array.DoubleArray;
  * @since !__version__!
  * @version !__version__!
  */
-public class DoubleStructure2d implements Structural2d {
+public class DoubleGrid2d implements Structural2d {
 
     protected final Structure2d structure;
     protected final DoubleArray elements;
 
-    public DoubleStructure2d(
+    public DoubleGrid2d(
         final Structure2d structure,
         final DoubleArray elements
     ) {
@@ -95,7 +95,7 @@ public class DoubleStructure2d implements Structural2d {
      * @throws IllegalArgumentException if {@code cols() != other.cols() ||
      *         rows() != other.rows()}
      */
-    public void assign(final DoubleStructure2d other) {
+    public void assign(final DoubleGrid2d other) {
         if (other == this) {
             return;
         }
@@ -156,7 +156,7 @@ public class DoubleStructure2d implements Structural2d {
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
     public void assign(
-        final DoubleStructure2d y,
+        final DoubleGrid2d y,
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
@@ -255,8 +255,8 @@ public class DoubleStructure2d implements Structural2d {
      *         otherwise
      */
     public static boolean equals(
-        final DoubleStructure2d a,
-        final DoubleStructure2d b,
+        final DoubleGrid2d a,
+        final DoubleGrid2d b,
         final double error
     ) {
         return a.extent().equals(b.extent()) &&
@@ -268,8 +268,8 @@ public class DoubleStructure2d implements Structural2d {
     private static boolean equals(
         final int r,
         final int c,
-        final DoubleStructure2d a,
-        final DoubleStructure2d b,
+        final DoubleGrid2d a,
+        final DoubleGrid2d b,
         final double error
     ) {
         final double v1 = a.get(r, c);
