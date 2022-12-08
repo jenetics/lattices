@@ -21,6 +21,8 @@ package io.jenetics.linealgebra.matrix;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.DoubleUnaryOperator;
+
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.structure.DoubleGrid2d;
@@ -293,6 +295,19 @@ public class DoubleMatrix2d
      */
     public DoubleMatrix2d mult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
         return mult(B, C, 1, (C == null ? 1 : 0), false, false);
+    }
+
+    /**
+     * Return the sum of all cells: {@code Sum(x[i, j])}.
+     *
+     * @return the sum of all cells
+     */
+    public double sum() {
+        if (size() == 0) {
+            return 0;
+        } else {
+            return reduce(Double::sum, DoubleUnaryOperator.identity());
+        }
     }
 
     @Override

@@ -67,11 +67,11 @@ class LU {
         }
 
 //        cern.colt.list.IntArrayList nonZeroIndexes = new cern.colt.list.IntArrayList(); // sparsity
-//        DoubleMatrix1d LUcolj = LU.viewColumn(0).like();  // blocked column j
+        DoubleMatrix1d LUcolj = LU.col(0).like();  // blocked column j
 //        cern.jet.math.Mult multFunction = cern.jet.math.Mult.mult(0);
 //
 //        // Outer loop.
-//        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < n; j++) {
 //            // blocking (make copy of j-th column to localize references)
 //            LUcolj.assign(LU.viewColumn(j));
 //
@@ -82,18 +82,18 @@ class LU {
 //            boolean sparse = (cardinality < maxCardinality);
 //
 //            // Apply previous transformations.
-//            for (int i = 0; i < m; i++) {
-//                int kmax = Math.min(i, j);
-//                double s;
+            for (int i = 0; i < m; i++) {
+                int kmax = Math.min(i, j);
+                double s = LUrows[i].dotProduct(LUcolj, 0, kmax);
 //                if (sparse) {
 //                    s = LUrows[i].zDotProduct(LUcolj, 0, kmax, nonZeroIndexes);
 //                } else {
 //                    s = LUrows[i].zDotProduct(LUcolj, 0, kmax);
 //                }
-//                double before = LUcolj.getQuick(i);
-//                double after = before - s;
-//                LUcolj.setQuick(i, after); // LUcolj is a copy
-//                LU.setQuick(i, j, after);   // this is the original
+                double before = LUcolj.get(i);
+                double after = before - s;
+                LUcolj.set(i, after); // LUcolj is a copy
+                LU.set(i, j, after);   // this is the original
 //                if (sparse) {
 //                    if (before == 0 && after != 0) { // nasty bug fixed!
 //                        int pos = nonZeroIndexes.binarySearch(i);
@@ -104,36 +104,36 @@ class LU {
 //                        nonZeroIndexes.remove(nonZeroIndexes.binarySearch(i));
 //                    }
 //                }
-//            }
+            }
 //
 //            // Find pivot and exchange if necessary.
-//            int p = j;
-//            if (p < m) {
-//                double max = Math.abs(LUcolj.getQuick(p));
-//                for (int i = j + 1; i < m; i++) {
-//                    double v = Math.abs(LUcolj.getQuick(i));
-//                    if (v > max) {
-//                        p = i;
-//                        max = v;
-//                    }
-//                }
-//            }
-//            if (p != j) {
-//                LUrows[p].swap(LUrows[j]);
-//                int k = piv[p];
-//                piv[p] = piv[j];
-//                piv[j] = k;
-//                pivsign = -pivsign;
-//            }
+            int p = j;
+            if (p < m) {
+                double max = Math.abs(LUcolj.get(p));
+                for (int i = j + 1; i < m; i++) {
+                    double v = Math.abs(LUcolj.get(i));
+                    if (v > max) {
+                        p = i;
+                        max = v;
+                    }
+                }
+            }
+            if (p != j) {
+                LUrows[p].swap(LUrows[j]);
+                int k = piv[p];
+                piv[p] = piv[j];
+                piv[j] = k;
+                pivsign = -pivsign;
+            }
 //
 //            // Compute multipliers.
-//            double jj;
-//            if (j < m && (jj = LU.getQuick(j, j)) != 0.0) {
-//                multFunction.multiplicator = 1 / jj;
-//                LU.viewColumn(j).viewPart(j + 1, m - (j + 1)).assign(multFunction);
-//            }
+            double jj;
+            if (j < m && (jj = LU.get(j, j)) != 0.0) {
+                //multFunction.multiplicator = 1 / jj;
+                //LU.col(j).view(j + 1, m - (j + 1)).assign(multFunction);
+            }
 //
-//        }
+        }
 //        setLU(LU);
     }
 

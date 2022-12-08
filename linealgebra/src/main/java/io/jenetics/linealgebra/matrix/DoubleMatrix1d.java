@@ -19,10 +19,9 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
@@ -137,48 +136,45 @@ public class DoubleMatrix1d
         }
     }
 
-//    /**
-//     * Fills the coordinates and values of cells having non-zero values into the specified lists.
-//     * Fills into the lists, starting at index 0.
-//     * After this call returns the specified lists all have a new size, the number of non-zero values.
-//     * <p>
-//     * In general, fill order is <i>unspecified</i>.
-//     * This implementation fills like: <tt>for (index = 0..size()-1)  do ... </tt>.
-//     * However, subclasses are free to us any other order, even an order that may change over time as cell values are changed.
-//     * (Of course, result lists indexes are guaranteed to correspond to the same cell).
-//     * <p>
-//     * <b>Example:</b>
-//     * <br>
-//     * <pre>
-//     * 0, 0, 8, 0, 7
-//     * -->
-//     * indexList  = (2,4)
-//     * valueList  = (8,7)
-//     * </pre>
-//     * In other words, <tt>get(2)==8, get(4)==7</tt>.
-//     *
-//     * @param indexList the list to be filled with indexes, can have any size.
-//     * @param valueList the list to be filled with values, can have any size.
-//     */
-//    public void getNonZeros(IntArrayList indexList, DoubleArrayList valueList, int maxCardinality) {
-//        boolean fillIndexList = indexList != null;
-//        boolean fillValueList = valueList != null;
-//        int card = cardinality(maxCardinality);
-//        if (fillIndexList) indexList.setSize(card);
-//        if (fillValueList) valueList.setSize(card);
-//        if (!(card < maxCardinality)) return;
-//
-//        if (fillIndexList) indexList.setSize(0);
-//        if (fillValueList) valueList.setSize(0);
-//        int s = size;
-//
-//        for (int i = 0; i < s; i++) {
-//            double value = getQuick(i);
-//            if (value != 0) {
-//                if (fillIndexList) indexList.add(i);
-//                if (fillValueList) valueList.add(value);
-//            }
-//        }
-//    }
+    /**
+     * Returns the number of cells having non-zero values, ignores tolerance.
+     */
+    public int cardinality() {
+        int cardinality = 0;
+        for (int i = size(); --i >= 0; ) {
+            if (Double.compare(get(i), 0) != 0) {
+                cardinality++;
+            }
+        }
+        return cardinality;
+    }
+
+    /**
+     * Returns the number of cells having non-zero values, but at most
+     * {@code maxCardinality}, ignores tolerance.
+     */
+    public int cardinality(int maxCardinality) {
+        int cardinality = 0;
+        int i = size();
+        while (--i >= 0 && cardinality < maxCardinality) {
+            if (Double.compare(get(i), 0) != 0) {
+                cardinality++;
+            }
+        }
+        return cardinality;
+    }
+
+    public int[] nonZeroIndices() {
+        final var indices = IntStream.builder();
+
+        for (int i = 0; i < size(); ++i) {
+            final var value = get(i);
+            if (Double.compare(value, 0.0) != 0) {
+                indices.add(i);
+            }
+        }
+
+        return indices.build().toArray();
+    }
 
 }

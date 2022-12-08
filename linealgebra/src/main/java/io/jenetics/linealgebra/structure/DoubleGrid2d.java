@@ -234,22 +234,9 @@ public class DoubleGrid2d implements Structural2d {
             }
             d = 0;
         }
-
         return a;
     }
 
-    /**
-     * Return the sum of all cells: {@code Sum(x[i, j])}.
-     *
-     * @return the sum of all cells
-     */
-    public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
-    }
 
     /* *************************************************************************
      * Static matrix helper methods.

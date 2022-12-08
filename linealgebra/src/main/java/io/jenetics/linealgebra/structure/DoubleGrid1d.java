@@ -139,6 +139,21 @@ public class DoubleGrid1d implements Structural1d {
     }
 
     /**
+     * Swaps each element {@code this[i]} with {@code other[i]}.
+     *
+     * @throws IllegalArgumentException if {@code size() != other.size()}.
+     */
+    public void swap(final DoubleGrid1d other) {
+        requireSameExtent(other.extent());
+
+        for (int i = size(); --i >= 0;) {
+            final var tmp = get(i);
+            set(i, other.get(i));
+            other.set(i, tmp);
+        }
+    }
+
+    /**
      * Applies a function to each cell and aggregates the results.
      * Returns a value {@code v} such that {@code v == a(size())} where
      * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
