@@ -49,4 +49,32 @@ public record Structure1d(Extent1d extent, Order1d order) {
         this(extent, StrideOrder1d.DEFAULT);
     }
 
+    /**
+     * Return a new structure which defines a view with the given range.
+     *
+     * @param range the view range
+     * @return a new structure which defines a view with the given range
+     * @throws IndexOutOfBoundsException if the created view structure doesn't
+     *         fit into the current structure
+     */
+    public Structure1d view(final Range1d range) {
+        if (range.index() + range.size() > extent.size()) {
+            throw new IndexOutOfBoundsException(extent + " : " + range);
+        }
+
+        if (order instanceof StrideOrder1d stride) {
+            return new Structure1d(
+                new Extent1d(range.size()),
+                new StrideOrder1d(
+                    stride.stride()*range.index(),
+                    stride.stride()
+                )
+            );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
 }

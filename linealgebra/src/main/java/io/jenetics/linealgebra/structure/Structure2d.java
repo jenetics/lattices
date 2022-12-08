@@ -51,6 +51,38 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     /**
+     * Return a new structure which defines a view with the given range.
+     *
+     * @param range the view range
+     * @return a new structure which defines a view with the given range
+     * @throws IndexOutOfBoundsException if the created view structure doesn't
+     *         fit into the current structure
+     */
+    public Structure2d view(final Range2d range) {
+        if (range.column() + range.width() > extent.cols() ||
+            range.row() + range.height() > extent.rows())
+        {
+            throw new IndexOutOfBoundsException(extent + " : " + range);
+        }
+
+        if (order instanceof StrideOrder2d stride) {
+            return new Structure2d(
+                new Extent2d(range.height(), range.width()),
+                new StrideOrder2d(
+                    stride.rowStride()*range.row(),
+                    stride.colStride()*range.column(),
+                    stride.rowStride(),
+                    stride.colStride()
+                )
+            );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    /**
      * Transposes the matrix structure without copying any matrix elements.
      *
      * @return the transposed matrix structure
@@ -79,12 +111,12 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof StrideOrder2d mo) {
+        if (order instanceof StrideOrder2d stride) {
             return new Structure1d(
                 new Extent1d(extent().rows()),
                 new StrideOrder1d(
-                    mo.index(0, index),
-                    mo.rowStride()
+                    stride.index(0, index),
+                    stride.rowStride()
                 )
             );
         } else {
@@ -111,12 +143,12 @@ public record Structure2d(Extent2d extent, Order2d order) {
             );
         }
 
-        if (order instanceof StrideOrder2d mo) {
+        if (order instanceof StrideOrder2d stride) {
             return new Structure1d(
                 new Extent1d(extent().cols()),
                 new StrideOrder1d(
-                    mo.index(index, 0),
-                    mo.colStride()
+                    stride.index(index, 0),
+                    stride.colStride()
                 )
             );
         } else {
