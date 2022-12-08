@@ -57,6 +57,8 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @return a new structure which defines a view with the given range
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder2d}
      */
     public Structure2d view(final Range2d range) {
         checkRange(range);
@@ -87,12 +89,49 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     /**
+     * Return a new structure which defines a view with the given range.
+     *
+     * @param stride the strides
+     * @return a new structure which defines a view with the given range
+     * @throws IndexOutOfBoundsException if the created view structure doesn't
+     *         fit into the current structure
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder2d}
+     */
+    public Structure2d view(final Stride2d stride) {
+        if (order instanceof StrideOrder2d ord) {
+            return new Structure2d(
+                new Extent2d(
+                    extent.rows() != 0
+                        ? (extent.rows() - 1)/stride.rowStride() + 1
+                        : 0,
+                    extent.cols() != 0
+                        ? (extent.cols() - 1)/ stride.colStride() + 1
+                        : 0
+                ),
+                new StrideOrder2d(
+                    ord.rowStart(),
+                    ord.colStart(),
+                    ord.rowStride()*stride.rowStride(),
+                    ord.colStride()*stride.colStride()
+                )
+            );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    /**
      * Return a new structure which defines a copy with the given range.
      *
      * @param range the view range
      * @return a new structure which defines a view with the given range
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder2d}
      */
     public Structure2d copy(final Range2d range) {
         checkRange(range);

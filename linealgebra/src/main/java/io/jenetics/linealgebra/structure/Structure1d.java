@@ -56,18 +56,48 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @return a new structure which defines a view with the given range
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder1d}
      */
     public Structure1d view(final Range1d range) {
         if (range.index() + range.size() > extent.size()) {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
 
-        if (order instanceof StrideOrder1d stride) {
+        if (order instanceof StrideOrder1d ord) {
             return new Structure1d(
                 new Extent1d(range.size()),
                 new StrideOrder1d(
-                    stride.stride()*range.index(),
-                    stride.stride()
+                    ord.stride()*range.index(),
+                    ord.stride()
+                )
+            );
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    /**
+     * Return a new structure which defines a view with the given range.
+     *
+     * @param stride the stride
+     * @return a new structure which defines a view with the given range
+     * @throws UnsupportedOperationException if the {@link #order()} function
+     *         is not an instance of {@link StrideOrder1d}
+     */
+    public Structure1d view(final Stride1d stride) {
+        if (order instanceof StrideOrder1d ord) {
+            return new Structure1d(
+                new Extent1d(
+                    extent.size() != 0
+                        ? (extent.size() - 1)/stride.stride() + 1
+                        : 0
+                ),
+                new StrideOrder1d(
+                    ord.start(),
+                    ord.stride()*stride.stride()
                 )
             );
         } else {

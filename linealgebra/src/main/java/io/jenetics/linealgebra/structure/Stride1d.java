@@ -20,22 +20,20 @@
 package io.jenetics.linealgebra.structure;
 
 /**
- * Represents the <em>row-major</em> order.
+ * Defines a stride.
  *
- * @param start the index of the first element
- * @param stride the number of indexes between any two elements
+ * @param stride the stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record StrideOrder1d(int start, int stride) implements Order1d {
+public record Stride1d(int stride) {
 
-    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
-
-    @Override
-    public int index(final int rank) {
-        return start + rank*stride;
+    public Stride1d {
+        if (stride < 0) {
+            throw new IllegalArgumentException("Stride must not be negative: " + stride);
+        }
     }
 
 }
