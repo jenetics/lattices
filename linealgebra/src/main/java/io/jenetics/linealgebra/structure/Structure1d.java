@@ -83,7 +83,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
             return new Structure1d(
                 new Extent1d(range.size()),
                 new StrideOrder1d(
-                    ord.stride()*range.index(),
+                    ord.start() + ord.stride()*range.index(),
                     ord.stride()
                 )
             );
