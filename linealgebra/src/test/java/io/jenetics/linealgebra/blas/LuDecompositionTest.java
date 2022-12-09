@@ -20,10 +20,12 @@
 package io.jenetics.linealgebra.blas;
 
 import cern.colt.matrix.linalg.LUDecompositionQuick;
+
+import org.testng.annotations.Test;
+
 import io.jenetics.linealgebra.ColtMatrices;
 import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
-import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

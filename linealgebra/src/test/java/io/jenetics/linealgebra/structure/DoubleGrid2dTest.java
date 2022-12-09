@@ -19,10 +19,11 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
