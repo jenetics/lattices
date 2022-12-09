@@ -31,7 +31,7 @@ import io.jenetics.linealgebra.function.IntIntPredicate;
  * @since !__version__!
  * @version !__version__!
  */
-public sealed interface Loop2d {
+public interface Loop2d {
 
     /**
      * Performs an action for each position of {@code this} dimension.
@@ -81,7 +81,7 @@ public sealed interface Loop2d {
     boolean nonMatch(final IntIntPredicate predicate);
 
     /**
-     * Row-major loop implementation.
+     * Row-major loop implementation. The rows and columns are iterated forward.
      *
      * @param extent the extent which defines the boundaries of the loop
      */
@@ -145,7 +145,8 @@ public sealed interface Loop2d {
     }
 
     /**
-     * Column-major loop implementation.
+     * Column-major loop implementation. he rows and columns are iterated
+     * forward.
      *
      * @param extent the extent which defines the boundaries of the loop
      */

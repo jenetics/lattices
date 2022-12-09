@@ -19,27 +19,27 @@
  */
 package io.jenetics.linealgebra.structure;
 
-import io.jenetics.linealgebra.array.DenseDoubleArray;
 import org.testng.annotations.Test;
 
+import io.jenetics.linealgebra.array.DenseDoubleArray;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class DoubleGrid1dTest {
+public class DoubleGrid2dTest {
 
     @Test
-    public void assign() {
-        final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
-        final var grid = new DoubleGrid1d(
+    public void setAndGet() {
+        final var extent = new Extent2d(100, 20);
+        final var structure = new Structure2d(extent);
+        final var grid = new DoubleGrid2d(
             structure,
             DenseDoubleArray.ofSize(extent.size())
         );
 
-        grid.assign(87);
-        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+        grid.forEach((row, col) -> grid.set(row, col, row*col));
+        grid.forEach((row, col) -> assertThat(grid.get(row, col)).isEqualTo(row*col));
     }
 
 }

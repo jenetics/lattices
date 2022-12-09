@@ -19,6 +19,9 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import io.jenetics.linealgebra.function.IntIntConsumer;
+import io.jenetics.linealgebra.function.IntIntPredicate;
+
 /**
  * 2-d structural mixin interface.
  *
@@ -26,7 +29,7 @@ package io.jenetics.linealgebra.structure;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural2d {
+public interface Structural2d extends Loop2d {
 
     /**
      * Return the structure for 2-d grid.
@@ -94,6 +97,36 @@ public interface Structural2d {
      */
     default int cols() {
         return extent().cols();
+    }
+
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    default Loop2d loop() {
+        return new RowMajor(extent());
+    }
+
+    @Override
+    default void forEach(final IntIntConsumer action) {
+        loop().forEach(action);
+    }
+
+    @Override
+    default boolean anyMatch(final IntIntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean allMatch(final IntIntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(final IntIntPredicate predicate) {
+        return loop().nonMatch(predicate);
     }
 
 }

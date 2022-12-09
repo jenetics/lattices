@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.structure;
 
 import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 /**
  * 1-d structural mixin interface.
@@ -80,7 +81,34 @@ public interface Structural1d extends Loop1d {
         return extent().size();
     }
 
-    default void forEach(final IntConsumer action) {
-        extent().loop().forEach(action);
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    default Loop1d loop() {
+        return new Loop1d.Forward(extent());
     }
+
+    @Override
+    default void forEach(final IntConsumer action) {
+        loop().forEach(action);
+    }
+
+    @Override
+    default boolean anyMatch(final IntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean allMatch(final IntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(final IntPredicate predicate) {
+        return loop().nonMatch(predicate);
+    }
+
 }
