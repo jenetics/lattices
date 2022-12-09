@@ -282,7 +282,7 @@ public class DoubleGrid2d implements Structural2d {
      * Static matrix helper methods.
      * ************************************************************************/
 
-    private static boolean equals(
+    static boolean equals(
         final int r,
         final int c,
         final DoubleGrid2d a,

@@ -184,6 +184,20 @@ public class DoubleGrid1d implements Structural1d {
         return a;
     }
 
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param other the second matrix to compare
+     * @param error the allowed relative error
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public boolean equals(final DoubleGrid1d other, final double error) {
+        return extent().equals(other.extent()) &&
+            allMatch(i -> equals(i, this, other, error));
+    }
+
     @Override
     public String toString() {
         final var out = new StringBuilder();
@@ -196,6 +210,22 @@ public class DoubleGrid1d implements Structural1d {
         }
         out.append("]");
         return out.toString();
+    }
+
+    /* *************************************************************************
+     * Static matrix helper methods.
+     * ************************************************************************/
+
+    private static boolean equals(
+        final int i,
+        final DoubleGrid1d a,
+        final DoubleGrid1d b,
+        final double error
+    ) {
+        final double v1 = a.get(i);
+        final double v2 = b.get(i);
+
+        return Math.abs(v1 - v2) <= Math.abs(v1*error);
     }
 
 }

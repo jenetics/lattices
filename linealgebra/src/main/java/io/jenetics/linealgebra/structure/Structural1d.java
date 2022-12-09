@@ -103,7 +103,7 @@ public interface Structural1d extends Loop1d {
 
     @Override
     default boolean allMatch(final IntPredicate predicate) {
-        return loop().anyMatch(predicate);
+        return loop().allMatch(predicate);
     }
 
     @Override

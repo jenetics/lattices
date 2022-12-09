@@ -121,7 +121,7 @@ public interface Structural2d extends Loop2d {
 
     @Override
     default boolean allMatch(final IntIntPredicate predicate) {
-        return loop().anyMatch(predicate);
+        return loop().allMatch(predicate);
     }
 
     @Override

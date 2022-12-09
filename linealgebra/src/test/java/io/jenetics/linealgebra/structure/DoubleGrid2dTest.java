@@ -21,8 +21,11 @@ package io.jenetics.linealgebra.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static io.jenetics.linealgebra.DenseDoubleMatrix2dRandom.nextMatrix;
+
 import org.testng.annotations.Test;
 
+import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 
 /**
@@ -41,6 +44,15 @@ public class DoubleGrid2dTest {
 
         grid.forEach((row, col) -> grid.set(row, col, row*col));
         grid.forEach((row, col) -> assertThat(grid.get(row, col)).isEqualTo(row*col));
+    }
+
+    @Test
+    public void equalsFalse() {
+        final var a = nextMatrix(new Extent2d(5, 5));
+        final var b = nextMatrix(new Extent2d(5, 5));
+
+        final var result = DoubleGrid2d.equals(1, 1, a, b, 0.0001);
+        assertThat(result).isFalse();
     }
 
 }

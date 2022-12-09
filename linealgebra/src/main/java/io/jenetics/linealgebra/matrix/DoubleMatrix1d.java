@@ -187,4 +187,9 @@ public class DoubleMatrix1d
         return indices.build().toArray();
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof DoubleMatrix1d m && equals(m, 0.0);
+    }
+
 }

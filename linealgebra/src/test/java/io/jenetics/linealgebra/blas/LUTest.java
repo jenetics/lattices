@@ -34,10 +34,10 @@ import io.jenetics.linealgebra.structure.Extent2d;
  */
 public class LUTest {
 
-    @Test
+    @Test(invocationCount = 10)
     public void decompose() {
         final var matrix = DenseDoubleMatrix2dRandom
-            .nextMatrix(new Extent2d(5, 5));
+            .nextMatrix(new Extent2d(50, 50));
 
         final var expected = decompose(matrix);
         LU.decompose(matrix);
