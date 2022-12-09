@@ -34,6 +34,9 @@ import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class DoubleMatrix2dTest {
 
     @Test
@@ -78,6 +81,20 @@ public class DoubleMatrix2dTest {
         for (int i = 0; i < dimension.rows(); ++i) {
             assertThat(column23.get(i)).isEqualTo(A.get(i, 23));
         }
+    }
+
+    @Test
+    public void columnViewLike() {
+        final var generator = RandomGenerator.getDefault();
+        final var random = new DenseDoubleMatrix2dRandom(generator);
+        final var dimension = new Extent2d(23, 54);
+
+        final var A = random.next(dimension);
+        final var column = A.columnAt(0);
+        final var like = column.like();
+
+        assertThat(like.size()).isEqualTo(A.rows());
+        like.set(like.size() - 1, 89);
     }
 
     @Test

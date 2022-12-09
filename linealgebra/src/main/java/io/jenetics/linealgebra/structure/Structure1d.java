@@ -50,6 +50,21 @@ public record Structure1d(Extent1d extent, Order1d order) {
     }
 
     /**
+     * Create a new structure which is like this one.
+     *
+     * @return a new structure which is like this one
+     */
+    public Structure1d like() {
+        if (order instanceof StrideOrder1d) {
+            return new Structure1d(extent);
+        } else {
+            throw new UnsupportedOperationException(
+                "Range view structure not supported by " + order
+            );
+        }
+    }
+
+    /**
      * Return a new structure which defines a view with the given range.
      *
      * @param range the view range

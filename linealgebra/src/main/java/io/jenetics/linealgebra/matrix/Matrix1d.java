@@ -86,7 +86,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
      * @return a new matrix which is like this one
      */
     default M like() {
-        return like(structure());
+        return like(structure().like());
     }
 
     /**
