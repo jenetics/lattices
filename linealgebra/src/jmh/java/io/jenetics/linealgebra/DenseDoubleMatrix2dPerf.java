@@ -52,8 +52,8 @@ public class DenseDoubleMatrix2dPerf {
 
         linealgebraA = random.next(dimension);
         linealgebraB = random.next(dimension);
-        coltA = ColtMatrices.of(linealgebraA);
-        coltB = ColtMatrices.of(linealgebraB);
+        coltA = Colts.toColt(linealgebraA);
+        coltB = Colts.toColt(linealgebraB);
     }
 
     @Benchmark

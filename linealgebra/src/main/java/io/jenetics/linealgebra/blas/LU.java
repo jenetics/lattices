@@ -1,0 +1,101 @@
+/*
+ * Java Linear Algebra Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Author:
+ *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
+ */
+package io.jenetics.linealgebra.blas;
+
+import static java.util.Objects.requireNonNull;
+
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.structure.Range1d;
+
+/**
+ * Performs in place LU-decomposition.
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
+ */
+final class LU {
+    private LU() {
+    }
+
+    /**
+     * Performs an in-place LU-decomposition of the given {@code matrix}.
+     *
+     * @param matrix the matrix to be decomposed
+     */
+    static void decompose(final DoubleMatrix2d matrix) {
+        requireNonNull(matrix);
+
+        final int m = matrix.rows();
+        final int n = matrix.cols();
+        if (m*n == 0) {
+            return;
+        }
+
+        final var rows = new DoubleMatrix1d[m];
+        for (int i = 0; i < m; ++i) {
+            rows[i] = matrix.rowAt(i);
+        }
+
+        final DoubleMatrix1d colj = matrix.columnAt(0).like();
+        for (int j = 0; j < n; j++) {
+            colj.assign(matrix.columnAt(j));
+
+            // Apply previous transformations.
+            for (int i = 0; i < m; i++) {
+                int kmax = Math.min(i, j);
+                double s = rows[i].dotProduct(colj, 0, kmax);
+                double before = colj.get(i);
+                double after = before - s;
+
+                colj.set(i, after);
+                matrix.set(i, j, after);
+            }
+
+            // Find pivot and exchange if necessary.
+            int p = j;
+            if (p < m) {
+                double max = Math.abs(colj.get(p));
+                for (int i = j + 1; i < m; ++i) {
+                    double v = Math.abs(colj.get(i));
+                    if (v > max) {
+                        p = i;
+                        max = v;
+                    }
+                }
+            }
+
+            if (p != j) {
+                rows[p].swap(rows[j]);
+            }
+
+            final double jj = matrix.get(j, j);
+            if (j < m && Double.compare(jj, 0.0) != 0) {
+                final var multiplier = 1.0/jj;
+                matrix
+                    .columnAt(j)
+                    .view(new Range1d(j + 1, m - (j + 1)))
+                    .update(v -> v*multiplier);
+            }
+        }
+    }
+
+}

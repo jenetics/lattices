@@ -25,24 +25,21 @@ import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
 import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
+import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Extent2d;
 
-/**
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- */
-public class LuDecompositionTest {
+public class LUTest {
 
     @Test
-    public void coltDecompose() {
-        final var matrix = Colts.toColt(
-            DenseDoubleMatrix2dRandom
-                .nextMatrix(new Extent2d(20, 20))
-        );
+    public void decompose() {
+        final var matrix = DenseDoubleMatrix2dRandom
+            .nextMatrix(new Extent2d(5, 5));
 
-        final var decomposer = new LUDecompositionQuick();
-        decomposer.decompose(matrix);
-        final var lu = decomposer.getU();
+        final var expected = decompose(matrix);
+        LU.decompose(matrix);
+
+        LinealgebraAsserts.assertEquals(matrix, expected);
     }
 
     private static DoubleMatrix2d decompose(final DoubleMatrix2d matrix) {
@@ -51,23 +48,6 @@ public class LuDecompositionTest {
         final var decomposer = new LUDecompositionQuick();
         decomposer.decompose(colt);
         return Colts.toLinealgebra(colt);
-    }
-
-    @Test
-    public void decompose() {
-        final var matrix = DenseDoubleMatrix2dRandom
-            .nextMatrix(new Extent2d(5, 5));
-
-        final var expected = decompose(matrix);
-
-        final var decomposer = new LuDecomposition();
-        decomposer.decompose(matrix);
-        final var lu = matrix; //decomposer.LU;
-
-        final var result = lu.equals(expected, 0.0001);
-        System.out.println(lu);
-        System.out.println(expected);
-        System.out.println(result);
     }
 
 }

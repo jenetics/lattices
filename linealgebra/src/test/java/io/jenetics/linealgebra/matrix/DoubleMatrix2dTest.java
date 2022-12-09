@@ -23,16 +23,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.random.RandomGenerator;
 import java.util.random.RandomGeneratorFactory;
 
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.ColtMatrices;
+import io.jenetics.linealgebra.Colts;
 import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
+import io.jenetics.linealgebra.structure.Range1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -72,14 +74,40 @@ public class DoubleMatrix2dTest {
     public void columnView() {
         final var generator = RandomGenerator.getDefault();
         final var random = new DenseDoubleMatrix2dRandom(generator);
-        final var dimension = new Extent2d(23, 54);
+        final var dimension = new Extent2d(10, 10);
 
         final var A = random.next(dimension);
-        final var column23 = A.columnAt(23);
+        final var column5 = A.columnAt(5);
 
-        assertThat(column23.size()).isEqualTo(dimension.rows());
+        assertThat(column5.size()).isEqualTo(dimension.rows());
         for (int i = 0; i < dimension.rows(); ++i) {
-            assertThat(column23.get(i)).isEqualTo(A.get(i, 23));
+            assertThat(column5.get(i)).isEqualTo(A.get(i, 5));
+        }
+
+        /*
+        final var val = new AtomicInteger();
+        A.forEach((i, j) -> A.set(i, j, val.incrementAndGet()));
+
+        column5.assign(0);
+        System.out.println(column5);
+        System.out.println();
+        System.out.println(A);
+         */
+
+
+        //A.set(2, 23, 1234);
+        //assertThat(column5.get(2)).isEqualTo(1234);
+
+        column5
+            .view(new Range1d(2, 5))
+            .update(v -> 0);
+
+        System.out.println(column5.view(new Range1d(2, 5)));
+        System.out.println(A.columnAt(5));
+        System.out.println(A);
+
+        for (int i = 0; i < 5; ++i) {
+            assertThat(A.get(i + 2, 5)).isEqualTo(0);
         }
     }
 
@@ -150,8 +178,8 @@ public class DoubleMatrix2dTest {
         final var B = random.next(dimension);
         final var C = A.mult(B, null, 2, 3, false, false);
 
-        final var coltA = ColtMatrices.of(A);
-        final var coltB = ColtMatrices.of(B);
+        final var coltA = Colts.toColt(A);
+        final var coltB = Colts.toColt(B);
         final var coltC = coltA.zMult(coltB, null, 2, 3, false, false);
 
         assertEquals(C, coltC);

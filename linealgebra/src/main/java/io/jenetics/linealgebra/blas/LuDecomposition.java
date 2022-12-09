@@ -24,7 +24,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Range1d;
 import io.jenetics.linealgebra.structure.Range2d;
 
-class LuDecomposition {
+final class LuDecomposition {
 
     protected DoubleMatrix2d LU;
 
@@ -40,11 +40,9 @@ class LuDecomposition {
     transient protected int[] work1;
     transient protected int[] work2;
 
-    public void decompose(DoubleMatrix2d A) {
-        final int CUT_OFF = 10;
-
+    void decompose(final DoubleMatrix2d A) {
         // Setup
-        LU = A;
+        DoubleMatrix2d LU = A;
         final int m = A.rows();
         final int n = A.cols();
 
@@ -58,13 +56,13 @@ class LuDecomposition {
         pivsign = 1;
 
         if (m*n == 0) {
-            setLU(LU);
+            //setLU(LU);
             return; // nothing to do
         }
 
         // Precompute and cache some views to avoid regenerating them time and again
         final var LUrows = new DoubleMatrix1d[m];
-        for (int i = 0; i < m; i++) {
+        for (int i = 0; i < m; ++i) {
             LUrows[i] = LU.rowAt(i);
         }
 
@@ -75,7 +73,7 @@ class LuDecomposition {
 //        // Outer loop.
         for (int j = 0; j < n; j++) {
 //            // blocking (make copy of j-th column to localize references)
-//            LUcolj.assign(LU.viewColumn(j));
+            LUcolj.assign(LU.columnAt(j));
 //
 //            // sparsity detection
 //            int maxCardinality = m / CUT_OFF; // == heuristic depending on speedup
@@ -112,7 +110,7 @@ class LuDecomposition {
             int p = j;
             if (p < m) {
                 double max = Math.abs(LUcolj.get(p));
-                for (int i = j + 1; i < m; i++) {
+                for (int i = j + 1; i < m; ++i) {
                     double v = Math.abs(LUcolj.get(i));
                     if (v > max) {
                         p = i;
@@ -133,16 +131,11 @@ class LuDecomposition {
             if (j < m && (jj = LU.get(j, j)) != 0.0) {
                 final var range = new Range1d(j + 1, m - (j + 1));
                 final var multiplier = 1.0/jj;
-                LU.columnAt(j).view(range).update(v -> v*multiplier);
+                LU.columnAt(j).view(range).update(v -> v/jj);
             }
 //
         }
 //        setLU(LU);
-    }
-
-    public void setLU(DoubleMatrix2d LU) {
-        this.LU = LU;
-        //this.isNonSingular = isNonsingular(LU);
     }
 
     static DoubleMatrix2d lowerTriangular(DoubleMatrix2d A) {

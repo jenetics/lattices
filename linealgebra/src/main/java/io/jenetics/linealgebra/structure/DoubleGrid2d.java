@@ -237,31 +237,50 @@ public class DoubleGrid2d implements Structural2d {
         return a;
     }
 
-
-    /* *************************************************************************
-     * Static matrix helper methods.
-     * ************************************************************************/
-
     /**
      * Checks whether the given matrices have the same dimension and contains
      * the same values.
      *
-     * @param a the first matrix
-     * @param b the second matrix
+     * @param other the second matrix to compare
      * @param error the allowed relative error
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public static boolean equals(
-        final DoubleGrid2d a,
-        final DoubleGrid2d b,
-        final double error
-    ) {
-        return a.extent().equals(b.extent()) &&
-            new Loop2d.RowMajor(a.extent()).allMatch((r, c) ->
-                equals(r, c, a, b, error)
-            );
+    public boolean equals(final DoubleGrid2d other, final double error) {
+        return extent().equals(other.extent()) &&
+            allMatch((r, c) -> equals(r, c, this, other, error));
     }
+
+    @Override
+    public String toString() {
+        final var out = new StringBuilder();
+
+        out.append("[");
+        for (int i = 0; i < rows(); ++i) {
+            if (i != 0) {
+                out.append(" ");
+            }
+            out.append("[");
+            for (int j = 0; j < cols(); ++j) {
+                out.append(get(i, j));
+                if (j < cols() - 1) {
+                    out.append(", ");
+                }
+            }
+            out.append("]");
+            if (i < rows() - 1) {
+                out.append("\n");
+            }
+        }
+
+        out.append("]");
+
+        return out.toString();
+    }
+
+    /* *************************************************************************
+     * Static matrix helper methods.
+     * ************************************************************************/
 
     private static boolean equals(
         final int r,

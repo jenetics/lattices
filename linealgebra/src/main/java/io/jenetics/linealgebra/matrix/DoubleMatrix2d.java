@@ -315,8 +315,7 @@ public class DoubleMatrix2d
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix2d m &&
-            equals(this, m, 0.0);
+        return obj instanceof DoubleMatrix2d m && equals(m, 0.0);
     }
 
 }

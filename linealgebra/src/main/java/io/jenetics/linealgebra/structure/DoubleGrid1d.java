@@ -184,4 +184,18 @@ public class DoubleGrid1d implements Structural1d {
         return a;
     }
 
+    @Override
+    public String toString() {
+        final var out = new StringBuilder();
+        out.append("[");
+        for (int i = 0; i < size(); ++i) {
+            out.append(get(i));
+            if (i < size() - 1) {
+                out.append(", ");
+            }
+        }
+        out.append("]");
+        return out.toString();
+    }
+
 }
