@@ -29,6 +29,9 @@ import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Extent2d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class LUTest {
 
     @Test
