@@ -19,30 +19,29 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import io.jenetics.linealgebra.array.DenseDoubleArray;
+import org.testng.annotations.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
- * The extent of 2-d structures.
- *
- * @param size the number of elements
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
  */
-public record Extent1d(int size) {
+public class DoubleGrid1dTest {
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
-        }
-    }
+    @Test
+    public void assign() {
+        final var extent = new Extent1d(100);
+        final var structure = new Structure1d(extent);
+        final var grid = new DoubleGrid1d(
+            structure,
+            DenseDoubleArray.ofSize(extent.size())
+        );
 
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
-
-    @Override
-    public String toString() {
-        return "[%s]".formatted(size());
+        grid.assign(87);
+        grid.forEach(i -> {
+            assertThat(grid.get(i)).isEqualTo(87.0);
+        });
     }
 
 }

@@ -19,30 +19,38 @@
  */
 package io.jenetics.linealgebra.structure;
 
-/**
- * The extent of 2-d structures.
- *
- * @param size the number of elements
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
- */
-public record Extent1d(int size) {
+import org.testng.annotations.Test;
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
+public class StrideOrder2dTest {
+
+    @Test
+    public void indexExtent() {
+        final var extent = new Extent2d(23, 43);
+        final var order = new StrideOrder2d(extent);
+
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                final var idx = order.index(i, j);
+                assertThat(idx).isEqualTo(i*extent.cols() + j);
+            }
         }
     }
 
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
+    @Test
+    public void transpose() {
+        final var order = new StrideOrder2d(34, 87, new Extent2d(87, 23));
+        final var torder = order.transpose();
 
-    @Override
-    public String toString() {
-        return "[%s]".formatted(size());
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
+            }
+        }
     }
 
 }

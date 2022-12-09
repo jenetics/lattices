@@ -24,7 +24,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Range1d;
 import io.jenetics.linealgebra.structure.Range2d;
 
-class LU {
+class LuDecomposition {
 
     protected DoubleMatrix2d LU;
 

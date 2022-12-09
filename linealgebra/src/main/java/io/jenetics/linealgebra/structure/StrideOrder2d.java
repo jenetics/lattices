@@ -32,8 +32,10 @@ package io.jenetics.linealgebra.structure;
  * @version !__version__!
  */
 public record StrideOrder2d(
-    int rowStart, int colStart,
-    int rowStride, int colStride
+    int rowStart,
+    int colStart,
+    int rowStride,
+    int colStride
 )
     implements Order2d
 {
@@ -47,6 +49,14 @@ public record StrideOrder2d(
      */
     public StrideOrder2d(final Extent2d extent) {
         this(0, 0, extent.cols(), 1);
+    }
+
+    public StrideOrder2d(
+        final int rowStart,
+        final int colStart,
+        final Extent2d extent
+    ) {
+        this(rowStart, colStart, extent.cols(), 1);
     }
 
     @Override

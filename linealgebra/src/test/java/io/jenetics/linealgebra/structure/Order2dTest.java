@@ -19,30 +19,26 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import org.testng.annotations.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
- * The extent of 2-d structures.
- *
- * @param size the number of elements
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
  */
-public record Extent1d(int size) {
+public class Order2dTest {
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
+    @Test
+    public void transpose() {
+        final Order2d order = (x, y) -> x + y*100;
+        final Order2d torder = order.transpose();
+
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
+            }
         }
-    }
 
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
-
-    @Override
-    public String toString() {
-        return "[%s]".formatted(size());
     }
 
 }

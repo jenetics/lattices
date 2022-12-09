@@ -40,4 +40,9 @@ public class DenseDoubleMatrix2dRandom {
         return result;
     }
 
+    public static DoubleMatrix2d nextMatrix(final Extent2d extent2d) {
+        return new DenseDoubleMatrix2dRandom(RandomGenerator.getDefault())
+            .next(extent2d);
+    }
+
 }

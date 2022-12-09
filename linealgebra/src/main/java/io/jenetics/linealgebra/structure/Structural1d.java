@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import java.util.function.IntConsumer;
+
 /**
  * 1-d structural mixin interface.
  *
@@ -26,7 +28,7 @@ package io.jenetics.linealgebra.structure;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural1d {
+public interface Structural1d extends Loop1d {
 
     /**
      * Return the structure for 2-d structures.
@@ -78,4 +80,7 @@ public interface Structural1d {
         return extent().size();
     }
 
+    default void forEach(final IntConsumer action) {
+        extent().loop().forEach(action);
+    }
 }

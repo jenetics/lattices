@@ -19,30 +19,32 @@
  */
 package io.jenetics.linealgebra.structure;
 
+import java.util.function.IntConsumer;
+
 /**
- * The extent of 2-d structures.
- *
- * @param size the number of elements
+ * Looping strategies for 1-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Extent1d(int size) {
+public interface Loop1d {
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
+    /**
+     * Performs an action for each position of {@code this} dimension.
+     *
+     * @param action an action to perform on the positions
+     */
+    void forEach(final IntConsumer action);
+
+
+    record Forward(Extent1d extent) implements Loop1d {
+        @Override
+        public void forEach(final IntConsumer action) {
+            for (int i = 0; i < extent.size(); ++i) {
+                action.accept(i);
+            }
         }
-    }
-
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
-
-    @Override
-    public String toString() {
-        return "[%s]".formatted(size());
     }
 
 }
