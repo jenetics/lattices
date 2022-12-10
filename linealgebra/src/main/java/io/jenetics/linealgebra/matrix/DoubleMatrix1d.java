@@ -24,11 +24,11 @@ import java.util.stream.IntStream;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
-import io.jenetics.linealgebra.structure.DoubleGrid1d;
-import io.jenetics.linealgebra.structure.Factory1d;
-import io.jenetics.linealgebra.structure.Range1d;
-import io.jenetics.linealgebra.structure.StrideOrder1d;
-import io.jenetics.linealgebra.structure.Structure1d;
+import io.jenetics.linealgebra.grid.DoubleGrid1d;
+import io.jenetics.linealgebra.grid.Factory1d;
+import io.jenetics.linealgebra.grid.Range1d;
+import io.jenetics.linealgebra.grid.StrideOrder1d;
+import io.jenetics.linealgebra.grid.Structure1d;
 
 /**
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}

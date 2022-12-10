@@ -17,25 +17,30 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.testng.annotations.Test;
+
+import io.jenetics.linealgebra.array.DenseDoubleArray;
 
 /**
- * Represents the order for accessing the linearly stored matrix data.
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
  */
-@FunctionalInterface
-public interface Order1d {
+public class DoubleGrid1dTest {
 
-    /**
-     * Return the position of the element with the given relative {@code rank}
-     * within the (virtual or non-virtual) internal 1-d array.
-     *
-     * @param rank the rank of the element.
-     * @return the (linearized) index of the given {@code rank}
-     */
-    int index(final int rank);
+    @Test
+    public void assign() {
+        final var extent = new Extent1d(100);
+        final var structure = new Structure1d(extent);
+        final var grid = new DoubleGrid1d(
+            structure,
+            DenseDoubleArray.ofSize(extent.size())
+        );
+
+        grid.assign(87);
+        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+    }
 
 }

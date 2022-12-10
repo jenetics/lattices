@@ -28,5 +28,5 @@ module io.jenetics.linealgebra {
     exports io.jenetics.linealgebra.blas;
     exports io.jenetics.linealgebra.function;
     exports io.jenetics.linealgebra.matrix;
-    exports io.jenetics.linealgebra.structure;
+    exports io.jenetics.linealgebra.grid;
 }

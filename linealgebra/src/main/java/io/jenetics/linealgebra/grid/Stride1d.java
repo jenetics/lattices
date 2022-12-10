@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
  * Defines a stride.

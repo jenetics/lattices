@@ -17,27 +17,32 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
- * Defines row- and columns strides.
+ * The extent of 2-d structures.
  *
- * @param rowStride the row stride value
- * @param colStride the column stride value
+ * @param size the number of elements
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Stride2d(int rowStride, int colStride) {
+public record Extent1d(int size) {
 
-    public Stride2d {
-        if (rowStride < 0 || colStride < 0) {
-            throw new IllegalArgumentException(
-                "Strides must not be negative: [%d, %d]."
-                    .formatted(rowStride, colStride)
-            );
+    public Extent1d {
+        if (size < 0) {
+            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
         }
+    }
+
+    public Loop1d loop() {
+        return new Loop1d.Forward(this);
+    }
+
+    @Override
+    public String toString() {
+        return "[%s]".formatted(size());
     }
 
 }

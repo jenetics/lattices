@@ -21,7 +21,7 @@ package io.jenetics.linealgebra.blas;
 
 import io.jenetics.linealgebra.Tolerance;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.structure.Structural2d;
+import io.jenetics.linealgebra.grid.Structural2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

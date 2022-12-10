@@ -17,30 +17,40 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.array.DenseDoubleArray;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class DoubleGrid1dTest {
+public class StrideOrder2dTest {
 
     @Test
-    public void assign() {
-        final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
-        final var grid = new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(extent.size())
-        );
+    public void indexExtent() {
+        final var extent = new Extent2d(23, 43);
+        final var order = new StrideOrder2d(extent);
 
-        grid.assign(87);
-        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                final var idx = order.index(i, j);
+                assertThat(idx).isEqualTo(i*extent.cols() + j);
+            }
+        }
+    }
+
+    @Test
+    public void transpose() {
+        final var order = new StrideOrder2d(34, 87, new Extent2d(87, 23));
+        final var torder = order.transpose();
+
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
+            }
+        }
     }
 
 }

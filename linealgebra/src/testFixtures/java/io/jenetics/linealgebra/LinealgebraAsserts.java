@@ -21,7 +21,7 @@ package io.jenetics.linealgebra;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.jenetics.linealgebra.structure.DoubleGrid2d;
+import io.jenetics.linealgebra.grid.DoubleGrid2d;
 
 public final class LinealgebraAsserts {
 

@@ -17,28 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.linealgebra.function.IntIntConsumer;
-import io.jenetics.linealgebra.function.IntIntPredicate;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 /**
- * Looping strategies for 2-d structures.
+ * Looping strategies for 1-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public interface Loop2d {
+public interface Loop1d {
 
     /**
      * Performs an action for each position of {@code this} dimension.
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final IntIntConsumer action);
+    void forEach(final IntConsumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -50,7 +50,7 @@ public interface Loop2d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final IntIntPredicate predicate);
+    boolean anyMatch(final IntPredicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -65,7 +65,7 @@ public interface Loop2d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final IntIntPredicate predicate);
+    boolean allMatch(final IntPredicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -78,151 +78,128 @@ public interface Loop2d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final IntIntPredicate predicate);
+    boolean nonMatch(final IntPredicate predicate);
 
     /**
-     * Row-major loop implementation. The rows and columns are iterated forward.
+     * Implements a forward loop iteration.
      *
      * @param range the range which defines the boundaries of the loop
      */
-    record RowMajor(Range2d range) implements Loop2d {
+    record Forward(Range1d range) implements Loop1d {
 
         /**
-         * Row-major implementation of the loop strategy
+         * Implements a forward loop iteration.
          *
          * @param extent the extent which defines the boundaries of the loop
          */
-        public RowMajor(final Extent2d extent) {
-            this(new Range2d(extent));
+        public Forward(final Extent1d extent) {
+            this(new Range1d(extent));
         }
 
         @Override
-        public void forEach(final IntIntConsumer action) {
+        public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
-                    action.accept(r, c);
-                }
+            for (int i = range.index(); i < range.size(); ++i) {
+                action.accept(i);
             }
         }
 
         @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
+        public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
+            for (int i = range.index(); i < range.size(); ++i) {
+                if (predicate.test(i)) {
+                    return true;
                 }
             }
-
             return false;
         }
 
         @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
+        public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
+            for (int i = range.index(); i < range.size(); ++i) {
+                if (!predicate.test(i)) {
+                    return false;
                 }
             }
-
             return true;
         }
 
         @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
+        public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
+            for (int i = range.index(); i < range.size(); ++i) {
+                if (predicate.test(i)) {
+                    return false;
                 }
             }
-
             return true;
         }
     }
 
     /**
-     * Column-major loop implementation. he rows and columns are iterated
-     * forward.
+     * Implements a backward loop iteration.
      *
      * @param range the range which defines the boundaries of the loop
      */
-    record ColMajor(Range2d range) implements Loop2d {
+    record Backward(Range1d range) implements Loop1d {
 
         /**
-         * Column-major implementation of the loop strategy
+         * Implements a backward loop iteration.
          *
          * @param extent the extent which defines the boundaries of the loop
          */
-        public ColMajor(final Extent2d extent) {
-            this(new Range2d(extent));
+        public Backward(final Extent1d extent) {
+            this(new Range1d(extent));
         }
 
         @Override
-        public void forEach(IntIntConsumer action) {
+        public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int c = range.column(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    action.accept(r, c);
-                }
+            for (int i = range.size(); --i >= range.index();) {
+                action.accept(i);
             }
         }
 
         @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
+        public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
+            for (int i = range.size(); --i >= range.index();) {
+                if (predicate.test(i)) {
+                    return true;
                 }
             }
-
             return false;
         }
 
         @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
+        public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
+            for (int i = range.size(); --i >= range.index();) {
+                if (!predicate.test(i)) {
+                    return false;
                 }
             }
-
             return true;
         }
 
         @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
+        public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
+            for (int i = range.size(); --i >= range.index();) {
+                if (predicate.test(i)) {
+                    return false;
                 }
             }
-
             return true;
         }
     }

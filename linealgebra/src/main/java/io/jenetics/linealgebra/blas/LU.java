@@ -26,7 +26,7 @@ import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.structure.Range1d;
+import io.jenetics.linealgebra.grid.Range1d;
 
 /**
  * Performs in place LU-decomposition.

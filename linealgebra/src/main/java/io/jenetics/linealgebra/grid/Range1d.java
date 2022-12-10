@@ -17,43 +17,36 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
- * @param row the row where the range starts
- * @param column the column where the range starts
- * @param height the height of the range
- * @param width the size of the range
+ * @param index the start index of the range
+ * @param size the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Range2d(int row, int column, int height, int width) {
+public record Range1d(int index, int size) {
 
-    public Range2d {
-        if (row < 0 || column < 0 || height < 0 || width < 0) {
+    public Range1d {
+        if (index < 0 || size < 0) {
             throw new IllegalArgumentException(
-                "Invalid range [%d, %d, %d, %d]."
-                    .formatted(row, column, height, width)
+                "Invalid range [%d, %d].".formatted(index, size)
             );
         }
     }
 
     /**
-     * Create a new range from the given extent. The start indices ({@link #row}
-     * and {@link #column()}) are set to zero.
+     * Create a new range from the given extent. The start indices ({@link #index}
+     * is set to zero.
      *
      * @param extent the extent of the new range
      */
-    public Range2d(final Extent2d extent) {
-        this(0, 0, extent.rows(), extent.cols());
-    }
-
-    public int size() {
-        return height*width;
+    public Range1d(final Extent1d extent) {
+        this(0, extent.size());
     }
 
 }

@@ -17,32 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
- * The extent of 2-d structures.
- *
- * @param size the number of elements
+ * Represents the order for accessing the linearly stored element data.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Extent1d(int size) {
+@FunctionalInterface
+public interface Order2d {
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
-        }
-    }
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     *
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code row} and {@code col}
+     */
+    int index(final int row, final int col);
 
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
-
-    @Override
-    public String toString() {
-        return "[%s]".formatted(size());
+    /**
+     * Return a new order function which swaps row index with column index.
+     *
+     * @return a new transposed order function
+     */
+    default Order2d transpose() {
+        return (row, col) -> index(col, row);
     }
 
 }

@@ -23,8 +23,8 @@ import java.util.random.RandomGenerator;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.structure.Extent1d;
-import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.grid.Extent1d;
+import io.jenetics.linealgebra.grid.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

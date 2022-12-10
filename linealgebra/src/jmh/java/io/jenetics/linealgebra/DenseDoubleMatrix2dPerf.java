@@ -36,7 +36,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.structure.Extent2d;
+import io.jenetics.linealgebra.grid.Extent2d;
 
 @Warmup(iterations = 1)
 @Measurement(iterations = 2)

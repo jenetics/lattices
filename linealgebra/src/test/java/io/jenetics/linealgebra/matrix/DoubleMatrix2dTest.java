@@ -29,10 +29,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
-import io.jenetics.linealgebra.structure.Extent2d;
-import io.jenetics.linealgebra.structure.Loop2d;
-import io.jenetics.linealgebra.structure.Range2d;
-import io.jenetics.linealgebra.structure.Stride2d;
+import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.grid.Loop2d;
+import io.jenetics.linealgebra.grid.Range2d;
+import io.jenetics.linealgebra.grid.Stride2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

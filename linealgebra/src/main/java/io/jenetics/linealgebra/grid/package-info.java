@@ -17,36 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
 
 /**
- * Represents a <em>grid</em> range with the given parameters.
- *
- * @param index the start index of the range
- * @param size the size of the range
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Range1d(int index, int size) {
-
-    public Range1d {
-        if (index < 0 || size < 0) {
-            throw new IllegalArgumentException(
-                "Invalid range [%d, %d].".formatted(index, size)
-            );
-        }
-    }
-
-    /**
-     * Create a new range from the given extent. The start indices ({@link #index}
-     * is set to zero.
-     *
-     * @param extent the extent of the new range
-     */
-    public Range1d(final Extent1d extent) {
-        this(0, extent.size());
-    }
-
-}
+package io.jenetics.linealgebra.grid;

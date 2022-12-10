@@ -19,12 +19,12 @@
  */
 package io.jenetics.linealgebra.matrix;
 
-import io.jenetics.linealgebra.structure.Extent1d;
-import io.jenetics.linealgebra.structure.Factory1d;
-import io.jenetics.linealgebra.structure.Range1d;
-import io.jenetics.linealgebra.structure.Stride1d;
-import io.jenetics.linealgebra.structure.Structural1d;
-import io.jenetics.linealgebra.structure.Structure1d;
+import io.jenetics.linealgebra.grid.Extent1d;
+import io.jenetics.linealgebra.grid.Factory1d;
+import io.jenetics.linealgebra.grid.Range1d;
+import io.jenetics.linealgebra.grid.Stride1d;
+import io.jenetics.linealgebra.grid.Structural1d;
+import io.jenetics.linealgebra.grid.Structure1d;
 
 /**
  * This interface defines the structure for 1-d matrices holding objects or

@@ -17,28 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.testng.annotations.Test;
+package io.jenetics.linealgebra.grid;
 
 /**
+ * Represents the order for accessing the linearly stored matrix data.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
  */
-public class Order2dTest {
+@FunctionalInterface
+public interface Order1d {
 
-    @Test
-    public void transpose() {
-        final Order2d order = (x, y) -> x + y*100;
-        final Order2d torder = order.transpose();
-
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 10; ++j) {
-                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
-            }
-        }
-
-    }
+    /**
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
+     *
+     * @param rank the rank of the element.
+     * @return the (linearized) index of the given {@code rank}
+     */
+    int index(final int rank);
 
 }

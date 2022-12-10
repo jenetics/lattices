@@ -17,35 +17,27 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Defines row- and columns strides.
+ *
+ * @param rowStride the row stride value
+ * @param colStride the column stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-@FunctionalInterface
-public interface Order2d {
+public record Stride2d(int rowStride, int colStride) {
 
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
-     */
-    int index(final int row, final int col);
-
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
+    public Stride2d {
+        if (rowStride < 0 || colStride < 0) {
+            throw new IllegalArgumentException(
+                "Strides must not be negative: [%d, %d]."
+                    .formatted(rowStride, colStride)
+            );
+        }
     }
 
 }

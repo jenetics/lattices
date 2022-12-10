@@ -17,50 +17,43 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
- * The extent of 2-d structures.
+ * Represents a <em>grid</em> range with the given parameters.
  *
- * @param rows the number of rows
- * @param cols the number of columns
+ * @param row the row where the range starts
+ * @param column the column where the range starts
+ * @param height the height of the range
+ * @param width the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Extent2d(int rows, int cols) {
+public record Range2d(int row, int column, int height, int width) {
 
-    public Extent2d {
-        if (rows < 0) {
+    public Range2d {
+        if (row < 0 || column < 0 || height < 0 || width < 0) {
             throw new IllegalArgumentException(
-                "Number of rows must greater or equal than start: " + rows
+                "Invalid range [%d, %d, %d, %d]."
+                    .formatted(row, column, height, width)
             );
         }
-        if (cols < 0) {
-            throw new IllegalArgumentException(
-                "Number of columns must greater or equal than start: " + cols
-            );
-        }
-    }
-
-    public Extent2d(final Range2d range) {
-        this(range.height(), range.width());
     }
 
     /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
+     * Create a new range from the given extent. The start indices ({@link #row}
+     * and {@link #column()}) are set to zero.
      *
-     * @return the number of cells for {@code this} matrix dimension
+     * @param extent the extent of the new range
      */
-    public int size() {
-        return rows*cols;
+    public Range2d(final Extent2d extent) {
+        this(0, 0, extent.rows(), extent.cols());
     }
 
-    @Override
-    public String toString() {
-        return "[%s x %s]".formatted(rows(), cols());
+    public int size() {
+        return height*width;
     }
 
 }

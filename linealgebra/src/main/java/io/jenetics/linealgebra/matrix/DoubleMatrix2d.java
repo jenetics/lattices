@@ -25,15 +25,15 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
-import io.jenetics.linealgebra.structure.DoubleGrid2d;
-import io.jenetics.linealgebra.structure.Extent1d;
-import io.jenetics.linealgebra.structure.Extent2d;
-import io.jenetics.linealgebra.structure.Factory2d;
-import io.jenetics.linealgebra.structure.Loop2d;
-import io.jenetics.linealgebra.structure.Range2d;
-import io.jenetics.linealgebra.structure.StrideOrder2d;
-import io.jenetics.linealgebra.structure.Structure1d;
-import io.jenetics.linealgebra.structure.Structure2d;
+import io.jenetics.linealgebra.grid.DoubleGrid2d;
+import io.jenetics.linealgebra.grid.Extent1d;
+import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.grid.Factory2d;
+import io.jenetics.linealgebra.grid.Loop2d;
+import io.jenetics.linealgebra.grid.Range2d;
+import io.jenetics.linealgebra.grid.StrideOrder2d;
+import io.jenetics.linealgebra.grid.Structure1d;
+import io.jenetics.linealgebra.grid.Structure2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements.

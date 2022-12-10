@@ -17,26 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
+import io.jenetics.linealgebra.function.IntIntConsumer;
+import io.jenetics.linealgebra.function.IntIntPredicate;
 
 /**
- * 1-d structural mixin interface.
+ * 2-d structural mixin interface.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural1d extends Loop1d {
+public interface Structural2d extends Loop2d {
 
     /**
-     * Return the structure for 2-d structures.
+     * Return the structure for 2-d grid.
      *
-     * @return the structure for 2-d structures
+     * @return the structure for 2-d grid
      */
-    Structure1d structure();
+    Structure2d structure();
 
     /**
      * Checks whether the extent of this structural object is the same as the
@@ -46,7 +46,7 @@ public interface Structural1d extends Loop1d {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    default void requireSameExtent(final Extent1d other) {
+    default void requireSameExtent(final Extent2d other) {
         if (!extent().equals(other)) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(extent(), extent())
@@ -59,7 +59,7 @@ public interface Structural1d extends Loop1d {
      *
      * @return the dimension of {@code this} 2-d structures
      */
-    default Extent1d extent() {
+    default Extent2d extent() {
         return structure().extent();
     }
 
@@ -68,7 +68,7 @@ public interface Structural1d extends Loop1d {
      *
      * @return the defined order of {@code this} 2-d structures
      */
-    default Order1d order() {
+    default Order2d order() {
         return structure().order();
     }
 
@@ -82,32 +82,50 @@ public interface Structural1d extends Loop1d {
     }
 
     /**
+     * Return the number of rows of {@code this} structures.
+     *
+     * @return the number of rows of {@code this} structures
+     */
+    default int rows() {
+        return extent().rows();
+    }
+
+    /**
+     * Return the number of columns of {@code this} structures.
+     *
+     * @return the number of columns of {@code this} structures
+     */
+    default int cols() {
+        return extent().cols();
+    }
+
+    /**
      * Return the default looping strategy of this structural, which can be
      * overridden by the implementation, if desired.
      *
      * @return the looping strategy of this structural
      */
-    default Loop1d loop() {
-        return new Loop1d.Forward(extent());
+    default Loop2d loop() {
+        return new RowMajor(extent());
     }
 
     @Override
-    default void forEach(final IntConsumer action) {
+    default void forEach(final IntIntConsumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(final IntPredicate predicate) {
+    default boolean anyMatch(final IntIntPredicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(final IntPredicate predicate) {
+    default boolean allMatch(final IntIntPredicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(final IntPredicate predicate) {
+    default boolean nonMatch(final IntIntPredicate predicate) {
         return loop().nonMatch(predicate);
     }
 

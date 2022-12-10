@@ -1,4 +1,4 @@
-package io.jenetics.linealgebra.structure;
+package io.jenetics.linealgebra.grid;
 
 /**
  * Factory interface for creating 1-d matrices.
