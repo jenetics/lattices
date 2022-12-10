@@ -124,7 +124,7 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d columnAt(final int index) {
-        return new DoubleMatrix1d(structure.columnView(index), elements);
+        return new DoubleMatrix1d(structure.columnAt(index), elements);
     }
 
     /**
@@ -139,7 +139,7 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(structure.rowView(index), elements);
+        return new DoubleMatrix1d(structure.rowAt(index), elements);
     }
 
     /* *************************************************************************
