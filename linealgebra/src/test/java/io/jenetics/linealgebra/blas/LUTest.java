@@ -21,15 +21,15 @@ package io.jenetics.linealgebra.blas;
 
 import static io.jenetics.linealgebra.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.LUDecomposition;
+import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.LUDecompositionQuick;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
 import io.jenetics.linealgebra.LinealgebraAsserts;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -72,9 +72,10 @@ public class LUTest {
         final var coltMatrix = Colts.toColt(matrix);
         final var coltB = Colts.toColt(B);
 
-        final var decomposer = new LUDecomposition(coltMatrix);
-        final var result = decomposer.solve(coltB);
-        return Colts.toLinealgebra(result);
+        //final var decomposer = new LUDecomposition(coltMatrix);
+        //final var result = decomposer.solve(coltB);
+        //return Colts.toLinealgebra(result);
+        return Colts.toLinealgebra(Algebra.DEFAULT.solve(Colts.toColt(matrix), Colts.toColt(B)));
     }
 
 }

@@ -34,7 +34,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  * @since !__version__!
  * @version !__version__!
  */
-final class LU {
+final class LU implements Solver {
 
     private final DoubleMatrix2d lu;
     private final int pivsign;
@@ -53,6 +53,7 @@ final class LU {
         singular = !isNonSingular(lu);
     }
 
+    @Override
     public void solve(final DoubleMatrix2d B) {
         lu.requireRectangular();
 

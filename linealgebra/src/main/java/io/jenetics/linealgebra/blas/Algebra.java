@@ -19,9 +19,10 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import java.util.function.Function;
+
 import io.jenetics.linealgebra.Tolerance;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.grid.Structural2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -34,13 +35,53 @@ public final class Algebra {
     }
 
     /**
+     * Solves A*X = B.
+     *
+     * @return X; a new independent matrix; solution if A is square, least
+     * squares solution otherwise.
+     */
+    public static DoubleMatrix2d solve(DoubleMatrix2d A, DoubleMatrix2d B) {
+        return A.rows() == A.cols()
+            ? lu(A).apply(B)
+            : qr(A).apply(B);
+    }
+
+    private static Function<DoubleMatrix2d, DoubleMatrix2d>
+    lu(final DoubleMatrix2d matrix) {
+        final var A = matrix.copy();
+        final var lu = LU.decompose(A);
+
+        return B -> {
+            final var BC = B.copy();
+            lu.solve(BC);
+            return BC;
+        };
+    }
+
+    private static Function<DoubleMatrix2d, DoubleMatrix2d>
+    qr(final DoubleMatrix2d matrix) {
+        final var A = matrix.copy();
+        final var qr = QR.decompose(A);
+
+        return B -> {
+            final var BC = B.copy();
+            qr.solve(BC);
+            return BC;
+        };
+    }
+
+    public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
+        return null;
+    }
+
+    /**
      * Check if the given {@code matrix} is non-singular.
      *
      * @param matrix the {@code matrix} to test
      * @return {@code true} if the given {@code matrix} is non-singular,
      *         {@code false} otherwise
      */
-    public static boolean isNonSingular(final DoubleMatrix2d matrix) {
+    static boolean isNonSingular(final DoubleMatrix2d matrix) {
         final var epsilon = Tolerance.epsilon();
 
         for (int j = Math.min(matrix.rows(), matrix.cols()); --j >= 0;) {
