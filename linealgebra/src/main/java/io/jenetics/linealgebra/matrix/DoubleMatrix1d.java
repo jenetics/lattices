@@ -32,7 +32,12 @@ import io.jenetics.linealgebra.grid.Structure1d;
 
 /**
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}
- * elements.
+ * elements. Instances of this class are usually created via a factory.
+ * <pre>{@code
+ * final DoubleMatrix1d matrix10 = DENSE_FACTORY.newInstance(10);
+ * }</pre>
+ *
+ * @see #DENSE_FACTORY
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -52,8 +57,15 @@ public class DoubleMatrix1d
             DenseDoubleArray.ofSize(struct.extent().size())
         );
 
-    public DoubleMatrix1d(final Structure1d structure, final DoubleArray elements) {
-        super(structure, elements);
+    /**
+     * Create a new 1-d matrix with the given {@code structure} and element
+     * {@code array}.
+     *
+     * @param structure the matrix structure
+     * @param array the element array
+     */
+    public DoubleMatrix1d(final Structure1d structure, final DoubleArray array) {
+        super(structure, array);
     }
 
     @Override

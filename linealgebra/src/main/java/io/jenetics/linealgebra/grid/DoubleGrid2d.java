@@ -38,10 +38,14 @@ public class DoubleGrid2d implements Structural2d {
     protected final Structure2d structure;
     protected final DoubleArray array;
 
-    public DoubleGrid2d(
-        final Structure2d structure,
-        final DoubleArray array
-    ) {
+    /**
+     * Create a new 2-d matrix with the given {@code structure} and element
+     * {@code array}.
+     *
+     * @param structure the matrix structure
+     * @param array the element array
+     */
+    public DoubleGrid2d(final Structure2d structure, final DoubleArray array) {
         if (structure.extent().size() > array.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +

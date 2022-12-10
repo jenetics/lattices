@@ -38,10 +38,14 @@ public class DoubleGrid1d implements Structural1d {
     protected final Structure1d structure;
     protected final DoubleArray array;
 
-    public DoubleGrid1d(
-        final Structure1d structure,
-        final DoubleArray array
-    ) {
+    /**
+     * Create a new 1-d grid with the given {@code structure} and element
+     * {@code array}.
+     *
+     * @param structure the matrix structure
+     * @param array the element array
+     */
+    public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
         if (structure.extent().size() > array.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
