@@ -22,23 +22,23 @@ package io.jenetics.linealgebra.array;
 import java.util.Arrays;
 
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code int} values.
  *
- * @param elements the underlying {@code double} element values
+ * @param elements the underlying {@code int} element values
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record DenseDoubleArray(double[] elements) implements DoubleArray {
+public record DenseIntArray(int[] elements) implements IntArray {
 
     @Override
-    public double get(final int index) {
+    public int get(final int index) {
         return elements[index];
     }
 
     @Override
-    public void set(final int index, final double value) {
+    public void set(final int index, final int value) {
         elements[index] = value;
     }
 
@@ -48,23 +48,23 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public DenseDoubleArray copy() {
-        return new DenseDoubleArray(elements.clone());
+    public DenseIntArray copy() {
+        return new DenseIntArray(elements.clone());
     }
 
     @Override
-    public DoubleArray copy(final int start, final int length) {
+    public DenseIntArray copy(final int start, final int length) {
         final var array = Arrays.copyOfRange(elements, start, start + length);
-        return new DenseDoubleArray(array);
+        return new DenseIntArray(array);
     }
 
     @Override
-    public DoubleArray like(final int length) {
+    public DenseIntArray like(final int length) {
         return ofSize(length);
     }
 
-    public static DenseDoubleArray ofSize(final int size) {
-        return new DenseDoubleArray(new double[size]);
+    public static DenseIntArray ofSize(final int size) {
+        return new DenseIntArray(new int[size]);
     }
 
 }
