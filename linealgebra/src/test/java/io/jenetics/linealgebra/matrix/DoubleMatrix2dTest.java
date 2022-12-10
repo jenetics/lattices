@@ -120,6 +120,90 @@ public class DoubleMatrix2dTest {
         }
     }
 
+    @Test(dataProvider = "matricesRanges")
+    public void columnViewFromMatrix(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix;
+
+        for (int c = 0; c < A.cols(); ++c) {
+            final var column = A.columnAt(c);
+
+            assertThat(column.size()).isEqualTo(A.rows());
+            for (int i = 0; i < A.rows(); ++i) {
+                assertThat(column.get(i)).isEqualTo(A.get(i, c));
+            }
+        }
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void columnViewFromMatrixCopy(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix.copy(range);
+
+        for (int c = 0; c < A.cols(); ++c) {
+            final var column = A.columnAt(c);
+
+            assertThat(column.size()).isEqualTo(A.rows());
+            for (int i = 0; i < A.rows(); ++i) {
+                assertThat(column.get(i)).isEqualTo(A.get(i, c));
+            }
+        }
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void columnViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix.view(range);
+
+        for (int c = 0; c < A.cols(); ++c) {
+            final var column = A.columnAt(c);
+
+            assertThat(column.size()).isEqualTo(A.rows());
+            for (int i = 0; i < A.rows(); ++i) {
+                assertThat(column.get(i)).isEqualTo(A.get(i, c));
+            }
+        }
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void rowViewFromMatrix(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix;
+
+        for (int r = 0; r < A.rows(); ++r) {
+            final var row = A.rowAt(r);
+
+            assertThat(row.size()).isEqualTo(A.cols());
+            for (int i = 0; i < A.cols(); ++i) {
+                assertThat(row.get(i)).isEqualTo(A.get(r, i));
+            }
+        }
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void rowViewFromMatrixCopy(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix.copy(range);
+
+        for (int r = 0; r < A.rows(); ++r) {
+            final var row = A.rowAt(r);
+
+            assertThat(row.size()).isEqualTo(A.cols());
+            for (int i = 0; i < A.cols(); ++i) {
+                assertThat(row.get(i)).isEqualTo(A.get(r, i));
+            }
+        }
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void rowViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix.view(range);
+
+        for (int r = 0; r < A.rows(); ++r) {
+            final var row = A.rowAt(r);
+
+            assertThat(row.size()).isEqualTo(A.cols());
+            for (int i = 0; i < A.cols(); ++i) {
+                assertThat(row.get(i)).isEqualTo(A.get(r, i));
+            }
+        }
+    }
+
     @Test
     public void equals() {
         final var dimension = new Extent2d(100, 34);
@@ -144,70 +228,6 @@ public class DoubleMatrix2dTest {
         assertThat(matrix.get(1,1)).isEqualTo(5);
         assertThat(matrix.get(2,2)).isEqualTo(9);
         assertThat(matrix.get(3,2)).isEqualTo(12);
-    }
-
-    @Test
-    public void columnView() {
-        final var dimension = new Extent2d(10, 10);
-
-        final var A = next(dimension);
-        final var column5 = A.columnAt(5);
-
-        assertThat(column5.size()).isEqualTo(dimension.rows());
-        for (int i = 0; i < dimension.rows(); ++i) {
-            assertThat(column5.get(i)).isEqualTo(A.get(i, 5));
-        }
-
-        /*
-        final var val = new AtomicInteger();
-        A.forEach((i, j) -> A.set(i, j, val.incrementAndGet()));
-
-        column5.assign(0);
-        System.out.println(column5);
-        System.out.println();
-        System.out.println(A);
-         */
-
-
-        //A.set(2, 23, 1234);
-        //assertThat(column5.get(2)).isEqualTo(1234);
-
-        column5
-            .view(new Range1d(2, 5))
-            .update(v -> 0);
-
-        System.out.println(column5.view(new Range1d(2, 5)));
-        System.out.println(A.columnAt(5));
-        System.out.println(A);
-
-        for (int i = 0; i < 5; ++i) {
-            assertThat(A.get(i + 2, 5)).isEqualTo(0);
-        }
-    }
-
-    @Test
-    public void columnViewLike() {
-        final var dimension = new Extent2d(23, 54);
-
-        final var A = next(dimension);
-        final var column = A.columnAt(0);
-        final var like = column.like();
-
-        assertThat(like.size()).isEqualTo(A.rows());
-        like.set(like.size() - 1, 89);
-    }
-
-    @Test
-    public void rowView() {
-        final var dimension = new Extent2d(23, 54);
-
-        final var A = next(dimension);
-        final var row12 = A.rowAt(12);
-
-        assertThat(row12.size()).isEqualTo(dimension.cols());
-        for (int i = 0; i < dimension.cols(); ++i) {
-            assertThat(row12.get(i)).isEqualTo(A.get(12, i));
-        }
     }
 
     @Test
