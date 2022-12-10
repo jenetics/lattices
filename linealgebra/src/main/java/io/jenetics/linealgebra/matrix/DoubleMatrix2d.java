@@ -80,8 +80,10 @@ public class DoubleMatrix2d
     @Override
     public DoubleMatrix2d copy(final Range2d range) {
         // Fast copy, if applicable.
-        if (range.row() == 0 && range.column() == 0 &&
-            range.height() == rows() && range.width() == cols() &&
+        if (range.row() == 0 &&
+            range.column() == 0 &&
+            range.height() == rows() &&
+            range.width() == cols() &&
             structure.order().equals(new StrideOrder2d(new Extent2d(range))))
         {
             return new DoubleMatrix2d(structure, elements.copy());
@@ -267,14 +269,12 @@ public class DoubleMatrix2d
         final int p = B.cols();
 
         if (C == null) {
-            final var struct = new Structure2d(new Extent2d(m, p));
-            final var elems = elements.like(struct.extent().size());
-            C = new DoubleMatrix2d(struct, elems);
+            C = like(m, p);
         }
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
-                "2-d matrix inner dimensions must equal:" +
+                "2-d matrix inner dimensions must be equal:" +
                     extent() + ", " + B.extent()
             );
         }
@@ -286,13 +286,15 @@ public class DoubleMatrix2d
         }
 
         if (this == C || B == C) {
-            throw new IllegalArgumentException("Matrices must not be identical.");
+            throw new IllegalArgumentException(
+                "Matrices A, B or C must not be identical."
+            );
         }
 
-        for (int j = p; --j >= 0; ) {
-            for (int i = m; --i >= 0; ) {
+        for (int j = p; --j >= 0;) {
+            for (int i = m; --i >= 0;) {
                 double s = 0;
-                for (int k = n; --k >= 0; ) {
+                for (int k = n; --k >= 0;) {
                     s += get(i, k) * B.get(k, j);
                 }
                 C.set(i, j, alpha * s + beta * C.get(i, j));
