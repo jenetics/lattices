@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.DenseDoubleMatrix2dRandom.nextMatrix;
+import static io.jenetics.linealgebra.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -67,14 +67,14 @@ public class DoubleGrid2dTest {
     @DataProvider
     public Object[][] grids() {
         return new Object[][] {
-            { nextMatrix(new Extent2d(0, 0)), nextMatrix(new Extent2d(0, 0)), true },
-            { nextMatrix(new Extent2d(0, 1)), nextMatrix(new Extent2d(0, 1)), true },
-            { nextMatrix(new Extent2d(1, 0)), nextMatrix(new Extent2d(1, 0)), true },
-            { nextMatrix(new Extent2d(0, 0)), nextMatrix(new Extent2d(0, 10)), false },
-            { nextMatrix(new Extent2d(5, 0)), nextMatrix(new Extent2d(0, 0)), false },
-            { nextMatrix(new Extent2d(5, 50)), nextMatrix(new Extent2d(5, 50)), false },
-            { nextMatrix(new Extent2d(50, 9)), nextMatrix(new Extent2d(50, 9)), false },
-            { nextMatrix(new Extent2d(50, 30)), nextMatrix(new Extent2d(50, 9)), false },
+            { next(new Extent2d(0, 0)), next(new Extent2d(0, 0)), true },
+            { next(new Extent2d(0, 1)), next(new Extent2d(0, 1)), true },
+            { next(new Extent2d(1, 0)), next(new Extent2d(1, 0)), true },
+            { next(new Extent2d(0, 0)), next(new Extent2d(0, 10)), false },
+            { next(new Extent2d(5, 0)), next(new Extent2d(0, 0)), false },
+            { next(new Extent2d(5, 50)), next(new Extent2d(5, 50)), false },
+            { next(new Extent2d(50, 9)), next(new Extent2d(50, 9)), false },
+            { next(new Extent2d(50, 30)), next(new Extent2d(50, 9)), false },
             equalGrids(new Extent2d(1, 1)),
             equalGrids(new Extent2d(1, 100)),
             equalGrids(new Extent2d(100, 1)),
@@ -83,7 +83,7 @@ public class DoubleGrid2dTest {
     }
 
     private static Object[] equalGrids(final Extent2d extent) {
-        final var matrix = nextMatrix(extent);
+        final var matrix = next(extent);
         return new Object[] { matrix, matrix.copy(), true };
     }
 

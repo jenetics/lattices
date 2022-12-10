@@ -19,10 +19,11 @@
  */
 package io.jenetics.linealgebra;
 
+import static io.jenetics.linealgebra.MatrixRandom.next;
+
 import cern.colt.matrix.DoubleMatrix2D;
 
 import java.util.concurrent.TimeUnit;
-import java.util.random.RandomGenerator;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -47,11 +48,10 @@ public class DenseDoubleMatrix2dPerf {
 
     @Setup
     public void setup() {
-        final var random = new DenseDoubleMatrix2dRandom(RandomGenerator.getDefault());
         final var dimension = new Extent2d(10, 10);
 
-        linealgebraA = random.next(dimension);
-        linealgebraB = random.next(dimension);
+        linealgebraA = next(dimension);
+        linealgebraB = next(dimension);
         coltA = Colts.toColt(linealgebraA);
         coltB = Colts.toColt(linealgebraB);
     }

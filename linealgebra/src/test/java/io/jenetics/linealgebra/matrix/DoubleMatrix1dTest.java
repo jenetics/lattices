@@ -20,9 +20,18 @@
 package io.jenetics.linealgebra.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static io.jenetics.linealgebra.MatrixRandom.next;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.linealgebra.structure.Extent1d;
+import io.jenetics.linealgebra.structure.Loop1d;
+import io.jenetics.linealgebra.structure.Range1d;
+
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class DoubleMatrix1dTest {
 
     @Test
@@ -33,6 +42,56 @@ public class DoubleMatrix1dTest {
 
         assertThat(like.size()).isEqualTo(matrix.size());
         like.forEach(i -> assertThat(like.get(i)).isEqualTo(0.0));
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void copy(final DoubleMatrix1d matrix, final Range1d range) {
+        if (range != null) {
+            final var copy = matrix.copy(range);
+
+            final var loop = new Loop1d.Forward(range);
+            loop.forEach(i -> {
+                final var j = i - range.index();
+
+                assertThat(copy.get(j))
+                    .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
+                    .isEqualTo(matrix.get(i));
+            });
+        }
+    }
+
+    @DataProvider
+    public Object[][] matricesRanges() {
+        return new Object[][] {
+            { next(new Extent1d(10)), new Range1d(0, 0) },
+            { next(new Extent1d(10)), new Range1d(5, 5) },
+            { next(new Extent1d(10)), new Range1d(2, 3) },
+            { next(new Extent1d(50)), new Range1d(23, 3) },
+            { next(new Extent1d(77)), new Range1d(23, 3) },
+
+            // Test also matrix views.
+            {
+                next(new Extent1d(77))
+                    .view(new Range1d(3, 7)),
+                new Range1d(1, 3),
+            }
+        };
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void view(final DoubleMatrix1d matrix, final Range1d range) {
+        if (range != null) {
+            final var copy = matrix.view(range);
+
+            final var loop = new Loop1d.Forward(range);
+            loop.forEach(i -> {
+                final var j = i - range.index();
+
+                assertThat(copy.get(j))
+                    .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
+                    .isEqualTo(matrix.get(i));
+            });
+        }
     }
 
 

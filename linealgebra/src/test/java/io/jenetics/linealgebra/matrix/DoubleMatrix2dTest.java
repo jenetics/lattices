@@ -20,19 +20,15 @@
 package io.jenetics.linealgebra.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.DenseDoubleMatrix2dRandom.nextMatrix;
+import static io.jenetics.linealgebra.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
-
-import java.util.random.RandomGenerator;
-import java.util.random.RandomGeneratorFactory;
 
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
-import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.Range1d;
@@ -65,41 +61,41 @@ public class DoubleMatrix2dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
-            { nextMatrix(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
-            { nextMatrix(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
-            { nextMatrix(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
-            { nextMatrix(new Extent2d(50, 10)), new Range2d(23, 3, 16, 7) },
-            { nextMatrix(new Extent2d(77, 59)), new Range2d(23, 3, 16, 7) },
+            { next(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
+            { next(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
+            { next(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
+            { next(new Extent2d(50, 10)), new Range2d(23, 3, 16, 7) },
+            { next(new Extent2d(77, 59)), new Range2d(23, 3, 16, 7) },
 
             // Test also matrix views.
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(3, 7, 20, 30)),
                 new Range2d(12, 3, 5, 7),
             },
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(0, 0, 20, 30)),
                 new Range2d(1, 3, 11, 7)
             },
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(0, 0, 20, 30)),
                 new Range2d(0, 0, 11, 7)
             },
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(3, 2, 20, 30)),
                 new Range2d(0, 0, 11, 7)
             },
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(3, 2, 20, 30))
                     .view(new Range2d(3, 2, 10, 20)),
                 new Range2d(0, 0, 5, 7)
             },
             {
-                nextMatrix(new Extent2d(77, 59))
+                next(new Extent2d(77, 59))
                     .view(new Range2d(3, 2, 20, 30))
                     .view(new Stride2d(2, 3)),
                 new Range2d(1, 2, 5, 4)
@@ -126,11 +122,8 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void equals() {
-        final var generator = RandomGeneratorFactory.getDefault().create();
-        final var random = new DenseDoubleMatrix2dRandom(generator);
-
         final var dimension = new Extent2d(100, 34);
-        final var a = random.next(dimension);
+        final var a = next(dimension);
         final var b = a.copy();
 
         assertThat(b).isNotSameAs(a);
@@ -155,11 +148,9 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void columnView() {
-        final var generator = RandomGenerator.getDefault();
-        final var random = new DenseDoubleMatrix2dRandom(generator);
         final var dimension = new Extent2d(10, 10);
 
-        final var A = random.next(dimension);
+        final var A = next(dimension);
         final var column5 = A.columnAt(5);
 
         assertThat(column5.size()).isEqualTo(dimension.rows());
@@ -196,11 +187,9 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void columnViewLike() {
-        final var generator = RandomGenerator.getDefault();
-        final var random = new DenseDoubleMatrix2dRandom(generator);
         final var dimension = new Extent2d(23, 54);
 
-        final var A = random.next(dimension);
+        final var A = next(dimension);
         final var column = A.columnAt(0);
         final var like = column.like();
 
@@ -210,11 +199,9 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void rowView() {
-        final var generator = RandomGenerator.getDefault();
-        final var random = new DenseDoubleMatrix2dRandom(generator);
         final var dimension = new Extent2d(23, 54);
 
-        final var A = random.next(dimension);
+        final var A = next(dimension);
         final var row12 = A.rowAt(12);
 
         assertThat(row12.size()).isEqualTo(dimension.cols());
@@ -253,12 +240,10 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void mult() {
-        final var generator = RandomGeneratorFactory.getDefault().create(1234);
-        final var random = new DenseDoubleMatrix2dRandom(generator);
         final var dimension = new Extent2d(10, 10);
 
-        final var A = random.next(dimension);
-        final var B = random.next(dimension);
+        final var A = next(dimension);
+        final var B = next(dimension);
         final var C = A.mult(B, null, 2, 3, false, false);
 
         final var coltA = Colts.toColt(A);

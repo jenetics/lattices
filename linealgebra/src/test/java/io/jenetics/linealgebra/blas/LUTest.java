@@ -19,12 +19,13 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static io.jenetics.linealgebra.MatrixRandom.next;
+
 import cern.colt.matrix.linalg.LUDecompositionQuick;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
-import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Extent2d;
@@ -36,8 +37,7 @@ public class LUTest {
 
     @Test(invocationCount = 10)
     public void decompose() {
-        final var matrix = DenseDoubleMatrix2dRandom
-            .nextMatrix(new Extent2d(50, 50));
+        final var matrix = next(new Extent2d(50, 50));
 
         final var expected = decompose(matrix);
         LU.decompose(matrix);
