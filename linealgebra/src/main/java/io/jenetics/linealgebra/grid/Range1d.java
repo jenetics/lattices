@@ -22,25 +22,25 @@ package io.jenetics.linealgebra.grid;
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
- * @param index the start index of the range
+ * @param start the start index of the range
  * @param size the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public record Range1d(int index, int size) {
+public record Range1d(int start, int size) {
 
     public Range1d {
-        if (index < 0 || size < 0) {
+        if (start < 0 || size < 0) {
             throw new IllegalArgumentException(
-                "Invalid range [%d, %d].".formatted(index, size)
+                "Invalid range [%d, %d].".formatted(start, size)
             );
         }
     }
 
     /**
-     * Create a new range from the given extent. The start indices ({@link #index}
+     * Create a new range from the given extent. The start indices ({@link #start}
      * is set to zero.
      *
      * @param extent the extent of the new range

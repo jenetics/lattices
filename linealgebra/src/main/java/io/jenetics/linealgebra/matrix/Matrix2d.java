@@ -81,11 +81,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
         return factory().newInstance(rows, cols);
     }
 
-    /**
-     * Return a new matrix with is like this one.
-     *
-     * @return a new matrix which is like this one
-     */
+    @Override
     default M like() {
         return like(structure().like());
     }
@@ -127,11 +123,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
      */
     M copy(final Range2d range);
 
-    /**
-     * Return a new minimal copy of the underlying element array.
-     *
-     * @return a new minimal copy of the underlying element array
-     */
+    @Override
     default M copy() {
         return copy(new Range2d(extent()));
     }

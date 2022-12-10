@@ -68,6 +68,15 @@ public class DoubleMatrix1d
         super(structure, array);
     }
 
+    /**
+     * Create a new matrix <em>view</em> from the given {@code grid}.
+     *
+     * @param grid the data grid
+     */
+    public DoubleMatrix1d(final DoubleGrid1d grid) {
+        this(grid.structure(), grid.array());
+    }
+
     @Override
     public Factory1d<DoubleMatrix1d> factory() {
         return struct -> new DoubleMatrix1d(
@@ -89,12 +98,12 @@ public class DoubleMatrix1d
         if (structure.order() instanceof StrideOrder1d so) {
             return new DoubleMatrix1d(
                 struct,
-                array.copy(range.index() + so.start(), range.size())
+                array.copy(range.start() + so.start(), range.size())
             );
         } else {
             final var elems = array.like(range.size());
             for (int i = 0; i < range.size(); ++i) {
-                elems.set(i, get(i + range.index()));
+                elems.set(i, get(i + range.start()));
             }
             return new DoubleMatrix1d(struct, elems);
         }

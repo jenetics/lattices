@@ -36,10 +36,6 @@ public record Extent1d(int size) {
         }
     }
 
-    public Loop1d loop() {
-        return new Loop1d.Forward(this);
-    }
-
     @Override
     public String toString() {
         return "[%s]".formatted(size());

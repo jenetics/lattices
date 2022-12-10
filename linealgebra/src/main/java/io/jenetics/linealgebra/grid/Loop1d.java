@@ -100,7 +100,7 @@ public interface Loop1d {
         public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int i = range.index(); i < range.size(); ++i) {
+            for (int i = range.start(); i < range.size(); ++i) {
                 action.accept(i);
             }
         }
@@ -109,7 +109,7 @@ public interface Loop1d {
         public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.index(); i < range.size(); ++i) {
+            for (int i = range.start(); i < range.size(); ++i) {
                 if (predicate.test(i)) {
                     return true;
                 }
@@ -121,7 +121,7 @@ public interface Loop1d {
         public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.index(); i < range.size(); ++i) {
+            for (int i = range.start(); i < range.size(); ++i) {
                 if (!predicate.test(i)) {
                     return false;
                 }
@@ -133,7 +133,7 @@ public interface Loop1d {
         public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.index(); i < range.size(); ++i) {
+            for (int i = range.start(); i < range.size(); ++i) {
                 if (predicate.test(i)) {
                     return false;
                 }
@@ -162,7 +162,7 @@ public interface Loop1d {
         public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int i = range.size(); --i >= range.index();) {
+            for (int i = range.size(); --i >= range.start();) {
                 action.accept(i);
             }
         }
@@ -171,7 +171,7 @@ public interface Loop1d {
         public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.size(); --i >= range.index();) {
+            for (int i = range.size(); --i >= range.start();) {
                 if (predicate.test(i)) {
                     return true;
                 }
@@ -183,7 +183,7 @@ public interface Loop1d {
         public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.size(); --i >= range.index();) {
+            for (int i = range.size(); --i >= range.start();) {
                 if (!predicate.test(i)) {
                     return false;
                 }
@@ -195,7 +195,7 @@ public interface Loop1d {
         public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = range.size(); --i >= range.index();) {
+            for (int i = range.size(); --i >= range.start();) {
                 if (predicate.test(i)) {
                     return false;
                 }

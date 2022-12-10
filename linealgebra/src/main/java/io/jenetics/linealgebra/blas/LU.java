@@ -139,9 +139,9 @@ final class LU {
             rows[i] = matrix.rowAt(i);
         }
 
-        final DoubleMatrix1d colj = matrix.columnAt(0).like();
+        final DoubleMatrix1d colj = matrix.colAt(0).like();
         for (int j = 0; j < n; ++j) {
-            colj.assign(matrix.columnAt(j));
+            colj.assign(matrix.colAt(j));
 
             // Apply previous transformations.
             for (int i = 0; i < m; ++i) {
@@ -180,7 +180,7 @@ final class LU {
             if (j < m && Double.compare(jj, 0.0) != 0) {
                 final var multiplier = 1.0/jj;
                 matrix
-                    .columnAt(j)
+                    .colAt(j)
                     .view(new Range1d(j + 1, m - (j + 1)))
                     .update(v -> v*multiplier);
             }

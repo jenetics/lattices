@@ -126,7 +126,7 @@ public class DoubleMatrix2dTest {
         var A = matrix;
 
         for (int c = 0; c < A.cols(); ++c) {
-            final var column = A.columnAt(c);
+            final var column = A.colAt(c);
 
             assertThat(column.size()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
@@ -140,7 +140,7 @@ public class DoubleMatrix2dTest {
         var A = matrix.copy(range);
 
         for (int c = 0; c < A.cols(); ++c) {
-            final var column = A.columnAt(c);
+            final var column = A.colAt(c);
 
             assertThat(column.size()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
@@ -154,7 +154,7 @@ public class DoubleMatrix2dTest {
         var A = matrix.view(range);
 
         for (int c = 0; c < A.cols(); ++c) {
-            final var column = A.columnAt(c);
+            final var column = A.colAt(c);
 
             assertThat(column.size()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {

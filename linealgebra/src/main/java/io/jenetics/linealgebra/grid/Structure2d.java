@@ -183,7 +183,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public Structure1d columnAt(final int index) {
+    public Structure1d colAt(final int index) {
         if (index < 0 || index >= extent().cols()) {
             throw new IndexOutOfBoundsException(
                 "Attempted to access " + extent() + " at column=" + index

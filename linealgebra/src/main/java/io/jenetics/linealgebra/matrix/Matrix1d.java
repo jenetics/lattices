@@ -80,11 +80,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
         return factory().newInstance(size);
     }
 
-    /**
-     * Return a new matrix with is like this one.
-     *
-     * @return a new matrix which is like this one
-     */
+    @Override
     default M like() {
         return like(structure().like());
     }
@@ -127,11 +123,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
      */
     M copy(final Range1d range);
 
-    /**
-     * Return a new minimal copy of the underlying element array.
-     *
-     * @return a new minimal copy of the underlying element array
-     */
+    @Override
     default M copy() {
         return copy(new Range1d(extent()));
     }

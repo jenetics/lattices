@@ -35,7 +35,7 @@ public interface Array<A extends Array<A>> {
      *
      * @return the size of {@code this} array
      */
-    int size();
+    int length();
 
     /**
      * Return a new copy of the given double array.
@@ -48,17 +48,26 @@ public interface Array<A extends Array<A>> {
      * Copies the specified range of this array
      *
      * @param start the initial index of the range to be copied, inclusive
-     * @param size the size the range to be copied
+     * @param length the size the range to be copied
      * @return a new array of the given range
      */
-    A copy(final int start, final int size);
+    A copy(final int start, final int length);
 
     /**
-     * Return a new array of the same type with the given {@code size}.
+     * Return a new array of the same type with the given {@code length}.
      *
-     * @param size the size of the new array
-     * @return a new array of the same type with the given {@code size}
+     * @param length the size of the new array
+     * @return a new array of the same type with the given {@code length}
      */
-    A like(final int size);
+    A like(final int length);
+
+    /**
+     * Return a new array of the same type and {@link #length()} as this one.
+     *
+     * @return a new array of the same type
+     */
+    default A like() {
+        return like(length());
+    }
 
 }

@@ -75,7 +75,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
      *         is not an instance of {@link StrideOrder1d}
      */
     public Structure1d view(final Range1d range) {
-        if (range.index() + range.size() > extent.size()) {
+        if (range.start() + range.size() > extent.size()) {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
 
@@ -83,7 +83,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
             return new Structure1d(
                 new Extent1d(range.size()),
                 new StrideOrder1d(
-                    ord.start() + ord.stride()*range.index(),
+                    ord.start() + ord.stride()*range.start(),
                     ord.stride()
                 )
             );

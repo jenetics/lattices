@@ -51,7 +51,7 @@ public class DoubleMatrix1dTest {
 
             final var loop = new Loop1d.Forward(range);
             loop.forEach(i -> {
-                final var j = i - range.index();
+                final var j = i - range.start();
 
                 assertThat(copy.get(j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
@@ -85,7 +85,7 @@ public class DoubleMatrix1dTest {
 
             final var loop = new Loop1d.Forward(range);
             loop.forEach(i -> {
-                final var j = i - range.index();
+                final var j = i - range.start();
 
                 assertThat(copy.get(j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))

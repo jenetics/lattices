@@ -73,6 +73,15 @@ public class DoubleMatrix2d
         super(structure, array);
     }
 
+    /**
+     * Create a new matrix <em>view</em> from the given {@code grid}.
+     *
+     * @param grid the data grid
+     */
+    public DoubleMatrix2d(final DoubleGrid2d grid) {
+        this(grid.structure(), grid.array());
+    }
+
     @Override
     public Factory2d<DoubleMatrix2d> factory() {
         return struct -> new DoubleMatrix2d(
@@ -132,8 +141,8 @@ public class DoubleMatrix2d
      * @throws UnsupportedOperationException if the {@link #order()} function
      *         is not an instance of {@link StrideOrder2d}
      */
-    public DoubleMatrix1d columnAt(final int index) {
-        return new DoubleMatrix1d(structure.columnAt(index), array);
+    public DoubleMatrix1d colAt(final int index) {
+        return new DoubleMatrix1d(structure.colAt(index), array);
     }
 
     /**

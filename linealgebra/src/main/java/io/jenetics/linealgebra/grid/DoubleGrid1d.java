@@ -46,11 +46,11 @@ public class DoubleGrid1d implements Structural1d {
      * @param array the element array
      */
     public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
-        if (structure.extent().size() > array.size()) {
+        if (structure.extent().size() > array.length()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d > %d."
-                        .formatted(structure.extent().size(), array.size())
+                        .formatted(structure.extent().size(), array.length())
             );
         }
 
@@ -61,6 +61,15 @@ public class DoubleGrid1d implements Structural1d {
     @Override
     public Structure1d structure() {
         return structure;
+    }
+
+    /**
+     * Return the underlying element array.
+     *
+     * @return the underlying element array
+     */
+    public DoubleArray array() {
+        return array;
     }
 
     /**

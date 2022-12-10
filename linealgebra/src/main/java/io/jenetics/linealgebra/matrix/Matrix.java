@@ -31,4 +31,19 @@ import io.jenetics.linealgebra.Self;
  * @version !__version__!
  */
 public interface Matrix<M extends Matrix<M>> extends Self<M> {
+
+    /**
+     * Return a new matrix with is like this one.
+     *
+     * @return a new matrix which is like this one
+     */
+    M like();
+
+    /**
+     * Return a new minimal copy of the underlying element array.
+     *
+     * @return a new minimal copy of the underlying element array
+     */
+    M copy();
+
 }

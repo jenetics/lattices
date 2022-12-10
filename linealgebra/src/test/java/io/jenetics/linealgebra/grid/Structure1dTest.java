@@ -36,7 +36,7 @@ public class Structure1dTest {
 
         assertThat(view.extent().size()).isEqualTo(range.size());
         for (int i = 0; i < range.size(); ++i) {
-            assertThat(view.order().index(i)).isEqualTo(i + range.index());
+            assertThat(view.order().index(i)).isEqualTo(i + range.start());
         }
     }
 

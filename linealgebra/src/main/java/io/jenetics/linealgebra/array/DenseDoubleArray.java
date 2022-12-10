@@ -39,7 +39,7 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public int size() {
+    public int length() {
         return elements.length;
     }
 
@@ -49,14 +49,14 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public DoubleArray copy(final int start, final int size) {
-        final var array = Arrays.copyOfRange(elements, start, start + size);
+    public DoubleArray copy(final int start, final int length) {
+        final var array = Arrays.copyOfRange(elements, start, start + length);
         return new DenseDoubleArray(array);
     }
 
     @Override
-    public DoubleArray like(final int size) {
-        return ofSize(size);
+    public DoubleArray like(final int length) {
+        return ofSize(length);
     }
 
     public static DenseDoubleArray ofSize(final int size) {
