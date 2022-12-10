@@ -36,22 +36,22 @@ import io.jenetics.linealgebra.array.DoubleArray;
 public class DoubleGrid1d implements Structural1d {
 
     protected final Structure1d structure;
-    protected final DoubleArray elements;
+    protected final DoubleArray array;
 
     public DoubleGrid1d(
         final Structure1d structure,
-        final DoubleArray elements
+        final DoubleArray array
     ) {
-        if (structure.extent().size() > elements.size()) {
+        if (structure.extent().size() > array.size()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
                     "required matrix cells: %d > %d."
-                        .formatted(structure.extent().size(), elements.size())
+                        .formatted(structure.extent().size(), array.size())
             );
         }
 
         this.structure = structure;
-        this.elements = elements;
+        this.array = array;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DoubleGrid1d implements Structural1d {
      *         bounds
      */
     public double get(final int index) {
-        return elements.get(order().index(index));
+        return array.get(order().index(index));
     }
 
     /**
@@ -81,7 +81,7 @@ public class DoubleGrid1d implements Structural1d {
      *         bounds
      */
     public void set(final int index, final double value) {
-        elements.set(order().index(index),  value);
+        array.set(order().index(index),  value);
     }
 
     /**

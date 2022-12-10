@@ -68,13 +68,13 @@ public class DoubleMatrix2d
     public Factory2d<DoubleMatrix2d> factory() {
         return struct -> new DoubleMatrix2d(
             struct,
-            elements.like(struct.extent().size())
+            array.like(struct.extent().size())
         );
     }
 
     @Override
     public DoubleMatrix2d view(final Structure2d structure) {
-        return new DoubleMatrix2d(structure, elements);
+        return new DoubleMatrix2d(structure, array);
     }
 
     @Override
@@ -86,10 +86,10 @@ public class DoubleMatrix2d
             range.width() == cols() &&
             structure.order().equals(new StrideOrder2d(new Extent2d(range))))
         {
-            return new DoubleMatrix2d(structure, elements.copy());
+            return new DoubleMatrix2d(structure, array.copy());
         } else {
             final var struct = structure.copy(range);
-            final var elems = elements.like(range.size());
+            final var elems = array.like(range.size());
 
             final var loop = new Loop2d.RowMajor(struct.extent());
             loop.forEach((r, c) ->
@@ -105,7 +105,7 @@ public class DoubleMatrix2d
 
     @Override
     public DoubleMatrix2d transpose() {
-        return new DoubleMatrix2d(structure.transpose(), elements);
+        return new DoubleMatrix2d(structure.transpose(), array);
     }
 
     /* *************************************************************************
@@ -124,7 +124,7 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d columnAt(final int index) {
-        return new DoubleMatrix1d(structure.columnAt(index), elements);
+        return new DoubleMatrix1d(structure.columnAt(index), array);
     }
 
     /**
@@ -139,7 +139,7 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(structure.rowAt(index), elements);
+        return new DoubleMatrix1d(structure.rowAt(index), array);
     }
 
     /* *************************************************************************
@@ -182,7 +182,7 @@ public class DoubleMatrix2d
 
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = elements.like(struct.extent().size());
+            final var elems = array.like(struct.extent().size());
             z = new DoubleMatrix1d(struct, elems);
         }
 

@@ -60,13 +60,13 @@ public class DoubleMatrix1d
     public Factory1d<DoubleMatrix1d> factory() {
         return struct -> new DoubleMatrix1d(
             struct,
-            elements.like(struct.extent().size())
+            array.like(struct.extent().size())
         );
     }
 
     @Override
     public DoubleMatrix1d view(final Structure1d structure) {
-        return new DoubleMatrix1d(structure, elements);
+        return new DoubleMatrix1d(structure, array);
     }
 
     @Override
@@ -77,10 +77,10 @@ public class DoubleMatrix1d
         if (structure.order() instanceof StrideOrder1d so) {
             return new DoubleMatrix1d(
                 struct,
-                elements.copy(range.index() + so.start(), range.size())
+                array.copy(range.index() + so.start(), range.size())
             );
         } else {
-            final var elems = elements.like(range.size());
+            final var elems = array.like(range.size());
             for (int i = 0; i < range.size(); ++i) {
                 elems.set(i, get(i + range.index()));
             }
