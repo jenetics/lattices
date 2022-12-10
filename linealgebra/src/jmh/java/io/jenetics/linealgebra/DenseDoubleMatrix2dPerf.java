@@ -27,15 +27,19 @@ import java.util.concurrent.TimeUnit;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.structure.Extent2d;
 
+@Warmup(iterations = 1)
+@Measurement(iterations = 2)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -48,7 +52,7 @@ public class DenseDoubleMatrix2dPerf {
 
     @Setup
     public void setup() {
-        final var dimension = new Extent2d(10, 10);
+        final var dimension = new Extent2d(100, 100);
 
         linealgebraA = next(dimension);
         linealgebraB = next(dimension);
@@ -68,6 +72,9 @@ public class DenseDoubleMatrix2dPerf {
 
 }
 
+
+// 10 x 10 matrix
+
 /*
 Mac:
 Benchmark                                Mode  Cnt  Score   Error  Units
@@ -80,4 +87,13 @@ Dell:
 Benchmark                                Mode  Cnt  Score   Error  Units
 DenseDoubleMatrix2dPerf.coltMult         avgt   25  0.818 ± 0.008  us/op
 DenseDoubleMatrix2dPerf.linealgebraMult  avgt   25  0.916 ± 0.002  us/op
+ */
+
+// 100 x 100 matrix
+
+/*
+Dell:
+Benchmark                                Mode  Cnt    Score    Error  Units
+DenseDoubleMatrix2dPerf.coltMult         avgt   10  643.762 ± 16.322  us/op
+DenseDoubleMatrix2dPerf.linealgebraMult  avgt   10  620.279 ±  2.351  us/op
  */
