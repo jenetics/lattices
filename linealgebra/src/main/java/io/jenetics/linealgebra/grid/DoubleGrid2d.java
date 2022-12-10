@@ -33,7 +33,7 @@ import io.jenetics.linealgebra.array.DoubleArray;
  * @since !__version__!
  * @version !__version__!
  */
-public class DoubleGrid2d implements Structural2d {
+public class DoubleGrid2d implements Grid2d {
 
     protected final Structure2d structure;
     protected final DoubleArray array;

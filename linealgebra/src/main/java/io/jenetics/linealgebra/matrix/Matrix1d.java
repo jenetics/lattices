@@ -23,7 +23,7 @@ import io.jenetics.linealgebra.grid.Extent1d;
 import io.jenetics.linealgebra.grid.Factory1d;
 import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.grid.Stride1d;
-import io.jenetics.linealgebra.grid.Structural1d;
+import io.jenetics.linealgebra.grid.Grid1d;
 import io.jenetics.linealgebra.grid.Structure1d;
 
 /**
@@ -35,7 +35,7 @@ import io.jenetics.linealgebra.grid.Structure1d;
  * @version !__version__!
  */
 public interface Matrix1d<M extends Matrix1d<M>>
-    extends Matrix<M>, Structural1d
+    extends Matrix<M>, Grid1d
 {
 
     /**

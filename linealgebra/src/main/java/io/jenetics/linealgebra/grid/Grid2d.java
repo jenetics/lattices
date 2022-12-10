@@ -29,7 +29,7 @@ import io.jenetics.linealgebra.function.IntIntPredicate;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural2d extends Loop2d {
+public interface Grid2d extends Loop2d {
 
     /**
      * Return the structure for 2-d grid.
@@ -46,7 +46,7 @@ public interface Structural2d extends Loop2d {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    default void requireSameExtent(final Structural2d other) {
+    default void requireSameExtent(final Grid2d other) {
         if (!extent().equals(other.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(extent(), extent())

@@ -29,7 +29,7 @@ import java.util.function.IntPredicate;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Structural1d extends Loop1d {
+public interface Grid1d extends Loop1d {
 
     /**
      * Return the structure for 2-d structures.
@@ -46,7 +46,7 @@ public interface Structural1d extends Loop1d {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    default void requireSameExtent(final Structural1d other) {
+    default void requireSameExtent(final Grid1d other) {
         if (!extent().equals(other.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(extent(), extent())
