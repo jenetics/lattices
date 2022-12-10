@@ -111,13 +111,9 @@ public class DoubleGrid2d implements Structural2d {
         if (other == this) {
             return;
         }
-        requireSameExtent(other.extent());
+        requireSameExtent(other);
 
-        for (int r = rows(); --r >= 0; ) {
-            for (int c = cols(); --c >= 0; ) {
-                set(r, c, other.get(r, c));
-            }
-        }
+        forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
     /**
@@ -162,11 +158,7 @@ public class DoubleGrid2d implements Structural2d {
      * @param value the value to be filled into the cells
      */
     public void assign(final double value) {
-        for (int r = rows(); --r >= 0; ) {
-            for (int c = cols(); --c >= 0; ) {
-                set(r, c, value);
-            }
-        }
+        forEach((r, c) -> set(r, c, value));
     }
 
     /**
@@ -184,13 +176,9 @@ public class DoubleGrid2d implements Structural2d {
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        requireSameExtent(y.extent());
+        requireSameExtent(y);
 
-        for (int r = rows(); --r >= 0; ) {
-            for (int c = cols(); --c >= 0; ) {
-                set(r, c, f.applyAsDouble(get(r, c), y.get(r, c)));
-            }
-        }
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
 
     /**
@@ -199,12 +187,25 @@ public class DoubleGrid2d implements Structural2d {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void update(final DoubleUnaryOperator f) {
-        for (int r = rows(); --r >= 0; ) {
-            for (int c = cols(); --c >= 0; ) {
-                set(r, c, f.applyAsDouble(get(r, c)));
-            }
-        }
+    public void assign(final DoubleUnaryOperator f) {
+        requireNonNull(f);
+
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
+    }
+
+    /**
+     * Swaps each element {@code this[i, j]} with {@code other[i, j]}.
+     *
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}.
+     */
+    public void swap(final DoubleGrid2d other) {
+        requireSameExtent(other);
+
+        forEach((r, c) -> {
+            final var tmp = get(r, c);
+            set(r, c, other.get(r, c));
+            other.set(r, c, tmp);
+        });
     }
 
     /**

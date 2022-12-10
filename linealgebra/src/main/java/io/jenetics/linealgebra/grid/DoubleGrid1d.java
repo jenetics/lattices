@@ -109,7 +109,7 @@ public class DoubleGrid1d implements Structural1d {
         if (other == this) {
             return;
         }
-        requireSameExtent(other.extent());
+        requireSameExtent(other);
 
         for (int i = 0; i < size(); ++i) {
             set(i, other.get(i));
@@ -139,18 +139,31 @@ public class DoubleGrid1d implements Structural1d {
     }
 
     /**
-     * Assigns the result of a function to each cell: {@code x[i] = f(x[i])}.
+     * Assigns the result of a function to each cell.
+     * <pre>{@code
+     * this[i] = f(this[i])
+     * }</pre>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void update(final DoubleUnaryOperator f) {
+    public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
         forEach(i -> set(i, f.applyAsDouble(get(i))));
     }
 
-    public void update(DoubleGrid1d y, DoubleBinaryOperator f) {
-        requireSameExtent(y.extent());
-        forEach(i -> set(i, f.applyAsDouble(get(i), y.get(i))));
+    /**
+     * Updates this grid with the values of {@code a} which are transformed by
+     * the given function {@code f}.
+     * <pre>{@code
+     * this[i] = f(this[i], a[i])
+     * }</pre>
+     *
+     * @param a the grid used for the update
+     * @param f the combiner function
+     */
+    public void assign(DoubleGrid1d a, DoubleBinaryOperator f) {
+        requireSameExtent(a);
+        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
     /**
@@ -159,13 +172,13 @@ public class DoubleGrid1d implements Structural1d {
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
     public void swap(final DoubleGrid1d other) {
-        requireSameExtent(other.extent());
+        requireSameExtent(other);
 
-        for (int i = size(); --i >= 0;) {
+        forEach(i -> {
             final var tmp = get(i);
             set(i, other.get(i));
             other.set(i, tmp);
-        }
+        });
     }
 
     /**

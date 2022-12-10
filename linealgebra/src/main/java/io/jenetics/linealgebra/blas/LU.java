@@ -93,7 +93,7 @@ final class LU {
             for (int i = k + 1; i < n; i++) {
                 final double multiplier = -lu.get(i, k);
                 if (Double.compare(multiplier, 0.0) != 0) {
-                    Brows[i].update(Browk, (a, b) -> a + multiplier*b);
+                    Brows[i].assign(Browk, (a, b) -> a + multiplier*b);
                 }
             }
         }
@@ -101,13 +101,13 @@ final class LU {
         // Solve U*B = Y;
         for (int k = n - 1; k >= 0; k--) {
             final double multiplier1 = 1.0/lu.get(k, k);
-            Brows[k].update(a -> a*multiplier1);
+            Brows[k].assign(a -> a*multiplier1);
             Browk.assign(Brows[k]);
 
             for (int i = 0; i < k; i++) {
                 final double multiplier2 = -lu.get(i, k);
                 if (Double.compare(multiplier2, 0.0) != 0) {
-                    Brows[i].update(Browk, (a, b) -> a  + multiplier2*b);
+                    Brows[i].assign(Browk, (a, b) -> a  + multiplier2*b);
                 }
             }
         }
@@ -182,7 +182,7 @@ final class LU {
                 matrix
                     .colAt(j)
                     .view(new Range1d(j + 1, m - (j + 1)))
-                    .update(v -> v*multiplier);
+                    .assign(v -> v*multiplier);
             }
         }
 

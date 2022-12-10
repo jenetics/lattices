@@ -42,12 +42,12 @@ public interface Structural2d extends Loop2d {
      * Checks whether the extent of this structural object is the same as the
      * given {@code other} extent.
      *
-     * @param other the other extent to check
+     * @param other the other structural to check
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    default void requireSameExtent(final Extent2d other) {
-        if (!extent().equals(other)) {
+    default void requireSameExtent(final Structural2d other) {
+        if (!extent().equals(other.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(extent(), extent())
             );
