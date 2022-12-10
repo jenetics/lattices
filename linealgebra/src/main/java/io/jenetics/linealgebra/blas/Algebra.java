@@ -34,20 +34,6 @@ public final class Algebra {
     }
 
     /**
-     * Checks whether the given matrix {@code a} is <em>rectangular</em>.
-     *
-     * @param a the structural to test
-     * @throws IllegalArgumentException if {@code a.rows() < a.cols()}.
-     */
-    public static void checkRectangular(final Structural2d a) {
-        if (a.rows() < a.cols()) {
-            throw new IllegalArgumentException(
-                "Matrix must be rectangular: " + a.extent()
-            );
-        }
-    }
-
-    /**
      * Check if the given {@code matrix} is non-singular.
      *
      * @param matrix the {@code matrix} to test

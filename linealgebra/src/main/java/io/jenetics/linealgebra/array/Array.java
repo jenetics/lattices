@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra.array;
 
+import io.jenetics.linealgebra.Self;
+
 /**
  * Base interface of all array implementations. An array is a container of
  * elements, which can be accessed by an <em>index</em> and has a fixed
@@ -28,7 +30,7 @@ package io.jenetics.linealgebra.array;
  * @since !__version__!
  * @version !__version__!
  */
-public interface Array<A extends Array<A>> {
+public interface Array<A extends Array<A>> extends Self<A> {
 
     /**
      * Return the size of {@code this} array.
@@ -42,7 +44,9 @@ public interface Array<A extends Array<A>> {
      *
      * @return a new copy of the given double array
      */
-    A copy();
+    default A copy() {
+        return copy(0, length());
+    }
 
     /**
      * Copies the specified range of this array

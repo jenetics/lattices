@@ -20,13 +20,12 @@
 package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.linealgebra.blas.Algebra.checkRectangular;
 import static io.jenetics.linealgebra.blas.Algebra.isNonSingular;
 import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
 
+import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.grid.Range1d;
 
 /**
  * Performs in place LU-decomposition.
@@ -55,7 +54,7 @@ final class LU {
     }
 
     public void solve(final DoubleMatrix2d B) {
-        checkRectangular(lu);
+        lu.requireRectangular();
 
         int m = lu.rows();
         int n = lu.cols();

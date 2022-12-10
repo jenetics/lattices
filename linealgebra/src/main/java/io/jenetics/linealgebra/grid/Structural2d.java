@@ -55,6 +55,19 @@ public interface Structural2d extends Loop2d {
     }
 
     /**
+     * Checks whether this structural is <em>rectangular</em>.
+     *
+     * @throws IllegalArgumentException if {@code this.rows() < his.cols()}.
+     */
+    default void requireRectangular() {
+        if (rows() < cols()) {
+            throw new IllegalArgumentException(
+                "Structure is not rectangular: " + extent()
+            );
+        }
+    }
+
+    /**
      * Return the dimension of {@code this} 2-d structures.
      *
      * @return the dimension of {@code this} 2-d structures
