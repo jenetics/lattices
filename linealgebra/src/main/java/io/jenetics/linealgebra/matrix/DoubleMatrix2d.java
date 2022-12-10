@@ -31,6 +31,7 @@ import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.Range2d;
+import io.jenetics.linealgebra.structure.StrideOrder1d;
 import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
@@ -60,11 +61,15 @@ public class DoubleMatrix2d
         super(structure, elements);
     }
 
+    public DoubleMatrix2d(final Extent2d extent, final DoubleArray elements) {
+        this(new Structure2d(extent), elements);
+    }
+
     @Override
     public Factory2d<DoubleMatrix2d> factory() {
         return struct -> new DoubleMatrix2d(
             struct,
-            elements.newArrayOfSize(struct.extent().size())
+            elements.like(struct.extent().size())
         );
     }
 
@@ -75,8 +80,19 @@ public class DoubleMatrix2d
 
     @Override
     public DoubleMatrix2d copy(final Range2d range) {
-        final var elems = elements.newArrayOfSize(range.size());
         final var struct = structure.copy(range);
+
+        // Check if we can to a fast copy.
+        if (structure.order() instanceof StrideOrder2d so && so.stride() == 1) {
+            return new DoubleMatrix1d(
+                struct,
+                elements.copy(range.index() + so.start(), range.size())
+            );
+        }
+
+
+        final var elems = elements.like(range.size());
+
 
         new Loop2d.RowMajor(extent()).forEach((r, c) ->
             elems.set(struct.order().index(r, c), get(r, c))
@@ -159,7 +175,7 @@ public class DoubleMatrix2d
 
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = elements.newArrayOfSize(struct.extent().size());
+            final var elems = elements.like(struct.extent().size());
             z = new DoubleMatrix1d(struct, elems);
         }
 
@@ -247,7 +263,7 @@ public class DoubleMatrix2d
 
         if (C == null) {
             final var struct = new Structure2d(new Extent2d(m, p));
-            final var elems = elements.newArrayOfSize(struct.extent().size());
+            final var elems = elements.like(struct.extent().size());
             C = new DoubleMatrix2d(struct, elems);
         }
 

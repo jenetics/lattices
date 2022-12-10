@@ -27,6 +27,7 @@ import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.structure.DoubleGrid1d;
 import io.jenetics.linealgebra.structure.Factory1d;
 import io.jenetics.linealgebra.structure.Range1d;
+import io.jenetics.linealgebra.structure.StrideOrder1d;
 import io.jenetics.linealgebra.structure.Structure1d;
 
 /**
@@ -59,7 +60,7 @@ public class DoubleMatrix1d
     public Factory1d<DoubleMatrix1d> factory() {
         return struct -> new DoubleMatrix1d(
             struct,
-            elements.newArrayOfSize(struct.extent().size())
+            elements.like(struct.extent().size())
         );
     }
 
@@ -70,14 +71,21 @@ public class DoubleMatrix1d
 
     @Override
     public DoubleMatrix1d copy(final Range1d range) {
-        final var elems = elements.newArrayOfSize(range.size());
         final var struct = structure.copy(range);
 
-        for (int i = 0; i < range.size(); ++i) {
-            elems.set(i, get(i + range.index()));
+        // Check if we can to a fast copy.
+        if (structure.order() instanceof StrideOrder1d so) {
+            return new DoubleMatrix1d(
+                struct,
+                elements.copy(range.index() + so.start(), range.size())
+            );
+        } else {
+            final var elems = elements.like(range.size());
+            for (int i = 0; i < range.size(); ++i) {
+                elems.set(i, get(i + range.index()));
+            }
+            return new DoubleMatrix1d(struct, elems);
         }
-
-        return new DoubleMatrix1d(struct, elems);
     }
 
     /* *************************************************************************

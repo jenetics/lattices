@@ -45,11 +45,20 @@ public interface Array<A extends Array<A>> {
     A copy();
 
     /**
+     * Copies the specified range of this array
+     *
+     * @param start the initial index of the range to be copied, inclusive
+     * @param size the size the range to be copied
+     * @return a new array of the given range
+     */
+    A copy(final int start, final int size);
+
+    /**
      * Return a new array of the same type with the given {@code size}.
      *
      * @param size the size of the new array
      * @return a new array of the same type with the given {@code size}
      */
-    A newArrayOfSize(final int size);
+    A like(final int size);
 
 }

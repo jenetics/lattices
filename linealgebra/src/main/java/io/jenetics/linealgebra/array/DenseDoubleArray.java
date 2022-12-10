@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra.array;
 
+import java.util.Arrays;
+
 /**
  * Implementation of a <em>dense</em> array of {@code double} values.
  *
@@ -47,7 +49,13 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public DoubleArray newArrayOfSize(final int size) {
+    public DoubleArray copy(final int start, final int size) {
+        final var array = Arrays.copyOfRange(elements, start, start + size);
+        return new DenseDoubleArray(array);
+    }
+
+    @Override
+    public DoubleArray like(final int size) {
         return ofSize(size);
     }
 

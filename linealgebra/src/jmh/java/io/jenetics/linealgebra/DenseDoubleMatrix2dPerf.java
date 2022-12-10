@@ -69,7 +69,15 @@ public class DenseDoubleMatrix2dPerf {
 }
 
 /*
+Mac:
 Benchmark                                Mode  Cnt  Score   Error  Units
 DenseDoubleMatrix2dPerf.coltMult         avgt   25  1,225 ± 0,021  us/op
 DenseDoubleMatrix2dPerf.linealgebraMult  avgt   25  1,328 ± 0,015  us/op
+ */
+
+/*
+Dell:
+Benchmark                                Mode  Cnt  Score   Error  Units
+DenseDoubleMatrix2dPerf.coltMult         avgt   25  0.818 ± 0.008  us/op
+DenseDoubleMatrix2dPerf.linealgebraMult  avgt   25  0.916 ± 0.002  us/op
  */
