@@ -136,4 +136,11 @@ public interface Matrix2d<M extends Matrix2d<M>>
         return copy(new Range2d(extent()));
     }
 
+    /**
+     * Return a transposed view of this matrix.
+     *
+     * @return the transposed view of this matrix.
+     */
+    M transpose();
+
 }

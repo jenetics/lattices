@@ -79,18 +79,31 @@ public class DoubleMatrix2d
 
     @Override
     public DoubleMatrix2d copy(final Range2d range) {
-        final var struct = structure.copy(range);
-        final var elems = elements.like(range.size());
+        // Fast copy, if applicable.
+        if (range.row() == 0 && range.column() == 0 &&
+            range.height() == rows() && range.width() == cols() &&
+            structure.order().equals(new StrideOrder2d(new Extent2d(range))))
+        {
+            return new DoubleMatrix2d(structure, elements.copy());
+        } else {
+            final var struct = structure.copy(range);
+            final var elems = elements.like(range.size());
 
-        final var loop = new Loop2d.RowMajor(struct.extent());
-        loop.forEach((r, c) ->
-            elems.set(
-                struct.order().index(r, c),
-                get(r + range.row(), c + range.column())
-            )
-        );
+            final var loop = new Loop2d.RowMajor(struct.extent());
+            loop.forEach((r, c) ->
+                elems.set(
+                    struct.order().index(r, c),
+                    get(r + range.row(), c + range.column())
+                )
+            );
 
-        return new DoubleMatrix2d(struct, elems);
+            return new DoubleMatrix2d(struct, elems);
+        }
+    }
+
+    @Override
+    public DoubleMatrix2d transpose() {
+        return new DoubleMatrix2d(structure.transpose(), elements);
     }
 
     /* *************************************************************************

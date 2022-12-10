@@ -31,7 +31,6 @@ import org.testng.annotations.Test;
 import io.jenetics.linealgebra.Colts;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
-import io.jenetics.linealgebra.structure.Range1d;
 import io.jenetics.linealgebra.structure.Range2d;
 import io.jenetics.linealgebra.structure.Stride2d;
 
@@ -61,6 +60,7 @@ public class DoubleMatrix2dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
+            { next(new Extent2d(10, 10)), new Range2d(0, 0, 10, 10) },
             { next(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
             { next(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
             { next(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
@@ -70,7 +70,8 @@ public class DoubleMatrix2dTest {
             // Test also matrix views.
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 7, 20, 30)),
+                    .view(new Range2d(3, 7, 20, 30))
+                    .transpose(),
                 new Range2d(12, 3, 5, 7),
             },
             {
@@ -204,6 +205,18 @@ public class DoubleMatrix2dTest {
         }
     }
 
+    @Test(dataProvider = "matricesRanges")
+    public void transpose(final DoubleMatrix2d matrix, final Range2d range) {
+        var A = matrix.copy().transpose();
+        assertThat(A.cols()).isEqualTo(matrix.rows());
+        assertThat(A.rows()).isEqualTo(matrix.cols());
+
+        final var loop = new Loop2d.RowMajor(matrix.extent());
+        loop.forEach((r, c) ->
+            assertThat(matrix.get(r, c)).isEqualTo(A.get(c, r))
+        );
+    }
+
     @Test
     public void equals() {
         final var dimension = new Extent2d(100, 34);
@@ -228,6 +241,11 @@ public class DoubleMatrix2dTest {
         assertThat(matrix.get(1,1)).isEqualTo(5);
         assertThat(matrix.get(2,2)).isEqualTo(9);
         assertThat(matrix.get(3,2)).isEqualTo(12);
+    }
+
+    @Test
+    public void transpose() {
+
     }
 
     @Test
