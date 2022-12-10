@@ -83,16 +83,25 @@ public interface Loop2d {
     /**
      * Row-major loop implementation. The rows and columns are iterated forward.
      *
-     * @param extent the extent which defines the boundaries of the loop
+     * @param range the range which defines the boundaries of the loop
      */
-    record RowMajor(Extent2d extent) implements Loop2d {
+    record RowMajor(Range2d range) implements Loop2d {
+
+        /**
+         * Row-major implementation of the loop strategy
+         *
+         * @param extent the extent which defines the boundaries of the loop
+         */
+        public RowMajor(final Extent2d extent) {
+            this(new Range2d(extent));
+        }
 
         @Override
         public void forEach(final IntIntConsumer action) {
             requireNonNull(action);
 
-            for (int r = 0; r < extent.rows(); ++r) {
-                for (int c = 0; c < extent.cols(); ++c) {
+            for (int r = range.row(); r < range.height(); ++r) {
+                for (int c = range.column(); c < range.width(); ++c) {
                     action.accept(r, c);
                 }
             }
@@ -102,8 +111,8 @@ public interface Loop2d {
         public boolean anyMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int r = 0; r < extent.rows(); ++r) {
-                for (int c = 0; c < extent.cols(); ++c) {
+            for (int r = range.row(); r < range.height(); ++r) {
+                for (int c = range.column(); c < range.width(); ++c) {
                     if (predicate.test(r, c)) {
                         return true;
                     }
@@ -117,9 +126,9 @@ public interface Loop2d {
         public boolean allMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = 0; i < extent.rows(); ++i) {
-                for (int j = 0; j < extent.cols(); ++j) {
-                    if (!predicate.test(i, j)) {
+            for (int r = range.row(); r < range.height(); ++r) {
+                for (int c = range.column(); c < range.width(); ++c) {
+                    if (!predicate.test(r, c)) {
                         return false;
                     }
                 }
@@ -132,8 +141,8 @@ public interface Loop2d {
         public boolean nonMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int r = 0; r < extent.rows(); ++r) {
-                for (int c = 0; c < extent.cols(); ++c) {
+            for (int r = range.row(); r < range.height(); ++r) {
+                for (int c = range.column(); c < range.width(); ++c) {
                     if (predicate.test(r, c)) {
                         return false;
                     }
@@ -148,17 +157,26 @@ public interface Loop2d {
      * Column-major loop implementation. he rows and columns are iterated
      * forward.
      *
-     * @param extent the extent which defines the boundaries of the loop
+     * @param range the range which defines the boundaries of the loop
      */
-    record ColMajor(Extent2d extent) implements Loop2d {
+    record ColMajor(Range2d range) implements Loop2d {
+
+        /**
+         * Column-major implementation of the loop strategy
+         *
+         * @param extent the extent which defines the boundaries of the loop
+         */
+        public ColMajor(final Extent2d extent) {
+            this(new Range2d(extent));
+        }
 
         @Override
         public void forEach(IntIntConsumer action) {
             requireNonNull(action);
 
-            for (int j = 0; j < extent.cols(); ++j) {
-                for (int i = 0; i < extent.rows(); ++i) {
-                    action.accept(i, j);
+            for (int c = range.column(); c < range.width(); ++c) {
+                for (int r = range.row(); r < range.height(); ++r) {
+                    action.accept(r, c);
                 }
             }
         }
@@ -167,8 +185,8 @@ public interface Loop2d {
         public boolean anyMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = 0; c < extent.cols(); ++c) {
-                for (int r = 0; r < extent.rows(); ++r) {
+            for (int c = range.column(); c < range.width(); ++c) {
+                for (int r = range.row(); r < range.height(); ++r) {
                     if (predicate.test(r, c)) {
                         return true;
                     }
@@ -182,9 +200,9 @@ public interface Loop2d {
         public boolean allMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int j = 0; j < extent.cols(); ++j) {
-                for (int i = 0; i < extent.rows(); ++i) {
-                    if (!predicate.test(i, j)) {
+            for (int c = range.column(); c < range.width(); ++c) {
+                for (int r = range.row(); r < range.height(); ++r) {
+                    if (!predicate.test(r, c)) {
                         return false;
                     }
                 }
@@ -197,8 +215,8 @@ public interface Loop2d {
         public boolean nonMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = 0; c < extent.cols(); ++c) {
-                for (int r = 0; r < extent.rows(); ++r) {
+            for (int c = range.column(); c < range.width(); ++c) {
+                for (int r = range.row(); r < range.height(); ++r) {
                     if (predicate.test(r, c)) {
                         return false;
                     }

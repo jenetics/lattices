@@ -36,4 +36,10 @@ public final class LinealgebraAsserts {
             .isTrue();
     }
 
+    public static void assertNotEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
+        assertThat(a.equals(b, DEFAULT_PRECISION))
+            .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
+            .isFalse();
+    }
+
 }

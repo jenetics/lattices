@@ -82,8 +82,8 @@ public record Structure2d(Extent2d extent, Order2d order) {
             return new Structure2d(
                 new Extent2d(range.height(), range.width()),
                 new StrideOrder2d(
-                    ord.rowStride()*range.row(),
-                    ord.colStride()*range.column(),
+                    ord.rowStart() + ord.rowStride()*range.row(),
+                    ord.colStart() + ord.colStride()*range.column(),
                     ord.rowStride(),
                     ord.colStride()
                 )

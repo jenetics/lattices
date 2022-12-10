@@ -20,12 +20,12 @@
 package io.jenetics.linealgebra.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import static io.jenetics.linealgebra.DenseDoubleMatrix2dRandom.nextMatrix;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
+import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 
 /**
@@ -46,13 +46,45 @@ public class DoubleGrid2dTest {
         grid.forEach((row, col) -> assertThat(grid.get(row, col)).isEqualTo(row*col));
     }
 
-    @Test
-    public void equalsFalse() {
-        final var a = nextMatrix(new Extent2d(5, 5));
-        final var b = nextMatrix(new Extent2d(5, 5));
+    @Test(dataProvider = "grids")
+    public void equals(
+        final DoubleGrid2d grid1,
+        final DoubleGrid2d grid2,
+        final boolean equals
+    ) {
+        LinealgebraAsserts.assertEquals(grid1, grid1);
+        LinealgebraAsserts.assertEquals(grid2, grid2);
 
-        final var result = DoubleGrid2d.equals(1, 1, a, b, 0.0001);
-        assertThat(result).isFalse();
+        if (equals) {
+            LinealgebraAsserts.assertEquals(grid1, grid2);
+            LinealgebraAsserts.assertEquals(grid2, grid1);
+        } else {
+            LinealgebraAsserts.assertNotEquals(grid1, grid2);
+            LinealgebraAsserts.assertNotEquals(grid2, grid1);
+        }
+    }
+
+    @DataProvider
+    public Object[][] grids() {
+        return new Object[][] {
+            { nextMatrix(new Extent2d(0, 0)), nextMatrix(new Extent2d(0, 0)), true },
+            { nextMatrix(new Extent2d(0, 1)), nextMatrix(new Extent2d(0, 1)), true },
+            { nextMatrix(new Extent2d(1, 0)), nextMatrix(new Extent2d(1, 0)), true },
+            { nextMatrix(new Extent2d(0, 0)), nextMatrix(new Extent2d(0, 10)), false },
+            { nextMatrix(new Extent2d(5, 0)), nextMatrix(new Extent2d(0, 0)), false },
+            { nextMatrix(new Extent2d(5, 50)), nextMatrix(new Extent2d(5, 50)), false },
+            { nextMatrix(new Extent2d(50, 9)), nextMatrix(new Extent2d(50, 9)), false },
+            { nextMatrix(new Extent2d(50, 30)), nextMatrix(new Extent2d(50, 9)), false },
+            equalGrids(new Extent2d(1, 1)),
+            equalGrids(new Extent2d(1, 100)),
+            equalGrids(new Extent2d(100, 1)),
+            equalGrids(new Extent2d(100, 100))
+        };
+    }
+
+    private static Object[] equalGrids(final Extent2d extent) {
+        final var matrix = nextMatrix(extent);
+        return new Object[] { matrix, matrix.copy(), true };
     }
 
 }

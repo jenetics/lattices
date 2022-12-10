@@ -31,7 +31,6 @@ import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Factory2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.Range2d;
-import io.jenetics.linealgebra.structure.StrideOrder1d;
 import io.jenetics.linealgebra.structure.StrideOrder2d;
 import io.jenetics.linealgebra.structure.Structure1d;
 import io.jenetics.linealgebra.structure.Structure2d;
@@ -81,21 +80,14 @@ public class DoubleMatrix2d
     @Override
     public DoubleMatrix2d copy(final Range2d range) {
         final var struct = structure.copy(range);
-
-        // Check if we can to a fast copy.
-        if (structure.order() instanceof StrideOrder2d so && so.stride() == 1) {
-            return new DoubleMatrix1d(
-                struct,
-                elements.copy(range.index() + so.start(), range.size())
-            );
-        }
-
-
         final var elems = elements.like(range.size());
 
-
-        new Loop2d.RowMajor(extent()).forEach((r, c) ->
-            elems.set(struct.order().index(r, c), get(r, c))
+        final var loop = new Loop2d.RowMajor(struct.extent());
+        loop.forEach((r, c) ->
+            elems.set(
+                struct.order().index(r, c),
+                get(r + range.row(), c + range.column())
+            )
         );
 
         return new DoubleMatrix2d(struct, elems);

@@ -19,10 +19,6 @@
  */
 package io.jenetics.linealgebra.structure;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.Optional;
-
 /**
  * Represents the <em>row-major</em> order.
  *
@@ -40,27 +36,6 @@ public record StrideOrder1d(int start, int stride) implements Order1d {
     @Override
     public int index(final int rank) {
         return start + rank*stride;
-    }
-
-    /**
-     * Return the continuous copyable range from the given {@code rage}. If this
-     * order doesn't represent a continuous array portion, {@link Optional#empty()}
-     * is returned.
-     *
-     * @param range the desired range to be copied
-     * @return the continuous copyable range
-     */
-    public Optional<Range1d> copyableRange(final Range1d range) {
-        requireNonNull(range);
-
-        if (stride == 1) {
-            return Optional.of(new Range1d(
-                range.index() + start(),
-                range.size()
-            ));
-        } else {
-            return Optional.empty();
-        }
     }
 
 }

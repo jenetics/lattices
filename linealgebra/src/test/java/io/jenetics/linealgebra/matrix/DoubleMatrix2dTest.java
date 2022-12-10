@@ -20,14 +20,15 @@
 package io.jenetics.linealgebra.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static io.jenetics.linealgebra.DenseDoubleMatrix2dRandom.nextMatrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.random.RandomGenerator;
 import java.util.random.RandomGeneratorFactory;
 
 import org.assertj.core.data.Percentage;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
@@ -35,11 +36,93 @@ import io.jenetics.linealgebra.DenseDoubleMatrix2dRandom;
 import io.jenetics.linealgebra.structure.Extent2d;
 import io.jenetics.linealgebra.structure.Loop2d;
 import io.jenetics.linealgebra.structure.Range1d;
+import io.jenetics.linealgebra.structure.Range2d;
+import io.jenetics.linealgebra.structure.Stride2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class DoubleMatrix2dTest {
+
+
+    @Test(dataProvider = "matricesRanges")
+    public void copy(final DoubleMatrix2d matrix, final Range2d range) {
+        if (range != null) {
+            final var copy = matrix.copy(range);
+
+            final var loop = new Loop2d.RowMajor(range);
+            loop.forEach((r, c) -> {
+                final var i = r - range.row();
+                final var j = c - range.column();
+
+                assertThat(copy.get(i, j))
+                    .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
+                    .isEqualTo(matrix.get(r, c));
+            });
+        }
+    }
+
+    @DataProvider
+    public Object[][] matricesRanges() {
+        return new Object[][] {
+            { nextMatrix(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
+            { nextMatrix(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
+            { nextMatrix(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
+            { nextMatrix(new Extent2d(50, 10)), new Range2d(23, 3, 16, 7) },
+            { nextMatrix(new Extent2d(77, 59)), new Range2d(23, 3, 16, 7) },
+
+            // Test also matrix views.
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(3, 7, 20, 30)),
+                new Range2d(12, 3, 5, 7),
+            },
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(0, 0, 20, 30)),
+                new Range2d(1, 3, 11, 7)
+            },
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(0, 0, 20, 30)),
+                new Range2d(0, 0, 11, 7)
+            },
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(3, 2, 20, 30)),
+                new Range2d(0, 0, 11, 7)
+            },
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(3, 2, 20, 30))
+                    .view(new Range2d(3, 2, 10, 20)),
+                new Range2d(0, 0, 5, 7)
+            },
+            {
+                nextMatrix(new Extent2d(77, 59))
+                    .view(new Range2d(3, 2, 20, 30))
+                    .view(new Stride2d(2, 3)),
+                new Range2d(1, 2, 5, 4)
+            },
+        };
+    }
+
+    @Test(dataProvider = "matricesRanges")
+    public void view(final DoubleMatrix2d matrix, final Range2d range) {
+        if (range != null) {
+            final var view = matrix.view(range);
+
+            final var loop = new Loop2d.RowMajor(range);
+            loop.forEach((r, c) -> {
+                final var i = r - range.row();
+                final var j = c - range.column();
+
+                assertThat(view.get(i, j))
+                    .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix.copy(range), view))
+                    .isEqualTo(matrix.get(r, c));
+            });
+        }
+    }
 
     @Test
     public void equals() {

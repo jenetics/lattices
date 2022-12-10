@@ -83,15 +83,24 @@ public interface Loop1d {
     /**
      * Implements a forward loop iteration.
      *
-     * @param extent the extent which defines the boundaries of the loop
+     * @param range the range which defines the boundaries of the loop
      */
-    record Forward(Extent1d extent) implements Loop1d {
+    record Forward(Range1d range) implements Loop1d {
+
+        /**
+         * Implements a forward loop iteration.
+         *
+         * @param extent the extent which defines the boundaries of the loop
+         */
+        public Forward(final Extent1d extent) {
+            this(new Range1d(extent));
+        }
 
         @Override
         public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int i = 0; i < extent.size(); ++i) {
+            for (int i = range.index(); i < range.size(); ++i) {
                 action.accept(i);
             }
         }
@@ -100,7 +109,7 @@ public interface Loop1d {
         public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = 0; i < extent.size(); ++i) {
+            for (int i = range.index(); i < range.size(); ++i) {
                 if (predicate.test(i)) {
                     return true;
                 }
@@ -112,7 +121,7 @@ public interface Loop1d {
         public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = 0; i < extent.size(); ++i) {
+            for (int i = range.index(); i < range.size(); ++i) {
                 if (!predicate.test(i)) {
                     return false;
                 }
@@ -124,7 +133,7 @@ public interface Loop1d {
         public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = 0; i < extent.size(); ++i) {
+            for (int i = range.index(); i < range.size(); ++i) {
                 if (predicate.test(i)) {
                     return false;
                 }
@@ -136,15 +145,24 @@ public interface Loop1d {
     /**
      * Implements a backward loop iteration.
      *
-     * @param extent the extent which defines the boundaries of the loop
+     * @param range the range which defines the boundaries of the loop
      */
-    record Backward(Extent1d extent) implements Loop1d {
+    record Backward(Range1d range) implements Loop1d {
+
+        /**
+         * Implements a backward loop iteration.
+         *
+         * @param extent the extent which defines the boundaries of the loop
+         */
+        public Backward(final Extent1d extent) {
+            this(new Range1d(extent));
+        }
 
         @Override
         public void forEach(final IntConsumer action) {
             requireNonNull(action);
 
-            for (int i = extent.size(); --i >= 0;) {
+            for (int i = range.size(); --i >= range.index();) {
                 action.accept(i);
             }
         }
@@ -153,7 +171,7 @@ public interface Loop1d {
         public boolean anyMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = extent.size(); --i >= 0;) {
+            for (int i = range.size(); --i >= range.index();) {
                 if (predicate.test(i)) {
                     return true;
                 }
@@ -165,7 +183,7 @@ public interface Loop1d {
         public boolean allMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = extent.size(); --i >= 0;) {
+            for (int i = range.size(); --i >= range.index();) {
                 if (!predicate.test(i)) {
                     return false;
                 }
@@ -177,7 +195,7 @@ public interface Loop1d {
         public boolean nonMatch(final IntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int i = extent.size(); --i >= 0;) {
+            for (int i = range.size(); --i >= range.index();) {
                 if (predicate.test(i)) {
                     return false;
                 }
