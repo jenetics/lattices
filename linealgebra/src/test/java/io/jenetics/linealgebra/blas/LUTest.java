@@ -21,6 +21,7 @@ package io.jenetics.linealgebra.blas;
 
 import static io.jenetics.linealgebra.MatrixRandom.next;
 
+import cern.colt.matrix.linalg.LUDecomposition;
 import cern.colt.matrix.linalg.LUDecompositionQuick;
 
 import org.testng.annotations.Test;
@@ -39,18 +40,41 @@ public class LUTest {
     public void decompose() {
         final var matrix = next(new Extent2d(50, 50));
 
-        final var expected = decompose(matrix);
+        final var expected = coldDecompose(matrix);
         LU.decompose(matrix);
 
         LinealgebraAsserts.assertEquals(matrix, expected);
     }
 
-    private static DoubleMatrix2d decompose(final DoubleMatrix2d matrix) {
+    private static DoubleMatrix2d coldDecompose(final DoubleMatrix2d matrix) {
         final var colt = Colts.toColt(matrix);
 
         final var decomposer = new LUDecompositionQuick();
         decomposer.decompose(colt);
         return Colts.toLinealgebra(colt);
+    }
+
+    @Test
+    public void solver() {
+        final var extent = new Extent2d(55, 55);
+        final var matrix = next(extent);
+        final var B = next(extent);
+
+        final var expected = coldSolve(matrix, B);
+
+        final var lu = LU.decompose(matrix);
+        lu.solve(B);
+
+        LinealgebraAsserts.assertEquals(B, expected);
+    }
+
+    private static DoubleMatrix2d coldSolve(final DoubleMatrix2d matrix, final DoubleMatrix2d B) {
+        final var coltMatrix = Colts.toColt(matrix);
+        final var coltB = Colts.toColt(B);
+
+        final var decomposer = new LUDecomposition(coltMatrix);
+        final var result = decomposer.solve(coltB);
+        return Colts.toLinealgebra(result);
     }
 
 }
