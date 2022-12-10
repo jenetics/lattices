@@ -19,12 +19,31 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import io.jenetics.linealgebra.matrix.Matrix2d;
+import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.blas.Algebra.checkRectangular;
+import static io.jenetics.linealgebra.blas.Algebra.isNonSingular;
 
-public final class Decomposition {
-    private Decomposition() {}
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
-    public record Result<M extends Matrix2d<M>>() {
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since !__version__!
+ * @version !__version__!
+ */
+public final class LuDecomposition {
+    private final DoubleMatrix2d lu;
+
+    private int[] work1;
+
+    private LuDecomposition(final DoubleMatrix2d lu) {
+        this.lu = requireNonNull(lu);
+    }
+
+    public static LuDecomposition of(final DoubleMatrix2d a) {
+        final var matrix = a.copy();
+        LU.decompose(matrix);
+
+        return new LuDecomposition(matrix);
     }
 
 }

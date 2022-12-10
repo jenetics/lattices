@@ -132,10 +132,12 @@ public class DoubleGrid1d implements Structural1d {
      */
     public void update(final DoubleUnaryOperator f) {
         requireNonNull(f);
+        forEach(i -> set(i, f.applyAsDouble(get(i))));
+    }
 
-        for (int i = 0; i < size(); ++i) {
-            set(i, f.applyAsDouble(get(i)));
-        }
+    public void update(DoubleGrid1d y, DoubleBinaryOperator f) {
+        requireSameExtent(y.extent());
+        forEach(i -> set(i, f.applyAsDouble(get(i), y.get(i))));
     }
 
     /**
