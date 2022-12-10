@@ -99,7 +99,7 @@ public class DoubleMatrix2d
     public DoubleMatrix2d copy(final Range2d range) {
         // Fast copy, if applicable.
         if (range.row() == 0 &&
-            range.column() == 0 &&
+            range.col() == 0 &&
             range.height() == rows() &&
             range.width() == cols() &&
             structure.order().equals(new StrideOrder2d(new Extent2d(range))))
@@ -113,7 +113,7 @@ public class DoubleMatrix2d
             loop.forEach((r, c) ->
                 elems.set(
                     struct.order().index(r, c),
-                    get(r + range.row(), c + range.column())
+                    get(r + range.row(), c + range.col())
                 )
             );
 

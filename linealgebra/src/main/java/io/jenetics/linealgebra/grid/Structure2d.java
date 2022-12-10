@@ -83,7 +83,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
                 new Extent2d(range.height(), range.width()),
                 new StrideOrder2d(
                     ord.rowStart() + ord.rowStride()*range.row(),
-                    ord.colStart() + ord.colStride()*range.column(),
+                    ord.colStart() + ord.colStride()*range.col(),
                     ord.rowStride(),
                     ord.colStride()
                 )
@@ -96,7 +96,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     private void checkRange(final Range2d range) {
-        if (range.column() + range.width() > extent.cols() ||
+        if (range.col() + range.width() > extent.cols() ||
             range.row() + range.height() > extent.rows())
         {
             throw new IndexOutOfBoundsException(extent + " : " + range);

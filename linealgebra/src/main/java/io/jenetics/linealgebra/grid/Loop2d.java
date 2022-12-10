@@ -101,7 +101,7 @@ public interface Loop2d {
             requireNonNull(action);
 
             for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
+                for (int c = range.col(); c < range.width(); ++c) {
                     action.accept(r, c);
                 }
             }
@@ -112,7 +112,7 @@ public interface Loop2d {
             requireNonNull(predicate);
 
             for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
+                for (int c = range.col(); c < range.width(); ++c) {
                     if (predicate.test(r, c)) {
                         return true;
                     }
@@ -127,7 +127,7 @@ public interface Loop2d {
             requireNonNull(predicate);
 
             for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
+                for (int c = range.col(); c < range.width(); ++c) {
                     if (!predicate.test(r, c)) {
                         return false;
                     }
@@ -142,7 +142,7 @@ public interface Loop2d {
             requireNonNull(predicate);
 
             for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.column(); c < range.width(); ++c) {
+                for (int c = range.col(); c < range.width(); ++c) {
                     if (predicate.test(r, c)) {
                         return false;
                     }
@@ -174,7 +174,7 @@ public interface Loop2d {
         public void forEach(IntIntConsumer action) {
             requireNonNull(action);
 
-            for (int c = range.column(); c < range.width(); ++c) {
+            for (int c = range.col(); c < range.width(); ++c) {
                 for (int r = range.row(); r < range.height(); ++r) {
                     action.accept(r, c);
                 }
@@ -185,7 +185,7 @@ public interface Loop2d {
         public boolean anyMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
+            for (int c = range.col(); c < range.width(); ++c) {
                 for (int r = range.row(); r < range.height(); ++r) {
                     if (predicate.test(r, c)) {
                         return true;
@@ -200,7 +200,7 @@ public interface Loop2d {
         public boolean allMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
+            for (int c = range.col(); c < range.width(); ++c) {
                 for (int r = range.row(); r < range.height(); ++r) {
                     if (!predicate.test(r, c)) {
                         return false;
@@ -215,7 +215,7 @@ public interface Loop2d {
         public boolean nonMatch(final IntIntPredicate predicate) {
             requireNonNull(predicate);
 
-            for (int c = range.column(); c < range.width(); ++c) {
+            for (int c = range.col(); c < range.width(); ++c) {
                 for (int r = range.row(); r < range.height(); ++r) {
                     if (predicate.test(r, c)) {
                         return false;

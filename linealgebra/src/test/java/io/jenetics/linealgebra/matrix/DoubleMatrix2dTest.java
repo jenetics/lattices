@@ -48,7 +48,7 @@ public class DoubleMatrix2dTest {
             final var loop = new Loop2d.RowMajor(range);
             loop.forEach((r, c) -> {
                 final var i = r - range.row();
-                final var j = c - range.column();
+                final var j = c - range.col();
 
                 assertThat(copy.get(i, j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
@@ -112,7 +112,7 @@ public class DoubleMatrix2dTest {
             final var loop = new Loop2d.RowMajor(range);
             loop.forEach((r, c) -> {
                 final var i = r - range.row();
-                final var j = c - range.column();
+                final var j = c - range.col();
 
                 assertThat(view.get(i, j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix.copy(range), view))
