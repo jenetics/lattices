@@ -135,7 +135,7 @@ public class BlasTest {
         check("idamax", next(43));
     }
 
-    @Test
+    @Test(invocationCount = 5)
     public void dgemv() {
         final var random = RandomGenerator.getDefault();
 
@@ -163,7 +163,7 @@ public class BlasTest {
         );
     }
 
-    @Test
+    @Test(invocationCount = 5)
     public void dsymv() {
         final var random = RandomGenerator.getDefault();
 
@@ -178,7 +178,7 @@ public class BlasTest {
         );
     }
 
-    @Test
+    @Test(invocationCount = 10)
     public void dtrmv() {
         final var random = RandomGenerator.getDefault();
 
@@ -204,7 +204,7 @@ public class BlasTest {
         check("dscal", random.nextDouble(9, 87), next(34, 34));
     }
 
-    @Test
+    @Test(invocationCount = 5)
     public void dgemm() {
         final var random = RandomGenerator.getDefault();
 
