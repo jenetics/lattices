@@ -20,13 +20,13 @@
 package io.jenetics.linealgebra.grid;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
+import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

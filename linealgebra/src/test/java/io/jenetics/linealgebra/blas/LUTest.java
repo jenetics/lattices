@@ -19,17 +19,17 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.LUDecompositionQuick;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.Colts;
-import io.jenetics.linealgebra.LinealgebraAsserts;
 import io.jenetics.linealgebra.grid.Extent2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
+import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

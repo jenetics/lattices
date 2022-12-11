@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

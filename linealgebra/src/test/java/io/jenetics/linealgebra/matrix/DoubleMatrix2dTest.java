@@ -20,7 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -28,11 +28,11 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.Colts;
 import io.jenetics.linealgebra.grid.Extent2d;
 import io.jenetics.linealgebra.grid.Loop2d;
 import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.grid.Stride2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

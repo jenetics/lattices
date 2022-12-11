@@ -19,7 +19,7 @@
  */
 package io.jenetics.linealgebra;
 
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -35,8 +35,9 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
 
 @Warmup(iterations = 1)
 @Measurement(iterations = 2)

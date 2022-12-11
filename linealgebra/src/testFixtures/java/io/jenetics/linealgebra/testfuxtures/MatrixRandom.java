@@ -17,14 +17,14 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra;
+package io.jenetics.linealgebra.testfuxtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.grid.Extent1d;
 import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

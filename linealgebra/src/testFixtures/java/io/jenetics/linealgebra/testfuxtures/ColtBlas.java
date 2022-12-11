@@ -17,10 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.linealgebra;
+package io.jenetics.linealgebra.testfuxtures;
 
-import static io.jenetics.linealgebra.Colts.toColt;
-import static io.jenetics.linealgebra.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
 
 import cern.colt.matrix.linalg.SeqBlas;
 

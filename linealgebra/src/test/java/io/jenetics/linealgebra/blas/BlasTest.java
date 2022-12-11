@@ -20,9 +20,9 @@
 package io.jenetics.linealgebra.blas;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.linealgebra.LinealgebraAsserts.assertEquals;
-import static io.jenetics.linealgebra.LinealgebraAsserts.assertNotEquals;
-import static io.jenetics.linealgebra.MatrixRandom.next;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertNotEquals;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -34,17 +34,17 @@ import java.util.stream.Stream;
 import org.assertj.core.util.DoubleComparator;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.Colts;
-import io.jenetics.linealgebra.DoubleGrid1dComparator;
-import io.jenetics.linealgebra.DoubleGrid2dComparator;
-import io.jenetics.linealgebra.DoubleMatrix1dComparator;
-import io.jenetics.linealgebra.DoubleMatrix2dComparator;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.grid.DoubleGrid1d;
 import io.jenetics.linealgebra.grid.DoubleGrid2d;
 import io.jenetics.linealgebra.grid.Extent1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
+import io.jenetics.linealgebra.testfuxtures.DoubleGrid1dComparator;
+import io.jenetics.linealgebra.testfuxtures.DoubleGrid2dComparator;
+import io.jenetics.linealgebra.testfuxtures.DoubleMatrix1dComparator;
+import io.jenetics.linealgebra.testfuxtures.DoubleMatrix2dComparator;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
