@@ -182,7 +182,7 @@ public interface Blas {
      * @throws IllegalArgumentException if {@code x.size() != y.size()}
      */
     default void daxpy(final double alpha, final DoubleMatrix1d x, final DoubleMatrix1d y) {
-        y.assign(x, (a, b) -> b + alpha*a);
+        y.assign(x, (a, b) -> a + alpha*b);
     }
 
     /**
@@ -306,7 +306,8 @@ public interface Blas {
         final DoubleMatrix2d A
     ) {
         for (int i = 0; i < A.rows(); ++i) {
-            A.rowAt(i).assign(y, (a, b) -> a + alpha*b);
+            final var multiplier = alpha*x.get(i);
+            A.rowAt(i).assign(y, (a, b) -> a + multiplier*b);
         }
     }
 
@@ -507,7 +508,7 @@ public interface Blas {
      *         A.rows() != B.rows()}
      */
     default void daxpy(final double alpha, final DoubleMatrix2d A, final DoubleMatrix2d B) {
-        B.assign(A, (a, b) -> b + alpha*a);
+        B.assign(A, (a, b) -> a + alpha*b);
     }
 
     /**

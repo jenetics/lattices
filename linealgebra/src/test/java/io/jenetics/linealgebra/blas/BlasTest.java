@@ -31,10 +31,17 @@ import cern.colt.matrix.linalg.SeqBlas;
 import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
+import org.assertj.core.util.DoubleComparator;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.Colts;
+import io.jenetics.linealgebra.DoubleGrid1dComparator;
+import io.jenetics.linealgebra.DoubleGrid2dComparator;
+import io.jenetics.linealgebra.DoubleMatrix1dComparator;
+import io.jenetics.linealgebra.DoubleMatrix2dComparator;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
+import io.jenetics.linealgebra.grid.DoubleGrid1d;
+import io.jenetics.linealgebra.grid.DoubleGrid2d;
 import io.jenetics.linealgebra.grid.Extent1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
@@ -79,14 +86,178 @@ public class BlasTest {
         );
     }
 
+    @Test
+    public void dscal() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dscal",
+            random.nextDouble(32, 321),
+            next(34)
+        );
+    }
+
+    @Test
+    public void dswap() {
+        check("dswap", next(121), next(121));
+    }
+
+    @Test
+    public void daxpy() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "daxpy",
+            random.nextDouble(32, 1233),
+            next(311),
+            next(311)
+        );
+    }
+
+    @Test
+    public void ddot() {
+        check("ddot", next(12), next(3)
+        );
+    }
+
+    @Test
+    public void dnrm2() {
+        check("dnrm2", next(30));
+    }
+
+    @Test
+    public void dasum() {
+        check("dasum", next(23));
+    }
+
+    @Test
+    public void idamax() {
+        check("idamax", next(43));
+    }
+
+    @Test
+    public void dgemv() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dgemv",
+            random.nextBoolean(),
+            random.nextDouble(3, 12),
+            next(5, 5),
+            next(5),
+            random.nextDouble(2, 4),
+            next(5)
+        );
+    }
+
+    @Test
+    public void dger() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dger",
+            random.nextDouble(3, 31),
+            next(7),
+            next(7),
+            next(7, 7)
+        );
+    }
+
+    @Test
+    public void dsymv() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dsymv",
+            random.nextBoolean(),
+            random.nextDouble(6, 34),
+            next(10, 10),
+            next(10),
+            random.nextDouble(8, 89),
+            next(10)
+        );
+    }
+
+    @Test
+    public void dtrmv() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dtrmv",
+            random.nextBoolean(),
+            random.nextBoolean(),
+            random.nextBoolean(),
+            next(10, 10),
+            next(10)
+        );
+    }
+
+    @Test
+    public void dcopy_l3() {
+        check("dcopy", next(20, 20), next(20, 20));
+    }
+
+    @Test
+    public void dscal_l3() {
+        final var random = RandomGenerator.getDefault();
+
+        check("dscal", random.nextDouble(9, 87), next(34, 34));
+    }
+
+    @Test
+    public void dgemm() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "dgemm",
+            random.nextBoolean(),
+            random.nextBoolean(),
+            random.nextDouble(2, 5),
+            next(3, 3),
+            next(3, 3),
+            random.nextDouble(2, 6),
+            next(3, 3)
+        );
+    }
+
+    @Test
+    public void daxpy_l3() {
+        final var random = RandomGenerator.getDefault();
+
+        check(
+            "daxpy",
+            random.nextDouble(23, 244),
+            next(30, 30),
+            next(30, 30)
+        );
+    }
+
+    @Test
+    public void dswap_l3() {
+        check("dswap", next(34, 23), next(34, 23));
+    }
+
     /* *************************************************************************
      * Helper methods for closing the gap between this and Colt.
      * ************************************************************************/
 
+    private static final double PRECISION = 0.00000001;
+
     private static void check(final String name, final Object... parameters) {
         final Object[] result = blas(name, parameters);
         final Object[] expected = colt(name, parameters);
-        assertThat(result).isEqualTo(expected);
+
+        assertThat(result)
+            .usingComparatorForType(new DoubleComparator(PRECISION), Double.class)
+            .usingComparatorForType(new DoubleGrid1dComparator(PRECISION), DoubleGrid1d.class)
+            .usingComparatorForType(new DoubleGrid2dComparator(PRECISION), DoubleGrid2d.class)
+            .usingComparatorForType(new DoubleMatrix1dComparator(PRECISION), DoubleMatrix1d.class)
+            .usingComparatorForType(new DoubleMatrix2dComparator(PRECISION), DoubleMatrix2d.class)
+            .isEqualTo(expected);
+    }
+
+    private static int compare(final double v1, final double v2) {
+        return Math.abs(v1 - v2) <= Math.abs(v1*0.01) ? 0 : 1;
     }
 
     private static Object[] blas(final String name, final Object... parameters) {
@@ -182,6 +353,8 @@ public class BlasTest {
             return double.class;
         } else if (type == Long.class) {
             return long.class;
+        } else if (type == Boolean.class) {
+          return boolean.class;
         } else if (type == Integer[].class) {
             return int[].class;
         } else if (type == Double[].class) {
