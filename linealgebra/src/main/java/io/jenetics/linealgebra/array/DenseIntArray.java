@@ -63,8 +63,19 @@ public record DenseIntArray(int[] elements) implements IntArray {
         return ofSize(length);
     }
 
-    public static DenseIntArray ofSize(final int size) {
-        return new DenseIntArray(new int[size]);
+    /**
+     * Create a new dense {@code int} array with the given {@code length}.
+     *
+     * @param length the length of the created array
+     * @return a new dense {@code int} array with the given {@code length}
+     */
+    public static DenseIntArray ofSize(final int length) {
+        return new DenseIntArray(new int[length]);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(elements);
     }
 
 }

@@ -19,9 +19,12 @@
  */
 package io.jenetics.linealgebra;
 
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
@@ -29,6 +32,22 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  */
 public final class Colts {
     private Colts() {
+    }
+
+    public static Object toLinealgebra(final Object colt) {
+        if (colt instanceof DoubleMatrix1D matrix) {
+            return toLinealgebra(matrix);
+        } else if (colt instanceof DoubleMatrix2D matrix) {
+            return toLinealgebra(matrix);
+        } else {
+            return null;
+        }
+    }
+
+    public static DenseDoubleMatrix1D toColt(final DoubleMatrix1d matrix) {
+        final var colt = new DenseDoubleMatrix1D(matrix.size());
+        matrix.forEach(i -> colt.setQuick(i, matrix.get(i)));
+        return colt;
     }
 
     public static DenseDoubleMatrix2D toColt(final DoubleMatrix2d matrix) {
@@ -42,6 +61,14 @@ public final class Colts {
             .newInstance(matrix.rows(), matrix.columns());
 
         la.forEach((r, c) -> la.set(r, c, matrix.getQuick(r, c)));
+        return la;
+    }
+
+    public static DoubleMatrix1d toLinealgebra(final DoubleMatrix1D matrix) {
+        final var la = DoubleMatrix1d.DENSE_FACTORY
+            .newInstance(matrix.size());
+
+        la.forEach(i -> la.set(i, matrix.getQuick(i)));
         return la;
     }
 

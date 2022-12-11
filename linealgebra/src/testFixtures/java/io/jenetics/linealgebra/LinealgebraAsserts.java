@@ -21,8 +21,12 @@ package io.jenetics.linealgebra;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.jenetics.linealgebra.grid.DoubleGrid1d;
 import io.jenetics.linealgebra.grid.DoubleGrid2d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public final class LinealgebraAsserts {
 
     public static final double DEFAULT_PRECISION = 0.0001;
@@ -37,6 +41,18 @@ public final class LinealgebraAsserts {
     }
 
     public static void assertNotEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
+        assertThat(a.equals(b, DEFAULT_PRECISION))
+            .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
+            .isFalse();
+    }
+
+    public static void assertEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
+        assertThat(a.equals(b, DEFAULT_PRECISION))
+            .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
+            .isTrue();
+    }
+
+    public static void assertNotEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
         assertThat(a.equals(b, DEFAULT_PRECISION))
             .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
             .isFalse();

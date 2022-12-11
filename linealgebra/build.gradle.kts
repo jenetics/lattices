@@ -39,7 +39,8 @@ dependencies {
     testImplementation("org.testng:testng:7.6.1")
     testImplementation("colt:colt:1.2.0")
 
-    testFixturesApi("colt:colt:1.2.0")
+    //testFixturesApi("colt:colt:1.2.0")
+    testFixturesApi(project(":colt"))
     testFixturesApi("org.assertj:assertj-core:3.20.2")
 
     jmh(testFixtures(project(":linealgebra")))

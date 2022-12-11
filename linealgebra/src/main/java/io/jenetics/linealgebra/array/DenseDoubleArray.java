@@ -63,8 +63,19 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
         return ofSize(length);
     }
 
-    public static DenseDoubleArray ofSize(final int size) {
-        return new DenseDoubleArray(new double[size]);
+    /**
+     * Create a new dense {@code double} array with the given {@code length}.
+     *
+     * @param length the length of the created array
+     * @return a new dense {@code double} array with the given {@code length}
+     */
+    public static DenseDoubleArray ofSize(final int length) {
+        return new DenseDoubleArray(new double[length]);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(elements);
     }
 
 }

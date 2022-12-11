@@ -118,8 +118,11 @@ public interface Blas {
     }
 
     /**
-     * Applies a givens plane rotation to (x,y);
-     * {@code x = c*x + s*y; y = c*y - s*x}.
+     * Applies a givens plane rotation to (x, y);
+     * <pre>{@code
+     * x = c*x + s*y
+     * y = c*y - s*x
+     * }</pre>
      *
      * @param x the first vector.
      * @param y the second vector.
@@ -135,10 +138,10 @@ public interface Blas {
         x.requireSameExtent(y);
         final var tmp = x.copy();
 
-        x.assign(a -> a*c);
+        x.assign(a -> c*a);
         x.assign(y, (a, b) -> a + b*s);
 
-        y.assign(a -> a*c);
+        y.assign(a -> c*a);
         y.assign(tmp, (a, b) -> a - b*s);
     }
 
