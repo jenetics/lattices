@@ -213,9 +213,11 @@ public class DoubleMatrix2d
         for (int i = rows(); --i >= 0; ) {
             double s = 0;
             for (int j = cols(); --j >= 0;) {
-                s += get(i, j) * y.get(j);
+                //s += get(i, j)*y.get(j);
+                s = Math.fma(get(i, j), y.get(j), s);
             }
-            z.set(i, alpha * s + beta * z.get(i));
+            //z.set(i, alpha*s + beta*z.get(i));
+            z.set(i, Math.fma(alpha, s, beta*z.get(i)));
         }
 
         return z;
@@ -313,9 +315,11 @@ public class DoubleMatrix2d
             for (int i = m; --i >= 0;) {
                 double s = 0;
                 for (int k = n; --k >= 0;) {
-                    s += get(i, k) * B.get(k, j);
+                    //s += get(i, k)*B.get(k, j);
+                    s = Math.fma(get(i, k), B.get(k, j), s);
                 }
-                C.set(i, j, alpha * s + beta * C.get(i, j));
+                //C.set(i, j, alpha*s + beta*C.get(i, j));
+                C.set(i, j, Math.fma(alpha, s, beta * C.get(i, j)));
             }
         }
 

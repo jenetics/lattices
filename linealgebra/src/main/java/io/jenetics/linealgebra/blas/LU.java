@@ -19,13 +19,14 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static java.util.Objects.requireNonNull;
-import static io.jenetics.linealgebra.blas.Algebra.isNonSingular;
-import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
-
 import io.jenetics.linealgebra.grid.Range1d;
+import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+
+import static io.jenetics.linealgebra.blas.Algebra.isNonSingular;
+import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Performs in place LU-decomposition.
@@ -34,7 +35,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  * @since !__version__!
  * @version !__version__!
  */
-final class LU implements Solver {
+public final class LU implements Solver {
 
     private final DoubleMatrix2d lu;
     private final int pivsign;
@@ -53,6 +54,36 @@ final class LU implements Solver {
         singular = !isNonSingular(lu);
     }
 
+    public DoubleMatrix2d lu() {
+        return lu.copy();
+    }
+
+    /**
+     * Return the lower triangular factor {@code L}.
+     *
+     * @return the lower triangular factor
+     */
+    public DoubleMatrix2d l() {
+        final var l = lu.copy();
+        lowerTriangular(l);
+        return l;
+    }
+
+    /**
+     * Return the upper triangular factor {@code U}.
+     *
+     * @return the upper triangular factor
+     */
+    public DoubleMatrix2d u() {
+        final var u = lu.copy();
+        upperTriangular(u);
+        return u;
+    }
+
+    public int[] pivot() {
+        return pivot.clone();
+    }
+
     @Override
     public void solve(final DoubleMatrix2d B) {
         lu.requireRectangular();
@@ -60,7 +91,7 @@ final class LU implements Solver {
         int m = lu.rows();
         int n = lu.cols();
 
-        if (m*n == 0) {
+        if (m == 0 || n == 0) {
             return;
         }
 
@@ -93,7 +124,8 @@ final class LU implements Solver {
             for (int i = k + 1; i < n; i++) {
                 final double multiplier = -lu.get(i, k);
                 if (Double.compare(multiplier, 0.0) != 0) {
-                    Brows[i].assign(Browk, (a, b) -> a + multiplier*b);
+                    //Brows[i].assign(Browk, (a, b) -> a + multiplier*b);
+                    Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier, b, a));
                 }
             }
         }
@@ -107,7 +139,8 @@ final class LU implements Solver {
             for (int i = 0; i < k; i++) {
                 final double multiplier2 = -lu.get(i, k);
                 if (Double.compare(multiplier2, 0.0) != 0) {
-                    Brows[i].assign(Browk, (a, b) -> a  + multiplier2*b);
+                    //Brows[i].assign(Browk, (a, b) -> a  + multiplier2*b);
+                    Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier2, b, a));
                 }
             }
         }
@@ -118,7 +151,7 @@ final class LU implements Solver {
      *
      * @param matrix the matrix to be decomposed
      */
-    static LU decompose(final DoubleMatrix2d matrix) {
+    public static LU decompose(final DoubleMatrix2d matrix) {
         requireNonNull(matrix);
 
         final int m = matrix.rows();
@@ -187,6 +220,38 @@ final class LU implements Solver {
         }
 
         return new LU(matrix, pivsign, piv);
+    }
+
+    private static void lowerTriangular(final DoubleMatrix2d A) {
+        int min = Math.min(A.rows(), A.cols());
+
+        for (int r = min; --r >= 0;) {
+            for (int c = min; --c >= 0;) {
+                if (r < c) {
+                    A.set(r, c, 0);
+                } else if (r == c) {
+                    A.set(r, c, 1);
+                }
+            }
+        }
+        if (A.cols() > A.rows()) {
+            A.view(new Range2d(0, min, A.rows(), A.cols() - min)).assign(0);
+        }
+    }
+
+    private static void upperTriangular(final DoubleMatrix2d A) {
+        int min = Math.min(A.rows(), A.cols());
+
+        for (int r = min; --r >= 0;) {
+            for (int c = min; --c >= 0;) {
+                if (r > c) {
+                    A.set(r, c, 0);
+                }
+            }
+        }
+        if (A.cols() < A.rows()) {
+            A.view(new Range2d(min, 0, A.rows() - min, A.cols())).assign(0);
+        }
     }
 
 }

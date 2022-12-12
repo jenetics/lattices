@@ -19,12 +19,14 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import java.util.function.Function;
-
-import io.jenetics.linealgebra.Tolerance;
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
+import java.util.function.Function;
+
 /**
+ * Linear algebraic matrix operations.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
@@ -70,6 +72,12 @@ public final class Algebra {
         };
     }
 
+    /**
+     * Returns the inverse or pseudo-inverse of matrix {@code A}.
+     *
+     * @return a new independent matrix. inverse(matrix) if the matrix is
+     *         square, pseudo-inverse otherwise.
+     */
     public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
         return null;
     }
@@ -82,10 +90,10 @@ public final class Algebra {
      *         {@code false} otherwise
      */
     static boolean isNonSingular(final DoubleMatrix2d matrix) {
-        final var epsilon = Tolerance.epsilon();
+        final var context = NumericalContext.instance();
 
-        for (int j = Math.min(matrix.rows(), matrix.cols()); --j >= 0;) {
-            if (Math.abs(matrix.get(j, j)) <= epsilon) {
+        for (int i = Math.min(matrix.rows(), matrix.cols()); --i >= 0;) {
+            if (context.isZero(matrix.get(i, i))) {
                 return false;
             }
         }

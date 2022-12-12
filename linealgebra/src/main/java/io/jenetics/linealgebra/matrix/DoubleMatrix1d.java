@@ -145,7 +145,8 @@ public class DoubleMatrix1d
         double sum = 0;
         int i = tail - 1;
         for (int k = l; --k >= 0; i--) {
-            sum += get(i) * y.get(i);
+            //sum += get(i)*y.get(i);
+            sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
     }

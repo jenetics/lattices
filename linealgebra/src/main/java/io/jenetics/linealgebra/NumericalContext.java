@@ -20,13 +20,30 @@
 package io.jenetics.linealgebra;
 
 /**
+ * Encapsulates the context settings which describes certain rules for numerical
+ * operations.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public class NumericalContext {
+public interface NumericalContext {
 
-    public double epsilon() {
+    /**
+     * Numerical context with an {@link #epsilon()} of zero.
+     */
+    NumericalContext ZERO = new NumericalContext() {
+        @Override
+        public double epsilon() {
+            return 0.0;
+        }
+        @Override
+        public boolean equals(final double a, final double b) {
+            return Double.compare(a, b) == 0;
+        }
+    };
+
+    default double epsilon() {
         return 0;
     }
 
@@ -39,16 +56,42 @@ public class NumericalContext {
      * @return {@code true} if the given values are equal, modulo the given
      *         {@link #epsilon()}, {@code false} otherwise
      */
-    public boolean equals(final double a, final double b) {
-        return false;
+    default boolean equals(final double a, final double b) {
+        return Double.compare(a, b) == 0 || Math.abs(a - b) <= epsilon();
     }
 
-    public boolean isZero(final double a) {
+    /**
+     * Tests whether the given double value is zero, according to the defined
+     * {@link #epsilon()}.
+     *
+     * @param a the value to test
+     * @return {@code true} if the given value is (near) zero, {@code false}
+     *         otherwise
+     */
+    default boolean isZero(final double a) {
         return equals(a, 0);
     }
 
-    public boolean isOne(final double a) {
+    /**
+     * Tests whether the given double value is one, according to the defined
+     * {@link #epsilon()}.
+     *
+     * @param a the value to test
+     * @return {@code true} if the given value is (near) one, {@code false}
+     *         otherwise
+     */
+    default boolean isOne(final double a) {
         return equals(a, 1);
+    }
+
+    /**
+     * Return the default numerical context.
+     *
+     * @return the default numerical context
+     */
+    static NumericalContext instance() {
+        record NC(double epsilon) implements NumericalContext {}
+        return new NC(0.0000000000001);
     }
 
 }

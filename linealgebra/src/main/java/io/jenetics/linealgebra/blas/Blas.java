@@ -80,18 +80,18 @@ public interface Blas {
         scale = Math.abs(a) + Math.abs(b);
 
         if (scale != 0.0) {
-            ra = a / scale;
-            rb = b / scale;
-            r = scale * Math.sqrt(ra * ra + rb * rb);
+            ra = a/scale;
+            rb = b/scale;
+            r = scale*Math.hypot(ra, rb);
             r = sign(1.0, roe) * r;
-            c = a / r;
-            s = b / r;
+            c = a/r;
+            s = b/r;
             z = 1.0;
             if (Math.abs(a) > Math.abs(b)) {
                 z = s;
             }
             if ((Math.abs(b) >= Math.abs(a)) && (c != 0.0)) {
-                z = 1.0 / c;
+                z = 1.0/c;
             }
         } else {
             c = 1.0;
@@ -139,10 +139,12 @@ public interface Blas {
         final var tmp = x.copy();
 
         x.assign(a -> c*a);
-        x.assign(y, (a, b) -> a + b*s);
+        //x.assign(y, (a, b) -> a + b*s);
+        x.assign(y, (a, b) -> Math.fma(b, s, a));
 
         y.assign(a -> c*a);
-        y.assign(tmp, (a, b) -> a - b*s);
+        //y.assign(tmp, (a, b) -> a - b*s);
+        y.assign(tmp, (a, b) -> -Math.fma(b, s, -a));
     }
 
     /**
@@ -182,7 +184,8 @@ public interface Blas {
      * @throws IllegalArgumentException if {@code x.size() != y.size()}
      */
     default void daxpy(final double alpha, final DoubleMatrix1d x, final DoubleMatrix1d y) {
-        y.assign(x, (a, b) -> a + alpha*b);
+        //y.assign(x, (a, b) -> a + alpha*b);
+        y.assign(x, (a, b) -> Math.fma(b, alpha, a));
     }
 
     /**
@@ -307,7 +310,8 @@ public interface Blas {
     ) {
         for (int i = 0; i < A.rows(); ++i) {
             final var multiplier = alpha*x.get(i);
-            A.rowAt(i).assign(y, (a, b) -> a + multiplier*b);
+            //A.rowAt(i).assign(y, (a, b) -> a + multiplier*b);
+            A.rowAt(i).assign(y, (a, b) -> Math.fma(b, multiplier, a));
         }
     }
 
@@ -352,10 +356,12 @@ public interface Blas {
         for (int i = 0; i < A.rows(); i++) {
             double sum = 0;
             for (int j = 0; j <= i; j++) {
-                sum += A.get(i, j)*x.get(j);
+                //sum += A.get(i, j)*x.get(j);
+                sum = Math.fma(A.get(i, j), x.get(j), sum);
             }
             for (int j = i + 1; j < A.rows(); j++) {
-                sum += A.get(j, i)*x.get(j);
+                //sum += A.get(j, i)*x.get(j);
+                sum = Math.fma(A.get(j, i), x.get(j), sum);
             }
             tmp.set(i, alpha * sum + beta * y.get(i));
         }
@@ -416,13 +422,17 @@ public interface Blas {
             double sum = 0;
             if (!isUpperTriangular) {
                 for (int j = 0; j < i; j++) {
-                    sum += A.get(i, j)*x.get(j);
+                    //sum += A.get(i, j)*x.get(j);
+                    sum = Math.fma(A.get(i, j), x.get(j), sum);
                 }
-                sum += y.get(i)*x.get(i);
+                //sum += y.get(i)*x.get(i);
+                sum = Math.fma(y.get(i), x.get(i), sum);
             } else {
-                sum += y.get(i)*x.get(i);
+                //sum += y.get(i)*x.get(i);
+                sum = Math.fma(y.get(i), x.get(i), sum);
                 for (int j = i + 1; j < A.rows(); j++) {
-                    sum += A.get(i, j)*x.get(j);
+                    //sum += A.get(i, j)*x.get(j);
+                    sum = Math.fma(A.get(i, j), x.get(j), sum);
                 }
             }
             b.set(i, sum);
@@ -508,7 +518,8 @@ public interface Blas {
      *         A.rows() != B.rows()}
      */
     default void daxpy(final double alpha, final DoubleMatrix2d A, final DoubleMatrix2d B) {
-        B.assign(A, (a, b) -> a + alpha*b);
+        //B.assign(A, (a, b) -> a + alpha*b);
+        B.assign(A, (a, b) -> Math.fma(alpha, b, a));
     }
 
     /**
