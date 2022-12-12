@@ -35,6 +35,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
+import io.jenetics.linealgebra.blas.Algebra;
 import io.jenetics.linealgebra.grid.Extent2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import io.jenetics.linealgebra.testfuxtures.Colts;
@@ -61,14 +62,24 @@ public class DenseDoubleMatrix2dPerf {
         coltB = Colts.toColt(linealgebraB);
     }
 
-    @Benchmark
+    //@Benchmark
     public Object linealgebraMult() {
         return linealgebraA.mult(linealgebraB, null, 2, 3, false, false);
     }
 
     @Benchmark
+    public Object linealgebraSolve() {
+        return Algebra.solve(linealgebraA, linealgebraB);
+    }
+
+    //@Benchmark
     public Object coltMult() {
         return coltA.zMult(coltB, null, 2, 3, false, false);
+    }
+
+    //@Benchmark
+    public Object coltSolve() {
+        return cern.colt.matrix.linalg.Algebra.DEFAULT.solve(coltA, coltB);
     }
 
 }
@@ -101,4 +112,8 @@ Dell:
 Benchmark                                Mode  Cnt    Score    Error  Units
 DenseDoubleMatrix2dPerf.coltMult         avgt   10  643.762 ± 16.322  us/op
 DenseDoubleMatrix2dPerf.linealgebraMult  avgt   10  620.279 ±  2.351  us/op
+
+Benchmark                                 Mode  Cnt     Score   Error  Units
+DenseDoubleMatrix2dPerf.coltSolve         avgt   10   823.843 ± 8.118  us/op
+DenseDoubleMatrix2dPerf.linealgebraSolve  avgt   10  1210.976 ± 4.143  us/op
  */

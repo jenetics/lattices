@@ -63,12 +63,14 @@ public final class Algebra {
      * Check if the given matrix {@code A} is non-singular.
      *
      * @param A the {@code matrix} to test
+     * @param context the numerical context used for comparing zeros
      * @return {@code true} if the given matrix {@code A} is non-singular,
      *         {@code false} otherwise
      */
-    public static boolean isNonSingular(final DoubleMatrix2d A) {
-        final var context = NumericalContext.instance();
-
+    public static boolean isNonSingular(
+        final DoubleMatrix2d A,
+        final NumericalContext context
+    ) {
         for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
             if (context.isZero(A.get(i, i))) {
                 return false;
@@ -80,16 +82,19 @@ public final class Algebra {
 
     /**
      * Check if the given matrix {@code A} is non-singular (not
-     * {@link #isNonSingular(DoubleMatrix2d)}).
+     * {@link #isNonSingular(DoubleMatrix2d, NumericalContext)} ).
      *
-     * @see #isNonSingular(DoubleMatrix2d)
+     * @see #isNonSingular(DoubleMatrix2d, NumericalContext)
      *
      * @param A the {@code matrix} to test
      * @return {@code true} if the given matrix {@code A} is non-singular,
      *         {@code false} otherwise
      */
-    public static boolean isSingular(final DoubleMatrix2d A) {
-        return !isNonSingular(A);
+    public static boolean isSingular(
+        final DoubleMatrix2d A,
+        final NumericalContext context
+    ) {
+        return !isNonSingular(A, context);
     }
 
 }

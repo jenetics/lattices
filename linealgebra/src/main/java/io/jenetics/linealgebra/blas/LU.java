@@ -23,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.linealgebra.blas.Algebra.isSingular;
 import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
@@ -41,11 +42,17 @@ public final class LU {
     private final int[] pivot;
     private final boolean singular;
 
-    private LU(final DoubleMatrix2d lu, final int[] pivot) {
+    private final NumericalContext context;
+
+    private LU(
+        final DoubleMatrix2d lu,
+        final int[] pivot,
+        final NumericalContext context
+    ) {
         this.lu = requireNonNull(lu);
         this.pivot = requireNonNull(pivot);
-
-        singular = isSingular(lu);
+        singular = isSingular(lu, context);
+        this.context = requireNonNull(context);
     }
 
     /**
@@ -132,12 +139,12 @@ public final class LU {
         final var Browk = DoubleMatrix1d.DENSE_FACTORY.newInstance(X.cols());
 
         // Solve L*Y = B(piv,:)
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; ++k) {
             Browk.assign(Brows[k]);
 
-            for (int i = k + 1; i < n; i++) {
+            for (int i = k + 1; i < n; ++i) {
                 final double multiplier = -lu.get(i, k);
-                if (Double.compare(multiplier, 0.0) != 0) {
+                if (context.isNotZero(multiplier)) {
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier, b, a));
                 }
             }
@@ -149,9 +156,9 @@ public final class LU {
             Brows[k].assign(a -> a*multiplier1);
             Browk.assign(Brows[k]);
 
-            for (int i = 0; i < k; i++) {
+            for (int i = 0; i < k; ++i) {
                 final double multiplier2 = -lu.get(i, k);
-                if (Double.compare(multiplier2, 0.0) != 0) {
+                if (context.isNotZero(multiplier2)) {
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier2, b, a));
                 }
             }
@@ -167,6 +174,7 @@ public final class LU {
      * @return the <em>LU</em>-decomposition of the given matrix {@code A}
      */
     public static LU decompose(final DoubleMatrix2d A) {
+        final var context = NumericalContext.instance();
         final var lu = A.copy();
 
         final int m = lu.rows();
@@ -178,8 +186,8 @@ public final class LU {
             piv[i] = i;
         }
 
-        if (m*n == 0) {
-            return new LU(lu, piv);
+        if (m == 0 || n == 0) {
+            return new LU(lu, piv, context);
         }
 
         final var rows = new DoubleMatrix1d[m];
@@ -225,16 +233,15 @@ public final class LU {
             }
 
             final double jj = lu.get(j, j);
-            if (j < m && Double.compare(jj, 0.0) != 0) {
+            if (j < m && context.isNotZero(jj)) {
                 final var multiplier = 1.0/jj;
-                lu
-                    .colAt(j)
+                lu.colAt(j)
                     .view(new Range1d(j + 1, m - (j + 1)))
                     .assign(v -> v*multiplier);
             }
         }
 
-        return new LU(lu, piv);
+        return new LU(lu, piv, context);
     }
 
     private static void lowerTriangular(final DoubleMatrix2d A) {

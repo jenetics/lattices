@@ -114,7 +114,11 @@ public class DoubleGrid2d implements Grid2d {
         }
         requireSameExtent(other);
 
-        forEach((r, c) -> set(r, c, other.get(r, c)));
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols(); --c >= 0;) {
+                set(r, c, other.get(r, c));
+            }
+        }
     }
 
     /**
@@ -159,7 +163,11 @@ public class DoubleGrid2d implements Grid2d {
      * @param value the value to be filled into the cells
      */
     public void assign(final double value) {
-        forEach((r, c) -> set(r, c, value));
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols(); --c >= 0;) {
+                set(r, c, value);
+            }
+        }
     }
 
     /**
@@ -179,7 +187,11 @@ public class DoubleGrid2d implements Grid2d {
         requireNonNull(f);
         requireSameExtent(y);
 
-        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols(); --c >= 0;) {
+                set(r, c, f.applyAsDouble(get(r, c), y.get(r, c)));
+            }
+        }
     }
 
     /**
@@ -191,7 +203,11 @@ public class DoubleGrid2d implements Grid2d {
     public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
 
-        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols(); --c >= 0;) {
+                set(r, c, f.applyAsDouble(get(r, c)));
+            }
+        }
     }
 
     /**
@@ -202,11 +218,13 @@ public class DoubleGrid2d implements Grid2d {
     public void swap(final DoubleGrid2d other) {
         requireSameExtent(other);
 
-        forEach((r, c) -> {
-            final var tmp = get(r, c);
-            set(r, c, other.get(r, c));
-            other.set(r, c, tmp);
-        });
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols(); --c >= 0;) {
+                final var tmp = get(r, c);
+                set(r, c, other.get(r, c));
+                other.set(r, c, tmp);
+            }
+        };
     }
 
     /**

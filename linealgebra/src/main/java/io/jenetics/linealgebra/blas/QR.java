@@ -84,7 +84,7 @@ public final class QR {
                 .view(new Range1d(k, qr.rows() - k));
 
             Q.set(k, k, 1);
-            for (int j = k; j < qr.cols(); j++) {
+            for (int j = k; j < qr.cols(); ++j) {
                 if (context.isNotZero(qr.get(k, k))) {
                     final var Qcolj = Q.colAt(j)
                         .view(new Range1d(k, qr.rows() - k));
@@ -104,8 +104,8 @@ public final class QR {
      */
     public DoubleMatrix2d r() {
         final var R = qr.like(new Extent2d(qr.cols(), qr.cols()));
-        for (int i = 0; i < qr.cols(); i++) {
-            for (int j = 0; j < qr.cols(); j++) {
+        for (int i = 0; i < qr.cols(); ++i) {
+            for (int j = 0; j < qr.cols(); ++j) {
                 if (i < j) {
                     R.set(i, j, qr.get(i, j));
                 } else if (i == j) {
@@ -143,15 +143,15 @@ public final class QR {
         final var X = B.copy();
 
         // Compute Y = transpose(Q)*B
-        for (int k = 0; k < qr.cols(); k++) {
-            for (int j = 0; j < B.cols(); j++) {
+        for (int k = 0; k < qr.cols(); ++k) {
+            for (int j = 0; j < B.cols(); ++j) {
                 double s = 0.0;
-                for (int i = k; i < qr.rows(); i++) {
+                for (int i = k; i < qr.rows(); ++i) {
                     //s += qr.get(i, k)*X.get(i, j);
                     s = Math.fma(qr.get(i, k), X.get(i, j), s);
                 }
                 s = -s/qr.get(k, k);
-                for (int i = k; i < qr.rows(); i++) {
+                for (int i = k; i < qr.rows(); ++i) {
                     //X.set(i, j, X.get(i, j) + s*qr.get(i, k));
                     X.set(
                         i, j,
@@ -163,11 +163,11 @@ public final class QR {
 
         // Solve R*X = Y;
         for (int k = qr.cols() - 1; k >= 0; k--) {
-            for (int j = 0; j < B.cols(); j++) {
+            for (int j = 0; j < B.cols(); ++j) {
                 X.set(k, j, X.get(k, j)/rdiag.get(k));
             }
             for (int i = 0; i < k; i++) {
-                for (int j = 0; j < B.cols(); j++) {
+                for (int j = 0; j < B.cols(); ++j) {
                     //X.set(i, j, X.get(i, j) - X.get(k, j)*qr.get(i, k));
                     X.set(
                         i, j,
@@ -185,7 +185,7 @@ public final class QR {
      * @return true if <tt>R</tt>, and hence <tt>A</tt>, has full rank.
      */
     public boolean hasFullRank() {
-        for (int j = 0; j < qr.cols(); j++) {
+        for (int j = 0; j < qr.cols(); ++j) {
             if (context.isZero(rdiag.get(j))) {
                 return false;
             }
@@ -209,14 +209,14 @@ public final class QR {
         final var Rdiag = qr.colAt(0).like();
 
         final var QRcolumnsPart = new DoubleMatrix1d[n];
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; ++k) {
             QRcolumnsPart[k] = qr.colAt(k).view(new Range1d(k, m - k));
         }
 
         // Main loop.
-        for (int k = 0; k < n; k++) {
+        for (int k = 0; k < n; ++k) {
             double nrm = 0;
-            for (int i = k; i < m; i++) {
+            for (int i = k; i < m; ++i) {
                 nrm = Math.hypot(nrm, qr.get(i, k));
             }
 
@@ -231,13 +231,13 @@ public final class QR {
                 qr.set(k, k, qr.get(k, k) + 1);
 
                 // Apply transformation to remaining columns.
-                for (int j = k + 1; j < n; j++) {
+                for (int j = k + 1; j < n; ++j) {
                     final DoubleMatrix1d QRcolj = qr.colAt(j)
                         .view(new Range1d(k, m - k));
 
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
                     s = -s/qr.get(k, k);
-                    for (int i = k; i < m; i++) {
+                    for (int i = k; i < m; ++i) {
                         //matrix.set(i, j, matrix.get(i, j) + s*matrix.get(i, k));
                         qr.set(
                             i, j,

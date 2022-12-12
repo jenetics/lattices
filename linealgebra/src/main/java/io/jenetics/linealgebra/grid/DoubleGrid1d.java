@@ -149,7 +149,9 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsDouble(get(i))));
+        for (int i = 0; i < size(); ++i) {
+            set(i, f.applyAsDouble(get(i)));
+        }
     }
 
     /**
@@ -164,7 +166,9 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void assign(DoubleGrid1d a, DoubleBinaryOperator f) {
         requireSameExtent(a);
-        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
+        for (int i = 0; i < size(); ++i) {
+            set(i, f.applyAsDouble(get(i), a.get(i)));
+        }
     }
 
     /**
@@ -174,12 +178,11 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void swap(final DoubleGrid1d other) {
         requireSameExtent(other);
-
-        forEach(i -> {
+        for (int i = 0; i < size(); ++i) {
             final var tmp = get(i);
             set(i, other.get(i));
             other.set(i, tmp);
-        });
+        };
     }
 
     /**

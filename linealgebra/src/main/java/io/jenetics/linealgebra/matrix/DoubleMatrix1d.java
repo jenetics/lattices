@@ -146,7 +146,6 @@ public class DoubleMatrix1d
         double sum = 0;
         int i = tail - 1;
         for (int k = l; --k >= 0; i--) {
-            //sum += get(i)*y.get(i);
             sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
@@ -192,25 +191,24 @@ public class DoubleMatrix1d
 
     /**
      * Returns the number of cells having non-zero values, but at most
-     * {@code maxCardinality}, ignores tolerance.
+     * {@code maxCardinality}.
      */
-    public int cardinality(int maxCardinality) {
+    public int cardinality(final int maxCardinality, final NumericalContext context) {
         int cardinality = 0;
         int i = size();
         while (--i >= 0 && cardinality < maxCardinality) {
-            if (Double.compare(get(i), 0) != 0) {
+            if (context.isNotZero(get(i))) {
                 cardinality++;
             }
         }
         return cardinality;
     }
 
-    public int[] nonZeroIndices() {
+    public int[] nonZeroIndices(final NumericalContext context) {
         final var indices = IntStream.builder();
 
         for (int i = 0; i < size(); ++i) {
-            final var value = get(i);
-            if (Double.compare(value, 0.0) != 0) {
+            if (context.isNotZero(get(i))) {
                 indices.add(i);
             }
         }

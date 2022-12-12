@@ -189,7 +189,7 @@ public class DoubleMatrix2d
      */
     public DoubleMatrix1d mult(
         final DoubleMatrix1d y,
-        DoubleMatrix1d z,
+        final DoubleMatrix1d z,
         final double alpha,
         final double beta,
         final boolean transposeA
@@ -202,7 +202,7 @@ public class DoubleMatrix2d
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
             final var elems = array.like(struct.extent().size());
-            z = new DoubleMatrix1d(struct, elems);
+            return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
         if (cols() != y.size() || rows() > z.size()) {
@@ -214,10 +214,8 @@ public class DoubleMatrix2d
         for (int i = rows(); --i >= 0; ) {
             double s = 0;
             for (int j = cols(); --j >= 0;) {
-                //s += get(i, j)*y.get(j);
                 s = Math.fma(get(i, j), y.get(j), s);
             }
-            //z.set(i, alpha*s + beta*z.get(i));
             z.set(i, Math.fma(alpha, s, beta*z.get(i)));
         }
 
@@ -266,7 +264,7 @@ public class DoubleMatrix2d
      */
     public DoubleMatrix2d mult(
         final DoubleMatrix2d B,
-        DoubleMatrix2d C,
+        final DoubleMatrix2d C,
         final double alpha,
         final double beta,
         final boolean transposeA,
@@ -281,17 +279,17 @@ public class DoubleMatrix2d
         if (transposeB) {
             return mult(
                 B.view(B.structure().transpose()), C,
-                alpha, beta, transposeA, false
+                alpha, beta, false, false
             );
+        }
+
+        if (C == null) {
+            return mult(B, like(rows(), B.cols()), alpha, beta, false, false);
         }
 
         final int m = rows();
         final int n = cols();
         final int p = B.cols();
-
-        if (C == null) {
-            C = like(m, p);
-        }
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
@@ -316,11 +314,9 @@ public class DoubleMatrix2d
             for (int i = m; --i >= 0;) {
                 double s = 0;
                 for (int k = n; --k >= 0;) {
-                    //s += get(i, k)*B.get(k, j);
                     s = Math.fma(get(i, k), B.get(k, j), s);
                 }
-                //C.set(i, j, alpha*s + beta*C.get(i, j));
-                C.set(i, j, Math.fma(alpha, s, beta * C.get(i, j)));
+                C.set(i, j, Math.fma(alpha, s, beta*C.get(i, j)));
             }
         }
 
