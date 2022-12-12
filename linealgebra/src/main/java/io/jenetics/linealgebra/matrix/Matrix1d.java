@@ -105,6 +105,16 @@ public interface Matrix1d<M extends Matrix1d<M>>
     }
 
     /**
+     * Return a new view of this matrix for the given {@code extent}.
+     *
+     * @param extent the extent of the returned view
+     * @return a new view of the underlying element array
+     */
+    default M view(final Extent1d extent) {
+        return view(new Range1d(extent));
+    }
+
+    /**
      * Return a new view of this matrix for the given {@code stride}.
      *
      * @param stride the range of the returned view

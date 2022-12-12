@@ -21,8 +21,7 @@ package io.jenetics.linealgebra.blas;
 
 import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.Algebra;
-import cern.colt.matrix.linalg.LUDecompositionQuick;
+import cern.colt.matrix.linalg.QRDecomposition;
 
 import org.testng.annotations.Test;
 
@@ -34,43 +33,35 @@ import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class LUTest {
+public class QRTest {
 
-    @Test(invocationCount = 10)
+    @Test(invocationCount = 5)
     public void decompose() {
         final var matrix = next(new Extent2d(50, 50));
 
         final var expected = coldDecompose(matrix);
 
-        LU.decompose(matrix);
-
+        QR.decompose(matrix);
         LinealgebraAsserts.assertEquals(matrix, expected);
     }
 
     private static DoubleMatrix2d coldDecompose(final DoubleMatrix2d matrix) {
-        final var colt = Colts.toColt(matrix);
-
-        final var decomposer = new LUDecompositionQuick();
-        decomposer.decompose(colt);
-        return Colts.toLinealgebra(colt);
+        return Colts.toLinealgebra(new QRDecomposition(Colts.toColt(matrix)).QR);
     }
 
-    @Test(invocationCount = 10)
+    @Test(invocationCount = 5)
     public void solver() {
-        final var extent = new Extent2d(55, 55);
+        final var extent = new Extent2d(50, 50);
         final var matrix = next(extent);
-        final var B = next(extent);
+        final var B = next(new Extent2d(extent.rows(), 100));
 
-        final var expected = coldSolve(matrix, B);
+        final var expected = new QRDecomposition(Colts.toColt(matrix))
+            .solve(Colts.toColt(B));
 
-        final var lu = LU.decompose(matrix);
-        lu.solve(B);
+        final var qr = QR.decompose(matrix);
+        final var x = qr.solve(B);
 
-        LinealgebraAsserts.assertEquals(B, expected);
-    }
-
-    private static DoubleMatrix2d coldSolve(final DoubleMatrix2d matrix, final DoubleMatrix2d B) {
-        return Colts.toLinealgebra(Algebra.DEFAULT.solve(Colts.toColt(matrix), Colts.toColt(B)));
+        LinealgebraAsserts.assertEquals(x, Colts.toLinealgebra(expected));
     }
 
 }
