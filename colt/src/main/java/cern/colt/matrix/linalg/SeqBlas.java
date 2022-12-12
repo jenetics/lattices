@@ -86,7 +86,6 @@ public class SeqBlas implements Blas {
 		for (int i = A.rows(); --i >= 0; ) {
 			fun.multiplicator = alpha * x.getQuick(i);
 			A.viewRow(i).assign(y, fun);
-
 		}
 	}
 
