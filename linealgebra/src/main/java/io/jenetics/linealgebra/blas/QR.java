@@ -33,7 +33,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  * @since !__version__!
  * @version !__version__!
  */
-final class QR {
+public final class QR {
 
     private final DoubleMatrix2d qr;
     private final DoubleMatrix1d rdiag;

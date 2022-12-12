@@ -53,7 +53,7 @@ public class DenseDoubleMatrix2dPerf {
 
     @Setup
     public void setup() {
-        final var dimension = new Extent2d(10, 10);
+        final var dimension = new Extent2d(100, 100);
 
         linealgebraA = next(dimension);
         linealgebraB = next(dimension);

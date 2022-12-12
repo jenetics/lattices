@@ -306,7 +306,8 @@ public class DoubleGrid2d implements Grid2d {
         final double v1 = a.get(r, c);
         final double v2 = b.get(r, c);
 
-        return Math.abs(v1 - v2) <= Math.abs(v1*error);
+        return Double.compare(v1, v2) == 0 ||
+            Math.abs(v1 - v2) <= Math.abs(v1*error);
     }
 
 }

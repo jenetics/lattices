@@ -253,7 +253,8 @@ public class DoubleGrid1d implements Grid1d {
         final double v1 = a.get(i);
         final double v2 = b.get(i);
 
-        return Math.abs(v1 - v2) <= Math.abs(v1*error);
+        return Double.compare(v1, v2) == 0 ||
+            Math.abs(v1 - v2) <= Math.abs(v1*error);
     }
 
 }
