@@ -22,6 +22,7 @@ package io.jenetics.linealgebra.matrix;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.grid.DoubleGrid1d;
@@ -219,7 +220,8 @@ public class DoubleMatrix1d
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix1d m && equals(m, 0.0);
+        return obj instanceof DoubleMatrix1d m &&
+            equals(m, NumericalContext.ZERO);
     }
 
 }

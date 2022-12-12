@@ -24,6 +24,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
@@ -256,13 +257,16 @@ public class DoubleGrid2d implements Grid2d {
      * the same values.
      *
      * @param other the second matrix to compare
-     * @param error the allowed relative error
+     * @param context the numerical context used for comparing for equality
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final DoubleGrid2d other, final double error) {
+    public boolean equals(
+        final DoubleGrid2d other,
+        final NumericalContext context
+    ) {
         return extent().equals(other.extent()) &&
-            allMatch((r, c) -> equals(r, c, this, other, error));
+            allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
     @Override
@@ -290,24 +294,6 @@ public class DoubleGrid2d implements Grid2d {
         out.append("]");
 
         return out.toString();
-    }
-
-    /* *************************************************************************
-     * Static matrix helper methods.
-     * ************************************************************************/
-
-    static boolean equals(
-        final int r,
-        final int c,
-        final DoubleGrid2d a,
-        final DoubleGrid2d b,
-        final double error
-    ) {
-        final double v1 = a.get(r, c);
-        final double v2 = b.get(r, c);
-
-        return Double.compare(v1, v2) == 0 ||
-            Math.abs(v1 - v2) <= Math.abs(v1*error);
     }
 
 }
