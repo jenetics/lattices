@@ -73,6 +73,18 @@ public interface NumericalContext {
     }
 
     /**
+     * Tests whether the given double value is not zero, according to the defined
+     * {@link #epsilon()}.
+     *
+     * @param a the value to test
+     * @return {@code true} if the given value is not (near) zero, {@code false}
+     *         otherwise
+     */
+    default boolean isNotZero(final double a) {
+        return !isZero(a);
+    }
+
+    /**
      * Tests whether the given double value is one, according to the defined
      * {@link #epsilon()}.
      *

@@ -19,41 +19,41 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.blas.Algebra.isSingular;
+import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
+
 import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
-import static io.jenetics.linealgebra.blas.Algebra.isNonSingular;
-import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
-import static java.util.Objects.requireNonNull;
-
 /**
- * Performs in place LU-decomposition.
+ * Store the result of an <em>LU</em>-decomposition.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
-public final class LU implements Solver {
+public final class LU {
 
     private final DoubleMatrix2d lu;
-    private final int pivsign;
     private final int[] pivot;
     private final boolean singular;
 
-    private LU(
-        final DoubleMatrix2d lu,
-        final int pivsign,
-        final int[] pivot
-    ) {
+    private LU(final DoubleMatrix2d lu, final int[] pivot) {
         this.lu = requireNonNull(lu);
-        this.pivsign = pivsign;
         this.pivot = requireNonNull(pivot);
 
-        singular = !isNonSingular(lu);
+        singular = isSingular(lu);
     }
 
+    /**
+     * Returns a copy of the combined lower and upper triangular factor,
+     * <em>LU</em>.
+     *
+     * @return a copy of the combined lower and upper triangular factor
+     */
     public DoubleMatrix2d lu() {
         return lu.copy();
     }
@@ -63,7 +63,7 @@ public final class LU implements Solver {
      *
      * @return the lower triangular factor
      */
-    public DoubleMatrix2d l() {
+    public DoubleMatrix2d lower() {
         final var l = lu.copy();
         lowerTriangular(l);
         return l;
@@ -74,31 +74,45 @@ public final class LU implements Solver {
      *
      * @return the upper triangular factor
      */
-    public DoubleMatrix2d u() {
+    public DoubleMatrix2d upper() {
         final var u = lu.copy();
         upperTriangular(u);
         return u;
     }
 
+    /**
+     * Returns a copy of the pivot permutation vector.
+     *
+     * @return a copy of the pivot permutation vector
+     */
     public int[] pivot() {
         return pivot.clone();
     }
 
-    @Override
-    public void solve(final DoubleMatrix2d B) {
+    /**
+     * Solves {@code A*X = B}.
+     *
+     * @param B a matrix with as many rows as {@code A} and any number of
+     *        columns
+     * @return {@code X} so that {@code L*U*X = B(piv,:)}
+     * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
+     *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
+     */
+    public DoubleMatrix2d solve(final DoubleMatrix2d B) {
         lu.requireRectangular();
 
+        final var X = B.copy();
         int m = lu.rows();
         int n = lu.cols();
 
         if (m == 0 || n == 0) {
-            return;
+            return X;
         }
 
-        if (B.rows() != m) {
+        if (X.rows() != m) {
             throw new IllegalArgumentException(
                 "Matrix row dimensions must agree: %s != %s."
-                    .formatted(B.rows(), m)
+                    .formatted(X.rows(), m)
             );
         }
         if (singular) {
@@ -106,16 +120,16 @@ public final class LU implements Solver {
         }
 
         // Right hand side with pivoting
-        permuteRows(B, this.pivot);
+        permuteRows(X, this.pivot);
 
         // Precompute and cache some views to avoid regenerating them time
         // and again.
         final DoubleMatrix1d[] Brows = new DoubleMatrix1d[n];
         for (int k = 0; k < n; ++k) {
-            Brows[k] = B.rowAt(k);
+            Brows[k] = X.rowAt(k);
         }
 
-        final var Browk = DoubleMatrix1d.DENSE_FACTORY.newInstance(B.cols());
+        final var Browk = DoubleMatrix1d.DENSE_FACTORY.newInstance(X.cols());
 
         // Solve L*Y = B(piv,:)
         for (int k = 0; k < n; k++) {
@@ -124,7 +138,6 @@ public final class LU implements Solver {
             for (int i = k + 1; i < n; i++) {
                 final double multiplier = -lu.get(i, k);
                 if (Double.compare(multiplier, 0.0) != 0) {
-                    //Brows[i].assign(Browk, (a, b) -> a + multiplier*b);
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier, b, a));
                 }
             }
@@ -139,23 +152,25 @@ public final class LU implements Solver {
             for (int i = 0; i < k; i++) {
                 final double multiplier2 = -lu.get(i, k);
                 if (Double.compare(multiplier2, 0.0) != 0) {
-                    //Brows[i].assign(Browk, (a, b) -> a  + multiplier2*b);
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier2, b, a));
                 }
             }
         }
+
+        return X;
     }
 
     /**
-     * Performs an in-place LU-decomposition of the given {@code matrix}.
+     * Performs an <em>LU</em>-decomposition of the given matrix {@code A}.
      *
-     * @param matrix the matrix to be decomposed
+     * @param A the matrix to be decomposed
+     * @return the <em>LU</em>-decomposition of the given matrix {@code A}
      */
-    public static LU decompose(final DoubleMatrix2d matrix) {
-        requireNonNull(matrix);
+    public static LU decompose(final DoubleMatrix2d A) {
+        final var lu = A.copy();
 
-        final int m = matrix.rows();
-        final int n = matrix.cols();
+        final int m = lu.rows();
+        final int n = lu.cols();
 
         int pivsign = 1;
         final int[] piv = new int[m];
@@ -164,17 +179,17 @@ public final class LU implements Solver {
         }
 
         if (m*n == 0) {
-            return new LU(matrix, pivsign, piv);
+            return new LU(lu, piv);
         }
 
         final var rows = new DoubleMatrix1d[m];
         for (int i = 0; i < m; ++i) {
-            rows[i] = matrix.rowAt(i);
+            rows[i] = lu.rowAt(i);
         }
 
-        final DoubleMatrix1d colj = matrix.colAt(0).like();
+        final var colj = lu.colAt(0).like();
         for (int j = 0; j < n; ++j) {
-            colj.assign(matrix.colAt(j));
+            colj.assign(lu.colAt(j));
 
             // Apply previous transformations.
             for (int i = 0; i < m; ++i) {
@@ -184,7 +199,7 @@ public final class LU implements Solver {
                 double after = before - s;
 
                 colj.set(i, after);
-                matrix.set(i, j, after);
+                lu.set(i, j, after);
             }
 
             // Find pivot and exchange if necessary.
@@ -209,21 +224,21 @@ public final class LU implements Solver {
                 pivsign = -pivsign;
             }
 
-            final double jj = matrix.get(j, j);
+            final double jj = lu.get(j, j);
             if (j < m && Double.compare(jj, 0.0) != 0) {
                 final var multiplier = 1.0/jj;
-                matrix
+                lu
                     .colAt(j)
                     .view(new Range1d(j + 1, m - (j + 1)))
                     .assign(v -> v*multiplier);
             }
         }
 
-        return new LU(matrix, pivsign, piv);
+        return new LU(lu, piv);
     }
 
     private static void lowerTriangular(final DoubleMatrix2d A) {
-        int min = Math.min(A.rows(), A.cols());
+        final int min = Math.min(A.rows(), A.cols());
 
         for (int r = min; --r >= 0;) {
             for (int c = min; --c >= 0;) {
@@ -240,7 +255,7 @@ public final class LU implements Solver {
     }
 
     private static void upperTriangular(final DoubleMatrix2d A) {
-        int min = Math.min(A.rows(), A.cols());
+        final int min = Math.min(A.rows(), A.cols());
 
         for (int r = min; --r >= 0;) {
             for (int c = min; --c >= 0;) {

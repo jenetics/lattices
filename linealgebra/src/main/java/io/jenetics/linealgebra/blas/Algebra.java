@@ -22,8 +22,6 @@ package io.jenetics.linealgebra.blas;
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
-import java.util.function.Function;
-
 /**
  * Linear algebraic matrix operations.
  *
@@ -37,39 +35,18 @@ public final class Algebra {
     }
 
     /**
-     * Solves A*X = B.
+     * Solves {@code A*X = B}.
      *
-     * @return X; a new independent matrix; solution if A is square, least
-     * squares solution otherwise.
+     * @return {@code X}, new independent matrix of the solution if A is square,
+     *         least squares solution otherwise.
      */
-    public static DoubleMatrix2d solve(DoubleMatrix2d A, DoubleMatrix2d B) {
+    public static DoubleMatrix2d solve(
+        final DoubleMatrix2d A,
+        final DoubleMatrix2d B
+    ) {
         return A.rows() == A.cols()
-            ? lu(A).apply(B)
-            : qr(A).apply(B);
-    }
-
-    private static Function<DoubleMatrix2d, DoubleMatrix2d>
-    lu(final DoubleMatrix2d matrix) {
-        final var A = matrix.copy();
-        final var lu = LU.decompose(A);
-
-        return B -> {
-            final var BC = B.copy();
-            lu.solve(BC);
-            return BC;
-        };
-    }
-
-    private static Function<DoubleMatrix2d, DoubleMatrix2d>
-    qr(final DoubleMatrix2d matrix) {
-        final var A = matrix.copy();
-        final var qr = QR.decompose(A);
-
-        return B -> {
-            final var BC = B.copy();
-            qr.solve(BC);
-            return BC;
-        };
+            ? LU.decompose(A).solve(B)
+            : QR.decompose(A).solve(B);
     }
 
     /**
@@ -83,22 +60,36 @@ public final class Algebra {
     }
 
     /**
-     * Check if the given {@code matrix} is non-singular.
+     * Check if the given matrix {@code A} is non-singular.
      *
-     * @param matrix the {@code matrix} to test
-     * @return {@code true} if the given {@code matrix} is non-singular,
+     * @param A the {@code matrix} to test
+     * @return {@code true} if the given matrix {@code A} is non-singular,
      *         {@code false} otherwise
      */
-    static boolean isNonSingular(final DoubleMatrix2d matrix) {
+    public static boolean isNonSingular(final DoubleMatrix2d A) {
         final var context = NumericalContext.instance();
 
-        for (int i = Math.min(matrix.rows(), matrix.cols()); --i >= 0;) {
-            if (context.isZero(matrix.get(i, i))) {
+        for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
+            if (context.isZero(A.get(i, i))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Check if the given matrix {@code A} is non-singular (not
+     * {@link #isNonSingular(DoubleMatrix2d)}).
+     *
+     * @see #isNonSingular(DoubleMatrix2d)
+     *
+     * @param A the {@code matrix} to test
+     * @return {@code true} if the given matrix {@code A} is non-singular,
+     *         {@code false} otherwise
+     */
+    public static boolean isSingular(final DoubleMatrix2d A) {
+        return !isNonSingular(A);
     }
 
 }

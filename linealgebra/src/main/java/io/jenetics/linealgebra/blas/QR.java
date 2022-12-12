@@ -21,19 +21,22 @@ package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Extent2d;
 import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
- * Performs in place QR-decomposition.
+ * Store the result of a <em>QR</em>-decomposition.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
 public final class QR {
+
+    private final NumericalContext context = NumericalContext.instance();
 
     private final DoubleMatrix2d qr;
     private final DoubleMatrix1d rdiag;
@@ -43,6 +46,88 @@ public final class QR {
         this.rdiag = requireNonNull(rdiag);
     }
 
+    /**
+     * Return a copy of the {@code QR} matrix.
+     *
+     * @return a copy of the {@code QR} matrix
+     */
+    public DoubleMatrix2d qr() {
+        return qr.copy();
+    }
+
+    /**
+     * Returns the <em>Householder</em> vectors {@code H}.
+     *
+     * @return the lower trapezoidal matrix whose columns define the householder
+     *         reflections
+     */
+    public DoubleMatrix2d h() {
+        final var A = qr.copy();
+        A.forEach((r, c) -> {
+            if (r < c) {
+                A.set(r, c, 0);
+            }
+        });
+
+        return A;
+    }
+
+    /**
+     * Generates and returns the (economy-sized) orthogonal factor {@code Q}.
+     *
+     * @return {@code Q}
+     */
+    public DoubleMatrix2d q() {
+        final DoubleMatrix2d Q = qr.like();
+        for (int k = qr.cols() - 1; k >= 0; k--) {
+            final DoubleMatrix1d QRcolk = qr.colAt(k)
+                .view(new Range1d(k, qr.rows() - k));
+
+            Q.set(k, k, 1);
+            for (int j = k; j < qr.cols(); j++) {
+                if (context.isNotZero(qr.get(k, k))) {
+                    final var Qcolj = Q.colAt(j)
+                        .view(new Range1d(k, qr.rows() - k));
+
+                    double s = -QRcolk.dotProduct(Qcolj)/qr.get(k, k);
+                    Qcolj.assign(QRcolk, (a, b) -> a + b*s);
+                }
+            }
+        }
+        return Q;
+    }
+
+    /**
+     * Returns the upper triangular factor {@code R}.
+     *
+     * @return {@code R}
+     */
+    public DoubleMatrix2d r() {
+        final var R = qr.like(new Extent2d(qr.cols(), qr.cols()));
+        for (int i = 0; i < qr.cols(); i++) {
+            for (int j = 0; j < qr.cols(); j++) {
+                if (i < j) {
+                    R.set(i, j, qr.get(i, j));
+                } else if (i == j) {
+                    R.set(i, j, rdiag.get(i));
+                } else {
+                    R.set(i, j, 0);
+                }
+            }
+        }
+
+        return R;
+    }
+
+    /**
+     * Solves {@code A*X = B}.
+     *
+     * @param B a matrix with as many rows as {@code A} and any number of
+     *        columns
+     * @return {@code X} that minimizes the two norm of {@code Q*R*X - B}
+     * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
+     *         {@code !hasFullRank()} ({@code A} is rank deficient)
+     */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
         if (B.rows() != qr.rows()) {
             throw new IllegalArgumentException(
@@ -55,7 +140,7 @@ public final class QR {
         }
 
         // Copy right hand side
-        final DoubleMatrix2d X = B.copy();
+        final var X = B.copy();
 
         // Compute Y = transpose(Q)*B
         for (int k = 0; k < qr.cols(); k++) {
@@ -101,54 +186,62 @@ public final class QR {
      */
     public boolean hasFullRank() {
         for (int j = 0; j < qr.cols(); j++) {
-            if (rdiag.get(j) == 0) {
+            if (context.isZero(rdiag.get(j))) {
                 return false;
             }
         }
         return true;
     }
 
-    public static QR decompose(final DoubleMatrix2d matrix) {
-        matrix.requireRectangular();
+    /**
+     * Performs an <em>QR</em>-decomposition of the given matrix {@code A},
+     * computed by Householder reflections.
+     *
+     * @param A the matrix to be decomposed
+     * @return the <em>QR</em>-decomposition of the given matrix {@code A}
+     */
+    public static QR decompose(final DoubleMatrix2d A) {
+        A.requireRectangular();
+        final var qr = A.copy();
 
-        final var m = matrix.rows();
-        final var n = matrix.cols();
-        final var Rdiag = matrix.colAt(0).like();
+        final var m = qr.rows();
+        final var n = qr.cols();
+        final var Rdiag = qr.colAt(0).like();
 
         final var QRcolumnsPart = new DoubleMatrix1d[n];
         for (int k = 0; k < n; k++) {
-            QRcolumnsPart[k] = matrix.colAt(k).view(new Range1d(k, m - k));
+            QRcolumnsPart[k] = qr.colAt(k).view(new Range1d(k, m - k));
         }
 
         // Main loop.
         for (int k = 0; k < n; k++) {
             double nrm = 0;
             for (int i = k; i < m; i++) {
-                nrm = Math.hypot(nrm, matrix.get(i, k));
+                nrm = Math.hypot(nrm, qr.get(i, k));
             }
 
             if (nrm != 0.0) {
                 // Form k-th Householder vector.
-                if (matrix.get(k, k) < 0) {
+                if (qr.get(k, k) < 0) {
                     nrm = -nrm;
                 }
                 final var divisor = 1.0/nrm;
                 QRcolumnsPart[k].assign(x -> x*divisor);
 
-                matrix.set(k, k, matrix.get(k, k) + 1);
+                qr.set(k, k, qr.get(k, k) + 1);
 
                 // Apply transformation to remaining columns.
                 for (int j = k + 1; j < n; j++) {
-                    final DoubleMatrix1d QRcolj = matrix.colAt(j)
+                    final DoubleMatrix1d QRcolj = qr.colAt(j)
                         .view(new Range1d(k, m - k));
 
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
-                    s = -s/matrix.get(k, k);
+                    s = -s/qr.get(k, k);
                     for (int i = k; i < m; i++) {
                         //matrix.set(i, j, matrix.get(i, j) + s*matrix.get(i, k));
-                        matrix.set(
+                        qr.set(
                             i, j,
-                            Math.fma(s, matrix.get(i, k), matrix.get(i, j))
+                            Math.fma(s, qr.get(i, k), qr.get(i, j))
                         );
                     }
                 }
@@ -156,7 +249,7 @@ public final class QR {
             Rdiag.set(k, -nrm);
         }
 
-        return new QR(matrix, Rdiag);
+        return new QR(qr, Rdiag);
     }
 
 }

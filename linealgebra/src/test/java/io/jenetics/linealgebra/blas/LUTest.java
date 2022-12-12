@@ -38,18 +38,16 @@ public class LUTest {
 
     @Test(invocationCount = 10)
     public void decompose() {
-        final var matrix = next(new Extent2d(50, 50));
+        final var A = next(new Extent2d(50, 50));
 
-        final var expected = coldDecompose(matrix);
-
-        LU.decompose(matrix);
-
-        LinealgebraAsserts.assertEquals(matrix, expected);
+        LinealgebraAsserts.assertEquals(
+            LU.decompose(A).lu(),
+            coldDecompose(A)
+        );
     }
 
     private static DoubleMatrix2d coldDecompose(final DoubleMatrix2d matrix) {
         final var colt = Colts.toColt(matrix);
-
         final var decomposer = new LUDecompositionQuick();
         decomposer.decompose(colt);
         return Colts.toLinealgebra(colt);
@@ -58,19 +56,15 @@ public class LUTest {
     @Test(invocationCount = 10)
     public void solver() {
         final var extent = new Extent2d(55, 55);
-        final var matrix = next(extent);
+        final var A = next(extent);
         final var B = next(extent);
 
-        final var expected = coldSolve(matrix, B);
-
-        final var lu = LU.decompose(matrix);
-        lu.solve(B);
-
-        LinealgebraAsserts.assertEquals(B, expected);
-    }
-
-    private static DoubleMatrix2d coldSolve(final DoubleMatrix2d matrix, final DoubleMatrix2d B) {
-        return Colts.toLinealgebra(Algebra.DEFAULT.solve(Colts.toColt(matrix), Colts.toColt(B)));
+        LinealgebraAsserts.assertEquals(
+            LU.decompose(A).solve(B),
+            Colts.toLinealgebra(
+                Algebra.DEFAULT.solve(Colts.toColt(A), Colts.toColt(B))
+            )
+        );
     }
 
 }
