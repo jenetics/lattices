@@ -53,7 +53,7 @@ public class DenseDoubleMatrix2dPerf {
 
     @Setup
     public void setup() {
-        final var dimension = new Extent2d(100, 100);
+        final var dimension = new Extent2d(10, 10);
 
         linealgebraA = next(dimension);
         linealgebraB = next(dimension);
@@ -81,6 +81,10 @@ Mac:
 Benchmark                                Mode  Cnt  Score   Error  Units
 DenseDoubleMatrix2dPerf.coltMult         avgt   25  1,225 ± 0,021  us/op
 DenseDoubleMatrix2dPerf.linealgebraMult  avgt   25  1,328 ± 0,015  us/op
+
+Benchmark                                Mode  Cnt  Score   Error  Units
+DenseDoubleMatrix2dPerf.coltMult         avgt   10  1,186 ± 0,014  us/op
+DenseDoubleMatrix2dPerf.linealgebraMult  avgt   10  1,287 ± 0,067  us/op
  */
 
 /*
