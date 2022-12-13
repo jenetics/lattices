@@ -27,6 +27,7 @@ import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import java.util.random.RandomGenerator;
 
+import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.grid.Extent2d;
@@ -54,6 +55,35 @@ public class AlgebraTest {
         final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
 
         assertThat(Algebra.norm1(A)).isEqualTo(COLT.norm1(toColt(A)));
+    }
+
+    @Test(invocationCount = 5)
+    public void trace() {
+        final var random = RandomGenerator.getDefault();
+        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+
+        assertThat(Algebra.trace(A))
+            .isCloseTo(COLT.trace(toColt(A)), Percentage.withPercentage(0.0000001));
+    }
+
+    @Test(invocationCount = 5)
+    public void det() {
+        final var random = RandomGenerator.getDefault();
+        final var size = random.nextInt(10, 100);
+        final var A = next(size, size);
+
+        assertThat(Algebra.det(A))
+            .isCloseTo(COLT.det(toColt(A)), Percentage.withPercentage(0.0000001));
+    }
+
+    @Test(invocationCount = 5)
+    public void cond() {
+        final var random = RandomGenerator.getDefault();
+        final var size = random.nextInt(10, 100);
+        final var A = next(size, size);
+
+        assertThat(Algebra.cond(A))
+            .isCloseTo(COLT.cond(toColt(A)), Percentage.withPercentage(0.0000001));
     }
 
     @Test(invocationCount = 5)

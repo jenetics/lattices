@@ -19,6 +19,7 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
 import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
@@ -26,6 +27,7 @@ import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.LUDecomposition;
 
+import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.grid.Extent2d;
@@ -44,6 +46,8 @@ public class LUTest {
 
         assertEquals(lu.L(), toLinealgebra(expected.getL()));
         assertEquals(lu.U(), toLinealgebra(expected.getU()));
+        assertThat(lu.det())
+            .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
     }
 
     @Test(invocationCount = 5)

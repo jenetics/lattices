@@ -514,6 +514,13 @@ public final class SingularValue {
     }
 
     /**
+     * Return the two norm condition number: {@code max(S) / min(S)}.
+     */
+    public double cond() {
+        return s[0]/s[Math.min(m, n) - 1];
+    }
+
+    /**
      * Performs an <em>Singular value</em>-decomposition of the given matrix
      * {@code A}.
      *

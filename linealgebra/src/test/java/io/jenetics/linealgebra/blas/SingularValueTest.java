@@ -52,6 +52,8 @@ public class SingularValueTest {
         assertThat(singular.rank()).isEqualTo(expected.rank());
         assertThat(singular.norm2())
             .isCloseTo(expected.norm2(), Percentage.withPercentage(0.0000001));
+        assertThat(singular.cond())
+            .isCloseTo(expected.cond(), Percentage.withPercentage(0.0000001));
 
         assertEquals(
             singular.values(),

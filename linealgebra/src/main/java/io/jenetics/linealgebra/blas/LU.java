@@ -28,6 +28,7 @@ import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+import io.jenetics.linealgebra.matrix.Matrices;
 
 /**
  * Store the result of an <em>LU</em>-decomposition.
@@ -40,6 +41,7 @@ public final class LU {
 
     private final DoubleMatrix2d LU;
     private final int[] pivot;
+    private final int pivsign;
     private final boolean singular;
 
     private final NumericalContext context;
@@ -47,10 +49,12 @@ public final class LU {
     private LU(
         final DoubleMatrix2d LU,
         final int[] pivot,
+        final int pivsign,
         final NumericalContext context
     ) {
         this.LU = requireNonNull(LU);
         this.pivot = requireNonNull(pivot);
+        this.pivsign = pivsign;
         singular = isSingular(LU);
         this.context = requireNonNull(context);
     }
@@ -94,6 +98,25 @@ public final class LU {
      */
     public int[] pivot() {
         return pivot.clone();
+    }
+
+    /**
+     * Returns the determinant {@code det(A)}.
+     *
+     * @throws IllegalArgumentException if the matrix is not square
+     */
+    public double det() {
+        Matrices.checkSquare(LU);
+
+        if (singular) {
+            return 0;
+        }
+
+        double det = pivsign;
+        for (int j = 0; j < LU.cols(); j++) {
+            det *= LU.get(j, j);
+        }
+        return det;
     }
 
     /**
@@ -187,7 +210,7 @@ public final class LU {
         }
 
         if (m == 0 || n == 0) {
-            return new LU(lu, piv, context);
+            return new LU(lu, piv, pivsign, context);
         }
 
         final var rows = new DoubleMatrix1d[m];
@@ -241,7 +264,7 @@ public final class LU {
             }
         }
 
-        return new LU(lu, piv, context);
+        return new LU(lu, piv, pivsign, context);
     }
 
     private static void lowerTriangular(final DoubleMatrix2d A) {

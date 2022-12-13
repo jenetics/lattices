@@ -70,6 +70,36 @@ public final class Algebra {
     }
 
     /**
+     * Returns the sum of the diagonal elements of matrix {@code A}:
+     * {@code Sum(A[i,i])}.
+     */
+    public static double trace(final DoubleMatrix2d A) {
+        double sum = 0;
+        for (int i = Math.min(A.rows(), A.cols()); --i >= 0; ) {
+            sum += A.get(i, i);
+        }
+        return sum;
+    }
+
+    /**
+     * Returns the determinant of matrix {@code A}.
+     *
+     * @return the determinant.
+     * @throws IllegalArgumentException if the matrix {@code A} is not square
+     */
+    public static double det(final DoubleMatrix2d A) {
+        return LU.decompose(A).det();
+    }
+
+    /**
+     * Returns the condition of matrix <tt>A</tt>, which is the ratio of largest
+     * to the smallest singular value.
+     */
+    public static double cond(final DoubleMatrix2d A) {
+        return SingularValue.decompose(A).cond();
+    }
+
+    /**
      * Solves {@code A*X = B}.
      *
      * @param A the matrix {@code A}
