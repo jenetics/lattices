@@ -19,6 +19,12 @@
  */
 package io.jenetics.linealgebra;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Encapsulates the context settings which describes certain rules for numerical
  * operations.
@@ -27,24 +33,35 @@ package io.jenetics.linealgebra;
  * @since !__version__!
  * @version !__version__!
  */
-public interface NumericalContext {
+public class NumericalContext {
 
     /**
      * Numerical context with an {@link #epsilon()} of zero.
      */
-    NumericalContext ZERO = new NumericalContext() {
-        @Override
-        public double epsilon() {
-            return 0.0;
-        }
+    public static final NumericalContext ZERO = new NumericalContext(0.0) {
         @Override
         public boolean equals(final double a, final double b) {
             return Double.compare(a, b) == 0;
         }
     };
 
-    default double epsilon() {
-        return 0;
+    /**
+     * The default numerical context.
+     */
+    public static final NumericalContext DEFAULT_CONTEXT =
+        new NumericalContext(Math.pow(10, -Env.precission));
+
+    private static final AtomicReference<NumericalContext> CONTEXT =
+        new AtomicReference<>(DEFAULT_CONTEXT);
+
+    private final double epsilon;
+
+    private NumericalContext(final double epsilon) {
+        this.epsilon = abs(epsilon);
+    }
+
+    public double epsilon() {
+        return epsilon;
     }
 
     /**
@@ -56,8 +73,8 @@ public interface NumericalContext {
      * @return {@code true} if the given values are equal, modulo the given
      *         {@link #epsilon()}, {@code false} otherwise
      */
-    default boolean equals(final double a, final double b) {
-        return Double.compare(a, b) == 0 || Math.abs(a - b) <= epsilon();
+    public boolean equals(final double a, final double b) {
+        return Double.compare(a, b) == 0 || abs(a - b) <= epsilon();
     }
 
     /**
@@ -67,8 +84,8 @@ public interface NumericalContext {
      * @return {@code true} if the given value is greater than zero, {@code false}
      *         otherwise
      */
-    default boolean isGreaterZero(final double a) {
-        return Math.abs(a) > epsilon() && Double.compare(a, 0.0) > 0;
+    public boolean isGreaterZero(final double a) {
+        return abs(a) > epsilon() && Double.compare(a, 0.0) > 0;
     }
 
     /**
@@ -78,8 +95,8 @@ public interface NumericalContext {
      * @return {@code true} if the given value is smaller than zero, {@code false}
      *         otherwise
      */
-    default boolean isSmallerZero(final double a) {
-        return Math.abs(a) > epsilon() && Double.compare(a, 0.0) < 0;
+    public boolean isSmallerZero(final double a) {
+        return abs(a) > epsilon() && Double.compare(a, 0.0) < 0;
     }
 
     /**
@@ -90,7 +107,7 @@ public interface NumericalContext {
      * @return {@code true} if the given value is (near) zero, {@code false}
      *         otherwise
      */
-    default boolean isZero(final double a) {
+    public boolean isZero(final double a) {
         return equals(a, 0);
     }
 
@@ -102,7 +119,7 @@ public interface NumericalContext {
      * @return {@code true} if the given value is not (near) zero, {@code false}
      *         otherwise
      */
-    default boolean isNotZero(final double a) {
+    public boolean isNotZero(final double a) {
         return !isZero(a);
     }
 
@@ -114,18 +131,44 @@ public interface NumericalContext {
      * @return {@code true} if the given value is (near) one, {@code false}
      *         otherwise
      */
-    default boolean isOne(final double a) {
+    public boolean isOne(final double a) {
         return equals(a, 1);
     }
 
+    public static NumericalContext ofPrecission(final int precission) {
+        return new NumericalContext(Math.pow(10, -Math.abs(precission)));
+    }
+
     /**
-     * Return the default numerical context.
+     * Set a new epsilon value for the numerical context.
      *
-     * @return the default numerical context
+     * @param precission the new context precission
      */
-    static NumericalContext instance() {
-        record NC(double epsilon) implements NumericalContext {}
-        return new NC(0.0000000000001);
+    public static void precission(final int precission) {
+        CONTEXT.set(new NumericalContext(Math.pow(10, -Math.abs(precission))));
+    }
+
+    /**
+     * Return the numerical context.
+     *
+     * @return the numerical context
+     */
+    public static NumericalContext instance() {
+        return CONTEXT.get();
+    }
+
+    @SuppressWarnings("removal")
+    private static final class Env {
+        private static final int precission = java.security.AccessController.doPrivileged(
+                (java.security.PrivilegedAction<Integer>)() -> {
+                    final int value = Integer.getInteger(
+                        "io.jenetics.lattice.defaultPrecision",
+                        9
+                    );
+
+                    return min(max(value, 1), 20);
+                }
+            );
     }
 
 }

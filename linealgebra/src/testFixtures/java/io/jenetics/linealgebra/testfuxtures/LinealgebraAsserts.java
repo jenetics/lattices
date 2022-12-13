@@ -30,36 +30,29 @@ import io.jenetics.linealgebra.grid.DoubleGrid2d;
  */
 public final class LinealgebraAsserts {
 
-    public static final NumericalContext DEFAULT_CONTEXT = new NumericalContext() {
-        @Override
-        public double epsilon() {
-            return 0.000000001;
-        }
-    };
-
     private LinealgebraAsserts() {
     }
 
     public static void assertEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
-        assertThat(a.equals(b, DEFAULT_CONTEXT))
+        assertThat(a.equals(b, NumericalContext.instance()))
             .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
             .isTrue();
     }
 
     public static void assertNotEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
-        assertThat(a.equals(b, DEFAULT_CONTEXT))
+        assertThat(a.equals(b, NumericalContext.instance()))
             .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
             .isFalse();
     }
 
     public static void assertEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
-        assertThat(a.equals(b, DEFAULT_CONTEXT))
+        assertThat(a.equals(b, NumericalContext.instance()))
             .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
             .isTrue();
     }
 
     public static void assertNotEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
-        assertThat(a.equals(b, DEFAULT_CONTEXT))
+        assertThat(a.equals(b, NumericalContext.instance()))
             .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
             .isFalse();
     }
