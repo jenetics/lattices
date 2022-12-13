@@ -38,20 +38,20 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  */
 public final class LU {
 
-    private final DoubleMatrix2d lu;
+    private final DoubleMatrix2d LU;
     private final int[] pivot;
     private final boolean singular;
 
     private final NumericalContext context;
 
     private LU(
-        final DoubleMatrix2d lu,
+        final DoubleMatrix2d LU,
         final int[] pivot,
         final NumericalContext context
     ) {
-        this.lu = requireNonNull(lu);
+        this.LU = requireNonNull(LU);
         this.pivot = requireNonNull(pivot);
-        singular = isSingular(lu, context);
+        singular = isSingular(LU, context);
         this.context = requireNonNull(context);
     }
 
@@ -61,8 +61,8 @@ public final class LU {
      *
      * @return a copy of the combined lower and upper triangular factor
      */
-    public DoubleMatrix2d lu() {
-        return lu.copy();
+    public DoubleMatrix2d LU() {
+        return LU.copy();
     }
 
     /**
@@ -70,8 +70,8 @@ public final class LU {
      *
      * @return the lower triangular factor
      */
-    public DoubleMatrix2d lower() {
-        final var l = lu.copy();
+    public DoubleMatrix2d L() {
+        final var l = LU.copy();
         lowerTriangular(l);
         return l;
     }
@@ -81,8 +81,8 @@ public final class LU {
      *
      * @return the upper triangular factor
      */
-    public DoubleMatrix2d upper() {
-        final var u = lu.copy();
+    public DoubleMatrix2d U() {
+        final var u = LU.copy();
         upperTriangular(u);
         return u;
     }
@@ -106,11 +106,11 @@ public final class LU {
      *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
      */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
-        lu.requireRectangular();
+        LU.requireRectangular();
 
         final var X = B.copy();
-        int m = lu.rows();
-        int n = lu.cols();
+        int m = LU.rows();
+        int n = LU.cols();
 
         if (m == 0 || n == 0) {
             return X;
@@ -127,7 +127,7 @@ public final class LU {
         }
 
         // Right hand side with pivoting
-        permuteRows(X, this.pivot);
+        permuteRows(X, pivot);
 
         // Precompute and cache some views to avoid regenerating them time
         // and again.
@@ -136,14 +136,14 @@ public final class LU {
             Brows[k] = X.rowAt(k);
         }
 
-        final var Browk = DoubleMatrix1d.DENSE_FACTORY.newInstance(X.cols());
+        final var Browk = X.colAt(0).like();
 
         // Solve L*Y = B(piv,:)
         for (int k = 0; k < n; ++k) {
             Browk.assign(Brows[k]);
 
             for (int i = k + 1; i < n; ++i) {
-                final double multiplier = -lu.get(i, k);
+                final double multiplier = -LU.get(i, k);
                 if (context.isNotZero(multiplier)) {
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier, b, a));
                 }
@@ -152,12 +152,12 @@ public final class LU {
 
         // Solve U*B = Y;
         for (int k = n - 1; k >= 0; k--) {
-            final double multiplier1 = 1.0/lu.get(k, k);
+            final double multiplier1 = 1.0/ LU.get(k, k);
             Brows[k].assign(a -> a*multiplier1);
             Browk.assign(Brows[k]);
 
             for (int i = 0; i < k; ++i) {
-                final double multiplier2 = -lu.get(i, k);
+                final double multiplier2 = -LU.get(i, k);
                 if (context.isNotZero(multiplier2)) {
                     Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier2, b, a));
                 }

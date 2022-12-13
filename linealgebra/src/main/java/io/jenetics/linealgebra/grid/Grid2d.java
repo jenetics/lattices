@@ -57,7 +57,7 @@ public interface Grid2d extends Loop2d {
     /**
      * Checks whether this structural is <em>rectangular</em>.
      *
-     * @throws IllegalArgumentException if {@code this.rows() < his.cols()}.
+     * @throws IllegalArgumentException if {@code this.rows() < his.cols()}
      */
     default void requireRectangular() {
         if (rows() < cols()) {

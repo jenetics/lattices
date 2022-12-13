@@ -19,16 +19,16 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
-
 import cern.colt.matrix.linalg.CholeskyDecomposition;
-
+import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.grid.Extent2d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.testfuxtures.Colts;
-import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -39,29 +39,24 @@ public class CholeskyTest {
     public void decompose() {
         final var matrix = next(new Extent2d(50, 50));
 
-        final var expected = coldDecompose(matrix);
+        final var expected = new CholeskyDecomposition(Colts.toColt(matrix));
+        final var cholesky = Cholesky.decompose(matrix);
 
-        final var L = Cholesky.decompose(matrix).L();
-        LinealgebraAsserts.assertEquals(L, expected);
-    }
-
-    private static DoubleMatrix2d coldDecompose(final DoubleMatrix2d matrix) {
-        return Colts.toLinealgebra(new CholeskyDecomposition(Colts.toColt(matrix)).getL());
+        assertEquals(cholesky.L(), toLinealgebra(expected.getL()));
+        assertThat(cholesky.isSymmetricPositiveDefinite())
+            .isEqualTo(expected.isSymmetricPositiveDefinite());
     }
 
     @Test(invocationCount = 5)
     public void solver() {
         final var extent = new Extent2d(50, 50);
-        final var matrix = next(extent);
+        final var A = next(extent);
         final var B = next(new Extent2d(extent.rows(), 100));
 
-        final var expected = new CholeskyDecomposition(Colts.toColt(matrix))
-            .solve(Colts.toColt(B));
-
-        final var ch = Cholesky.decompose(matrix);
-        final var x = ch.solve(B);
-
-        LinealgebraAsserts.assertEquals(x, Colts.toLinealgebra(expected));
+        assertEquals(
+            Cholesky.decompose(A).solve(B),
+            toLinealgebra(new CholeskyDecomposition(toColt(A)).solve(toColt(B)))
+        );
     }
 
 }

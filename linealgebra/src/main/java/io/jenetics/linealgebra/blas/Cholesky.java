@@ -19,11 +19,11 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static java.util.Objects.requireNonNull;
-
-
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Performs in place Cholesky-decomposition.
@@ -35,18 +35,39 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 public class Cholesky {
 
     private final DoubleMatrix2d L;
-    private final boolean isSymmetricPositiveDefinite;
+    private final boolean symmetricPositiveDefinite;
 
-    public Cholesky(
+    private final NumericalContext context;
+
+    private Cholesky(
         final DoubleMatrix2d L,
-        final boolean isSymmetricPositiveDefinite
+        final boolean symmetricPositiveDefinite,
+        final NumericalContext context
     ) {
         this.L = requireNonNull(L);
-        this.isSymmetricPositiveDefinite = isSymmetricPositiveDefinite;
+        this.symmetricPositiveDefinite = symmetricPositiveDefinite;
+
+        this.context = requireNonNull(context);
     }
 
+    /**
+     * Returns the triangular factor {@code L}.
+     *
+     * @return {@code L}
+     */
     public DoubleMatrix2d L() {
         return L;
+    }
+
+    /**
+     * Return {@code true} if the matrix {@code A} is symmetric and positive
+     * definite.
+     *
+     * @return {@code true} if {@code A}is symmetric and positive definite
+     *         {@code false} otherwise
+     */
+    public boolean isSymmetricPositiveDefinite() {
+        return symmetricPositiveDefinite;
     }
 
     /**
@@ -57,28 +78,24 @@ public class Cholesky {
      * @throws IllegalArgumentException if <tt>B.rows() != A.rows()</tt>.
      * @throws IllegalArgumentException if <tt>!isSymmetricPositiveDefinite()</tt>.
      */
-    public DoubleMatrix2d solve(DoubleMatrix2d B) {
-        // Copy right hand side.
-        DoubleMatrix2d X = B.copy();
-        int nx = B.cols();
+    public DoubleMatrix2d solve(final DoubleMatrix2d B) {
+        final var X = B.copy();
 
-        // fix by MG Ferreira <mgf@webmail.co.za>
-        // old code is in method xxxSolveBuggy()
-        for (int c = 0; c < nx; c++) {
+        for (int c = 0; c < B.cols(); ++c) {
             // Solve L*Y = B;
             for (int i = 0; i < L.rows(); i++) {
                 double sum = B.get(i, c);
                 for (int k = i - 1; k >= 0; k--) {
-                    sum -= L.get(i, k)*X.get(k, c);
+                    sum = -Math.fma(L.get(i, k), X.get(k, c), -sum);
                 }
-                X.set(i, c, sum / L.get(i, i));
+                X.set(i, c, sum/L.get(i, i));
             }
 
             // Solve L'*X = Y;
             for (int i = L.rows() - 1; i >= 0; i--) {
                 double sum = X.get(i, c);
                 for (int k = i + 1; k < L.rows(); k++) {
-                    sum -= L.get(k, i) * X.get(k, c);
+                    sum = -Math.fma(L.get(k, i), X.get(k, c), -sum);
                 }
                 X.set(i, c, sum/L.get(i, i));
             }
@@ -87,17 +104,24 @@ public class Cholesky {
         return X;
     }
 
+    /**
+     * Performs a <em>Cholesky</em>-decomposition of the symmetric and positive
+     * definite matrix {@code A}.
+     *
+     * @param A the matrix to be decomposed
+     * @return Structure to access {@code L} and
+     *         {@code isSymmetricPositiveDefinite} flag
+     * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
+     */
     public static Cholesky decompose(final DoubleMatrix2d A) {
         A.requireRectangular();
-        // Initialize.
-        //double[][] A = Arg.getArray();
+
+        final var context = NumericalContext.instance();
 
         final var n = A.rows();
-        //L = new double[n][n];
         final var L = A.like(n, n);
         var isSymmetricPositiveDefinite = A.cols() == n;
 
-        //precompute and cache some views to avoid regenerating them time and again
         final var Lrows = new DoubleMatrix1d[n];
         for (int j = 0; j < A.rows(); j++) {
             Lrows[j] = L.rowAt(j);
@@ -105,27 +129,19 @@ public class Cholesky {
 
         // Main loop.
         for (int j = 0; j < n; j++) {
-            //double[] Lrowj = L[j];
-            //DoubleMatrix1D Lrowj = L.viewRow(j);
             double d = 0.0;
             for (int k = 0; k < j; k++) {
-                //double[] Lrowk = L[k];
                 double s = Lrows[k].dotProduct(Lrows[j], 0, k);
-			/*
-			DoubleMatrix1D Lrowk = L.viewRow(k);
-			double s = 0.0;
-			for (int i = 0; i < k; i++) {
-			   s += Lrowk.getQuick(i)*Lrowj.getQuick(i);
-			}
-			*/
+
                 s = (A.get(j, k) - s)/L.get(k, k);
                 Lrows[j].set(k, s);
-                d = d + s * s;
+                d = Math.fma(s, s, d);
                 isSymmetricPositiveDefinite = isSymmetricPositiveDefinite &&
-                    (A.get(k, j) == A.get(j, k));
+                    context.equals(A.get(k, j), A.get(j, k));
             }
             d = A.get(j, j) - d;
-            isSymmetricPositiveDefinite = isSymmetricPositiveDefinite && (d > 0.0);
+            isSymmetricPositiveDefinite = isSymmetricPositiveDefinite &&
+                context.isGreaterZero(d);
             L.set(j, j, Math.sqrt(Math.max(d, 0.0)));
 
             for (int k = j + 1; k < n; k++) {
@@ -133,7 +149,7 @@ public class Cholesky {
             }
         }
 
-        return new Cholesky(L, isSymmetricPositiveDefinite);
+        return new Cholesky(L, isSymmetricPositiveDefinite, context);
     }
 
 }

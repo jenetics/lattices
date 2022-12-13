@@ -61,6 +61,28 @@ public interface NumericalContext {
     }
 
     /**
+     * Tests whether the given value {@code a} is greater than zero.
+     *
+     * @param a the value to test
+     * @return {@code true} if the given value is greater than zero, {@code false}
+     *         otherwise
+     */
+    default boolean isGreaterZero(final double a) {
+        return Math.abs(a) > epsilon() && Double.compare(a, 0.0) > 0;
+    }
+
+    /**
+     * Tests whether the given value {@code a} is smaller than zero.
+     *
+     * @param a the value to test
+     * @return {@code true} if the given value is smaller than zero, {@code false}
+     *         otherwise
+     */
+    default boolean isSmallerZero(final double a) {
+        return Math.abs(a) > epsilon() && Double.compare(a, 0.0) < 0;
+    }
+
+    /**
      * Tests whether the given double value is zero, according to the defined
      * {@link #epsilon()}.
      *

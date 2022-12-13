@@ -19,51 +19,40 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
-
-import cern.colt.matrix.linalg.Algebra;
-import cern.colt.matrix.linalg.LUDecompositionQuick;
-
+import cern.colt.matrix.linalg.LUDecomposition;
+import io.jenetics.linealgebra.grid.Extent2d;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.grid.Extent2d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.testfuxtures.Colts;
-import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class LUTest {
 
-    @Test(invocationCount = 10)
+    @Test(invocationCount = 5)
     public void decompose() {
         final var A = next(new Extent2d(50, 50));
 
-        LinealgebraAsserts.assertEquals(
-            LU.decompose(A).lu(),
-            coldDecompose(A)
-        );
+        final var expected = new LUDecomposition(toColt(A));
+        final var lu = LU.decompose(A);
+
+        assertEquals(lu.L(), toLinealgebra(expected.getL()));
+        assertEquals(lu.U(), toLinealgebra(expected.getU()));
     }
 
-    private static DoubleMatrix2d coldDecompose(final DoubleMatrix2d matrix) {
-        final var colt = Colts.toColt(matrix);
-        final var decomposer = new LUDecompositionQuick();
-        decomposer.decompose(colt);
-        return Colts.toLinealgebra(colt);
-    }
-
-    @Test(invocationCount = 10)
+    @Test(invocationCount = 5)
     public void solver() {
         final var extent = new Extent2d(55, 55);
         final var A = next(extent);
         final var B = next(extent);
 
-        LinealgebraAsserts.assertEquals(
+        assertEquals(
             LU.decompose(A).solve(B),
-            Colts.toLinealgebra(
-                Algebra.DEFAULT.solve(Colts.toColt(A), Colts.toColt(B))
-            )
+            toLinealgebra(new LUDecomposition(toColt(A)).solve(toColt(B)))
         );
     }
 

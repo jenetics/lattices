@@ -36,14 +36,20 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  */
 public final class QR {
 
-    private final NumericalContext context = NumericalContext.instance();
-
-    private final DoubleMatrix2d qr;
+    private final DoubleMatrix2d QR;
     private final DoubleMatrix1d rdiag;
 
-    private QR(final DoubleMatrix2d qr, final DoubleMatrix1d rdiag) {
-        this.qr = requireNonNull(qr);
+    private final NumericalContext context;
+
+    private QR(
+        final DoubleMatrix2d QR,
+        final DoubleMatrix1d rdiag,
+        final NumericalContext context
+    ) {
+        this.QR = requireNonNull(QR);
         this.rdiag = requireNonNull(rdiag);
+
+        this.context = requireNonNull(context);
     }
 
     /**
@@ -51,8 +57,8 @@ public final class QR {
      *
      * @return a copy of the {@code QR} matrix
      */
-    public DoubleMatrix2d qr() {
-        return qr.copy();
+    public DoubleMatrix2d QR() {
+        return QR.copy();
     }
 
     /**
@@ -61,8 +67,8 @@ public final class QR {
      * @return the lower trapezoidal matrix whose columns define the householder
      *         reflections
      */
-    public DoubleMatrix2d h() {
-        final var A = qr.copy();
+    public DoubleMatrix2d H() {
+        final var A = QR.copy();
         A.forEach((r, c) -> {
             if (r < c) {
                 A.set(r, c, 0);
@@ -77,19 +83,19 @@ public final class QR {
      *
      * @return {@code Q}
      */
-    public DoubleMatrix2d q() {
-        final DoubleMatrix2d Q = qr.like();
-        for (int k = qr.cols() - 1; k >= 0; k--) {
-            final DoubleMatrix1d QRcolk = qr.colAt(k)
-                .view(new Range1d(k, qr.rows() - k));
+    public DoubleMatrix2d Q() {
+        final DoubleMatrix2d Q = QR.like();
+        for (int k = QR.cols() - 1; k >= 0; k--) {
+            final DoubleMatrix1d QRcolk = QR.colAt(k)
+                .view(new Range1d(k, QR.rows() - k));
 
             Q.set(k, k, 1);
-            for (int j = k; j < qr.cols(); ++j) {
-                if (context.isNotZero(qr.get(k, k))) {
+            for (int j = k; j < QR.cols(); ++j) {
+                if (context.isNotZero(QR.get(k, k))) {
                     final var Qcolj = Q.colAt(j)
-                        .view(new Range1d(k, qr.rows() - k));
+                        .view(new Range1d(k, QR.rows() - k));
 
-                    double s = -QRcolk.dotProduct(Qcolj)/qr.get(k, k);
+                    double s = -QRcolk.dotProduct(Qcolj)/ QR.get(k, k);
                     Qcolj.assign(QRcolk, (a, b) -> Math.fma(b, s, a));
                 }
             }
@@ -102,12 +108,12 @@ public final class QR {
      *
      * @return {@code R}
      */
-    public DoubleMatrix2d r() {
-        final var R = qr.like(new Extent2d(qr.cols(), qr.cols()));
-        for (int i = 0; i < qr.cols(); ++i) {
-            for (int j = 0; j < qr.cols(); ++j) {
+    public DoubleMatrix2d R() {
+        final var R = QR.like(new Extent2d(QR.cols(), QR.cols()));
+        for (int i = 0; i < QR.cols(); ++i) {
+            for (int j = 0; j < QR.cols(); ++j) {
                 if (i < j) {
-                    R.set(i, j, qr.get(i, j));
+                    R.set(i, j, QR.get(i, j));
                 } else if (i == j) {
                     R.set(i, j, rdiag.get(i));
                 } else {
@@ -129,10 +135,10 @@ public final class QR {
      *         {@code !hasFullRank()} ({@code A} is rank deficient)
      */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
-        if (B.rows() != qr.rows()) {
+        if (B.rows() != QR.rows()) {
             throw new IllegalArgumentException(
                 "Matrix row dimensions must agree: %s != %s."
-                    .formatted(B.extent(), qr.extent())
+                    .formatted(B.extent(), QR.extent())
             );
         }
         if (!hasFullRank()) {
@@ -143,49 +149,46 @@ public final class QR {
         final var X = B.copy();
 
         // Compute Y = transpose(Q)*B
-        for (int k = 0; k < qr.cols(); ++k) {
+        for (int k = 0; k < QR.cols(); ++k) {
             for (int j = 0; j < B.cols(); ++j) {
                 double s = 0.0;
-                for (int i = k; i < qr.rows(); ++i) {
-                    //s += qr.get(i, k)*X.get(i, j);
-                    s = Math.fma(qr.get(i, k), X.get(i, j), s);
+                for (int i = k; i < QR.rows(); ++i) {
+                    s = Math.fma(QR.get(i, k), X.get(i, j), s);
                 }
-                s = -s/qr.get(k, k);
-                for (int i = k; i < qr.rows(); ++i) {
-                    //X.set(i, j, X.get(i, j) + s*qr.get(i, k));
+                s = -s/QR.get(k, k);
+                for (int i = k; i < QR.rows(); ++i) {
                     X.set(
                         i, j,
-                        Math.fma(s, qr.get(i, k), X.get(i, j))
+                        Math.fma(s, QR.get(i, k), X.get(i, j))
                     );
                 }
             }
         }
 
         // Solve R*X = Y;
-        for (int k = qr.cols() - 1; k >= 0; k--) {
+        for (int k = QR.cols() - 1; k >= 0; k--) {
             for (int j = 0; j < B.cols(); ++j) {
                 X.set(k, j, X.get(k, j)/rdiag.get(k));
             }
             for (int i = 0; i < k; i++) {
                 for (int j = 0; j < B.cols(); ++j) {
-                    //X.set(i, j, X.get(i, j) - X.get(k, j)*qr.get(i, k));
                     X.set(
                         i, j,
-                        -Math.fma(X.get(k, j), qr.get(i, k), -X.get(i, j))
+                        -Math.fma(X.get(k, j), QR.get(i, k), -X.get(i, j))
                     );
                 }
             }
         }
-        return X.view(new Extent2d(qr.cols(), B.cols()));
+        return X.view(new Extent2d(QR.cols(), B.cols()));
     }
 
     /**
-     * Returns whether the matrix <tt>A</tt> has full rank.
+     * Returns whether the matrix {@code A} has full rank.
      *
-     * @return true if <tt>R</tt>, and hence <tt>A</tt>, has full rank.
+     * @return true if {@code R}, and hence {@code A}, has full rank
      */
     public boolean hasFullRank() {
-        for (int j = 0; j < qr.cols(); ++j) {
+        for (int j = 0; j < QR.cols(); ++j) {
             if (context.isZero(rdiag.get(j))) {
                 return false;
             }
@@ -199,6 +202,7 @@ public final class QR {
      *
      * @param A the matrix to be decomposed
      * @return the <em>QR</em>-decomposition of the given matrix {@code A}
+     * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static QR decompose(final DoubleMatrix2d A) {
         A.requireRectangular();
@@ -238,7 +242,6 @@ public final class QR {
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
                     s = -s/qr.get(k, k);
                     for (int i = k; i < m; ++i) {
-                        //matrix.set(i, j, matrix.get(i, j) + s*matrix.get(i, k));
                         qr.set(
                             i, j,
                             Math.fma(s, qr.get(i, k), qr.get(i, j))
@@ -249,7 +252,7 @@ public final class QR {
             Rdiag.set(k, -nrm);
         }
 
-        return new QR(qr, Rdiag);
+        return new QR(qr, Rdiag, NumericalContext.instance());
     }
 
 }
