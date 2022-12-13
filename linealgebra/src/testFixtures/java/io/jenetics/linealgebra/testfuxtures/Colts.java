@@ -64,6 +64,12 @@ public final class Colts {
         return la;
     }
 
+    public static DoubleMatrix1d toLinealgebra(final double[] values) {
+        final var val = DoubleMatrix1d.DENSE_FACTORY.newInstance(values.length);
+        val.assign(values);
+        return val;
+    }
+
     public static DoubleMatrix1d toLinealgebra(final DoubleMatrix1D matrix) {
         final var la = DoubleMatrix1d.DENSE_FACTORY
             .newInstance(matrix.size());

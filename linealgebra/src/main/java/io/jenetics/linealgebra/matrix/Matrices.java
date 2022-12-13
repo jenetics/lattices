@@ -47,13 +47,27 @@ public final class Matrices {
     /**
      * Checks whether the given matrix {@code A} is <em>square</em>.
      *
-     * @param A the matrix to test
+     * @param A the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() != A.cols()}
      */
     public static void checkSquare(final DoubleMatrix2d A) {
         if (!isSquare(A)) {
             throw new IllegalArgumentException(
                 "Matrix must be square: " + A.extent()
+            );
+        }
+    }
+
+    /**
+     * Checks whether the given matrix {@code A} is <em>rectangular</em>.
+     *
+     * @param A the matrix to check
+     * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
+     */
+    public static void checkRectangular(final DoubleMatrix2d A) {
+        if (A.rows() < A.cols()) {
+            throw new IllegalArgumentException(
+                "Matrix must be rectangular: " + A.extent()
             );
         }
     }
