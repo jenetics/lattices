@@ -19,33 +19,45 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
-
-import cern.colt.matrix.linalg.Algebra;
-
+import io.jenetics.linealgebra.grid.Extent2d;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.grid.Extent2d;
-import io.jenetics.linealgebra.testfuxtures.Colts;
-import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
+import java.util.random.RandomGenerator;
+
+import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class AlgebraTest {
 
-    @Test
+    private static final cern.colt.matrix.linalg.Algebra COLT =
+        cern.colt.matrix.linalg.Algebra.DEFAULT;
+
+    @Test(invocationCount = 5)
     public void solve() {
         final var extent = new Extent2d(55, 55);
         final var A = next(extent);
         final var B = next(extent);
 
-        final var X = io.jenetics.linealgebra.blas.Algebra.solve(A, B);
+        assertEquals(
+            Algebra.solve(A, B),
+            toLinealgebra(COLT.solve(toColt(A), toColt(B)))
+        );
+    }
 
-        final var expected = Colts.toLinealgebra(
-            Algebra.DEFAULT.solve(Colts.toColt(A), Colts.toColt(B)));
+    @Test(invocationCount = 5)
+    public void inverse() {
+        final var random = RandomGenerator.getDefault();
+        final var cols = random.nextInt(45, 65);
+        final var rows = random.nextInt(cols, 100);
+        final var extent = new Extent2d(rows, cols);
+        final var A = next(extent);
 
-        LinealgebraAsserts.assertEquals(X, expected);
+        assertEquals(Algebra.inverse(A), toLinealgebra(COLT.inverse(toColt(A))));
     }
 
 }
