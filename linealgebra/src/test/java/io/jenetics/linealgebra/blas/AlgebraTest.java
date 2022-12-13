@@ -28,6 +28,7 @@ import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
 import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -36,6 +37,23 @@ public class AlgebraTest {
 
     private static final cern.colt.matrix.linalg.Algebra COLT =
         cern.colt.matrix.linalg.Algebra.DEFAULT;
+
+
+    @Test(invocationCount = 5)
+    public void norm1Vector() {
+        final var random = RandomGenerator.getDefault();
+        final var x = next(random.nextInt(123));
+
+        assertThat(Algebra.norm1(x)).isEqualTo(COLT.norm1(toColt(x)));
+    }
+
+    @Test(invocationCount = 5)
+    public void norm1Matrix() {
+        final var random = RandomGenerator.getDefault();
+        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+
+        assertThat(Algebra.norm1(A)).isEqualTo(COLT.norm1(toColt(A)));
+    }
 
     @Test(invocationCount = 5)
     public void solve() {

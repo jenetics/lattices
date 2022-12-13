@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.blas;
 
 import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
@@ -32,6 +33,36 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 public final class Algebra {
 
     private Algebra() {
+    }
+
+    /**
+     * Calculate the one-norm of vector {@code x}, which is defined as
+     * {@code Sum(abs(x[i]))}
+     *
+     * @param x the vector for which to calculate the one-norm
+     * @return the one-norm of {@code x}
+     */
+    public static double norm1(final DoubleMatrix1d x) {
+        if (x.size() == 0) {
+            return 0;
+        } else {
+            return x.reduce(Double::sum, Math::abs);
+        }
+    }
+
+    /**
+     * Calculate the one-norm of matrix {@code A}, which is defined as the
+     * maximum absolute column sum.
+     *
+     * @param A the matrix for which to calculate the one-norm
+     * @return the one-norm of {@code A}
+     */
+    public static double norm1(final DoubleMatrix2d A) {
+        double max = 0;
+        for (int c = A.cols(); --c >= 0;) {
+            max = Math.max(max, norm1(A.colAt(c)));
+        }
+        return max;
     }
 
     /**
@@ -152,17 +183,6 @@ public final class Algebra {
     }
 
     /**
-     * Check if the given matrix {@code A} is non-singular.
-     *
-     * @param A the {@code matrix} to test
-     * @return {@code true} if the given matrix {@code A} is non-singular,
-     *         {@code false} otherwise
-     */
-    public static boolean isNonSingular(final DoubleMatrix2d A) {
-        return isNonSingular(A, NumericalContext.instance());
-    }
-
-    /**
      * Check if the given matrix {@code A} is non-singular (not
      * {@link #isNonSingular(DoubleMatrix2d, NumericalContext)} ).
      *
@@ -178,20 +198,6 @@ public final class Algebra {
         final NumericalContext context
     ) {
         return !isNonSingular(A, context);
-    }
-
-    /**
-     * Check if the given matrix {@code A} is non-singular (not
-     * {@link #isNonSingular(DoubleMatrix2d, NumericalContext)} ).
-     *
-     * @see #isNonSingular(DoubleMatrix2d, NumericalContext)
-     *
-     * @param A the {@code matrix} to test
-     * @return {@code true} if the given matrix {@code A} is non-singular,
-     *         {@code false} otherwise
-     */
-    public static boolean isSingular(final DoubleMatrix2d A) {
-        return isSingular(A, NumericalContext.instance());
     }
 
 }
