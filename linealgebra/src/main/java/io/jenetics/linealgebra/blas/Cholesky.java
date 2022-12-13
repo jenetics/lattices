@@ -26,7 +26,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Performs in place Cholesky-decomposition.
+ * Store the result of a <em>Cholesky</em>-decomposition.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
