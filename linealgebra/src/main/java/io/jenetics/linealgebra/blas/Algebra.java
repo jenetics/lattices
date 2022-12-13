@@ -19,6 +19,10 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static io.jenetics.linealgebra.matrix.Matrices.checkSquare;
+import static io.jenetics.linealgebra.matrix.Matrices.isDiagonal;
+import static io.jenetics.linealgebra.matrix.Matrices.isSquare;
+
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
@@ -90,11 +94,9 @@ public final class Algebra {
      *         square, pseudo-inverse otherwise.
      */
     public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
-        final NumericalContext context = NumericalContext.instance();
-
-        if (isSquare(A) && isDiagonal(A, context)) {
+        if (isSquare(A) && isDiagonal(A)) {
             final var inv = A.copy();
-            if (!diagonalInverse(inv, context)) {
+            if (!diagonalInverse(inv)) {
                 throw new IllegalArgumentException("A is singular.");
             }
 
@@ -109,15 +111,10 @@ public final class Algebra {
         }
     }
 
-    private static boolean diagonalInverse(
-        final DoubleMatrix2d A,
-        final NumericalContext context
-    ) {
-        if (A.rows() != A.cols()) {
-            throw new IllegalArgumentException(
-                "Matrix must be square: " + A.extent()
-            );
-        }
+    private static boolean diagonalInverse(final DoubleMatrix2d A) {
+        checkSquare(A);
+
+        final NumericalContext context = NumericalContext.instance();
         boolean nonSingular = true;
         for (int i = A.rows(); --i >= 0; ) {
             double v = A.get(i, i);
@@ -126,78 +123,6 @@ public final class Algebra {
         }
 
         return nonSingular;
-    }
-
-    /**
-     * A matrix {@code A} is <em>square</em> if it has the same number of rows
-     * and columns.
-     */
-    public static boolean isSquare(final DoubleMatrix2d A) {
-        return A.rows() == A.cols();
-    }
-
-    /**
-     * A matrix {@code A} is <em>diagonal</em> if {@code A[i, j] == 0} whenever
-     * {@code i != j}. Matrix may but need not be square.
-     *
-     * @param A the matrix to test
-     * @param context the numerical context used for checking for <em>zero</em>
-     *        values
-     * @return {@code true} if the matrix {@code A} is <em>diagonal</em>,
-     *         {@code false} otherwise
-     */
-    public static boolean isDiagonal(
-        final DoubleMatrix2d A,
-        final NumericalContext context
-    ) {
-        for (int r = A.rows(); --r >= 0; ) {
-            for (int c = A.cols(); --c >= 0; ) {
-                if (r != c && context.isNotZero(A.get(r, c))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if the given matrix {@code A} is non-singular.
-     *
-     * @param A the {@code matrix} to test
-     * @param context the numerical context used for comparing zeros
-     * @return {@code true} if the given matrix {@code A} is non-singular,
-     *         {@code false} otherwise
-     */
-    public static boolean isNonSingular(
-        final DoubleMatrix2d A,
-        final NumericalContext context
-    ) {
-        for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
-            if (context.isZero(A.get(i, i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if the given matrix {@code A} is non-singular (not
-     * {@link #isNonSingular(DoubleMatrix2d, NumericalContext)} ).
-     *
-     * @see #isNonSingular(DoubleMatrix2d, NumericalContext)
-     *
-     * @param A the {@code matrix} to test
-     * @param context the numerical context used for comparing zeros
-     * @return {@code true} if the given matrix {@code A} is non-singular,
-     *         {@code false} otherwise
-     */
-    public static boolean isSingular(
-        final DoubleMatrix2d A,
-        final NumericalContext context
-    ) {
-        return !isNonSingular(A, context);
     }
 
 }

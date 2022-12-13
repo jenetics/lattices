@@ -20,8 +20,8 @@
 package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.linealgebra.blas.Algebra.isSingular;
 import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
+import static io.jenetics.linealgebra.matrix.Matrices.isSingular;
 
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Range1d;
@@ -51,7 +51,7 @@ public final class LU {
     ) {
         this.LU = requireNonNull(LU);
         this.pivot = requireNonNull(pivot);
-        singular = isSingular(LU, context);
+        singular = isSingular(LU);
         this.context = requireNonNull(context);
     }
 
