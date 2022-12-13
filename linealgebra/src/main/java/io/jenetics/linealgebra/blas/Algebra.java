@@ -70,8 +70,8 @@ public final class Algebra {
      *
      * @param A the matrix {@code A}
      * @param B the matrix {@code B}
-     * @return {@code X}, new independent matrix of the solution if A is square,
-     *         least squares solution otherwise.
+     * @return {@code X}, new independent matrix of the solution if {@code A} is
+     *         square, least squares solution otherwise.
      */
     public static DoubleMatrix2d solve(
         final DoubleMatrix2d A,
