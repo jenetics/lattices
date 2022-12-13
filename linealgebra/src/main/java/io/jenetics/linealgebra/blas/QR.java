@@ -90,7 +90,7 @@ public final class QR {
                         .view(new Range1d(k, qr.rows() - k));
 
                     double s = -QRcolk.dotProduct(Qcolj)/qr.get(k, k);
-                    Qcolj.assign(QRcolk, (a, b) -> a + b*s);
+                    Qcolj.assign(QRcolk, (a, b) -> Math.fma(b, s, a));
                 }
             }
         }

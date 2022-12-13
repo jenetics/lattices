@@ -19,15 +19,14 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
-
 import cern.colt.matrix.linalg.QRDecomposition;
-
+import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
 import org.testng.annotations.Test;
 
-import io.jenetics.linealgebra.grid.Extent2d;
-import io.jenetics.linealgebra.testfuxtures.Colts;
-import io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
+import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -38,11 +37,12 @@ public class QRTest {
     public void decompose() {
         final var A = next(new Extent2d(50, 50));
 
-        QR.decompose(A);
-        LinealgebraAsserts.assertEquals(
-            QR.decompose(A).qr(),
-            Colts.toLinealgebra(new QRDecomposition(Colts.toColt(A)).QR)
-        );
+        final var expected = new QRDecomposition(toColt(A));
+        final var qr = QR.decompose(A);
+
+        LinealgebraAsserts.assertEquals(qr.q(), toLinealgebra(expected.getQ()));
+        LinealgebraAsserts.assertEquals(qr.r(), toLinealgebra(expected.getR()));
+        LinealgebraAsserts.assertEquals(qr.h(), toLinealgebra(expected.getH()));
     }
 
     @Test(invocationCount = 5)
@@ -53,9 +53,7 @@ public class QRTest {
 
         LinealgebraAsserts.assertEquals(
             QR.decompose(A).solve(B),
-            Colts.toLinealgebra(
-                new QRDecomposition(Colts.toColt(A)).solve(Colts.toColt(B))
-            )
+            toLinealgebra(new QRDecomposition(toColt(A)).solve(toColt(B)))
         );
     }
 

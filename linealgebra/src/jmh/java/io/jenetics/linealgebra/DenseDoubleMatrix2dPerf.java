@@ -77,7 +77,7 @@ public class DenseDoubleMatrix2dPerf {
         return coltA.zMult(coltB, null, 2, 3, false, false);
     }
 
-    //@Benchmark
+    @Benchmark
     public Object coltSolve() {
         return cern.colt.matrix.linalg.Algebra.DEFAULT.solve(coltA, coltB);
     }
