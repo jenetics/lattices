@@ -19,16 +19,18 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import cern.colt.matrix.linalg.CholeskyDecomposition;
-import io.jenetics.linealgebra.grid.Extent2d;
-import io.jenetics.linealgebra.testfuxtures.Colts;
-import org.testng.annotations.Test;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
 import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
-import static org.assertj.core.api.Assertions.assertThat;
+
+import cern.colt.matrix.linalg.CholeskyDecomposition;
+
+import org.testng.annotations.Test;
+
+import io.jenetics.linealgebra.grid.Extent2d;
+import io.jenetics.linealgebra.testfuxtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

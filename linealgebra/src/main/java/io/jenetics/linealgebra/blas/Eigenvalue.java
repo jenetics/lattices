@@ -37,29 +37,19 @@ public final class Eigenvalue {
 
     private final NumericalContext context = NumericalContext.instance();
 
-    /**
-     * Row and column dimension (square matrix).
-     */
+    // Row and column dimension (square matrix).
     private int n;
 
-    /**
-     * Arrays for internal storage of eigenvalues.
-     */
+    // Arrays for internal storage of eigenvalues.
     private double[] d, e;
 
-    /**
-     * Array for internal storage of eigenvectors.
-     */
+    // Array for internal storage of eigenvectors.
     private DoubleMatrix2d V;
 
-    /**
-     * Array for internal storage of non-symmetric Hessenberg form.
-     */
+    // Array for internal storage of non-symmetric Hessenberg form.
     private double[][] H;
 
-    /**
-     * Working storage for nonsymmetric algorithm.
-     */
+    // Working storage for non-symmetric algorithm.
     private double[] ort;
 
     // Complex scalar division.
@@ -67,23 +57,6 @@ public final class Eigenvalue {
 
     private Eigenvalue() {
     }
-
-    /**
-     * Constructs and returns a new eigenvalue decomposition object;
-     * The decomposed matrices can be retrieved via instance methods of the
-     * returned decomposition object.
-     * Checks for symmetry, then constructs the eigenvalue decomposition.
-     *
-     * @param A A square matrix.
-     * @return A decomposition object to access <tt>D</tt> and <tt>V</tt>.
-     * @throws IllegalArgumentException if <tt>A</tt> is not square.
-     */
-    public static Eigenvalue decompose(final DoubleMatrix2d A) {
-        final var eigen = new Eigenvalue();
-        eigen.init(A);
-        return eigen;
-    }
-
 
     private void init(final DoubleMatrix2d A) {
         Matrices.checkSquare(A);
@@ -927,6 +900,20 @@ public final class Eigenvalue {
         final var result = DoubleMatrix1d.DENSE_FACTORY.newInstance(d.length);
         result.assign(d);
         return result;
+    }
+
+    /**
+     * Performs an <em>Eigenvalue</em>-decomposition of the given matrix
+     * {@code A}.
+     *
+     * @param A the square matrix to be decomposed
+     * @return the <em>Eigenvalue</em>-decomposition of the given matrix {@code A}
+     * @throws IllegalArgumentException if {@code A} is not square
+     */
+    public static Eigenvalue decompose(final DoubleMatrix2d A) {
+        final var eigen = new Eigenvalue();
+        eigen.init(A);
+        return eigen;
     }
 
 }

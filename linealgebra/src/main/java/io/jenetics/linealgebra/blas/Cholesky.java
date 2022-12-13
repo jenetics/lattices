@@ -19,11 +19,11 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static java.util.Objects.requireNonNull;
+
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Store the result of a <em>Cholesky</em>-decomposition.
