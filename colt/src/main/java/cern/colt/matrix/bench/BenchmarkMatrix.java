@@ -559,7 +559,9 @@ public class BenchmarkMatrix {
 
             public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
                 lu = null;
-                if (!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByRow(A) || !cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByColumn(A)) {
+                if (!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByRow(A) ||
+                    !cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByColumn(A))
+                {
                     cern.colt.matrix.linalg.Property.ZERO.generateNonSingular(A);
                 }
                 super.setParameters(A, B);
@@ -1034,7 +1036,7 @@ public class BenchmarkMatrix {
      * Executes procedure repeatadly until more than minSeconds have elapsed.
      */
     protected static void runSpecial(double minSeconds, String title, Double2DProcedure function) {
-        int[] sizes = {10000};
+        int[] sizes = {10_000};
         double[] densities = {0.00001};
         boolean[] sparses = {true};
 

@@ -31,7 +31,7 @@ public class QRDecomposition implements java.io.Serializable {
 	 *
 	 * @serial internal array storage.
 	 */
-	private DoubleMatrix2D QR;
+	public DoubleMatrix2D QR;
 	//private double[][] QR;
 
 	/**

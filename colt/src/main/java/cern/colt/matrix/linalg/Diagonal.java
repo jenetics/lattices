@@ -36,6 +36,7 @@ class Diagonal {
 	 */
 	public static boolean inverse(DoubleMatrix2D A) {
 		Property.DEFAULT.checkSquare(A);
+
 		boolean isNonSingular = true;
 		for (int i = A.rows(); --i >= 0; ) {
 			double v = A.getQuick(i, i);
@@ -44,4 +45,5 @@ class Diagonal {
 		}
 		return isNonSingular;
 	}
+
 }

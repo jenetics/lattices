@@ -21,9 +21,8 @@
  * @version 2.0
  */
 plugins {
-	`java-library`
-	idea
-	`maven-publish`
+    `java-library`
+    idea
 }
 
 description = "Colt - CERN Open Source Libraries for High Performance Scientific and Technical Computing"

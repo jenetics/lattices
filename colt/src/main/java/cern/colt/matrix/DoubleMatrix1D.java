@@ -430,6 +430,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
 		if (fillIndexList) indexList.setSize(0);
 		if (fillValueList) valueList.setSize(0);
 		int s = size;
+
 		for (int i = 0; i < s; i++) {
 			double value = getQuick(i);
 			if (value != 0) {

@@ -323,11 +323,14 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 	protected AbstractMatrix2D vStrides(int rowStride, int columnStride) {
 		if (rowStride <= 0 || columnStride <= 0)
 			throw new IndexOutOfBoundsException("illegal strides: " + rowStride + ", " + columnStride);
+
 		this.rowStride *= rowStride;
 		this.columnStride *= columnStride;
+
 		if (this.rows != 0) this.rows = (this.rows - 1) / rowStride + 1;
 		if (this.columns != 0) this.columns = (this.columns - 1) / columnStride + 1;
-		this.isNoView = false;
+
+        this.isNoView = false;
 		return this;
 	}
 }
