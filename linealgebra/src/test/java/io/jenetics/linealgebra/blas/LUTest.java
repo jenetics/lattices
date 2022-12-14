@@ -27,10 +27,10 @@ import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.LUDecomposition;
 
-import io.jenetics.linealgebra.NumericalContext;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Extent2d;
 
 /**

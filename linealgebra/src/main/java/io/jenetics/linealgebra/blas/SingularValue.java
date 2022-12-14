@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import io.jenetics.linealgebra.grid.Grids;
-import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+
+import io.jenetics.linealgebra.grid.Grids;
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
  * Store the result of an <em>Singular value</em>-decomposition.

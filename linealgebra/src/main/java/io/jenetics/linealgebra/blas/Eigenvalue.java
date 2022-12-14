@@ -19,12 +19,12 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import static io.jenetics.linealgebra.matrix.Matrices.isSymmetric;
+
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Grids;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-
-import static io.jenetics.linealgebra.matrix.Matrices.isSymmetric;
 
 /**
  * Store the result of an <em>Eigenvalue</em>-decomposition.

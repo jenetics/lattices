@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import io.jenetics.linealgebra.NumericalContext;
-import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-
 import static io.jenetics.linealgebra.grid.Grids.checkSquare;
 import static io.jenetics.linealgebra.grid.Grids.isSquare;
 import static io.jenetics.linealgebra.matrix.Matrices.isDiagonal;
+
+import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
 /**
  * Linear algebraic matrix operations.

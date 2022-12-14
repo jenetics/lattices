@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.grid;
 
-import io.jenetics.linealgebra.NumericalContext;
-import io.jenetics.linealgebra.array.DoubleArray;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import static java.util.Objects.requireNonNull;
+import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
  * Generic class for 1-d grids holding {@code double} elements. The
