@@ -29,6 +29,7 @@ import cern.colt.matrix.linalg.QRDecomposition;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.matrix.blas.QR;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

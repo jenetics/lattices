@@ -40,6 +40,7 @@ import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.Extent1d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.matrix.blas.Blas;
 import io.jenetics.lattices.testfuxtures.Colts;
 import io.jenetics.lattices.testfuxtures.DoubleGrid1dComparator;
 import io.jenetics.lattices.testfuxtures.DoubleGrid2dComparator;

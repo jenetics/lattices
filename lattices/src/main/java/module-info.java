@@ -25,8 +25,8 @@
 module io.jenetics.lattices {
     exports io.jenetics.lattices;
     exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.blas;
     exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.matrix;
     exports io.jenetics.lattices.grid;
+    exports io.jenetics.lattices.matrix;
+    exports io.jenetics.lattices.matrix.blas;
 }

@@ -31,6 +31,7 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.matrix.blas.LU;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

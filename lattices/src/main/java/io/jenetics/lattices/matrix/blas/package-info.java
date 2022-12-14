@@ -23,4 +23,4 @@
  * @since !__version__!
  * @version !__version__!
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;

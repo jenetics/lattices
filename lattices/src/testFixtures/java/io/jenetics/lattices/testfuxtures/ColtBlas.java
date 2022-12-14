@@ -24,7 +24,7 @@ import static io.jenetics.lattices.testfuxtures.Colts.toLinealgebra;
 
 import cern.colt.matrix.linalg.SeqBlas;
 
-import io.jenetics.lattices.blas.Blas;
+import io.jenetics.lattices.matrix.blas.Blas;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 

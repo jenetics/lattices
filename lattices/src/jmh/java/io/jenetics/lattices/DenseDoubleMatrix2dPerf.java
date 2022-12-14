@@ -35,7 +35,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import io.jenetics.lattices.blas.Algebra;
+import io.jenetics.lattices.matrix.blas.Algebra;
 import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.testfuxtures.Colts;

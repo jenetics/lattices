@@ -17,10 +17,9 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.blas.Permutations.permuteRows;
 import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
@@ -151,7 +150,7 @@ public final class LU {
         }
 
         // Right hand side with pivoting
-        permuteRows(X, pivot);
+        Permutations.permuteRows(X, pivot);
 
         // Precompute and cache some views to avoid regenerating them time
         // and again.
