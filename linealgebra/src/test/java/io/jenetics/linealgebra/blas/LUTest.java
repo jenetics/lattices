@@ -45,12 +45,10 @@ public class LUTest {
         final var expected = new LUDecomposition(toColt(A));
         final var lu = LU.decompose(A);
 
-        try (var __ = new NumericalContext.Scope(6)) {
-            assertEquals(lu.L(), toLinealgebra(expected.getL()));
-            assertEquals(lu.U(), toLinealgebra(expected.getU()));
-            assertThat(lu.det())
-                .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
-        }
+        assertEquals(lu.L(), toLinealgebra(expected.getL()));
+        assertEquals(lu.U(), toLinealgebra(expected.getU()));
+        assertThat(lu.det())
+            .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
     }
 
     @Test(invocationCount = 5)

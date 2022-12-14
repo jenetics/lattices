@@ -35,7 +35,7 @@ import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
  */
 public final class Eigenvalue {
 
-    private final NumericalContext context = NumericalContext.instance();
+    private final NumericalContext context = NumericalContext.get();
 
     // Row and column dimension (square matrix).
     private int n;

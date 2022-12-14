@@ -43,7 +43,7 @@ public final class Matrices {
      *         {@code false} otherwise
      */
     public static boolean isDiagonal(final DoubleMatrix2d A) {
-        final var context = NumericalContext.instance();
+        final var context = NumericalContext.get();
 
         for (int r = A.rows(); --r >= 0; ) {
             for (int c = A.cols(); --c >= 0; ) {
@@ -64,7 +64,7 @@ public final class Matrices {
      *         {@code false} otherwise
      */
     public static boolean isNonSingular(final DoubleMatrix2d A) {
-        final var context = NumericalContext.instance();
+        final var context = NumericalContext.get();
 
         for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
             if (context.isZero(A.get(i, i))) {
@@ -98,7 +98,7 @@ public final class Matrices {
      */
     public static boolean isSymmetric(final DoubleMatrix2d A) {
         Grids.checkSquare(A);
-        return A.equals(A.transpose(), NumericalContext.instance());
+        return A.equals(A.transpose());
     }
 
     /**

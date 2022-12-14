@@ -23,7 +23,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.grid.DoubleGrid2d;
@@ -357,8 +356,7 @@ public class DoubleMatrix2d
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix2d m &&
-            equals(m, NumericalContext.ZERO);
+        return obj instanceof DoubleMatrix2d m && equals(m);
     }
 
 }

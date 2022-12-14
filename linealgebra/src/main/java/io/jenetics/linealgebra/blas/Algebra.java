@@ -135,7 +135,7 @@ public final class Algebra {
         if (isSquare(A) && isDiagonal(A)) {
             final var inv = A.copy();
             if (!diagonalInverse(inv)) {
-                throw new IllegalArgumentException("A is singular.");
+                throw new IllegalArgumentException("Matrix to invert is singular.");
             }
 
             return inv;
@@ -152,7 +152,7 @@ public final class Algebra {
     private static boolean diagonalInverse(final DoubleMatrix2d A) {
         checkSquare(A);
 
-        final NumericalContext context = NumericalContext.instance();
+        final NumericalContext context = NumericalContext.get();
         boolean nonSingular = true;
         for (int i = A.rows(); --i >= 0; ) {
             double v = A.get(i, i);

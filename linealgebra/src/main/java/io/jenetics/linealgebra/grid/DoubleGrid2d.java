@@ -291,14 +291,12 @@ public class DoubleGrid2d implements Grid2d {
      * the same values.
      *
      * @param other the second matrix to compare
-     * @param context the numerical context used for comparing for equality
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(
-        final DoubleGrid2d other,
-        final NumericalContext context
-    ) {
+    public boolean equals(final DoubleGrid2d other) {
+        final var context = NumericalContext.get();
+
         return extent().equals(other.extent()) &&
             allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }

@@ -116,7 +116,7 @@ public class Cholesky {
     public static Cholesky decompose(final DoubleMatrix2d A) {
         A.requireRectangular();
 
-        final var context = NumericalContext.instance();
+        final var context = NumericalContext.get();
 
         final var n = A.rows();
         final var L = A.like(n, n);

@@ -81,7 +81,7 @@ public interface Blas {
 
         scale = Math.abs(a) + Math.abs(b);
 
-        final var context = NumericalContext.instance();
+        final var context = NumericalContext.get();
         if (context.isNotZero(scale)) {
             ra = a/scale;
             rb = b/scale;

@@ -218,8 +218,7 @@ public class DoubleMatrix1d
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix1d m &&
-            equals(m, NumericalContext.ZERO);
+        return obj instanceof DoubleMatrix1d m && equals(m);
     }
 
 }

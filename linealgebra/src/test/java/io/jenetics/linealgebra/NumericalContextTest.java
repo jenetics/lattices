@@ -21,6 +21,13 @@ package io.jenetics.linealgebra;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.IntStream;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -29,13 +36,72 @@ import org.testng.annotations.Test;
 public class NumericalContextTest {
 
     @Test
-    public void changedContext() {
-        NumericalContext.precission(5);
+    public void setDefault() {
+        NumericalContext.reset();
+        final var devault = NumericalContext.get();
+        Assert.assertNotNull(devault);
 
-        final NumericalContext context = NumericalContext.instance();
-        assertThat(context.epsilon()).isEqualTo(Math.pow(10, -5));
+        NumericalContext.set(new NumericalContext(0.1));
+        assertThat(NumericalContext.get()).isNotNull();
+        assertThat(NumericalContext.get().epsilon()).isEqualTo(0.1);
 
-        NumericalContext.precission(9);
+        NumericalContext.reset();
+        assertThat(NumericalContext.get()).isSameAs(devault);
+    }
+
+    @Test
+    public void setRandom() {
+        final var context = new NumericalContext(0.1);
+        NumericalContext.set(context);
+
+        assertThat(NumericalContext.get()).isSameAs(context);
+        NumericalContext.reset();
+    }
+
+    @Test
+    public void setRandomThreading()
+        throws ExecutionException, InterruptedException
+    {
+        final var context = new NumericalContext(0.1);
+        NumericalContext.set(context);
+
+        final ExecutorService executor = Executors.newFixedThreadPool(10);
+        try {
+            final var futures = IntStream.range(0, 500)
+                .mapToObj(i -> executor
+                    .submit(() -> assertThat(NumericalContext.get()).isSameAs(context)))
+                .toList();
+
+            for (Future<?> future : futures) {
+                future.get();
+            }
+        } finally {
+            executor.shutdown();
+            NumericalContext.reset();
+        }
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void setNullRandom() {
+        NumericalContext.set(null);
+    }
+
+    @Test
+    public void localContext() {
+        final var context = NumericalContext.get();
+
+        final var context1 = new NumericalContext(0.1);
+        NumericalContext.using(context1, () -> {
+            final var context2 = new NumericalContext(0.2);
+            NumericalContext.using(context2, () ->
+                assertThat(NumericalContext.get()).isSameAs(context2)
+            );
+
+            assertThat(NumericalContext.get()).isSameAs(context1);
+        });
+
+        assertThat(NumericalContext.get()).isSameAs(context);
     }
 
 }

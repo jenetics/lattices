@@ -239,14 +239,12 @@ public class DoubleGrid1d implements Grid1d {
      * the same values.
      *
      * @param other the second matrix to compare
-     * @param context the numerical context used for comparing for equality
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(
-        final DoubleGrid1d other,
-        final NumericalContext context
-    ) {
+    public boolean equals(final DoubleGrid1d other) {
+        final var context = NumericalContext.get();
+
         return extent().equals(other.extent()) &&
             allMatch(i -> context.equals(get(i), other.get(i)));
     }

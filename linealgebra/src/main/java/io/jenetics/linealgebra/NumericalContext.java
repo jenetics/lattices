@@ -20,14 +20,32 @@
 package io.jenetics.linealgebra;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.util.Objects.requireNonNull;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.random.RandomGeneratorFactory;
 
 /**
  * Encapsulates the context settings which describes certain rules for numerical
- * operations.
+ * operations. The default context is created with an epsilon of 10<sup>-9</sup>.
+ * The default value can be changed with defining a Java <em>property</em> on
+ * the command line.
+ * <pre>
+ * $ java -Dio.jenetics.lattices.precision=12 ...
+ * </pre>
+ * The example above will change the epsilon of the default context object to
+ * 10<sup>-12</sup>. It is also possible to change the numerical context only
+ * for specific parts of your code. This might be useful in a testing
+ * environment. The following example shows how to do this.
+ * <pre>{@code
+ * final DoubleMatrix2d A = ...;
+ * final DoubleMatrix2d B = ...;
+ *
+ * // Executes the 'solve' operation with a different epsilon.
+ * // Other parts of the program are not effected.
+ * NumericalContext.using(new NumericalContext(0.001), () -> {
+ *     final DoubleMatrix2d X = Algebra.solve(A, B);
+ * });
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -35,43 +53,48 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class NumericalContext {
 
-    public static final class Scope implements AutoCloseable {
-        private final int precision;
-
-        public Scope(final int precision) {
-            this.precision = precision;
-        }
-
-        @Override
-        public void close() {
-        }
-    }
+    /**
+     * The default context used for linear algebra calculations. It can be
+     * defined on the command line with a Java property
+     * {@code io.jenetics.lattices.precission}, where {@code precission} is the
+     * number of significant decimal digits. The <em>epsilon</em> values is
+     * calculated as follows: {@code Math.pow(10, -precission)}.
+     */
+    private static final NumericalContext DEFAULT_EPSILON_CONTEXT =
+        new NumericalContext(EnvPrecission.EPSILON);
 
     /**
      * Numerical context with an {@link #epsilon()} of zero.
      */
-    public static final NumericalContext ZERO = new NumericalContext(0.0) {
-        @Override
-        public boolean equals(final double a, final double b) {
-            return Double.compare(a, b) == 0;
-        }
-    };
+    public static final NumericalContext ZERO_EPSILON =
+        new NumericalContext(0.0) {
+            @Override
+            public boolean equals(final double a, final double b) {
+                return Double.compare(a, b) == 0;
+            }
+        };
 
-    /**
-     * The default numerical context.
-     */
-    public static final NumericalContext DEFAULT_CONTEXT =
-        new NumericalContext(Math.pow(10, -Env.precission));
+    // Holds the current context.
+    private static final Context<NumericalContext> CONTEXT =
+        new Context<>(DEFAULT_EPSILON_CONTEXT);
 
-    private static final AtomicReference<NumericalContext> CONTEXT =
-        new AtomicReference<>(DEFAULT_CONTEXT);
 
     private final double epsilon;
 
-    private NumericalContext(final double epsilon) {
+    /**
+     * Create a new numerical context with the given epsilon.
+     *
+     * @param epsilon the {@code epsilon} of this context
+     */
+    public NumericalContext(final double epsilon) {
         this.epsilon = abs(epsilon);
     }
 
+    /**
+     * Return the epsilon value used in this numerical context.
+     *
+     * @return the epsilon value used in this numerical context
+     */
     public double epsilon() {
         return epsilon;
     }
@@ -147,40 +170,89 @@ public class NumericalContext {
         return equals(a, 1);
     }
 
-    public static NumericalContext ofPrecision(final int precision) {
-        return new NumericalContext(Math.pow(10, -Math.abs(precision)));
+
+    @Override
+    public String toString() {
+        return "NumericalContext[epsilon=%f]".formatted(epsilon);
     }
 
-    /**
-     * Set a new epsilon value for the numerical context.
-     *
-     * @param precission the new context precission
-     */
-    public static void precission(final int precission) {
-        CONTEXT.set(new NumericalContext(Math.pow(10, -Math.abs(precission))));
-    }
+    /* *************************************************************************
+     * Accessor methods.
+     * ************************************************************************/
 
     /**
-     * Return the numerical context.
+     * Return the current numerical context.
      *
-     * @return the numerical context
+     * @return the current numerical context
      */
-    public static NumericalContext instance() {
+    public static NumericalContext get() {
         return CONTEXT.get();
     }
 
-    @SuppressWarnings("removal")
-    private static final class Env {
-        private static final int precission = java.security.AccessController.doPrivileged(
-                (java.security.PrivilegedAction<Integer>)() -> {
-                    final int value = Integer.getInteger(
-                        "io.jenetics.lattice.defaultPrecision",
-                        9
-                    );
+    /**
+     * Set a new {@link NumericalContext} for the <em>global</em> scope.
+     *
+     * @param context the new {@link NumericalContext} for the <em>global</em>
+     *        scope
+     * @throws NullPointerException if the {@code context} object is {@code null}
+     */
+    public static void set(final NumericalContext context) {
+        requireNonNull(context);
+        CONTEXT.set(context);
+    }
 
-                    return min(max(value, 1), 20);
-                }
+    /**
+     * Set the context object to its default value.
+     */
+    public static void reset() {
+        CONTEXT.reset();
+    }
+
+    /**
+     * Executes the given {@code task} with the new numerical {@code context}.
+     * The numerical context effects only the task execution. The following
+     * example shows how to solve a matrix equation with a different numerical
+     * context then the default one.
+     *
+     * <pre>{@code
+     * final DoubleMatrix2d A = ...;
+     * final DoubleMatrix2d B = ...;
+     * NumericalContext.using(new NumericalContext(0.001), () -> {
+     *     final DoubleMatrix2d X = Algebra.solve(A, B);
+     * });
+     * }</pre>
+     *
+     * The example above shuffles the given integer {@code seq} <i>using</i> the
+     * given {@link RandomGeneratorFactory#getDefault()} factory.
+     *
+     * @since 7.0
+     *
+     * @param context the numerical context used in the given {@code task}
+     * @param task the {@code task} which is executed within the <i>scope</i> of
+     *        the given numerical context
+     * @throws NullPointerException if one of the arguments is {@code null}
+     */
+    public static void using(final NumericalContext context, final Runnable task) {
+        requireNonNull(context);
+        requireNonNull(task);
+
+        CONTEXT.with(context, c -> { task.run(); return null; });
+    }
+
+    @SuppressWarnings("removal")
+    private static final class EnvPrecission {
+        private static final int DEFAULT_PRECISSION = 9;
+
+        private static final int PRECISSION =
+            java.security.AccessController.doPrivileged(
+                (java.security.PrivilegedAction<Integer>)() ->
+                    Integer.getInteger(
+                        "io.jenetics.lattices.precision",
+                        DEFAULT_PRECISSION
+                    )
             );
+
+        private static final double EPSILON = Math.pow(10, -PRECISSION);
     }
 
 }

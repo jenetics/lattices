@@ -252,7 +252,7 @@ public final class QR {
             Rdiag.set(k, -nrm);
         }
 
-        return new QR(qr, Rdiag, NumericalContext.instance());
+        return new QR(qr, Rdiag, NumericalContext.get());
     }
 
 }

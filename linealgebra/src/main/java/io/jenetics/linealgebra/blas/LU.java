@@ -197,7 +197,7 @@ public final class LU {
      * @return the <em>LU</em>-decomposition of the given matrix {@code A}
      */
     public static LU decompose(final DoubleMatrix2d A) {
-        final var context = NumericalContext.instance();
+        final var context = NumericalContext.get();
         final var lu = A.copy();
 
         final int m = lu.rows();
