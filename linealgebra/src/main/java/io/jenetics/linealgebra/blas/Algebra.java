@@ -70,6 +70,58 @@ public final class Algebra {
     }
 
     /**
+     * Returns the two-norm (aka <em>euclidean norm</em>) of vector {@code x}.
+     * This is equivalent to {@code mult(x,x)}.
+     *
+     * @param x the vector for which to calculate the two-norm
+     * @return the two-norm of the given vector {@code x}
+     */
+    public static double norm2(final DoubleMatrix1d x) {
+        return x.dotProduct(x);
+    }
+
+    /**
+     * Returns the two-norm of matrix {@code A}. This is the maximum singular
+     * value obtained from {@link SingularValue#decompose(DoubleMatrix2d)}.
+     *
+     * @param A the matrix from which to calculate the two-norm
+     * @return the two-norm of the given matrix {@code A}
+     */
+    public static double norm2(final DoubleMatrix2d A) {
+        return SingularValue.decompose(A).norm2();
+    }
+
+    /**
+     * Returns the infinity-norm of vector {@code x}. This is defined as
+     * {@code Max(abs(x[i]))}.
+     *
+     * @param x the vector for calculating the infinity-norm
+     * @return the infinity-norm of the given vector
+     */
+    public static double normInf(final DoubleMatrix1d x) {
+        if (x.size() == 0) {
+            return 0;
+        } else {
+            return x.reduce(Math::max, Math::abs);
+        }
+    }
+
+    /**
+     * Returns the infinity-norm of matrix {@code A}. This is the maximum
+     * absolute row sum.
+     *
+     * @param A the matrix from which to calculate the infinity-norm
+     * @return the infinity-norm of the given matrix
+     */
+    public static double normInf(final DoubleMatrix2d A) {
+        double max = 0;
+        for (int row = A.rows(); --row >= 0;) {
+            max = Math.max(max, norm1(A.rowAt(row)));
+        }
+        return max;
+    }
+
+    /**
      * Returns the sum of the diagonal elements of matrix {@code A}:
      * {@code Sum(A[i,i])}.
      *
@@ -104,6 +156,17 @@ public final class Algebra {
      */
     public static double cond(final DoubleMatrix2d A) {
         return SingularValue.decompose(A).cond();
+    }
+
+    /**
+     * Return the effective numerical matrix rank, which is the number of
+     * non-negligible singular values.
+     *
+     * @param A the matrix for which to calculate the rank
+     * @return the rank for the given matrix
+     */
+    public int rank(final DoubleMatrix2d A) {
+        return SingularValue.decompose(A).rank();
     }
 
     /**

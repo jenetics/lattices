@@ -37,6 +37,9 @@ import io.jenetics.linealgebra.grid.Extent2d;
  */
 public class AlgebraTest {
 
+    private static final Percentage EPSILON = Percentage
+        .withPercentage(Math.pow(10, -6));
+
     private static final cern.colt.matrix.linalg.Algebra COLT =
         cern.colt.matrix.linalg.Algebra.DEFAULT;
 
@@ -46,7 +49,8 @@ public class AlgebraTest {
         final var random = RandomGenerator.getDefault();
         final var x = next(random.nextInt(123));
 
-        assertThat(Algebra.norm1(x)).isEqualTo(COLT.norm1(toColt(x)));
+        assertThat(Algebra.norm1(x))
+            .isCloseTo(COLT.norm1(toColt(x)), EPSILON);
     }
 
     @Test(invocationCount = 5)
@@ -54,7 +58,44 @@ public class AlgebraTest {
         final var random = RandomGenerator.getDefault();
         final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
 
-        assertThat(Algebra.norm1(A)).isEqualTo(COLT.norm1(toColt(A)));
+        assertThat(Algebra.norm1(A))
+            .isCloseTo(COLT.norm1(toColt(A)), EPSILON);
+    }
+
+    @Test(invocationCount = 5)
+    public void norm2Vector() {
+        final var random = RandomGenerator.getDefault();
+        final var x = next(random.nextInt(123));
+
+        assertThat(Algebra.norm2(x))
+            .isCloseTo(COLT.norm2(toColt(x)), EPSILON);
+    }
+
+    @Test(invocationCount = 5)
+    public void norm2Matrix() {
+        final var random = RandomGenerator.getDefault();
+        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+
+        assertThat(Algebra.norm2(A))
+            .isCloseTo(COLT.norm2(toColt(A)), EPSILON);
+    }
+
+    @Test(invocationCount = 5)
+    public void normInfVector() {
+        final var random = RandomGenerator.getDefault();
+        final var x = next(random.nextInt(123));
+
+        assertThat(Algebra.normInf(x))
+            .isCloseTo(COLT.normInfinity(toColt(x)), EPSILON);
+    }
+
+    @Test(invocationCount = 5)
+    public void normInfMatrix() {
+        final var random = RandomGenerator.getDefault();
+        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+
+        assertThat(Algebra.normInf(A))
+            .isCloseTo(COLT.normInfinity(toColt(A)), EPSILON);
     }
 
     @Test(invocationCount = 5)
@@ -63,7 +104,7 @@ public class AlgebraTest {
         final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
 
         assertThat(Algebra.trace(A))
-            .isCloseTo(COLT.trace(toColt(A)), Percentage.withPercentage(0.0000001));
+            .isCloseTo(COLT.trace(toColt(A)), EPSILON);
     }
 
     @Test(invocationCount = 5)
@@ -73,7 +114,7 @@ public class AlgebraTest {
         final var A = next(size, size);
 
         assertThat(Algebra.det(A))
-            .isCloseTo(COLT.det(toColt(A)), Percentage.withPercentage(0.0000001));
+            .isCloseTo(COLT.det(toColt(A)), EPSILON);
     }
 
     @Test(invocationCount = 5)
@@ -83,7 +124,7 @@ public class AlgebraTest {
         final var A = next(size, size);
 
         assertThat(Algebra.cond(A))
-            .isCloseTo(COLT.cond(toColt(A)), Percentage.withPercentage(0.0000001));
+            .isCloseTo(COLT.cond(toColt(A)), EPSILON);
     }
 
     @Test(invocationCount = 5)
