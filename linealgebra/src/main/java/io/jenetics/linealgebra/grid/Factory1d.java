@@ -18,7 +18,7 @@ public interface Factory1d<T> {
      * @param structure the structure of the new matrix
      * @return a new matrix with the given {@code structure}
      */
-    T newInstance(final Structure1d structure);
+    T create(final Structure1d structure);
 
     /**
      * Create a new matrix with the given {@code dimension} and default
@@ -27,8 +27,8 @@ public interface Factory1d<T> {
      * @param dim the dimension of the created array
      * @return a new matrix with the given {@code dimension}
      */
-    default T newInstance(final Extent1d dim) {
-        return newInstance(new Structure1d(dim));
+    default T create(final Extent1d dim) {
+        return create(new Structure1d(dim));
     }
 
     /**
@@ -37,7 +37,7 @@ public interface Factory1d<T> {
      * @param size the number of matrix elements
      * @return a new matrix with the given size
      */
-    default T newInstance(final int size) {
-        return newInstance(new Extent1d(size));
+    default T create(final int size) {
+        return create(new Extent1d(size));
     }
 }

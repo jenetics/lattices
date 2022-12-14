@@ -34,7 +34,7 @@ public final class MatrixRandom {
     }
 
     public static DoubleMatrix2d next(final Extent2d extent, final RandomGenerator random) {
-        final var result = DoubleMatrix2d.DENSE_FACTORY.newInstance(extent);
+        final var result = DoubleMatrix2d.DENSE.create(extent);
         result.assign(a -> random.nextInt(10_000)/100.0);
         return result;
     }
@@ -48,7 +48,7 @@ public final class MatrixRandom {
     }
 
     public static DoubleMatrix1d next(final Extent1d extent, final RandomGenerator random) {
-        final var result = DoubleMatrix1d.DENSE_FACTORY.newInstance(extent);
+        final var result = DoubleMatrix1d.DENSE.create(extent);
         result.assign(a -> random.nextInt(10_000)/100.0);
         return result;
     }

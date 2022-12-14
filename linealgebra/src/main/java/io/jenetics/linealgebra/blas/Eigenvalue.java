@@ -75,7 +75,7 @@ public final class Eigenvalue {
             tql2();
 
         } else {
-            V = DoubleMatrix2d.DENSE_FACTORY.newInstance(n, n);
+            V = DoubleMatrix2d.DENSE.create(n, n);
             H = new double[n][n];
             ort = new double[n];
 
@@ -857,7 +857,7 @@ public final class Eigenvalue {
      * @return {@code D}
      */
     public DoubleMatrix2d D() {
-        final var D = DoubleMatrix2d.DENSE_FACTORY.newInstance(n, n);
+        final var D = DoubleMatrix2d.DENSE.create(n, n);
 
         for (int i = 0; i < n; ++i) {
             D.set(i, i, d[i]);
@@ -886,7 +886,7 @@ public final class Eigenvalue {
      * @return the imaginary parts of the eigenvalues
      */
     public DoubleMatrix1d imagEigenvalues() {
-        final var result = DoubleMatrix1d.DENSE_FACTORY.newInstance(e.length);
+        final var result = DoubleMatrix1d.DENSE.create(e.length);
         result.assign(e);
         return result;
     }
@@ -897,7 +897,7 @@ public final class Eigenvalue {
      * @return the real parts of the eigenvalues
      */
     public DoubleMatrix1d realEigenvalues() {
-        final var result = DoubleMatrix1d.DENSE_FACTORY.newInstance(d.length);
+        final var result = DoubleMatrix1d.DENSE.create(d.length);
         result.assign(d);
         return result;
     }

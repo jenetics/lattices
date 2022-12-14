@@ -448,7 +448,7 @@ public final class SingularValue {
      * @return S
      */
     public DoubleMatrix2d S() {
-        final var S = DoubleMatrix2d.DENSE_FACTORY.newInstance(n, n);
+        final var S = DoubleMatrix2d.DENSE.create(n, n);
         for (int i = 0; i < n; ++i) {
             S.set(i, i, s[i]);
         }
@@ -462,7 +462,7 @@ public final class SingularValue {
      * @return {@code U}
      */
     public DoubleMatrix2d U() {
-        final var U = DoubleMatrix2d.DENSE_FACTORY.newInstance(m, min(m, n));
+        final var U = DoubleMatrix2d.DENSE.create(m, min(m, n));
         U.assign(this.U);
         return U;
     }
@@ -473,7 +473,7 @@ public final class SingularValue {
      * @return {@code U}
      */
     public DoubleMatrix2d V() {
-        final var V = DoubleMatrix2d.DENSE_FACTORY.newInstance(n, n);
+        final var V = DoubleMatrix2d.DENSE.create(n, n);
         V.assign(this.V);
         return V;
     }
@@ -485,7 +485,7 @@ public final class SingularValue {
      * @return diagonal of {@code S}
      */
     public DoubleMatrix1d values() {
-        final var sv = DoubleMatrix1d.DENSE_FACTORY.newInstance(s.length);
+        final var sv = DoubleMatrix1d.DENSE.create(s.length);
         sv.assign(s);
         return sv;
     }

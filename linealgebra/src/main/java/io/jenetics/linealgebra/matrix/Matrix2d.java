@@ -55,7 +55,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
      * @return a new matrix which is like this one
      */
     default M like(final Structure2d structure) {
-        return factory().newInstance(structure);
+        return factory().create(structure);
     }
 
     /**
@@ -66,7 +66,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
      * @return a new matrix which is like this one
      */
     default M like(final Extent2d extent) {
-        return factory().newInstance(extent);
+        return factory().create(extent);
     }
 
     /**
@@ -78,7 +78,7 @@ public interface Matrix2d<M extends Matrix2d<M>>
      * @return a new matrix which is like this one
      */
     default M like(final int rows, final int cols) {
-        return factory().newInstance(rows, cols);
+        return factory().create(rows, cols);
     }
 
     @Override

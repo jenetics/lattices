@@ -40,7 +40,7 @@ import io.jenetics.linealgebra.grid.Structure1d;
  * final DoubleMatrix1d matrix10 = DENSE_FACTORY.newInstance(10);
  * }</pre>
  *
- * @see #DENSE_FACTORY
+ * @see #DENSE
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -54,7 +54,7 @@ public class DoubleMatrix1d
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory1d<DoubleMatrix1d> DENSE_FACTORY = struct ->
+    public static final Factory1d<DoubleMatrix1d> DENSE = struct ->
         new DoubleMatrix1d(
             struct,
             DenseDoubleArray.ofSize(struct.extent().size())

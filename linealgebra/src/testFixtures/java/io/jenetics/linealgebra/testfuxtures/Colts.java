@@ -57,22 +57,22 @@ public final class Colts {
     }
 
     public static DoubleMatrix2d toLinealgebra(final DoubleMatrix2D matrix) {
-        final var la = DoubleMatrix2d.DENSE_FACTORY
-            .newInstance(matrix.rows(), matrix.columns());
+        final var la = DoubleMatrix2d.DENSE
+            .create(matrix.rows(), matrix.columns());
 
         la.forEach((r, c) -> la.set(r, c, matrix.getQuick(r, c)));
         return la;
     }
 
     public static DoubleMatrix1d toLinealgebra(final double[] values) {
-        final var val = DoubleMatrix1d.DENSE_FACTORY.newInstance(values.length);
+        final var val = DoubleMatrix1d.DENSE.create(values.length);
         val.assign(values);
         return val;
     }
 
     public static DoubleMatrix1d toLinealgebra(final DoubleMatrix1D matrix) {
-        final var la = DoubleMatrix1d.DENSE_FACTORY
-            .newInstance(matrix.size());
+        final var la = DoubleMatrix1d.DENSE
+            .create(matrix.size());
 
         la.forEach(i -> la.set(i, matrix.getQuick(i)));
         return la;

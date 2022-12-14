@@ -229,7 +229,7 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void assign() {
-        final var matrix = DoubleMatrix2d.DENSE_FACTORY.newInstance(4, 3);
+        final var matrix = DoubleMatrix2d.DENSE.create(4, 3);
         matrix.assign(new double[][] {
             {1, 2, 3},
             {4, 5, 6},
@@ -250,7 +250,7 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void reduce() {
-        final var matrix = DoubleMatrix2d.DENSE_FACTORY.newInstance(4, 3);
+        final var matrix = DoubleMatrix2d.DENSE.create(4, 3);
         matrix.assign(new double[][] {
             {1, 2, 3},
             {4, 5, 6},
@@ -264,7 +264,7 @@ public class DoubleMatrix2dTest {
 
     @Test
     public void sum() {
-        final var matrix = DoubleMatrix2d.DENSE_FACTORY.newInstance(4, 3);
+        final var matrix = DoubleMatrix2d.DENSE.create(4, 3);
         matrix.assign(new double[][] {
             {1, 2, 3},
             {4, 5, 6},

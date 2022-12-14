@@ -41,10 +41,10 @@ import io.jenetics.linealgebra.grid.Structure2d;
  * Generic class for 2-d matrices holding {@code double} elements. Instances
  * of this class are usually created via a factory.
  * <pre>{@code
- * final DoubleMatrix2d matrix5x10 = DENSE_FACTORY.newInstance(5, 10);
+ * final DoubleMatrix2d matrix5x10 = DoubleMatrix2d.DENSE.create(5, 10);
  * }</pre>
  *
- * @see #DENSE_FACTORY
+ * @see #DENSE
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -58,7 +58,7 @@ public class DoubleMatrix2d
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Factory2d<DoubleMatrix2d> DENSE_FACTORY = struct ->
+    public static final Factory2d<DoubleMatrix2d> DENSE = struct ->
         new DoubleMatrix2d(
             struct,
             DenseDoubleArray.ofSize(struct.extent().size())

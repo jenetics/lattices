@@ -36,7 +36,7 @@ public class DoubleMatrix1dTest {
 
     @Test
     public void like() {
-        final var matrix = DoubleMatrix1d.DENSE_FACTORY.newInstance(23);
+        final var matrix = DoubleMatrix1d.DENSE.create(23);
         matrix.forEach(i -> matrix.set(i, 2*i));
         final var like = matrix.like();
 
