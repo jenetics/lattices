@@ -25,7 +25,29 @@
  * views onto the <em>Java</em> arrays, which contains the actual structure. A
  * grid can also be seen as a combination of a grid <em>structure</em> and an
  * <em>array</em>, which contains the data. The <em>structure</em> defines the
- * element access and the extent of the grid.
+ * element access and the extent of the grid. The following code example shows
+ * the view-based design of this package/library.
+ * <pre>{@code
+ * // Double array, which is created somewhere else.
+ * final var data = new double[10*15];
+ * // Wrap the data into an array. This is just a view, no
+ * // actual data are copied.
+ * final var array = new DenseDoubleArray(data);
+ *
+ * // Define the structure (extent) of your 2-d grid.
+ * final var structure = new Structure2d(new Extent2d(10, 15));
+ * // Create the grid with your defined structure and data.
+ * // The grid is a 2-d view onto your one-dimensional double array.
+ * final var grid = new DoubleGrid2d(structure, array);
+ *
+ * // Assign each grid element the value 42.
+ * grid.forEach((i, j) -> grid.set(i, j, 42.0));
+ *
+ * // The value is written to the underlying double[] array
+ * for (var value : data) {
+ *     assertThat(value).isEqualTo(42.0);
+ * }
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!

@@ -87,4 +87,27 @@ public class DoubleGrid2dTest {
         return new Object[] { matrix, matrix.copy(), true };
     }
 
+    @Test
+    public void createFromDoubleArray() {
+        // Double array, which is created somewhere else.
+        final var data = new double[10*15];
+        // Wrap the data into an array. This is just a view, no
+        // actual data are copied.
+        final var array = new DenseDoubleArray(data);
+
+        // Define the structure (extent) of your 2-d grid.
+        final var structure = new Structure2d(new Extent2d(10, 15));
+        // Create the grid with your defined structure and data.
+        // The grid is a 2-d view onto your one-dimensional double array.
+        final var grid = new DoubleGrid2d(structure, array);
+
+        // Assign each grid element the value 42.
+        grid.forEach((i, j) -> grid.set(i, j, 42.0));
+
+        // The value is written to the underlying double[] array
+        for (var value : data) {
+            assertThat(value).isEqualTo(42.0);
+        }
+    }
+
 }

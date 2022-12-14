@@ -28,7 +28,9 @@ import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
- * Generic class for 2-d grids holding {@code double} elements.
+ * Generic class for 2-d grids holding {@code double} elements. The
+ * {@code DoubleGrid2d} is <em>just</em> a 2-d view onto a 1-d Java
+ * {@code double[]} array.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
@@ -36,7 +38,15 @@ import io.jenetics.linealgebra.array.DoubleArray;
  */
 public class DoubleGrid2d implements Grid2d {
 
+    /**
+     * The structure, which defines the <em>extent</em> of the grid and the
+     * <em>order</em> which determines the index mapping {@code N^2 -> N}.
+     */
     protected final Structure2d structure;
+
+    /**
+     * The underlying {@code double[]} array.
+     */
     protected final DoubleArray array;
 
     /**
@@ -45,13 +55,19 @@ public class DoubleGrid2d implements Grid2d {
      *
      * @param structure the matrix structure
      * @param array the element array
+     * @throws IllegalArgumentException if the size of the given {@code array}
+     *         is not able to hold the required number of elements. It is still
+     *         possible that an {@link IndexOutOfBoundsException} is thrown when
+     *         the defined order of the grid tries to access an array index,
+     *         which is not within the bounds of the {@code array}.
+     * @throws NullPointerException if one of the arguments is {@code null}
      */
     public DoubleGrid2d(final Structure2d structure, final DoubleArray array) {
         if (structure.extent().size() > array.length()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
-                    "required matrix cells: %d > %d."
-                        .formatted(structure.extent().size(), array.length())
+                    "required grid cells: %s > %s."
+                        .formatted(structure.extent(), array.length())
             );
         }
 
