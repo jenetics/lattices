@@ -39,35 +39,6 @@ public interface Grid2d extends Loop2d {
     Structure2d structure();
 
     /**
-     * Checks whether the extent of this structural object is the same as the
-     * given {@code other} extent.
-     *
-     * @param other the other structural to check
-     * @throws IllegalArgumentException if the given {@code other} extent doesn't
-     *         match
-     */
-    default void requireSameExtent(final Grid2d other) {
-        if (!extent().equals(other.extent())) {
-            throw new IllegalArgumentException(
-                "Incompatible extent: %s != %s.".formatted(extent(), extent())
-            );
-        }
-    }
-
-    /**
-     * Checks whether this structural is <em>rectangular</em>.
-     *
-     * @throws IllegalArgumentException if {@code this.rows() < his.cols()}
-     */
-    default void requireRectangular() {
-        if (rows() < cols()) {
-            throw new IllegalArgumentException(
-                "Structure is not rectangular: " + extent()
-            );
-        }
-    }
-
-    /**
      * Return the dimension of {@code this} 2-d structures.
      *
      * @return the dimension of {@code this} 2-d structures

@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.grid.Grids.checkRectangular;
 
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
@@ -114,7 +115,7 @@ public class Cholesky {
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static Cholesky decompose(final DoubleMatrix2d A) {
-        A.requireRectangular();
+        checkRectangular(A);
 
         final var context = NumericalContext.get();
 

@@ -21,6 +21,7 @@ package io.jenetics.linealgebra.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.linealgebra.NumericalContext.ZERO_EPSILON;
+import static io.jenetics.linealgebra.grid.Grids.checkSameExtent;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -129,7 +130,7 @@ public class DoubleGrid2d implements Grid2d {
         if (other == this) {
             return;
         }
-        requireSameExtent(other);
+        checkSameExtent(this, other);
 
         for (int r = rows(); --r >= 0;) {
             for (int c = cols(); --c >= 0;) {
@@ -202,7 +203,7 @@ public class DoubleGrid2d implements Grid2d {
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        requireSameExtent(y);
+        checkSameExtent(this, y);
 
         for (int r = rows(); --r >= 0;) {
             for (int c = cols(); --c >= 0;) {
@@ -233,7 +234,7 @@ public class DoubleGrid2d implements Grid2d {
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
     public void swap(final DoubleGrid2d other) {
-        requireSameExtent(other);
+        checkSameExtent(this, other);
 
         for (int r = rows(); --r >= 0;) {
             for (int c = cols(); --c >= 0;) {

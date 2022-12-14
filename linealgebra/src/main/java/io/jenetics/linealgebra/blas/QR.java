@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.grid.Grids.checkRectangular;
 
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.Extent2d;
@@ -205,7 +206,8 @@ public final class QR {
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static QR decompose(final DoubleMatrix2d A) {
-        A.requireRectangular();
+        checkRectangular(A);
+
         final var qr = A.copy();
 
         final var m = qr.rows();

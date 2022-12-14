@@ -21,6 +21,7 @@ package io.jenetics.linealgebra.blas;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
+import static io.jenetics.linealgebra.grid.Grids.checkRectangular;
 import static io.jenetics.linealgebra.matrix.Matrices.isSingular;
 
 import io.jenetics.linealgebra.NumericalContext;
@@ -129,7 +130,7 @@ public final class LU {
      *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
      */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
-        LU.requireRectangular();
+        checkRectangular(LU);
 
         final var X = B.copy();
         int m = LU.rows();
@@ -175,7 +176,7 @@ public final class LU {
 
         // Solve U*B = Y;
         for (int k = n - 1; k >= 0; k--) {
-            final double multiplier1 = 1.0/ LU.get(k, k);
+            final double multiplier1 = 1.0/LU.get(k, k);
             Brows[k].assign(a -> a*multiplier1);
             Browk.assign(Brows[k]);
 
