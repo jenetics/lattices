@@ -17,20 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public class Order2dTest {
+
+    @Test
+    public void transpose() {
+        final Order2d order = (x, y) -> x + y*100;
+        final Order2d torder = order.transpose();
+
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
+            }
+        }
+
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

@@ -17,20 +17,30 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.testng.annotations.Test;
+
+import io.jenetics.lattices.array.DenseDoubleArray;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public class DoubleGrid1dTest {
+
+    @Test
+    public void assign() {
+        final var extent = new Extent1d(100);
+        final var structure = new Structure1d(extent);
+        final var grid = new DoubleGrid1d(
+            structure,
+            DenseDoubleArray.ofSize(extent.size())
+        );
+
+        grid.assign(87);
+        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

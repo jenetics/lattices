@@ -17,20 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.array;
 
 /**
+ * Definition of an array with {@code double} values.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+public interface DoubleArray extends Array<DoubleArray> {
+
+    /**
+     * Return the array value at the given {@code index}.
+     *
+     * @param index the array index of the returned element
+     * @return the element at the given {@code index}
+     */
+    double get(final int index);
+
+    /**
+     * Set the given {@code value} at the given {@code index}.
+     *
+     * @param index the array index of the new value
+     * @param value the value to be set at the given index
+     */
+    void set(final int index, final double value);
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

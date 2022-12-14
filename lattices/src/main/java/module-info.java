@@ -20,17 +20,13 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+module io.jenetics.lattices {
+    exports io.jenetics.lattices;
+    exports io.jenetics.lattices.array;
+    exports io.jenetics.lattices.blas;
+    exports io.jenetics.lattices.function;
+    exports io.jenetics.lattices.matrix;
+    exports io.jenetics.lattices.grid;
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

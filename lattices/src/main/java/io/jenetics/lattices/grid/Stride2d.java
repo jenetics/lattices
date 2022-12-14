@@ -17,20 +17,27 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Defines row- and columns strides.
+ *
+ * @param rowStride the row stride value
+ * @param colStride the column stride value
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public record Stride2d(int rowStride, int colStride) {
+
+    public Stride2d {
+        if (rowStride < 0 || colStride < 0) {
+            throw new IllegalArgumentException(
+                "Strides must not be negative: [%d, %d]."
+                    .formatted(rowStride, colStride)
+            );
+        }
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

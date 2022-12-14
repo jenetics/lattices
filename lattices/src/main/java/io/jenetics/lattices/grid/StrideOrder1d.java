@@ -17,20 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Represents the <em>row-major</em> order.
+ *
+ * @param start the index of the first element
+ * @param stride the number of indexes between any two elements
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public record StrideOrder1d(int start, int stride) implements Order1d {
+
+    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
+
+    @Override
+    public int index(final int rank) {
+        return start + rank*stride;
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

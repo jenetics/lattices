@@ -17,20 +17,33 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.matrix;
+
+import io.jenetics.lattices.Self;
 
 /**
+ * Base interface of all matrix implementations. An matrix is a container of
+ * elements, which can be accessed by a <em>multidimensional index</em> and has
+ * a fixed number of elements (<em>size</em>).
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+public interface Matrix<M extends Matrix<M>> extends Self<M> {
+
+    /**
+     * Return a new matrix with is like this one.
+     *
+     * @return a new matrix which is like this one
+     */
+    M like();
+
+    /**
+     * Return a new minimal copy of the underlying element array.
+     *
+     * @return a new minimal copy of the underlying element array
+     */
+    M copy();
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

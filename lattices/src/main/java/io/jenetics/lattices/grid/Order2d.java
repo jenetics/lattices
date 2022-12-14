@@ -17,20 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Represents the order for accessing the linearly stored element data.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+@FunctionalInterface
+public interface Order2d {
+
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     *
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code row} and {@code col}
+     */
+    int index(final int row, final int col);
+
+    /**
+     * Return a new order function which swaps row index with column index.
+     *
+     * @return a new transposed order function
+     */
+    default Order2d transpose() {
+        return (row, col) -> index(col, row);
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

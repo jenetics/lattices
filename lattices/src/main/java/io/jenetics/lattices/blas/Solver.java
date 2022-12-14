@@ -17,20 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.blas;
+
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+public interface Solver {
+
+    void solve(DoubleMatrix2d B);
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

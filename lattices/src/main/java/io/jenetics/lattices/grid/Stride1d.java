@@ -17,20 +17,23 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Defines a stride.
+ *
+ * @param stride the stride value
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public record Stride1d(int stride) {
+
+    public Stride1d {
+        if (stride < 0) {
+            throw new IllegalArgumentException("Stride must not be negative: " + stride);
+        }
     }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

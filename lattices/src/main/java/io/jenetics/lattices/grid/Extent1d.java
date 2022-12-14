@@ -17,20 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * The extent of 2-d structures.
+ *
+ * @param size the number of elements
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public record Extent1d(int size) {
+
+    public Extent1d {
+        if (size < 0) {
+            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
+        }
     }
+
+    @Override
+    public String toString() {
+        return "[%s]".formatted(size());
+    }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

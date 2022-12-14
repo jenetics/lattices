@@ -17,20 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.function;
 
 /**
+ * Represents an operation that accepts an (int, int)-valued argument and
+ * returns no result.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+@FunctionalInterface
+public interface IntIntConsumer {
+
+    /**
+     * Performs this operation on the given arguments.
+     *
+     * @param i first value
+     * @param j second value
+     */
+    void accept(final int i, final int j);
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

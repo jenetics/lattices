@@ -17,20 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Represents the order for accessing the linearly stored matrix data.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+@FunctionalInterface
+public interface Order1d {
+
+    /**
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
+     *
+     * @param rank the rank of the element.
+     * @return the (linearized) index of the given {@code rank}
+     */
+    int index(final int rank);
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

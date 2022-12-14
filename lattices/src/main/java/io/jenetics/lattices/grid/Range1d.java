@@ -17,20 +17,36 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
 
 /**
+ * Represents a <em>grid</em> range with the given parameters.
+ *
+ * @param start the start index of the range
+ * @param size the size of the range
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+public record Range1d(int start, int size) {
+
+    public Range1d {
+        if (start < 0 || size < 0) {
+            throw new IllegalArgumentException(
+                "Invalid range [%d, %d].".formatted(start, size)
+            );
+        }
     }
+
+    /**
+     * Create a new range from the given extent. The start indices ({@link #start}
+     * is set to zero.
+     *
+     * @param extent the extent of the new range
+     */
+    public Range1d(final Extent1d extent) {
+        this(0, extent.size());
+    }
+
 }
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")

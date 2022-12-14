@@ -20,17 +20,7 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since !__version__!
+ * @version !__version__!
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
-}
-
-rootProject.name = "colt"
-
-include("colt")
-include("lattices")
+package io.jenetics.lattices.blas;
