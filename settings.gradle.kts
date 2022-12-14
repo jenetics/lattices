@@ -30,7 +30,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "colt"
+rootProject.name = "lattices"
 
 include("colt")
 include("lattices")
