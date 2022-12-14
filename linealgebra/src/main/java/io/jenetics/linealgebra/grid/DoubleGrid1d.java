@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.NumericalContext.ZERO_EPSILON;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -247,6 +248,20 @@ public class DoubleGrid1d implements Grid1d {
 
         return extent().equals(other.extent()) &&
             allMatch(i -> context.equals(get(i), other.get(i)));
+    }
+
+    @Override
+    public int hashCode() {
+        final int[] hash = new int[] { 37 };
+        forEach(i -> hash[0] += Double.hashCode(get(i))*17);
+        return hash[0];
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        return object == this ||
+            object instanceof DoubleGrid1d grid &&
+            NumericalContext.with(ZERO_EPSILON, () -> equals(grid));
     }
 
     @Override

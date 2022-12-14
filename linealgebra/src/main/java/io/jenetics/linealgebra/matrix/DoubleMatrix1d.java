@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra.matrix;
 
+import static io.jenetics.linealgebra.NumericalContext.ZERO_EPSILON;
+
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
@@ -217,8 +219,10 @@ public class DoubleMatrix1d
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix1d m && equals(m);
+    public boolean equals(final Object object) {
+        return object == this ||
+            object instanceof DoubleMatrix1d matrix &&
+            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
     }
 
 }

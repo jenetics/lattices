@@ -20,9 +20,11 @@
 package io.jenetics.linealgebra.matrix;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.linealgebra.NumericalContext.ZERO_EPSILON;
 
 import java.util.function.DoubleUnaryOperator;
 
+import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 import io.jenetics.linealgebra.grid.DoubleGrid2d;
@@ -355,8 +357,10 @@ public class DoubleMatrix2d
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return obj instanceof DoubleMatrix2d m && equals(m);
+    public boolean equals(final Object object) {
+        return object == this ||
+            object instanceof DoubleMatrix2d matrix &&
+            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
     }
 
 }

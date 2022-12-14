@@ -22,6 +22,7 @@ package io.jenetics.linealgebra;
 import static java.lang.Math.abs;
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.Supplier;
 import java.util.random.RandomGeneratorFactory;
 
 /**
@@ -237,6 +238,27 @@ public class NumericalContext {
         requireNonNull(task);
 
         CONTEXT.with(context, c -> { task.run(); return null; });
+    }
+
+    /**
+     * Opens a new <em>scope</em> with the given numerical and executes the
+     * given {@code supplier}.
+     *
+     * @param context the numerical context used when executing the
+     *        {@code supplier}
+     * @param supplier the supplier to execute with the new numerical context
+     * @return the supplier result
+     * @param <C> the numerical context type
+     * @param <T> the type of the supplier result
+     */
+    public static <C extends NumericalContext, T> T with(
+        final C context,
+        final Supplier<? extends T> supplier
+    ) {
+        requireNonNull(context);
+        requireNonNull(supplier);
+
+        return CONTEXT.with(context, c -> supplier.get());
     }
 
     @SuppressWarnings("removal")
