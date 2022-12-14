@@ -28,7 +28,7 @@ plugins {
 	id("me.champeau.jmh") version "0.6.6" apply false
 }
 
-rootProject.version = Colt.VERSION
+rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
 	version = "7.6"
@@ -39,8 +39,8 @@ tasks.named<Wrapper>("wrapper") {
  * Project configuration *before* the projects has been evaluated.
  */
 allprojects {
-	group =  Colt.GROUP
-	version = Colt.VERSION
+	group =  Lattices.GROUP
+	version = Lattices.VERSION
 
 	repositories {
 		flatDir {
@@ -94,12 +94,12 @@ gradle.projectsEvaluated {
 fun setupJava(project: Project) {
 	val attr = mutableMapOf(
 		"Implementation-Title" to project.name,
-		"Implementation-Version" to Colt.VERSION,
-		"Implementation-URL" to Colt.URL,
-		"Implementation-Vendor" to Colt.NAME,
-		"ProjectName" to Colt.NAME,
-		"Version" to Colt.VERSION,
-		"Maintainer" to Colt.AUTHOR,
+		"Implementation-Version" to Lattices.VERSION,
+		"Implementation-URL" to Lattices.URL,
+		"Implementation-Vendor" to Lattices.NAME,
+		"ProjectName" to Lattices.NAME,
+		"Version" to Lattices.VERSION,
+		"Maintainer" to Lattices.AUTHOR,
 		"Project" to project.name,
 		"Project-Version" to project.version,
 
@@ -253,7 +253,7 @@ fun xlint(): String {
 	).joinToString(separator = ",")
 }
 
-val identifier = "${Colt.ID}-${Colt.VERSION}"
+val identifier = "${Lattices.ID}-${Lattices.VERSION}"
 
 /**
  * Setup of the Maven publishing.
@@ -285,7 +285,7 @@ fun setupPublishing(project: Project) {
 	project.configure<PublishingExtension> {
 		publications {
 			create<MavenPublication>("mavenJava") {
-				artifactId = Colt.ID
+				artifactId = Lattices.ID
 				from(project.components["java"])
 				versionMapping {
 					usage("java-api") {
@@ -296,9 +296,9 @@ fun setupPublishing(project: Project) {
 					}
 				}
 				pom {
-					name.set(Colt.ID)
+					name.set(Lattices.ID)
 					description.set(project.description)
-					url.set(Colt.URL)
+					url.set(Lattices.URL)
 					inceptionYear.set("2022")
 
 					licenses {
@@ -310,9 +310,9 @@ fun setupPublishing(project: Project) {
 					}
 					developers {
 						developer {
-							id.set(Colt.ID)
-							name.set(Colt.AUTHOR)
-							email.set(Colt.EMAIL)
+							id.set(Lattices.ID)
+							name.set(Lattices.AUTHOR)
+							email.set(Lattices.EMAIL)
 						}
 					}
 					scm {

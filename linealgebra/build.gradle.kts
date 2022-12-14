@@ -28,7 +28,7 @@ plugins {
     id("me.champeau.jmh")
 }
 
-extra["moduleName"] = "io.jenetics.linealgebra"
+extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
     implementation(project(":colt"))

@@ -51,14 +51,14 @@ object Env {
 /**
  * Information about the library and author.
  */
-object Colt {
+object Lattices {
 	const val VERSION = "3.0.0-SNAPSHOT"
-	const val ID = "colt"
-	const val NAME = "colt"
+	const val ID = "lattices"
+	const val NAME = "lattices"
 	const val GROUP = "io.jenetics"
 	const val AUTHOR = "Franz Wilhelmstötter"
 	const val EMAIL = "franz.wilhelmstoetter@gmail.com"
-	const val URL = "https://github.com/jenetics/colt"
+	const val URL = "https://github.com/jenetics/lattices"
 }
 
 /**
@@ -68,7 +68,7 @@ object Maven {
 	const val SNAPSHOT_URL = "https://oss.sonatype.org/content/repositories/snapshots/"
 	const val RELEASE_URL = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-	const val SCM_URL = "https://github.com/jenetics/colt"
-	const val SCM_CONNECTION = "scm:git:https://github.com/jenetics/colt.git"
-	const val DEVELOPER_CONNECTION = "scm:git:https://github.com/jenetics/colt.git"
+	const val SCM_URL = "https://github.com/jenetics/lattices"
+	const val SCM_CONNECTION = "scm:git:https://github.com/jenetics/lattices.git"
+	const val DEVELOPER_CONNECTION = "scm:git:https://github.com/jenetics/lattices.git"
 }
