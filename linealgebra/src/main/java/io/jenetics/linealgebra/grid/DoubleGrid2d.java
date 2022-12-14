@@ -32,7 +32,16 @@ import io.jenetics.linealgebra.array.DoubleArray;
 /**
  * Generic class for 2-d grids holding {@code double} elements. The
  * {@code DoubleGrid2d} is <em>just</em> a 2-d view onto a 1-d Java
- * {@code double[]} array.
+ * {@code double[]} array. The following example shows how to create such a grid
+ * view from a given {@code double[]} array.
+ *
+ * <pre>{@code
+ * final var values = new double[50*100];
+ * final var grid = new DoubleGrid2d(
+ *     new Structure2d(new Extent2d(50, 100)),
+ *     new DenseDoubleArray(values)
+ * );
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!

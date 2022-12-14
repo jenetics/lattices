@@ -21,6 +21,8 @@ package io.jenetics.linealgebra.testfuxtures;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.data.Percentage;
+
 import io.jenetics.linealgebra.NumericalContext;
 import io.jenetics.linealgebra.grid.DoubleGrid1d;
 import io.jenetics.linealgebra.grid.DoubleGrid2d;
@@ -29,6 +31,9 @@ import io.jenetics.linealgebra.grid.DoubleGrid2d;
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public final class LinealgebraAsserts {
+
+    public static final Percentage EPSILON = Percentage
+        .withPercentage(Math.pow(10, -6));
 
     private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -6));
 

@@ -22,12 +22,12 @@ package io.jenetics.linealgebra.blas;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import java.util.random.RandomGenerator;
 
-import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.grid.Extent2d;
@@ -36,9 +36,6 @@ import io.jenetics.linealgebra.grid.Extent2d;
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class AlgebraTest {
-
-    private static final Percentage EPSILON = Percentage
-        .withPercentage(Math.pow(10, -6));
 
     private static final cern.colt.matrix.linalg.Algebra COLT =
         cern.colt.matrix.linalg.Algebra.DEFAULT;
@@ -74,7 +71,8 @@ public class AlgebraTest {
     @Test(invocationCount = 5)
     public void norm2Matrix() {
         final var random = RandomGenerator.getDefault();
-        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+        final var size = random.nextInt(10, 100);
+        final var A = next(size, size);
 
         assertThat(Algebra.norm2(A))
             .isCloseTo(COLT.norm2(toColt(A)), EPSILON);

@@ -22,12 +22,12 @@ package io.jenetics.linealgebra.blas;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toColt;
 import static io.jenetics.linealgebra.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.linealgebra.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.linealgebra.testfuxtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 
-import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.linealgebra.grid.Extent2d;
@@ -51,9 +51,9 @@ public class SingularValueTest {
         assertEquals(singular.V(), toLinealgebra(expected.getV()));
         assertThat(singular.rank()).isEqualTo(expected.rank());
         assertThat(singular.norm2())
-            .isCloseTo(expected.norm2(), Percentage.withPercentage(0.0000001));
+            .isCloseTo(expected.norm2(), EPSILON);
         assertThat(singular.cond())
-            .isCloseTo(expected.cond(), Percentage.withPercentage(0.0000001));
+            .isCloseTo(expected.cond(), EPSILON);
 
         assertEquals(
             singular.values(),

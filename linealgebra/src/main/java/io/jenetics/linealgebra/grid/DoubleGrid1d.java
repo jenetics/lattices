@@ -26,18 +26,37 @@ import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.array.DenseDoubleArray;
 import io.jenetics.linealgebra.array.DoubleArray;
 
 /**
  * Generic class for 1-d grids holding {@code double} elements. The
- * @code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code double[]}
- * array.
+ * {@code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code double[]}
+ * array. The following example shows how to create such a grid view from a given
+ * {@code double[]} array.
+ *
+ * <pre>{@code
+ * final var values = new double[100];
+ * final var grid = new DoubleGrid1d(
+ *     new Structure1d(new Extent1d(100)),
+ *     new DenseDoubleArray(values)
+ * );
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
  */
 public class DoubleGrid1d implements Grid1d {
+
+    /**
+     * Factory for creating dense 1-d double grids.
+     */
+    public static final Factory1d<DoubleGrid1d> DENSE = struct ->
+        new DoubleGrid1d(
+            struct,
+            DenseDoubleArray.ofSize(struct.extent().size())
+        );
 
     /**
      * The structure, which defines the <em>extent</em> of the grid and the

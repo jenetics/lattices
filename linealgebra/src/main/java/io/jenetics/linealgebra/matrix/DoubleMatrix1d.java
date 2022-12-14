@@ -37,7 +37,7 @@ import io.jenetics.linealgebra.grid.Structure1d;
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}
  * elements. Instances of this class are usually created via a factory.
  * <pre>{@code
- * final DoubleMatrix1d matrix10 = DENSE_FACTORY.newInstance(10);
+ * final DoubleMatrix1d matrix10 = DoubleMatrix1d.DENSE.create(10);
  * }</pre>
  *
  * @see #DENSE
