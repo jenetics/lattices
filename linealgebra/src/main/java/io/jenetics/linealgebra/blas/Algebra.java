@@ -72,10 +72,13 @@ public final class Algebra {
     /**
      * Returns the sum of the diagonal elements of matrix {@code A}:
      * {@code Sum(A[i,i])}.
+     *
+     * @param A the matrix for which to calculate the trace
+     * @return the trace of the matrix
      */
     public static double trace(final DoubleMatrix2d A) {
         double sum = 0;
-        for (int i = Math.min(A.rows(), A.cols()); --i >= 0; ) {
+        for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
             sum += A.get(i, i);
         }
         return sum;
@@ -84,6 +87,7 @@ public final class Algebra {
     /**
      * Returns the determinant of matrix {@code A}.
      *
+     * @param A the matrix for which to calculate the determinante
      * @return the determinant.
      * @throws IllegalArgumentException if the matrix {@code A} is not square
      */
@@ -92,8 +96,11 @@ public final class Algebra {
     }
 
     /**
-     * Returns the condition of matrix <tt>A</tt>, which is the ratio of largest
+     * Returns the condition of matrix {@code A}, which is the ratio of largest
      * to the smallest singular value.
+     *
+     * @param A the matrix for which to calculate the one-norm
+     * @return the condition for the given matrix
      */
     public static double cond(final DoubleMatrix2d A) {
         return SingularValue.decompose(A).cond();
@@ -122,6 +129,7 @@ public final class Algebra {
      * @param A the matrix to invert
      * @return a new independent matrix. inverse(matrix) if the matrix is
      *         square, pseudo-inverse otherwise.
+     * @throws IllegalArgumentException if the given matrix is singular
      */
     public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
         if (isSquare(A) && isDiagonal(A)) {
