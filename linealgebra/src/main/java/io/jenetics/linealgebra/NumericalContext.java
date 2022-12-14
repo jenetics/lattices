@@ -35,6 +35,18 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class NumericalContext {
 
+    public static final class Scope implements AutoCloseable {
+        private final int precision;
+
+        public Scope(final int precision) {
+            this.precision = precision;
+        }
+
+        @Override
+        public void close() {
+        }
+    }
+
     /**
      * Numerical context with an {@link #epsilon()} of zero.
      */

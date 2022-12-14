@@ -28,7 +28,9 @@ import java.util.function.DoubleUnaryOperator;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Generic class for 1-d grids holding {@code double} elements.
+ * Generic class for 1-d grids holding {@code double} elements. The
+ * @code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code double[]}
+ * array.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
