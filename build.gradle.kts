@@ -232,24 +232,24 @@ fun xlint(): String {
 	// See https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html#extra-options
 	return listOf<String>(
 		//"auxiliaryclass",
-		//"cast",
+		"cast",
 		//"classfile",
 		//"dep-ann",
-		//"deprecation",
-		//"divzero",
+		"deprecation",
+		"divzero",
 		//"empty",
 		//"exports",
-		//"finally",
+		"finally",
 		//"module",
 		//"opens",
-		//"overrides",
+		"overrides",
 		"rawtypes",
 		//"removal",
-		//"serial",
-		//"static",
-		//"try",
+		"serial",
+		"static",
+		"try",
 		"unchecked",
-		//"varargs"
+		"varargs"
 	).joinToString(separator = ",")
 }
 
