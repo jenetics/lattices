@@ -20,7 +20,6 @@
 package io.jenetics.linealgebra.grid;
 
 import static java.util.Objects.requireNonNull;
-
 import static io.jenetics.linealgebra.NumericalContext.ZERO_EPSILON;
 
 import java.util.function.DoubleBinaryOperator;
