@@ -19,6 +19,14 @@
  */
 
 /**
+ * This package contains classes which allows to create rectangular
+ * multidimensional data structures, aka grids, which map to one-dimensional
+ * data structures, natively supported by Java. Grids, and its derivatives, are
+ * views onto the <em>Java</em> arrays, which contains the actual structure. A
+ * grid can also be seen as a combination of a grid <em>structure</em> and an
+ * <em>array</em>, which contains the data. The <em>structure</em> defines the
+ * element access and the extent of the grid.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!

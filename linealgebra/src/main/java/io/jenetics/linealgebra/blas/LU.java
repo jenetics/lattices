@@ -19,16 +19,16 @@
  */
 package io.jenetics.linealgebra.blas;
 
-import static java.util.Objects.requireNonNull;
-import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
-import static io.jenetics.linealgebra.matrix.Matrices.isSingular;
-
 import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.grid.Grids;
 import io.jenetics.linealgebra.grid.Range1d;
 import io.jenetics.linealgebra.grid.Range2d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrices;
+
+import static io.jenetics.linealgebra.blas.Permutations.permuteRows;
+import static io.jenetics.linealgebra.matrix.Matrices.isSingular;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Store the result of an <em>LU</em>-decomposition.
@@ -106,7 +106,7 @@ public final class LU {
      * @throws IllegalArgumentException if the matrix is not square
      */
     public double det() {
-        Matrices.checkSquare(LU);
+        Grids.checkSquare(LU);
 
         if (singular) {
             return 0;

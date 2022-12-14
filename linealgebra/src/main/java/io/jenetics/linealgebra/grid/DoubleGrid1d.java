@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.grid;
 
-import static java.util.Objects.requireNonNull;
+import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.array.DoubleArray;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.linealgebra.NumericalContext;
-import io.jenetics.linealgebra.array.DoubleArray;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Generic class for 1-d grids holding {@code double} elements.
@@ -110,7 +110,7 @@ public class DoubleGrid1d implements Grid1d {
         if (other == this) {
             return;
         }
-        requireSameExtent(other);
+        Grids.checkSameExtent(this, other);
 
         for (int i = 0; i < size(); ++i) {
             set(i, other.get(i));
@@ -164,8 +164,9 @@ public class DoubleGrid1d implements Grid1d {
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    public void assign(DoubleGrid1d a, DoubleBinaryOperator f) {
-        requireSameExtent(a);
+    public void assign(final DoubleGrid1d a, final DoubleBinaryOperator f) {
+        Grids.checkSameExtent(this, a);
+
         for (int i = 0; i < size(); ++i) {
             set(i, f.applyAsDouble(get(i), a.get(i)));
         }
@@ -177,7 +178,8 @@ public class DoubleGrid1d implements Grid1d {
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
     public void swap(final DoubleGrid1d other) {
-        requireSameExtent(other);
+        Grids.checkSameExtent(this, other);
+
         for (int i = 0; i < size(); ++i) {
             final var tmp = get(i);
             set(i, other.get(i));

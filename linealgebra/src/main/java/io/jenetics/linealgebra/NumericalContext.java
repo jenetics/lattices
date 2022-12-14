@@ -135,8 +135,8 @@ public class NumericalContext {
         return equals(a, 1);
     }
 
-    public static NumericalContext ofPrecission(final int precission) {
-        return new NumericalContext(Math.pow(10, -Math.abs(precission)));
+    public static NumericalContext ofPrecision(final int precision) {
+        return new NumericalContext(Math.pow(10, -Math.abs(precision)));
     }
 
     /**

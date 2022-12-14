@@ -20,6 +20,7 @@
 package io.jenetics.linealgebra.matrix;
 
 import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.grid.Grids;
 
 /**
  * Some helper methods for checking pre-conditions.
@@ -31,45 +32,6 @@ import io.jenetics.linealgebra.NumericalContext;
 public final class Matrices {
 
     private Matrices() {
-    }
-
-    /**
-     * A matrix {@code A} is <em>square</em> if it has the same number of rows
-     * and columns.
-     *
-     * @param A the matrix to check
-     * @return {@code true} if the {@code A} is square, {@code false} otherwise
-     */
-    public static boolean isSquare(final DoubleMatrix2d A) {
-        return A.rows() == A.cols();
-    }
-
-    /**
-     * Checks whether the given matrix {@code A} is <em>square</em>.
-     *
-     * @param A the matrix to check
-     * @throws IllegalArgumentException if {@code A.rows() != A.cols()}
-     */
-    public static void checkSquare(final DoubleMatrix2d A) {
-        if (!isSquare(A)) {
-            throw new IllegalArgumentException(
-                "Matrix must be square: " + A.extent()
-            );
-        }
-    }
-
-    /**
-     * Checks whether the given matrix {@code A} is <em>rectangular</em>.
-     *
-     * @param A the matrix to check
-     * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
-     */
-    public static void checkRectangular(final DoubleMatrix2d A) {
-        if (A.rows() < A.cols()) {
-            throw new IllegalArgumentException(
-                "Matrix must be rectangular: " + A.extent()
-            );
-        }
     }
 
     /**
@@ -135,7 +97,7 @@ public final class Matrices {
      * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public static boolean isSymmetric(final DoubleMatrix2d A) {
-        checkSquare(A);
+        Grids.checkSquare(A);
         return A.equals(A.transpose(), NumericalContext.instance());
     }
 

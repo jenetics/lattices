@@ -14,6 +14,19 @@ Create your own binary version.
 
     $ ./gradlew jar
 
+# Lattices
+
+_Lattices_ is a library for implementing two multidimensional data structures, known as lattice. Implementation of multidimensional data structures.
+
+## Grid
+
+Grids are rectangular latices.
+
+## Matrix
+
+Implementation of grids.
+
+
 ## Design
 
 This Linear Algebra Library has been implemented with some basic concepts in mind.

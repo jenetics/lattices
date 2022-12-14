@@ -19,6 +19,8 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import io.jenetics.linealgebra.NumericalContext;
+import io.jenetics.linealgebra.grid.Grids;
 import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
 import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
 
@@ -79,7 +81,8 @@ public interface Blas {
 
         scale = Math.abs(a) + Math.abs(b);
 
-        if (scale != 0.0) {
+        final var context = NumericalContext.instance();
+        if (context.isNotZero(scale)) {
             ra = a/scale;
             rb = b/scale;
             r = scale*Math.hypot(ra, rb);
@@ -90,7 +93,7 @@ public interface Blas {
             if (Math.abs(a) > Math.abs(b)) {
                 z = s;
             }
-            if ((Math.abs(b) >= Math.abs(a)) && (c != 0.0)) {
+            if ((Math.abs(b) >= Math.abs(a)) && (context.isNotZero(c))) {
                 z = 1.0/c;
             }
         } else {
@@ -135,15 +138,14 @@ public interface Blas {
         final double c,
         final double s
     ) {
-        x.requireSameExtent(y);
+        Grids.checkSameExtent(x, y);
+
         final var tmp = x.copy();
 
         x.assign(a -> c*a);
-        //x.assign(y, (a, b) -> a + b*s);
         x.assign(y, (a, b) -> Math.fma(b, s, a));
 
         y.assign(a -> c*a);
-        //y.assign(tmp, (a, b) -> a - b*s);
         y.assign(tmp, (a, b) -> -Math.fma(b, s, -a));
     }
 
@@ -167,7 +169,7 @@ public interface Blas {
      * @param y the second vector
      * @throws IllegalArgumentException {@code x.size() != y.size()}.
      */
-    default void dswap(DoubleMatrix1d x, DoubleMatrix1d y) {
+    default void dswap(final DoubleMatrix1d x, final DoubleMatrix1d y) {
         y.swap(x);
     }
 
@@ -184,7 +186,6 @@ public interface Blas {
      * @throws IllegalArgumentException if {@code x.size() != y.size()}
      */
     default void daxpy(final double alpha, final DoubleMatrix1d x, final DoubleMatrix1d y) {
-        //y.assign(x, (a, b) -> a + alpha*b);
         y.assign(x, (a, b) -> Math.fma(b, alpha, a));
     }
 
@@ -261,19 +262,19 @@ public interface Blas {
     /**
      * Generalized linear algebraic matrix-vector multiply;
      * {@code y = alpha*A*x + beta*y}. In fact equivalent to
-     * {@code A.zMult(x,y,alpha,beta,transposeA)}. Note: Matrix shape
+     * {@code A.mult(x,y,alpha,beta,transposeA)}. Note: Matrix shape
      * conformance is checked <i>after</i> potential transpositions.
      *
      * @param transposeA set this flag to indicate that the multiplication shall
-     * be performed on A'.
+     *        be performed on {@code A}
      * @param alpha a scale factor.
      * @param A the source matrix.
      * @param x the first source vector.
      * @param beta a scale factor.
      * @param y the second source vector, this is also the vector where results
      * are stored.
-     * @throws IllegalArgumentException
-     * {@code A.columns() != x.size() || A.rows() != y.size())}..
+     * @throws IllegalArgumentException if
+     *         {@code A.columns() != x.size() || A.rows() != y.size())}
      */
     default void dgemv(
         final boolean transposeA,
@@ -310,7 +311,6 @@ public interface Blas {
     ) {
         for (int i = 0; i < A.rows(); ++i) {
             final var multiplier = alpha*x.get(i);
-            //A.rowAt(i).assign(y, (a, b) -> a + multiplier*b);
             A.rowAt(i).assign(y, (a, b) -> Math.fma(b, multiplier, a));
         }
     }
@@ -340,7 +340,7 @@ public interface Blas {
         final double beta,
         final DoubleMatrix1d y
     ) {
-        checkSquare(A);
+        Grids.checkSquare(A);
 
         if (isUpperTriangular) {
             A = A.transpose();
@@ -356,25 +356,15 @@ public interface Blas {
         for (int i = 0; i < A.rows(); i++) {
             double sum = 0;
             for (int j = 0; j <= i; j++) {
-                //sum += A.get(i, j)*x.get(j);
                 sum = Math.fma(A.get(i, j), x.get(j), sum);
             }
             for (int j = i + 1; j < A.rows(); j++) {
-                //sum += A.get(j, i)*x.get(j);
                 sum = Math.fma(A.get(j, i), x.get(j), sum);
             }
             tmp.set(i, alpha * sum + beta * y.get(i));
         }
 
         y.assign(tmp);
-    }
-
-    private static void checkSquare(final DoubleMatrix2d A) {
-        if (A.rows() != A.cols()) {
-            throw new IllegalArgumentException(
-                "Matrix must be square: " + A.extent()
-            );
-        }
     }
 
     /**
@@ -397,7 +387,7 @@ public interface Blas {
         DoubleMatrix2d A,
         final DoubleMatrix1d x
     ) {
-        checkSquare(A);
+        Grids.checkSquare(A);
 
         if (transposeA) {
             A = A.transpose();
@@ -422,16 +412,12 @@ public interface Blas {
             double sum = 0;
             if (!isUpperTriangular) {
                 for (int j = 0; j < i; j++) {
-                    //sum += A.get(i, j)*x.get(j);
                     sum = Math.fma(A.get(i, j), x.get(j), sum);
                 }
-                //sum += y.get(i)*x.get(i);
                 sum = Math.fma(y.get(i), x.get(i), sum);
             } else {
-                //sum += y.get(i)*x.get(i);
                 sum = Math.fma(y.get(i), x.get(i), sum);
                 for (int j = i + 1; j < A.rows(); j++) {
-                    //sum += A.get(i, j)*x.get(j);
                     sum = Math.fma(A.get(i, j), x.get(j), sum);
                 }
             }
@@ -518,17 +504,16 @@ public interface Blas {
      *         A.rows() != B.rows()}
      */
     default void daxpy(final double alpha, final DoubleMatrix2d A, final DoubleMatrix2d B) {
-        //B.assign(A, (a, b) -> a + alpha*b);
         B.assign(A, (a, b) -> Math.fma(alpha, b, a));
     }
 
     /**
-     * Swaps the elements of two matrices; {@code B <==> A}.
+     * Swaps the elements of two matrices: {@code B <==> A}.
      *
      * @param A the first matrix.
      * @param B the second matrix.
      * @throws IllegalArgumentException if
-     * {@code A.columns() != B.columns() || A.rows() != B.rows()}.
+     *         {@code A.columns() != B.columns() || A.rows() != B.rows()}.
      */
     default void dswap(DoubleMatrix2d A, DoubleMatrix2d B) {
         A.swap(B);

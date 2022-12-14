@@ -19,13 +19,13 @@
  */
 package io.jenetics.linealgebra.blas;
 
+import io.jenetics.linealgebra.grid.Grids;
+import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
+import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-
-import io.jenetics.linealgebra.matrix.DoubleMatrix1d;
-import io.jenetics.linealgebra.matrix.DoubleMatrix2d;
-import io.jenetics.linealgebra.matrix.Matrices;
 
 /**
  * Store the result of an <em>Singular value</em>-decomposition.
@@ -49,7 +49,7 @@ public final class SingularValue {
     }
 
     private void init(final DoubleMatrix2d Arg) {
-        Matrices.checkRectangular(Arg);
+        Grids.checkRectangular(Arg);
 
         // Derived from LINPACK code.
         // Initialize.
@@ -274,8 +274,8 @@ public final class SingularValue {
                     if (ks == k) {
                         break;
                     }
-                    double t = (ks != p ? abs(e[ks]) : 0.) +
-                        (ks != k + 1 ? abs(e[ks - 1]) : 0.);
+                    double t = (ks != p ? abs(e[ks]) : 0.0) +
+                        (ks != k + 1 ? abs(e[ks - 1]) : 0.0);
                     if (abs(s[ks]) <= eps * t) {
                         s[ks] = 0.0;
                         break;
