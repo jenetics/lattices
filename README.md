@@ -1,5 +1,5 @@
 ![Build Status](https://github.com/jenetics/lattices/actions/workflows/gradle.yml/badge.svg)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jenetics/lattices/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22colt%22)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jenetics/lattices/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22lattices%22)
 [![Javadoc](https://www.javadoc.io/badge/io.jenetics/lattices.svg)](http://www.javadoc.io/doc/io.jenetics/lattices)
 
 # Lattices
