@@ -32,5 +32,4 @@ pluginManagement {
 
 rootProject.name = "lattices"
 
-include("colt")
 include("lattices")

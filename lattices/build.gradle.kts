@@ -36,7 +36,6 @@ dependencies {
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
     testImplementation("org.testng:testng:7.6.1")
     testImplementation("colt:colt:1.2.0")
-    testImplementation("it.unimi.dsi:lama4j:1.1.1")
 
     testFixturesApi("colt:colt:1.2.0")
     testFixturesApi("org.assertj:assertj-core:3.20.2")
