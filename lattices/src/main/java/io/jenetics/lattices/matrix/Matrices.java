@@ -94,7 +94,7 @@ public final class Matrices {
      * is <em>symmetric</em> if {@code A = transpose(A)}, that is
      * {@code A[i, j] == A[j, i]}.
      *
-     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if {@code !isSquare(A)}
      */
     public static boolean isSymmetric(final DoubleMatrix2d A) {
         Grids.checkSquare(A);

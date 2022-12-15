@@ -21,7 +21,7 @@
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 2.0
- * @version 2.0
+ * @version !__version__!
  */
 plugins {
 	base
@@ -156,8 +156,7 @@ fun setupTestReporting(project: Project) {
 fun setupJavadoc(project: Project) {
 	project.tasks.withType<Javadoc> {
 		val doclet = options as StandardJavadocDocletOptions
-		//doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
-		doclet.addBooleanOption("Xdoclint:none", true)
+		doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
 
 		exclude("**/internal/**")
 
@@ -231,20 +230,20 @@ fun setupJavadoc(project: Project) {
 fun xlint(): String {
 	// See https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html#extra-options
 	return listOf<String>(
-		//"auxiliaryclass",
+		"auxiliaryclass",
 		"cast",
-		//"classfile",
-		//"dep-ann",
+		"classfile",
+		"dep-ann",
 		"deprecation",
 		"divzero",
-		//"empty",
-		//"exports",
+		"empty",
+		"exports",
 		"finally",
-		//"module",
-		//"opens",
+		"module",
+		"opens",
 		"overrides",
 		"rawtypes",
-		//"removal",
+		"removal",
 		"serial",
 		"static",
 		"try",

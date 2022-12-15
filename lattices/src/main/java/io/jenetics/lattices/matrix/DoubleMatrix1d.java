@@ -154,9 +154,9 @@ public class DoubleMatrix1d
     }
 
     /**
-     * Returns the dot product of two vectors x and y, which is {
-     * @code Sum(x[i]*y[i])}, where {@code x == this}.
-     * Operates on cells at indexes {@code 0 .. Math.min(size(), y.size())}.
+     * Returns the dot product of two vectors x and y, which is
+     * {@code Sum(x[i]*y[i])}, where {@code x == this}. Operates on cells at
+     * indexes {@code 0 .. Math.min(size(), y.size())}.
      *
      * @param y the second vector
      * @return the sum of products

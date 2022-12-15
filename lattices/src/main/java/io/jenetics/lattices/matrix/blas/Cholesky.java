@@ -72,12 +72,12 @@ public class Cholesky {
     }
 
     /**
-     * Solves <tt>A*X = B</tt>; returns <tt>X</tt>.
+     * Solves {@code A*X = B} and returns {@code X}.
      *
-     * @param B A Matrix with as many rows as <tt>A</tt> and any number of columns.
-     * @return <tt>X</tt> so that <tt>L*L'*X = B</tt>.
-     * @throws IllegalArgumentException if <tt>B.rows() != A.rows()</tt>.
-     * @throws IllegalArgumentException if <tt>!isSymmetricPositiveDefinite()</tt>.
+     * @param B a atrix with as many rows as {@code A} and any number of columns
+     * @return {@code X} so that {@code L*L'*X = B}
+     * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
+     *         {@code !isSymmetricPositiveDefinite()}
      */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
         final var X = B.copy();
