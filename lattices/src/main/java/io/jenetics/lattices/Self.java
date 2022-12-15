@@ -46,8 +46,8 @@ package io.jenetics.lattices;
  * @param <S> the type of the implementing class.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public interface Self<S extends Self<S>> {
 

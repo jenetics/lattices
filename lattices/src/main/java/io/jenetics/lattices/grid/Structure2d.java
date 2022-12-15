@@ -31,8 +31,8 @@ import io.jenetics.lattices.matrix.Matrix1d;
  * @param order the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record Structure2d(Extent2d extent, Order2d order) {
 

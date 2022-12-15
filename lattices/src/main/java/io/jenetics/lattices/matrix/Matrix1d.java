@@ -31,8 +31,8 @@ import io.jenetics.lattices.grid.Structure1d;
  * primitive data types.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public interface Matrix1d<M extends Matrix1d<M>>
     extends Matrix<M>, Grid1d

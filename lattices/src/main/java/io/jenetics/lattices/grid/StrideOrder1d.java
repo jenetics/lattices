@@ -26,8 +26,8 @@ package io.jenetics.lattices.grid;
  * @param stride the number of indexes between any two elements
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record StrideOrder1d(int start, int stride) implements Order1d {
 

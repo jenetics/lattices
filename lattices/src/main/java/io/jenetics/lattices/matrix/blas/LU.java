@@ -34,8 +34,8 @@ import io.jenetics.lattices.matrix.DoubleMatrix2d;
  * Store the result of an <em>LU</em>-decomposition.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public final class LU {
 

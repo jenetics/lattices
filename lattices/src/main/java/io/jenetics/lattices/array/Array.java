@@ -27,8 +27,8 @@ import io.jenetics.lattices.Self;
  * <em>size</em>.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public interface Array<A extends Array<A>> extends Self<A> {
 

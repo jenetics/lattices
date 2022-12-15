@@ -27,8 +27,8 @@ import java.util.Arrays;
  * @param elements the underlying {@code int} element values
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record DenseIntArray(int[] elements) implements IntArray {
 

@@ -43,8 +43,8 @@ import io.jenetics.lattices.grid.Structure1d;
  * @see #DENSE
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public class DoubleMatrix1d
     extends DoubleGrid1d

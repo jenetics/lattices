@@ -28,8 +28,8 @@ package io.jenetics.lattices.grid;
  * @param width the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record Range2d(int row, int col, int height, int width) {
 

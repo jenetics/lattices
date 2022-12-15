@@ -25,8 +25,8 @@ package io.jenetics.lattices.grid;
  * @param size the number of elements
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record Extent1d(int size) {
 

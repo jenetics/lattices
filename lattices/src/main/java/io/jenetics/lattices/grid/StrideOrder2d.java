@@ -28,8 +28,8 @@ package io.jenetics.lattices.grid;
  * @param colStride the number of elements between two columns
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record StrideOrder2d(
     int rowStart,

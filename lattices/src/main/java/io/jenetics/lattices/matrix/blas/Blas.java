@@ -32,8 +32,8 @@ import io.jenetics.lattices.matrix.DoubleMatrix2d;
  * high quality linear algebra software.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public interface Blas {
 

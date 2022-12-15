@@ -26,8 +26,8 @@ package io.jenetics.lattices.grid;
  * @param size the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record Range1d(int start, int size) {
 

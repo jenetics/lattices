@@ -24,8 +24,8 @@ package io.jenetics.lattices.function;
  * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface IntIntConsumer {

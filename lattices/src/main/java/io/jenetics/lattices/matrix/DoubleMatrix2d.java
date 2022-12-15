@@ -47,8 +47,8 @@ import io.jenetics.lattices.grid.Structure2d;
  * @see #DENSE
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public class DoubleMatrix2d
     extends DoubleGrid2d

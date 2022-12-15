@@ -31,8 +31,8 @@ import io.jenetics.lattices.grid.Structure2d;
  * primitive data types.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public interface Matrix2d<M extends Matrix2d<M>>
     extends Matrix<M>, Grid2d

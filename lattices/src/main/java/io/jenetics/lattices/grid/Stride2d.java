@@ -26,8 +26,8 @@ package io.jenetics.lattices.grid;
  * @param colStride the column stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 public record Stride2d(int rowStride, int colStride) {
 

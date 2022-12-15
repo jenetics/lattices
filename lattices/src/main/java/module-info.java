@@ -20,7 +20,7 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
+ * @since 3.0
  */
 module io.jenetics.lattices {
     exports io.jenetics.lattices;

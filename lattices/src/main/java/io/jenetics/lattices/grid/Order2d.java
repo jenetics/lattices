@@ -23,8 +23,8 @@ package io.jenetics.lattices.grid;
  * Represents the order for accessing the linearly stored element data.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since !__version__!
- * @version !__version__!
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface Order2d {
