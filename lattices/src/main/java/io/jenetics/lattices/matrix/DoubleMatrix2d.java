@@ -259,7 +259,7 @@ public class DoubleMatrix2d
      *          {@code null} to indicate that a new result matrix should be
      *          constructed.
      * @return C, or a newly created result matrix
-     * @throws IllegalArgumentException if {@code B.rows() != A.columns()} or
+     * @throws IllegalArgumentException if {@code B.rows() != A.cols()} or
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */
@@ -335,7 +335,7 @@ public class DoubleMatrix2d
      *          {@code null} to indicate that a new result matrix should be
      *          constructed.
      * @return C, or a newly created result matrix.
-     * @throws IllegalArgumentException if {@code B.rows() != A.columns()} or
+     * @throws IllegalArgumentException if {@code B.rows() != A.cols()} or
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */

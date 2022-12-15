@@ -19,6 +19,8 @@
  */
 
 /**
+ * This package contains implementations of linear algebra operations.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!

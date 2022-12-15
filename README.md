@@ -18,22 +18,67 @@ _Lattices_ uses [Gradle](http://www.gradle.org/downloads) as build system.
 
 ## Functionality
 
-In geometry and group theory, a _lattice_ in the real coordinate space R^n is an infinite set of points in this space.
-
-This library allows to map a multidimensional grid onto an one-dimensional array, natively supported by Java.
-
-_Lattices_ is a library for implementing two multidimensional data structures, known as lattice. Implementation of multidimensional data structures.
-
 ### Grid
 
-Multi-dimensional arrays are arguably the most frequently used abstraction in scientific and technical codes. They support a broad variety of applications in the domain of Physics, Linear Algebra, Computational Fluid Dynamics, Relational Algebra, Statistics, Graphics Rendering and others. For example many physics problems can be mapped to matrix problems: Linear and nonlinear systems of equations, linear differential equations, quantum mechanical eigenvalue problems, Tensors, etc. Physics NTuples are essentially 2-d arrays. In the area of Online Analytic Processing (OLAP) multi-dimensional arrays are called Data Cubes. In this toolkit they are called Matrices, simply because the term Array is already heavily overloaded and Data Cube is somewhat fuzzy to many people.
+_Grids_ are multidimensional views onto one-dimensional arrays. This approach makes the implementation of the _matrices_ in this library very flexible and configurable. It is possible to configure the _structure_ (extent and iteration order) independently of the layout of the underlying array (dense or sparse). How this can be done is shown in the following example.
 
-Grids are rectangular latices. It contains methods for iterating and accessing/setting the elements and defining the extent and the iteration order. It defines on how a multidimensional grid-point is mapped to an one-dimensional index of the underlying array element.
+```java
+// Double array, which is created somewhere else.
+final var data = new double[10*15];
+// Wrap the data into an array. This is just a view, no
+// actual data are copied.
+final var array = new DenseDoubleArray(data);
 
-The main design principle of _grids_ are, that they are multidimensional views on one-dimensional array, as they are natively supported by Java.
+// Define the structure (extent) of your 2-d grid.
+final var structure = new Structure2d(new Extent2d(10, 15));
+// Create the grid with your defined structure and data.
+// The grid is a 2-d view onto your one-dimensional double array.
+final var grid = new DoubleGrid2d(structure, array);
+
+// Assign each grid element the value 42.
+grid.forEach((i, j) -> grid.set(i, j, 42.0));
+
+// The value is written to the underlying double[] array
+for (var value : data) {
+    assertThat(value).isEqualTo(42.0);
+}
+```
 
 ### Matrix
 
-This package contains classes for creating _matrices_ and doing basic linear algebra operations.
+_Matrices_ are extending _grids_ and share the same design principles. They are also highly configurable and are _just_ mutlidimensional _views_ of the underlying one-dimensional arrays. Additionally, they support the usual linear algebra functionality.
+
+```java
+final var A = DoubleMatrix2d.DENSE.create(3, 3);
+A.assign(new double[][] {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+});
+
+final var B = DoubleMatrix2d.DENSE.create(3, 3);
+B.assign(new double[][] {
+    {10, 11, 12},
+    {13, 14, 15},
+    {16, 17, 18}
+});
+    
+// Create a new matrix with the same extent than B.
+var C = B.like();
+
+// Do the matrix multiplication C = A*B.
+A.mult(B, C);
+
+// Multiply A*B and let C create.
+C = A.mult(B, null);
+    
+// The result of the multiplication.    
+// [[84.0, 90.0, 96.0]
+//  [201.0, 216.0, 231.0]
+//  [318.0, 342.0, 366.0]]
+```
+
+The `Algebra` and the `Blas` class contains additional operations.
+
 
 

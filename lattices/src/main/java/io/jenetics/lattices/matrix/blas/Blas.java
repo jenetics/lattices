@@ -68,7 +68,7 @@ public interface Blas {
      * @param a rotational elimination parameter a.
      * @param b rotational elimination parameter b.
      * @param rotvec Must be at least of length 4. On output contains the values
-     * {@code {a,b,c,s}}.
+     *        {@code {a,b,c,s}}.
      */
     default void drotg(double a, double b, double[] rotvec) {
         double c, s, roe, scale, r, z, ra, rb;
@@ -500,7 +500,7 @@ public interface Blas {
      * @param A the first source matrix.
      * @param B the second source matrix, this is also the matrix where results
      *          are stored.
-     * @throws IllegalArgumentException if {@code A.columns() != B.columns() ||
+     * @throws IllegalArgumentException if {@code A.columns() != B.cols() ||
      *         A.rows() != B.rows()}
      */
     default void daxpy(final double alpha, final DoubleMatrix2d A, final DoubleMatrix2d B) {

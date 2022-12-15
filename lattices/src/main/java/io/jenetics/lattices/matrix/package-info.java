@@ -19,6 +19,10 @@
  */
 
 /**
+ * This package contains the commonly known <em>matrix</em> implementation
+ * classes. The matrix classes share the same design principles as the grid
+ * classes; they are mainly multidimensional view onto one-dimensional arrays.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since !__version__!
  * @version !__version__!
