@@ -147,10 +147,7 @@ public class DoubleGrid1d implements Grid1d {
             return;
         }
         Grids.checkSameExtent(this, other);
-
-        for (int i = 0; i < size(); ++i) {
-            set(i, other.get(i));
-        }
+        forEach(i -> set(i, other.get(i)));
     }
 
     /**
@@ -159,7 +156,7 @@ public class DoubleGrid1d implements Grid1d {
      * @param values the values to be filled into the cells
      */
     public void assign(final double[] values) {
-        for (int i = 0; i < Math.min(values.length, size()); ++i) {
+        for (int i = 0, n = Math.min(values.length, size()); i <n; ++i) {
             set(i, values[i]);
         }
     }
@@ -170,9 +167,7 @@ public class DoubleGrid1d implements Grid1d {
      * @param value the value to be filled into the cells
      */
     public void assign(final double value) {
-        for (int i = 0; i < size(); ++i) {
-            set(i, value);
-        }
+        forEach(i -> set(i, value));
     }
 
     /**
@@ -185,9 +180,7 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
-        for (int i = 0; i < size(); ++i) {
-            set(i, f.applyAsDouble(get(i)));
-        }
+        forEach(i -> set(i, f.applyAsDouble(get(i))));
     }
 
     /**
@@ -202,10 +195,7 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void assign(final DoubleGrid1d a, final DoubleBinaryOperator f) {
         Grids.checkSameExtent(this, a);
-
-        for (int i = 0; i < size(); ++i) {
-            set(i, f.applyAsDouble(get(i), a.get(i)));
-        }
+        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
     /**
@@ -215,12 +205,11 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void swap(final DoubleGrid1d other) {
         Grids.checkSameExtent(this, other);
-
-        for (int i = 0; i < size(); ++i) {
+        forEach(i -> {
             final var tmp = get(i);
             set(i, other.get(i));
             other.set(i, tmp);
-        };
+        });
     }
 
     /**

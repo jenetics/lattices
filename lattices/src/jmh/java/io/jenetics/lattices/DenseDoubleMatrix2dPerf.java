@@ -38,8 +38,8 @@ import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.blas.Algebra;
 import io.jenetics.lattices.testfuxtures.Colts;
 
-@Warmup(iterations = 5)
-@Measurement(iterations = 7)
+@Warmup(iterations = 1)
+@Measurement(iterations = 1)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -53,7 +53,7 @@ public class DenseDoubleMatrix2dPerf {
         DoubleMatrix2D[] coltB = new DoubleMatrix2D[5];
 
         {
-            for (int i = 1; i <= latticesA.length - 1; ++i) {
+            for (int i = 0; i <= latticesA.length - 4; ++i) {
                 final int size = (int)Math.pow(10, i);
                 latticesA[i] = next(size, size);
                 latticesB[i] = next(size, size);
@@ -78,47 +78,47 @@ public class DenseDoubleMatrix2dPerf {
         );
     }
 
-    @Benchmark
-    public Object lattices_mul_100(Matrices matrices) {
-        return matrices.latticesA[1].mult(
-            matrices.latticesB[1], null, 2.3, 3.4, false, true
-        );
-    }
-
-    @Benchmark
-    public Object colt_mul_100(Matrices matrices) {
-        return matrices.coltA[1].zMult(
-            matrices.coltB[1], null, 2.3, 3.4, false, true
-        );
-    }
-
-    @Benchmark
-    public Object lattices_mul_1000(Matrices matrices) {
-        return matrices.latticesA[2].mult(
-            matrices.latticesB[2], null, 2.3, 3.4, false, true
-        );
-    }
-
-    @Benchmark
-    public Object colt_mul_1000(Matrices matrices) {
-        return matrices.coltA[2].zMult(
-            matrices.coltB[2], null, 2.3, 3.4, false, true
-        );
-    }
-
-    @Benchmark
-    public Object lattices_mul_10000(Matrices matrices) {
-        return matrices.latticesA[3].mult(
-            matrices.latticesB[3], null, 2.3, 3.4, false, true
-        );
-    }
-
-    @Benchmark
-    public Object colt_mul_10000(Matrices matrices) {
-        return matrices.coltA[3].zMult(
-            matrices.coltB[3], null, 2.3, 3.4, false, true
-        );
-    }
+//    @Benchmark
+//    public Object lattices_mul_100(Matrices matrices) {
+//        return matrices.latticesA[1].mult(
+//            matrices.latticesB[1], null, 2.3, 3.4, false, true
+//        );
+//    }
+//
+//    @Benchmark
+//    public Object colt_mul_100(Matrices matrices) {
+//        return matrices.coltA[1].zMult(
+//            matrices.coltB[1], null, 2.3, 3.4, false, true
+//        );
+//    }
+//
+//    @Benchmark
+//    public Object lattices_mul_1000(Matrices matrices) {
+//        return matrices.latticesA[2].mult(
+//            matrices.latticesB[2], null, 2.3, 3.4, false, true
+//        );
+//    }
+//
+//    @Benchmark
+//    public Object colt_mul_1000(Matrices matrices) {
+//        return matrices.coltA[2].zMult(
+//            matrices.coltB[2], null, 2.3, 3.4, false, true
+//        );
+//    }
+//
+//    @Benchmark
+//    public Object lattices_mul_10000(Matrices matrices) {
+//        return matrices.latticesA[3].mult(
+//            matrices.latticesB[3], null, 2.3, 3.4, false, true
+//        );
+//    }
+//
+//    @Benchmark
+//    public Object colt_mul_10000(Matrices matrices) {
+//        return matrices.coltA[3].zMult(
+//            matrices.coltB[3], null, 2.3, 3.4, false, true
+//        );
+//    }
 
     /*
     @Benchmark
@@ -136,16 +136,16 @@ public class DenseDoubleMatrix2dPerf {
     }
      */
 
-    @Benchmark
-    public Object latticesSolve_10000(Matrices matrices) {
-        return Algebra.solve(matrices.latticesA[3], matrices.latticesB[3]);
-    }
-
-    @Benchmark
-    public Object coltSolve_10000(Matrices matrices) {
-        return cern.colt.matrix.linalg.Algebra.DEFAULT
-            .solve(matrices.coltA[3], matrices.coltB[3]);
-    }
+//    @Benchmark
+//    public Object latticesSolve_10000(Matrices matrices) {
+//        return Algebra.solve(matrices.latticesA[3], matrices.latticesB[3]);
+//    }
+//
+//    @Benchmark
+//    public Object coltSolve_10000(Matrices matrices) {
+//        return cern.colt.matrix.linalg.Algebra.DEFAULT
+//            .solve(matrices.coltA[3], matrices.coltB[3]);
+//    }
 
 }
 

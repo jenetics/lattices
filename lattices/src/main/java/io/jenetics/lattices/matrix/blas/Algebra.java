@@ -47,11 +47,7 @@ public final class Algebra {
      * @return the one-norm of {@code x}
      */
     public static double norm1(final DoubleMatrix1d x) {
-        if (x.size() == 0) {
-            return 0;
-        } else {
-            return x.reduce(Double::sum, Math::abs);
-        }
+        return x.size() == 0 ? 0 : x.reduce(Double::sum, Math::abs);
     }
 
     /**

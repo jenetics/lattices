@@ -97,7 +97,7 @@ public class DoubleMatrix1d
     public DoubleMatrix1d copy(final Range1d range) {
         final var struct = structure.copy(range);
 
-        // Check if we can to a fast copy.
+        // Check if we can do a fast copy.
         if (structure.order() instanceof StrideOrder1d so) {
             return new DoubleMatrix1d(
                 struct,
@@ -147,7 +147,7 @@ public class DoubleMatrix1d
 
         double sum = 0;
         int i = tail - 1;
-        for (int k = l; --k >= 0; i--) {
+        for (int k = l; --k >= 0; --i) {
             sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
@@ -168,47 +168,40 @@ public class DoubleMatrix1d
     /**
      * Returns the sum of all cells {@code Sum(x[i])}.
      *
-     * @return the sum
+     * @return the sum of the vector elements
      */
     public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
+        return size() == 0
+            ? 0
+            : reduce(Double::sum, DoubleUnaryOperator.identity());
     }
 
     /**
-     * Returns the number of cells having non-zero values, ignores tolerance.
+     * Return the number of cells having non-zero values.
+     *
+     * @return the number of cells having non-zero values
      */
     public int cardinality() {
+        final var context = NumericalContext.get();
+
         int cardinality = 0;
-        for (int i = size(); --i >= 0; ) {
-            if (Double.compare(get(i), 0) != 0) {
-                cardinality++;
+        for (int i = 0; i < size(); ++i) {
+            if (context.isZero(get(i))) {
+                ++cardinality;
             }
         }
         return cardinality;
     }
 
     /**
-     * Returns the number of cells having non-zero values, but at most
-     * {@code maxCardinality}.
+     * Return the indices of non-zero values.
+     *
+     * @return the indices of non-zero values
      */
-    public int cardinality(final int maxCardinality, final NumericalContext context) {
-        int cardinality = 0;
-        int i = size();
-        while (--i >= 0 && cardinality < maxCardinality) {
-            if (context.isNotZero(get(i))) {
-                cardinality++;
-            }
-        }
-        return cardinality;
-    }
+    public int[] nonZeroIndices() {
+        final var context = NumericalContext.get();
 
-    public int[] nonZeroIndices(final NumericalContext context) {
         final var indices = IntStream.builder();
-
         for (int i = 0; i < size(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);

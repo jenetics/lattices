@@ -33,7 +33,7 @@ import io.jenetics.lattices.matrix.DoubleMatrix2d;
  * @since 3.0
  * @version 3.0
  */
-public class Cholesky {
+public final class Cholesky {
 
     private final DoubleMatrix2d L;
     private final boolean symmetricPositiveDefinite;
@@ -57,7 +57,7 @@ public class Cholesky {
      * @return {@code L}
      */
     public DoubleMatrix2d L() {
-        return L;
+        return L.copy();
     }
 
     /**
@@ -74,7 +74,7 @@ public class Cholesky {
     /**
      * Solves {@code A*X = B} and returns {@code X}.
      *
-     * @param B a atrix with as many rows as {@code A} and any number of columns
+     * @param B a matrix with as many rows as {@code A} and any number of columns
      * @return {@code X} so that {@code L*L'*X = B}
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code !isSymmetricPositiveDefinite()}
@@ -84,18 +84,18 @@ public class Cholesky {
 
         for (int c = 0; c < B.cols(); ++c) {
             // Solve L*Y = B;
-            for (int i = 0; i < L.rows(); i++) {
+            for (int i = 0; i < L.rows(); ++i) {
                 double sum = B.get(i, c);
-                for (int k = i - 1; k >= 0; k--) {
+                for (int k = i - 1; k >= 0; --k) {
                     sum = -Math.fma(L.get(i, k), X.get(k, c), -sum);
                 }
                 X.set(i, c, sum/L.get(i, i));
             }
 
             // Solve L'*X = Y;
-            for (int i = L.rows() - 1; i >= 0; i--) {
+            for (int i = L.rows() - 1; i >= 0; --i) {
                 double sum = X.get(i, c);
-                for (int k = i + 1; k < L.rows(); k++) {
+                for (int k = i + 1; k < L.rows(); ++k) {
                     sum = -Math.fma(L.get(k, i), X.get(k, c), -sum);
                 }
                 X.set(i, c, sum/L.get(i, i));

@@ -99,16 +99,12 @@ public class DoubleMatrix2d
 
     @Override
     public DoubleMatrix2d copy(final Range2d range) {
-        // Fast copy, if applicable.
-        if (range.row() == 0 &&
-            range.col() == 0 &&
-            range.height() == rows() &&
-            range.width() == cols() &&
-            structure.order().equals(new StrideOrder2d(new Extent2d(range))))
-        {
+        final var struct = structure.copy(range);
+
+        // Fast track if no range-copy is needed.
+        if (structure.equals(struct)){
             return new DoubleMatrix2d(structure, array.copy());
         } else {
-            final var struct = structure.copy(range);
             final var elems = array.like(range.size());
 
             final var loop = new Loop2d.RowMajor(struct.extent());
@@ -168,13 +164,13 @@ public class DoubleMatrix2d
 
     /**
      * Linear algebraic matrix-vector multiplication
-     * <pre>
+     * <pre>{@code
      *     z = alpha * A * y + beta*z
      *     z[i] = alpha*Sum(A[i, j] * y[j]) + beta*z[i],
      *           i = 0..A.rows() - 1, j = 0..y.size() - 1
      *     where
      *     A == this
-     * </pre>
+     * }</pre>
      *
      * @implNote
      * Matrix shape conformance is checked <em>after</em> potential
@@ -294,7 +290,7 @@ public class DoubleMatrix2d
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
-                "2-d matrix inner dimensions must be equal:" +
+                "Matrix inner dimensions must be equal:" +
                     extent() + ", " + B.extent()
             );
         }

@@ -128,6 +128,7 @@ public class AlgebraTest {
 
     @Test(invocationCount = 5)
     public void solve() {
+        //final var extent = new Extent2d(1000, 1000);
         final var extent = new Extent2d(55, 55);
         final var A = next(extent);
         final var B = next(extent);

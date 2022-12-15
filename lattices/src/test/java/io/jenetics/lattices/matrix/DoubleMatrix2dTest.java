@@ -299,4 +299,17 @@ public class DoubleMatrix2dTest {
         );
     }
 
+    @Test
+    public void isView() {
+        final var extent = new Extent2d(4, 6);
+        final var matrix = DoubleMatrix2d.DENSE.create(extent);
+
+        final var structure = matrix.structure();
+        final var copy = structure.copy(new Range2d(extent));
+        assertThat(copy).isEqualTo(structure);
+
+        final var copy2 = structure.copy(new Range2d(new Extent2d(3, 6)));
+        assertThat(copy2).isNotEqualTo(structure);
+    }
+
 }

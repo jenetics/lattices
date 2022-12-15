@@ -140,12 +140,7 @@ public class DoubleGrid2d implements Grid2d {
             return;
         }
         checkSameExtent(this, other);
-
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols(); --c >= 0;) {
-                set(r, c, other.get(r, c));
-            }
-        }
+        forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
     /**
@@ -190,11 +185,7 @@ public class DoubleGrid2d implements Grid2d {
      * @param value the value to be filled into the cells
      */
     public void assign(final double value) {
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols(); --c >= 0;) {
-                set(r, c, value);
-            }
-        }
+        forEach((r, c) -> set(r, c, value));
     }
 
     /**
@@ -214,11 +205,7 @@ public class DoubleGrid2d implements Grid2d {
         requireNonNull(f);
         checkSameExtent(this, y);
 
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols(); --c >= 0;) {
-                set(r, c, f.applyAsDouble(get(r, c), y.get(r, c)));
-            }
-        }
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
 
     /**
@@ -229,12 +216,7 @@ public class DoubleGrid2d implements Grid2d {
      */
     public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
-
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols(); --c >= 0;) {
-                set(r, c, f.applyAsDouble(get(r, c)));
-            }
-        }
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
     }
 
     /**
@@ -244,14 +226,11 @@ public class DoubleGrid2d implements Grid2d {
      */
     public void swap(final DoubleGrid2d other) {
         checkSameExtent(this, other);
-
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols(); --c >= 0;) {
-                final var tmp = get(r, c);
-                set(r, c, other.get(r, c));
-                other.set(r, c, tmp);
-            }
-        };
+        forEach((r, c) -> {
+            final var tmp = get(r, c);
+            set(r, c, other.get(r, c));
+            other.set(r, c, tmp);
+        });
     }
 
     /**
