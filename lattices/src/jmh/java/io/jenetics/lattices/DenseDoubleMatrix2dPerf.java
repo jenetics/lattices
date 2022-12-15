@@ -19,10 +19,12 @@
  */
 package io.jenetics.lattices;
 
+import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+
 import cern.colt.matrix.DoubleMatrix2D;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
-import io.jenetics.lattices.matrix.blas.Algebra;
-import io.jenetics.lattices.testfuxtures.Colts;
+
+import java.util.concurrent.TimeUnit;
+
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -32,9 +34,9 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.TimeUnit;
-
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.matrix.blas.Algebra;
+import io.jenetics.lattices.testfuxtures.Colts;
 
 @Warmup(iterations = 5)
 @Measurement(iterations = 7)
