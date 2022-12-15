@@ -46,7 +46,7 @@ for (var value : data) {
 
 ### Matrix
 
-_Matrices_ are extending _grids_ and share the same design principles. They are also highly configurable and are _just_ mutlidimensional _views_ of the underlying one-dimensional arrays. Additionally, they support the usual linear algebra functionality.
+_Matrices_ are extending _grids_ and share the same design principles. They are also highly configurable and are _just_ multidimensional _views_ onto the underlying one-dimensional arrays. Additionally, they support the usual linear algebra functionality.
 
 ```java
 final var A = DoubleMatrix2d.DENSE.create(3, 3);
