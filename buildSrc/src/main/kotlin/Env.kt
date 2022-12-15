@@ -52,7 +52,7 @@ object Env {
  * Information about the library and author.
  */
 object Lattices {
-	const val VERSION = "3.0.0-ALPHA-1"
+	const val VERSION = "3.0.0.ALPHA1"
 	const val ID = "lattices"
 	const val NAME = "lattices"
 	const val GROUP = "io.jenetics"
