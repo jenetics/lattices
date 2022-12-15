@@ -21,14 +21,14 @@
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 2.0
- * @version 2.0
+ * @version 3.0
  */
 plugins {
 	base
 	id("me.champeau.jmh") version "0.6.6" apply false
 }
 
-rootProject.version = Colt.VERSION
+rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
 	version = "7.6"
@@ -39,8 +39,8 @@ tasks.named<Wrapper>("wrapper") {
  * Project configuration *before* the projects has been evaluated.
  */
 allprojects {
-	group =  Colt.GROUP
-	version = Colt.VERSION
+	group =  Lattices.GROUP
+	version = Lattices.VERSION
 
 	repositories {
 		flatDir {
@@ -50,9 +50,9 @@ allprojects {
 		mavenCentral()
 	}
 
-	configurations.all {
-		resolutionStrategy.failOnVersionConflict()
-	}
+    configurations.all {
+        resolutionStrategy.preferProjectModules()
+    }
 }
 
 /**
@@ -63,13 +63,13 @@ gradle.projectsEvaluated {
 		val project = this
 
 		tasks.withType<JavaCompile> {
-			options.compilerArgs.add("-Xlint:none" + xlint())
+			options.compilerArgs.add("-Xlint:" + xlint())
 		}
 
 		plugins.withType<JavaPlugin> {
 			configure<JavaPluginExtension> {
-				sourceCompatibility = JavaVersion.VERSION_1_8
-				targetCompatibility = JavaVersion.VERSION_1_8
+				sourceCompatibility = JavaVersion.VERSION_17
+				targetCompatibility = JavaVersion.VERSION_17
 			}
 
 			configure<JavaPluginExtension> {
@@ -94,12 +94,12 @@ gradle.projectsEvaluated {
 fun setupJava(project: Project) {
 	val attr = mutableMapOf(
 		"Implementation-Title" to project.name,
-		"Implementation-Version" to Colt.VERSION,
-		"Implementation-URL" to Colt.URL,
-		"Implementation-Vendor" to Colt.NAME,
-		"ProjectName" to Colt.NAME,
-		"Version" to Colt.VERSION,
-		"Maintainer" to Colt.AUTHOR,
+		"Implementation-Version" to Lattices.VERSION,
+		"Implementation-URL" to Lattices.URL,
+		"Implementation-Vendor" to Lattices.NAME,
+		"ProjectName" to Lattices.NAME,
+		"Version" to Lattices.VERSION,
+		"Maintainer" to Lattices.AUTHOR,
 		"Project" to project.name,
 		"Project-Version" to project.version,
 
@@ -156,8 +156,7 @@ fun setupTestReporting(project: Project) {
 fun setupJavadoc(project: Project) {
 	project.tasks.withType<Javadoc> {
 		val doclet = options as StandardJavadocDocletOptions
-		//doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
-		doclet.addBooleanOption("Xdoclint:none", true)
+		doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
 
 		exclude("**/internal/**")
 
@@ -231,29 +230,29 @@ fun setupJavadoc(project: Project) {
 fun xlint(): String {
 	// See https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html#extra-options
 	return listOf<String>(
-		//"auxiliaryclass",
-		//"cast",
-		//"classfile",
-		//"dep-ann",
-		//"deprecation",
-		//"divzero",
-		//"empty",
-		//"exports",
-		//"finally",
-		//"module",
-		//"opens",
-		//"overrides",
-		//"rawtypes",
-		//"removal",
-		//"serial",
-		//"static",
-		//"try",
-		//"unchecked",
-		//"varargs"
+		"auxiliaryclass",
+		"cast",
+		"classfile",
+		"dep-ann",
+		"deprecation",
+		"divzero",
+		"empty",
+		"exports",
+		"finally",
+		"module",
+		"opens",
+		"overrides",
+		"rawtypes",
+		"removal",
+		"serial",
+		"static",
+		"try",
+		"unchecked",
+		"varargs"
 	).joinToString(separator = ",")
 }
 
-val identifier = "${Colt.ID}-${Colt.VERSION}"
+val identifier = "${Lattices.ID}-${Lattices.VERSION}"
 
 /**
  * Setup of the Maven publishing.
@@ -285,7 +284,7 @@ fun setupPublishing(project: Project) {
 	project.configure<PublishingExtension> {
 		publications {
 			create<MavenPublication>("mavenJava") {
-				artifactId = Colt.ID
+				artifactId = Lattices.ID
 				from(project.components["java"])
 				versionMapping {
 					usage("java-api") {
@@ -296,9 +295,9 @@ fun setupPublishing(project: Project) {
 					}
 				}
 				pom {
-					name.set(Colt.ID)
+					name.set(Lattices.ID)
 					description.set(project.description)
-					url.set(Colt.URL)
+					url.set(Lattices.URL)
 					inceptionYear.set("2022")
 
 					licenses {
@@ -310,9 +309,9 @@ fun setupPublishing(project: Project) {
 					}
 					developers {
 						developer {
-							id.set(Colt.ID)
-							name.set(Colt.AUTHOR)
-							email.set(Colt.EMAIL)
+							id.set(Lattices.ID)
+							name.set(Lattices.AUTHOR)
+							email.set(Lattices.EMAIL)
 						}
 					}
 					scm {

@@ -24,11 +24,15 @@
  * @version 2.1
  */
 plugins {
-	`java-gradle-plugin`
-	`kotlin-dsl`
+    `java-gradle-plugin`
+    `kotlin-dsl`
 }
 
+description = "Lattices - Java library for multidimensional data structures"
+
+extra["moduleName"] = "io.jenetics.lattices"
+
 repositories {
-	mavenLocal()
-	gradlePluginPortal()
+    mavenLocal()
+    gradlePluginPortal()
 }
