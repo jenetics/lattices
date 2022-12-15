@@ -27,6 +27,8 @@ plugins {
     id("me.champeau.jmh")
 }
 
+description = "Lattices - Java library for multidimensional data structures"
+
 extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
