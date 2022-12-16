@@ -33,9 +33,9 @@ import io.jenetics.lattices.grid.DoubleGrid2d;
 public final class LinealgebraAsserts {
 
     public static final Percentage EPSILON = Percentage
-        .withPercentage(Math.pow(10, -6));
+        .withPercentage(Math.pow(10, -5));
 
-    private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -6));
+    private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -5));
 
     private LinealgebraAsserts() {
     }

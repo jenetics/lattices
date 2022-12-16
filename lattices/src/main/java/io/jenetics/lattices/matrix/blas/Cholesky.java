@@ -123,19 +123,19 @@ public final class Cholesky {
         final var L = A.like(n, n);
         var isSymmetricPositiveDefinite = A.cols() == n;
 
-        final var Lrows = new DoubleMatrix1d[n];
+        final var L_rows = new DoubleMatrix1d[n];
         for (int j = 0; j < A.rows(); j++) {
-            Lrows[j] = L.rowAt(j);
+            L_rows[j] = L.rowAt(j);
         }
 
         // Main loop.
         for (int j = 0; j < n; j++) {
             double d = 0.0;
             for (int k = 0; k < j; k++) {
-                double s = Lrows[k].dotProduct(Lrows[j], 0, k);
+                double s = L_rows[k].dotProduct(L_rows[j], 0, k);
 
                 s = (A.get(j, k) - s)/L.get(k, k);
-                Lrows[j].set(k, s);
+                L_rows[j].set(k, s);
                 d = Math.fma(s, s, d);
                 isSymmetricPositiveDefinite = isSymmetricPositiveDefinite &&
                     context.equals(A.get(k, j), A.get(j, k));

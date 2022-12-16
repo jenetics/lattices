@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Arrays.copyOfRange;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleBinaryOperator;
@@ -233,8 +234,7 @@ public class DoubleGrid1d implements Grid1d {
             array instanceof DenseDoubleArray a1 &&
             other.array instanceof DenseDoubleArray a2)
         {
-            final var temp = new double[size()];
-            System.arraycopy(a1.elements(), so1.start(), temp, 0, size());
+            final var temp = copyOfRange(a1.elements(), so1.start(), so1.start() + size());
             System.arraycopy(a2.elements(), so2.start(), a1.elements(), so1.start(), size());
             System.arraycopy(temp, 0, a2.elements(), so2.start(), size());
         } else {

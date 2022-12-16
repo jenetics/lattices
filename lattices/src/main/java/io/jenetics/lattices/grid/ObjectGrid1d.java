@@ -287,6 +287,7 @@ public class ObjectGrid1d<T> implements Grid1d {
      * @return the dense object factory
      * @param <T> the grid element type
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
         return struct -> new ObjectGrid1d<T>(

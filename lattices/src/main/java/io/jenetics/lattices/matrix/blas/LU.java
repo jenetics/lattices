@@ -132,8 +132,8 @@ public final class LU {
         checkRectangular(LU);
 
         final var X = B.copy();
-        int m = LU.rows();
-        int n = LU.cols();
+        final int m = LU.rows();
+        final int n = LU.cols();
 
         if (m == 0 || n == 0) {
             return X;
@@ -152,23 +152,21 @@ public final class LU {
         // Right hand side with pivoting
         Permutations.permuteRows(X, pivot);
 
-        // Precompute and cache some views to avoid regenerating them time
-        // and again.
-        final DoubleMatrix1d[] Brows = new DoubleMatrix1d[n];
+        final DoubleMatrix1d[] B_rows = new DoubleMatrix1d[n];
         for (int k = 0; k < n; ++k) {
-            Brows[k] = X.rowAt(k);
+            B_rows[k] = X.rowAt(k);
         }
 
-        final var Browk = X.colAt(0).like();
+        final var B_row_k = X.colAt(0).like();
 
         // Solve L*Y = B(piv,:)
         for (int k = 0; k < n; ++k) {
-            Browk.assign(Brows[k]);
+            B_row_k.assign(B_rows[k]);
 
             for (int i = k + 1; i < n; ++i) {
                 final double multiplier = -LU.get(i, k);
                 if (context.isNotZero(multiplier)) {
-                    Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier, b, a));
+                    B_rows[i].assign(B_row_k, (a, b) -> Math.fma(multiplier, b, a));
                 }
             }
         }
@@ -176,13 +174,13 @@ public final class LU {
         // Solve U*B = Y;
         for (int k = n - 1; k >= 0; k--) {
             final double multiplier1 = 1.0/LU.get(k, k);
-            Brows[k].assign(a -> a*multiplier1);
-            Browk.assign(Brows[k]);
+            B_rows[k].assign(a -> a*multiplier1);
+            B_row_k.assign(B_rows[k]);
 
             for (int i = 0; i < k; ++i) {
                 final double multiplier2 = -LU.get(i, k);
                 if (context.isNotZero(multiplier2)) {
-                    Brows[i].assign(Browk, (a, b) -> Math.fma(multiplier2, b, a));
+                    B_rows[i].assign(B_row_k, (a, b) -> Math.fma(multiplier2, b, a));
                 }
             }
         }
@@ -218,27 +216,27 @@ public final class LU {
             rows[i] = lu.rowAt(i);
         }
 
-        final var colj = lu.colAt(0).like();
+        final var col_j = lu.colAt(0).like();
         for (int j = 0; j < n; ++j) {
-            colj.assign(lu.colAt(j));
+            col_j.assign(lu.colAt(j));
 
             // Apply previous transformations.
             for (int i = 0; i < m; ++i) {
                 int kmax = Math.min(i, j);
-                double s = rows[i].dotProduct(colj, 0, kmax);
-                double before = colj.get(i);
+                double s = rows[i].dotProduct(col_j, 0, kmax);
+                double before = col_j.get(i);
                 double after = before - s;
 
-                colj.set(i, after);
+                col_j.set(i, after);
                 lu.set(i, j, after);
             }
 
             // Find pivot and exchange if necessary.
             int p = j;
             if (p < m) {
-                double max = Math.abs(colj.get(p));
+                double max = Math.abs(col_j.get(p));
                 for (int i = j + 1; i < m; ++i) {
-                    double v = Math.abs(colj.get(i));
+                    double v = Math.abs(col_j.get(i));
                     if (v > max) {
                         p = i;
                         max = v;
