@@ -20,6 +20,8 @@
 package io.jenetics.lattices.matrix;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.denseMult;
+import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -297,13 +299,18 @@ public class DoubleMatrix2d
             );
         }
 
-        for (int j = p; --j >= 0;) {
-            for (int i = m; --i >= 0;) {
-                double s = 0;
-                for (int k = n; --k >= 0;) {
-                    s = Math.fma(get(i, k), B.get(k, j), s);
+        // If dense matrix multiplication doesn't apply, do classic variant.
+        if (isDense(this, B, C)) {
+            denseMult(this, B, C, alpha, beta);
+        } else {
+            for (int j = p; --j >= 0;) {
+                for (int i = m; --i >= 0;) {
+                    double s = 0;
+                    for (int k = n; --k >= 0;) {
+                        s = Math.fma(get(i, k), B.get(k, j), s);
+                    }
+                    C.set(i, j, Math.fma(alpha, s, beta*C.get(i, j)));
                 }
-                C.set(i, j, Math.fma(alpha, s, beta*C.get(i, j)));
             }
         }
 
