@@ -36,8 +36,8 @@ public record Range2d(int row, int col, int height, int width) {
     public Range2d {
         if (row < 0 || col < 0 || height < 0 || width < 0) {
             throw new IllegalArgumentException(
-                "Invalid range [%d, %d, %d, %d]."
-                    .formatted(row, col, height, width)
+                "Invalid range: [%d..%d, %d..%d]"
+                    .formatted(row, height, col, width)
             );
         }
     }
@@ -54,6 +54,11 @@ public record Range2d(int row, int col, int height, int width) {
 
     public int size() {
         return height*width;
+    }
+
+    @Override
+    public String toString() {
+        return "[%d..%d, %d..%d]".formatted(row, height, col, width);
     }
 
 }

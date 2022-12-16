@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
 
+import java.util.Arrays;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
@@ -147,7 +148,19 @@ public class DoubleGrid1d implements Grid1d {
             return;
         }
         Grids.checkSameExtent(this, other);
-        forEach(i -> set(i, other.get(i)));
+
+        // Fast track assign.
+        if (order() instanceof StrideOrder1d so1 &&
+            other.order() instanceof StrideOrder1d so2 &&
+            so1.stride() == 1 &&
+            so2.stride() == 1 &&
+            array instanceof DenseDoubleArray dda1 &&
+            other.array instanceof DenseDoubleArray dda2)
+        {
+            System.arraycopy(dda2.elements(), so2.start(), dda1.elements(), so1.start(), size());
+        } else {
+            forEach(i -> set(i, other.get(i)));
+        }
     }
 
     /**
@@ -156,8 +169,18 @@ public class DoubleGrid1d implements Grid1d {
      * @param values the values to be filled into the cells
      */
     public void assign(final double[] values) {
-        for (int i = 0, n = Math.min(values.length, size()); i <n; ++i) {
-            set(i, values[i]);
+        final var size = Math.min(values.length, size());
+
+        // Fast track assign.
+        if (order() instanceof StrideOrder1d so1 &&
+            so1.stride() == 1 &&
+            array instanceof DenseDoubleArray a1)
+        {
+            System.arraycopy(values, 0, a1.elements(), so1.start(), size);
+        } else {
+            for (int i = 0; i < size; ++i) {
+                set(i, values[i]);
+            }
         }
     }
 
@@ -205,11 +228,26 @@ public class DoubleGrid1d implements Grid1d {
      */
     public void swap(final DoubleGrid1d other) {
         Grids.checkSameExtent(this, other);
-        forEach(i -> {
-            final var tmp = get(i);
-            set(i, other.get(i));
-            other.set(i, tmp);
-        });
+
+        // Fast track swap.
+        if (order() instanceof StrideOrder1d so1 &&
+            other.order() instanceof StrideOrder1d so2 &&
+            so1.stride() == 1 &&
+            so2.stride() == 1 &&
+            array instanceof DenseDoubleArray a1 &&
+            other.array instanceof DenseDoubleArray a2)
+        {
+            final var temp = new double[size()];
+            System.arraycopy(a1.elements(), so1.start(), temp, 0, size());
+            System.arraycopy(a2.elements(), so2.start(), a1.elements(), so1.start(), size());
+            System.arraycopy(temp, 0, a2.elements(), so2.start(), size());
+        } else {
+            forEach(i -> {
+                final var tmp = get(i);
+                set(i, other.get(i));
+                other.set(i, tmp);
+            });
+        }
     }
 
     /**

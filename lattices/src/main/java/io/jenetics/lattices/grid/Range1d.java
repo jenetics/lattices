@@ -34,7 +34,7 @@ public record Range1d(int start, int size) {
     public Range1d {
         if (start < 0 || size < 0) {
             throw new IllegalArgumentException(
-                "Invalid range [%d, %d].".formatted(start, size)
+                "Invalid range: [%d..%d].".formatted(start, size)
             );
         }
     }
@@ -47,6 +47,11 @@ public record Range1d(int start, int size) {
      */
     public Range1d(final Extent1d extent) {
         this(0, extent.size());
+    }
+
+    @Override
+    public String toString() {
+        return "[%d..%d]".formatted(start, size);
     }
 
 }

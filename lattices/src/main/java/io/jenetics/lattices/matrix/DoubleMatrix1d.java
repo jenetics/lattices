@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.matrix;
 
-import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
-
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
@@ -118,14 +116,13 @@ public class DoubleMatrix1d
 
     /**
      * Returns the dot product of two vectors x and y, which is
-     * {@code Sum(x[i]*y[i])}, where {@code x == this}.
-     * Operates on cells at indexes {@code from ..
-     * Min(size(), y.size(), from + length) - 1}.
+     * {@code Sum(x[i]*y[i])}, where {@code x == this}. Operates on cells at
+     * indexes {@code from .. Min(size(), y.size(), from + length) - 1}.
      *
      * @param y the second vector
      * @param from the first index to be considered
      * @param length the number of cells to be considered
-     * @return the sum of products, start if {@code from<0 || length<0}
+     * @return the sum of products, start if {@code from < 0 || length < 0}
      */
     public double dotProduct(
         final DoubleMatrix1d y,
@@ -136,6 +133,30 @@ public class DoubleMatrix1d
             return 0;
         }
 
+        final int to = Math.min(Math.min(size(), y.size()), from + length);
+
+        // Fast track dot-product.
+        /*
+        if (order() instanceof StrideOrder1d so1 &&
+            y.order() instanceof StrideOrder1d so2 &&
+            so1.stride() == 1 &&
+            so2.stride() == 1 &&
+            array instanceof DenseDoubleArray dda1 &&
+            y.array instanceof DenseDoubleArray dda2)
+        {
+
+        } else {
+
+        }
+         */
+
+        double sum = 0;
+        for (int i = from; i < to; ++i) {
+            sum = Math.fma(get(i), y.get(i), sum);
+        }
+        return sum;
+
+        /*
         int tail = from + length;
         if (size() < tail) {
             tail = size();
@@ -151,6 +172,7 @@ public class DoubleMatrix1d
             sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
+         */
     }
 
     /**
@@ -215,7 +237,7 @@ public class DoubleMatrix1d
     public boolean equals(final Object object) {
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
-            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
+            equals(matrix);
     }
 
 }

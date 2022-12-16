@@ -20,16 +20,13 @@
 package io.jenetics.lattices.matrix;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
 
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.grid.Range2d;
@@ -192,10 +189,8 @@ public class DoubleMatrix2d
         final boolean transposeA
     ) {
         if (transposeA) {
-            return view(structure().transpose())
-                .mult(y, z, alpha, beta, false);
+            return transpose().mult(y, z, alpha, beta, false);
         }
-
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
             final var elems = array.like(struct.extent().size());
@@ -208,12 +203,12 @@ public class DoubleMatrix2d
             );
         }
 
-        for (int i = rows(); --i >= 0; ) {
+        for (int r = 0; r < rows(); ++r) {
             double s = 0;
-            for (int j = cols(); --j >= 0;) {
-                s = Math.fma(get(i, j), y.get(j), s);
+            for (int c = 0; c < cols(); ++c) {
+                s = Math.fma(get(r, c), y.get(c), s);
             }
-            z.set(i, Math.fma(alpha, s, beta*z.get(i)));
+            z.set(r, Math.fma(alpha, s, beta*z.get(r)));
         }
 
         return z;
@@ -270,16 +265,11 @@ public class DoubleMatrix2d
         requireNonNull(B);
 
         if (transposeA) {
-            return view(structure().transpose())
-                .mult(B, C, alpha, beta, false, transposeB);
+            return transpose().mult(B, C, alpha, beta, false, transposeB);
         }
         if (transposeB) {
-            return mult(
-                B.view(B.structure().transpose()), C,
-                alpha, beta, false, false
-            );
+            return mult(B.transpose(), C, alpha, beta, false, false);
         }
-
         if (C == null) {
             return mult(B, like(rows(), B.cols()), alpha, beta, false, false);
         }
@@ -356,7 +346,7 @@ public class DoubleMatrix2d
     public boolean equals(final Object object) {
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
-            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
+            equals(matrix);
     }
 
 }
