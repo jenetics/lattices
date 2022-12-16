@@ -20,7 +20,6 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.DoubleBinaryOperator;
@@ -302,7 +301,7 @@ public class DoubleGrid2d implements Grid2d {
     public boolean equals(final Object object) {
         return object == this ||
             object instanceof DoubleGrid2d grid &&
-            NumericalContext.with(ZERO_EPSILON, () -> equals(grid));
+            equals(grid);
     }
 
     @Override

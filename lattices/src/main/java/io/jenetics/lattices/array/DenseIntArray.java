@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.array;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 
 /**
@@ -31,6 +33,10 @@ import java.util.Arrays;
  * @version 3.0
  */
 public record DenseIntArray(int[] elements) implements IntArray {
+
+    public DenseIntArray {
+        requireNonNull(elements);
+    }
 
     @Override
     public int get(final int index) {
