@@ -21,41 +21,14 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
+import java.util.Objects;
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.array.DenseObjectArray;
+import io.jenetics.lattices.array.ObjectArray;
 
-/**
- * Generic class for 1-d grids holding {@code double} elements. The
- * {@code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code double[]}
- * array. The following example shows how to create such a grid view from a given
- * {@code double[]} array.
- *
- * <pre>{@code
- * final var values = new double[100];
- * final var grid = new DoubleGrid1d(
- *     new Structure1d(new Extent1d(100)),
- *     new DenseDoubleArray(values)
- * );
- * }</pre>
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public class DoubleGrid1d implements Grid1d {
-
-    /**
-     * Factory for creating dense 1-d double grids.
-     */
-    public static final Factory1d<DoubleGrid1d> DENSE = struct ->
-        new DoubleGrid1d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
-        );
+public class ObjectGrid1d<T> implements Grid1d {
 
     /**
      * The structure, which defines the <em>extent</em> of the grid and the
@@ -66,7 +39,7 @@ public class DoubleGrid1d implements Grid1d {
     /**
      * The underlying {@code double[]} array.
      */
-    protected final DoubleArray array;
+    protected final ObjectArray<T> array;
 
     /**
      * Create a new 1-d grid with the given {@code structure} and element
@@ -81,7 +54,7 @@ public class DoubleGrid1d implements Grid1d {
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
+    public ObjectGrid1d(final Structure1d structure, final ObjectArray<T> array) {
         if (structure.extent().size() > array.length()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
@@ -104,7 +77,7 @@ public class DoubleGrid1d implements Grid1d {
      *
      * @return the underlying element array
      */
-    public DoubleArray array() {
+    public ObjectArray<T> array() {
         return array;
     }
 
@@ -116,7 +89,7 @@ public class DoubleGrid1d implements Grid1d {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    public double get(final int index) {
+    public T get(final int index) {
         return array.get(order().index(index));
     }
 
@@ -129,7 +102,7 @@ public class DoubleGrid1d implements Grid1d {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    public void set(final int index, final double value) {
+    public void set(final int index, final T value) {
         array.set(order().index(index),  value);
     }
 
@@ -141,7 +114,7 @@ public class DoubleGrid1d implements Grid1d {
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
-    public void assign(final DoubleGrid1d other) {
+    public void assign(final ObjectGrid1d<? extends T> other) {
         if (other == this) {
             return;
         }
@@ -152,10 +125,10 @@ public class DoubleGrid1d implements Grid1d {
             other.order() instanceof StrideOrder1d so2 &&
             so1.stride() == 1 &&
             so2.stride() == 1 &&
-            array instanceof DenseDoubleArray dda1 &&
-            other.array instanceof DenseDoubleArray dda2)
+            array instanceof DenseObjectArray<T> doa1 &&
+            other.array instanceof DenseObjectArray<?> doa2)
         {
-            System.arraycopy(dda2.elements(), so2.start(), dda1.elements(), so1.start(), size());
+            System.arraycopy(doa2.elements(), so2.start(), doa1.elements(), so1.start(), size());
         } else {
             forEach(i -> set(i, other.get(i)));
         }
@@ -166,13 +139,15 @@ public class DoubleGrid1d implements Grid1d {
      *
      * @param values the values to be filled into the cells
      */
-    public void assign(final double[] values) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public final void assign(final T... values) {
         final var size = Math.min(values.length, size());
 
         // Fast track assign.
         if (order() instanceof StrideOrder1d so1 &&
             so1.stride() == 1 &&
-            array instanceof DenseDoubleArray a1)
+            array instanceof DenseObjectArray<T> a1)
         {
             System.arraycopy(values, 0, a1.elements(), so1.start(), size);
         } else {
@@ -185,7 +160,7 @@ public class DoubleGrid1d implements Grid1d {
      *
      * @param value the value to be filled into the cells
      */
-    public void assign(final double value) {
+    public void assign(final T value) {
         forEach(i -> set(i, value));
     }
 
@@ -197,9 +172,9 @@ public class DoubleGrid1d implements Grid1d {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final DoubleUnaryOperator f) {
+    public void assign(final UnaryOperator<T> f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsDouble(get(i))));
+        forEach(i -> set(i, f.apply(get(i))));
     }
 
     /**
@@ -212,9 +187,9 @@ public class DoubleGrid1d implements Grid1d {
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    public void assign(final DoubleGrid1d a, final DoubleBinaryOperator f) {
+    public void assign(final ObjectGrid1d<? extends T> a, final BinaryOperator<T> f) {
         Grids.checkSameExtent(this, a);
-        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
+        forEach(i -> set(i, f.apply(get(i), a.get(i))));
     }
 
     /**
@@ -222,60 +197,46 @@ public class DoubleGrid1d implements Grid1d {
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    public void swap(final DoubleGrid1d other) {
+    public void swap(final ObjectGrid1d<T> other) {
         Grids.checkSameExtent(this, other);
 
-        // Fast track swap.
-        if (order() instanceof StrideOrder1d so1 &&
-            other.order() instanceof StrideOrder1d so2 &&
-            so1.stride() == 1 &&
-            so2.stride() == 1 &&
-            array instanceof DenseDoubleArray a1 &&
-            other.array instanceof DenseDoubleArray a2)
-        {
-            final var temp = new double[size()];
-            System.arraycopy(a1.elements(), so1.start(), temp, 0, size());
-            System.arraycopy(a2.elements(), so2.start(), a1.elements(), so1.start(), size());
-            System.arraycopy(temp, 0, a2.elements(), so2.start(), size());
-        } else {
-            forEach(i -> {
-                final var tmp = get(i);
-                set(i, other.get(i));
-                other.set(i, tmp);
-            });
-        }
+        forEach(i -> {
+            final var tmp = get(i);
+            set(i, other.get(i));
+            other.set(i, tmp);
+        });
     }
 
-    /**
-     * Applies a function to each cell and aggregates the results.
-     * Returns a value {@code v} such that {@code v == a(size())} where
-     * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
-     *
-     * @param reducer an aggregation function taking as first argument the
-     *        current aggregation and as second argument the transformed current
-     *        cell value
-     * @param f a function transforming the current cell value
-     * @return the aggregated measure
-     */
-    public double reduce(
-        final DoubleBinaryOperator reducer,
-        final DoubleUnaryOperator f
-    ) {
-        requireNonNull(reducer);
-        requireNonNull(f);
-
-        if (size() == 0) {
-            return Double.NaN;
-        }
-
-        double a = f.applyAsDouble(get(size() - 1));
-        for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
-        }
-
-        return a;
-    }
+//    /**
+//     * Applies a function to each cell and aggregates the results.
+//     * Returns a value {@code v} such that {@code v == a(size())} where
+//     * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
+//     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
+//     *
+//     * @param reducer an aggregation function taking as first argument the
+//     *        current aggregation and as second argument the transformed current
+//     *        cell value
+//     * @param f a function transforming the current cell value
+//     * @return the aggregated measure
+//     */
+//    public double reduce(
+//        final DoubleBinaryOperator reducer,
+//        final DoubleUnaryOperator f
+//    ) {
+//        requireNonNull(reducer);
+//        requireNonNull(f);
+//
+//        if (size() == 0) {
+//            return Double.NaN;
+//        }
+//
+//        double a = f.applyAsDouble(get(size() - 1));
+//        for (int i = size() - 1; --i >= 0;) {
+//            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
+//        }
+//
+//        return a;
+//    }
 
     /**
      * Checks whether the given matrices have the same dimension and contains
@@ -285,24 +246,23 @@ public class DoubleGrid1d implements Grid1d {
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final DoubleGrid1d other) {
-        final var context = NumericalContext.get();
+    public boolean equals(final ObjectGrid1d<?> other) {
 
         return extent().equals(other.extent()) &&
-            allMatch(i -> context.equals(get(i), other.get(i)));
+            allMatch(i -> Objects.equals(get(i), other.get(i)));
     }
 
     @Override
     public int hashCode() {
         final int[] hash = new int[] { 37 };
-        forEach(i -> hash[0] += Double.hashCode(get(i))*17);
+        forEach(i -> hash[0] += Objects.hashCode(get(i))*17);
         return hash[0];
     }
 
     @Override
     public boolean equals(final Object object) {
         return object == this ||
-            object instanceof DoubleGrid1d grid &&
+            object instanceof ObjectGrid1d<?> grid &&
             equals(grid);
     }
 
@@ -318,6 +278,21 @@ public class DoubleGrid1d implements Grid1d {
         }
         out.append("]");
         return out.toString();
+    }
+
+    /**
+     * Return a factory for creating dense 1-d object grids.
+     *
+     * @param __ not used (Java trick for getting "reified" element type)
+     * @return the dense object factory
+     * @param <T> the grid element type
+     */
+    @SafeVarargs
+    public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
+        return struct -> new ObjectGrid1d<T>(
+            struct,
+            DenseObjectArray.ofSize(struct.extent().size(), __)
+        );
     }
 
 }

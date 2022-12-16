@@ -21,30 +21,28 @@ package io.jenetics.lattices.array;
 
 import static java.util.Objects.requireNonNull;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code Object} values.
  *
- * @param elements the underlying {@code double} element values
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
+ * @param elements the underlying {@code Object} element values
+ * @param <T> the value type
  */
-public record DenseDoubleArray(double[] elements) implements DoubleArray {
+public record DenseObjectArray<T>(T[] elements) implements ObjectArray<T> {
 
-    public DenseDoubleArray {
+    public DenseObjectArray {
         requireNonNull(elements);
     }
 
     @Override
-    public double get(final int index) {
+    public T get(final int index) {
         return elements[index];
     }
 
     @Override
-    public void set(final int index, final double value) {
+    public void set(final int index, final T value) {
         elements[index] = value;
     }
 
@@ -54,29 +52,34 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
     }
 
     @Override
-    public DenseDoubleArray copy() {
-        return new DenseDoubleArray(elements.clone());
+    public ObjectArray<T> copy() {
+        return new DenseObjectArray<>(elements.clone());
     }
 
     @Override
-    public DoubleArray copy(final int start, final int length) {
+    public ObjectArray<T> copy(final int start, final int length) {
         final var array = Arrays.copyOfRange(elements, start, start + length);
-        return new DenseDoubleArray(array);
+        return new DenseObjectArray<>(array);
     }
 
     @Override
-    public DoubleArray like(final int length) {
+    public ObjectArray<T> like(final int length) {
         return ofSize(length);
     }
 
     /**
-     * Create a new dense {@code double} array with the given {@code length}.
+     * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
-     * @return a new dense {@code double} array with the given {@code length}
+     * @param __ not used (Java trick for getting "reified" element type)
+     * @return a new dense {@code int} array with the given {@code length}
      */
-    public static DenseDoubleArray ofSize(final int length) {
-        return new DenseDoubleArray(new double[length]);
+    @SafeVarargs
+    public static <T> ObjectArray<T> ofSize(final int length, final T... __) {
+        @SuppressWarnings("unchecked")
+        final T[] elements = (T[])Array
+            .newInstance(__.getClass().getComponentType(), length);
+        return new DenseObjectArray<>(elements);
     }
 
     @Override
