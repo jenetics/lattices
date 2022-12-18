@@ -45,7 +45,7 @@ public class DoubleMatrix2dTest {
         if (range != null) {
             final var copy = matrix.copy(range);
 
-            final var loop = new Loop2d.RowMajor(range);
+            final var loop = new Loop2d.RowFirst(range);
             loop.forEach((r, c) -> {
                 final var i = r - range.row();
                 final var j = c - range.col();
@@ -109,7 +109,7 @@ public class DoubleMatrix2dTest {
         if (range != null) {
             final var view = matrix.view(range);
 
-            final var loop = new Loop2d.RowMajor(range);
+            final var loop = new Loop2d.RowFirst(range);
             loop.forEach((r, c) -> {
                 final var i = r - range.row();
                 final var j = c - range.col();
@@ -211,7 +211,7 @@ public class DoubleMatrix2dTest {
         assertThat(A.cols()).isEqualTo(matrix.rows());
         assertThat(A.rows()).isEqualTo(matrix.cols());
 
-        final var loop = new Loop2d.RowMajor(matrix.extent());
+        final var loop = new Loop2d.RowFirst(matrix.extent());
         loop.forEach((r, c) ->
             assertThat(matrix.get(r, c)).isEqualTo(A.get(c, r))
         );
@@ -294,7 +294,7 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        new Loop2d.RowMajor(a.extent()).forEach((r, c) ->
+        new Loop2d.RowFirst(a.extent()).forEach((r, c) ->
             assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
         );
     }

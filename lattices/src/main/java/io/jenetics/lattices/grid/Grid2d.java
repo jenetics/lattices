@@ -19,9 +19,6 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.function.IntIntConsumer;
-import io.jenetics.lattices.function.IntIntPredicate;
-
 /**
  * 2-d structural mixin interface.
  *
@@ -29,7 +26,7 @@ import io.jenetics.lattices.function.IntIntPredicate;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid2d extends Loop2d {
+public interface Grid2d extends Loopable2d {
 
     /**
      * Return the structure for 2-d grid.
@@ -90,27 +87,7 @@ public interface Grid2d extends Loop2d {
      * @return the looping strategy of this structural
      */
     default Loop2d loop() {
-        return new RowMajor(extent());
-    }
-
-    @Override
-    default void forEach(final IntIntConsumer action) {
-        loop().forEach(action);
-    }
-
-    @Override
-    default boolean anyMatch(final IntIntPredicate predicate) {
-        return loop().anyMatch(predicate);
-    }
-
-    @Override
-    default boolean allMatch(final IntIntPredicate predicate) {
-        return loop().allMatch(predicate);
-    }
-
-    @Override
-    default boolean nonMatch(final IntIntPredicate predicate) {
-        return loop().nonMatch(predicate);
+        return new RowFirst(extent());
     }
 
 }

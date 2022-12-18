@@ -19,27 +19,43 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.function.IntIntConsumer;
+import io.jenetics.lattices.function.IntIntPredicate;
+
 /**
- * Represents the <em>row-major</em> order.
- *
- * @param start the index of the first element
- * @param stride the number of indexes between any two elements
+ * Defines the looping strategy of a grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
+public interface Loopable2d extends Loop2d {
 
-    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
+    /**
+     * Return the looping strategy.
+     *
+     * @return the looping strategy
+     */
+    Loop2d loop();
 
-    public StrideOrder1d(final int start, final int stride) {
-        this(new Index1d(start), new Stride1d(stride));
+    @Override
+    default void forEach(final IntIntConsumer action) {
+        loop().forEach(action);
     }
 
     @Override
-    public int index(final int rank) {
-        return start.value() + rank*stride.value();
+    default boolean anyMatch(final IntIntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean allMatch(final IntIntPredicate predicate) {
+        return loop().allMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(final IntIntPredicate predicate) {
+        return loop().nonMatch(predicate);
     }
 
 }

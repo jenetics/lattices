@@ -22,17 +22,19 @@ package io.jenetics.lattices.grid;
 /**
  * Defines a stride.
  *
- * @param stride the stride value
+ * @param value the stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int stride) {
+public record Stride1d(int value) {
 
     public Stride1d {
-        if (stride < 0) {
-            throw new IllegalArgumentException("Stride must not be negative: " + stride);
+        if (value < 0) {
+            throw new IllegalArgumentException(
+                "Stride must not be negative: " + value
+            );
         }
     }
 

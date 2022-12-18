@@ -19,9 +19,6 @@
  */
 package io.jenetics.lattices.grid;
 
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-
 /**
  * 1-d structural mixin interface.
  *
@@ -29,7 +26,7 @@ import java.util.function.IntPredicate;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid1d extends Loop1d {
+public interface Grid1d extends Loopable1d {
 
     /**
      * Return the structure for 2-d structures.
@@ -71,28 +68,9 @@ public interface Grid1d extends Loop1d {
      *
      * @return the looping strategy of this structural
      */
+    @Override
     default Loop1d loop() {
         return new Loop1d.Forward(extent());
-    }
-
-    @Override
-    default void forEach(final IntConsumer action) {
-        loop().forEach(action);
-    }
-
-    @Override
-    default boolean anyMatch(final IntPredicate predicate) {
-        return loop().anyMatch(predicate);
-    }
-
-    @Override
-    default boolean allMatch(final IntPredicate predicate) {
-        return loop().allMatch(predicate);
-    }
-
-    @Override
-    default boolean nonMatch(final IntPredicate predicate) {
-        return loop().nonMatch(predicate);
     }
 
 }

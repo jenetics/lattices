@@ -47,9 +47,9 @@ public class Structure1dTest {
         final var view = struct.view(stride);
 
         assertThat(view.extent().size())
-            .isEqualTo(struct.extent().size()/stride.stride());
+            .isEqualTo(struct.extent().size()/stride.value());
         for (int i = 0; i < 7; ++i) {
-            assertThat(view.order().index(i)).isEqualTo(i*stride.stride());
+            assertThat(view.order().index(i)).isEqualTo(i*stride.value());
         }
     }
 

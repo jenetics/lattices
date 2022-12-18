@@ -99,7 +99,7 @@ public class DoubleMatrix1d
         if (structure.order() instanceof StrideOrder1d so) {
             return new DoubleMatrix1d(
                 struct,
-                array.copy(range.start() + so.start(), range.size())
+                array.copy(range.start() + so.start().value(), range.size())
             );
         } else {
             final var elems = array.like(range.size());

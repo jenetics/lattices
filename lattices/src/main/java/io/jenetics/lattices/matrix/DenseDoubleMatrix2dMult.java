@@ -62,13 +62,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_colStride = ((StrideOrder2d)A.order()).colStride();
-        final int B_colStride = ((StrideOrder2d)B.order()).colStride();
-        final int C_colStride = ((StrideOrder2d)C.order()).colStride();
+        final int A_colStride = ((StrideOrder2d)A.order()).stride().col();
+        final int B_colStride = ((StrideOrder2d)B.order()).stride().col();
+        final int C_colStride = ((StrideOrder2d)C.order()).stride().col();
 
-        final int A_rowStride = ((StrideOrder2d)A.order()).rowStride();
-        final int B_rowStride = ((StrideOrder2d)B.order()).rowStride();
-        final int C_rowStride = ((StrideOrder2d)C.order()).rowStride();
+        final int A_rowStride = ((StrideOrder2d)A.order()).stride().row();
+        final int B_rowStride = ((StrideOrder2d)B.order()).stride().row();
+        final int C_rowStride = ((StrideOrder2d)C.order()).stride().row();
 
         /*
         A is blocked to hide memory latency

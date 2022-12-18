@@ -43,7 +43,7 @@ public class StrideOrder2dTest {
 
     @Test
     public void transpose() {
-        final var order = new StrideOrder2d(34, 87, new Extent2d(87, 23));
+        final var order = new StrideOrder2d(new Index2d(34, 87), new Extent2d(87, 23));
         final var torder = order.transpose();
 
         for (int i = 0; i < 10; ++i) {

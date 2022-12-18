@@ -22,20 +22,19 @@ package io.jenetics.lattices.grid;
 /**
  * Defines row- and columns strides.
  *
- * @param rowStride the row stride value
- * @param colStride the column stride value
+ * @param row the row stride value
+ * @param col the column stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride2d(int rowStride, int colStride) {
+public record Stride2d(int row, int col) {
 
     public Stride2d {
-        if (rowStride < 0 || colStride < 0) {
+        if (row < 0 || col < 0) {
             throw new IllegalArgumentException(
-                "Strides must not be negative: [%d, %d]."
-                    .formatted(rowStride, colStride)
+                "Strides must not be negative: %s.".formatted(this)
             );
         }
     }

@@ -22,21 +22,14 @@ package io.jenetics.lattices.grid;
 /**
  * Implements a structure order by defining start indexes and strides.
  *
- * @param rowStart the index of the first row element
- * @param colStart the index of the first column element
- * @param rowStride the number of elements between two rows
- * @param colStride the number of elements between two columns
+ * @param start the start index of the first element
+ * @param stride the element strides
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder2d(
-    int rowStart,
-    int colStart,
-    int rowStride,
-    int colStride
-)
+public record StrideOrder2d(Index2d start, Stride2d stride)
     implements Order2d
 {
 
@@ -48,25 +41,21 @@ public record StrideOrder2d(
      * @param extent the structure extent
      */
     public StrideOrder2d(final Extent2d extent) {
-        this(0, 0, extent.cols(), 1);
+        this(Index2d.ZERO, new Stride2d(extent.cols(), 1));
     }
 
-    public StrideOrder2d(
-        final int rowStart,
-        final int colStart,
-        final Extent2d extent
-    ) {
-        this(rowStart, colStart, extent.cols(), 1);
+    public StrideOrder2d(final Index2d start, final Extent2d extent) {
+        this(start, new Stride2d(extent.cols(), 1));
     }
 
     @Override
     public int index(final int row, final int col) {
-        return rowStart + row*rowStride + colStart + col*colStride;
+        return start.row() + row*stride.row() + start.col() + col*stride.col();
     }
 
     @Override
     public StrideOrder2d transpose() {
-        return new StrideOrder2d(colStart, rowStart, colStride, rowStride);
+        return new StrideOrder2d(start, new Stride2d(stride.col(), stride.row()));
     }
 
 }

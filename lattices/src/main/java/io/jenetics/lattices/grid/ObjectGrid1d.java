@@ -123,12 +123,15 @@ public class ObjectGrid1d<T> implements Grid1d {
         // Fast track assign.
         if (order() instanceof StrideOrder1d so1 &&
             other.order() instanceof StrideOrder1d so2 &&
-            so1.stride() == 1 &&
-            so2.stride() == 1 &&
+            so1.stride().value() == 1 &&
+            so2.stride().value() == 1 &&
             array instanceof DenseObjectArray<T> doa1 &&
             other.array instanceof DenseObjectArray<?> doa2)
         {
-            System.arraycopy(doa2.elements(), so2.start(), doa1.elements(), so1.start(), size());
+            System.arraycopy(
+                doa2.elements(), so2.start().value(),
+                doa1.elements(), so1.start().value(), size()
+            );
         } else {
             forEach(i -> set(i, other.get(i)));
         }
@@ -146,10 +149,13 @@ public class ObjectGrid1d<T> implements Grid1d {
 
         // Fast track assign.
         if (order() instanceof StrideOrder1d so1 &&
-            so1.stride() == 1 &&
+            so1.stride().value() == 1 &&
             array instanceof DenseObjectArray<T> a1)
         {
-            System.arraycopy(values, 0, a1.elements(), so1.start(), size);
+            System.arraycopy(
+                values, 0, a1.elements(),
+                so1.start().value(), size
+            );
         } else {
             forEach(i -> set(i, values[i]));
         }

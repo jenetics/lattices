@@ -82,10 +82,11 @@ public record Structure2d(Extent2d extent, Order2d order) {
             return new Structure2d(
                 new Extent2d(range.height(), range.width()),
                 new StrideOrder2d(
-                    ord.rowStart() + ord.rowStride()*range.row(),
-                    ord.colStart() + ord.colStride()*range.col(),
-                    ord.rowStride(),
-                    ord.colStride()
+                    new Index2d(
+                    ord.start().row() + ord.stride().row()*range.row(),
+                    ord.start().col() + ord.stride().col()*range.col()
+                    ),
+                    ord.stride()
                 )
             );
         } else {
@@ -118,17 +119,18 @@ public record Structure2d(Extent2d extent, Order2d order) {
             return new Structure2d(
                 new Extent2d(
                     extent.rows() != 0
-                        ? (extent.rows() - 1)/stride.rowStride() + 1
+                        ? (extent.rows() - 1)/stride.row() + 1
                         : 0,
                     extent.cols() != 0
-                        ? (extent.cols() - 1)/ stride.colStride() + 1
+                        ? (extent.cols() - 1)/ stride.col() + 1
                         : 0
                 ),
                 new StrideOrder2d(
-                    ord.rowStart(),
-                    ord.colStart(),
-                    ord.rowStride()*stride.rowStride(),
-                    ord.colStride()*stride.colStride()
+                    ord.start(),
+                    new Stride2d(
+                        ord.stride().row()*stride.row(),
+                        ord.stride().col()*stride.col()
+                    )
                 )
             );
         } else {
@@ -195,7 +197,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
                 new Extent1d(extent().rows()),
                 new StrideOrder1d(
                     ord.index(0, index),
-                    ord.rowStride()
+                    ord.stride().row()
                 )
             );
         } else {
@@ -227,7 +229,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
                 new Extent1d(extent().cols()),
                 new StrideOrder1d(
                     ord.index(index, 0),
-                    ord.colStride()
+                    ord.stride().col()
                 )
             );
         } else {

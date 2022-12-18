@@ -151,12 +151,15 @@ public class DoubleGrid1d implements Grid1d {
         // Fast track assign.
         if (order() instanceof StrideOrder1d so1 &&
             other.order() instanceof StrideOrder1d so2 &&
-            so1.stride() == 1 &&
-            so2.stride() == 1 &&
+            so1.stride().value() == 1 &&
+            so2.stride().value() == 1 &&
             array instanceof DenseDoubleArray dda1 &&
             other.array instanceof DenseDoubleArray dda2)
         {
-            System.arraycopy(dda2.elements(), so2.start(), dda1.elements(), so1.start(), size());
+            System.arraycopy(
+                dda2.elements(), so2.start().value(),
+                dda1.elements(), so1.start().value(), size()
+            );
         } else {
             forEach(i -> set(i, other.get(i)));
         }
@@ -172,10 +175,13 @@ public class DoubleGrid1d implements Grid1d {
 
         // Fast track assign.
         if (order() instanceof StrideOrder1d so1 &&
-            so1.stride() == 1 &&
+            so1.stride().value() == 1 &&
             array instanceof DenseDoubleArray a1)
         {
-            System.arraycopy(values, 0, a1.elements(), so1.start(), size);
+            System.arraycopy(
+                values, 0,
+                a1.elements(), so1.start().hashCode(), size
+            );
         } else {
             forEach(i -> set(i, values[i]));
         }
@@ -229,14 +235,23 @@ public class DoubleGrid1d implements Grid1d {
         // Fast track swap.
         if (order() instanceof StrideOrder1d so1 &&
             other.order() instanceof StrideOrder1d so2 &&
-            so1.stride() == 1 &&
-            so2.stride() == 1 &&
+            so1.stride().value() == 1 &&
+            so2.stride().value() == 1 &&
             array instanceof DenseDoubleArray a1 &&
             other.array instanceof DenseDoubleArray a2)
         {
-            final var temp = copyOfRange(a1.elements(), so1.start(), so1.start() + size());
-            System.arraycopy(a2.elements(), so2.start(), a1.elements(), so1.start(), size());
-            System.arraycopy(temp, 0, a2.elements(), so2.start(), size());
+            final var temp = copyOfRange(
+                a1.elements(), so1.start().value(),
+                so1.start().value() + size()
+            );
+            System.arraycopy(
+                a2.elements(), so2.start().value(),
+                a1.elements(), so1.start().value(), size()
+            );
+            System.arraycopy(
+                temp, 0,
+                a2.elements(), so2.start().value(), size()
+            );
         } else {
             forEach(i -> {
                 final var tmp = get(i);

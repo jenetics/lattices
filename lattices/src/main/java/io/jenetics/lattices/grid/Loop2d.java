@@ -85,14 +85,14 @@ public interface Loop2d {
      *
      * @param range the range which defines the boundaries of the loop
      */
-    record RowMajor(Range2d range) implements Loop2d {
+    record RowFirst(Range2d range) implements Loop2d {
 
         /**
          * Row-major implementation of the loop strategy
          *
          * @param extent the extent which defines the boundaries of the loop
          */
-        public RowMajor(final Extent2d extent) {
+        public RowFirst(final Extent2d extent) {
             this(new Range2d(extent));
         }
 
@@ -159,14 +159,14 @@ public interface Loop2d {
      *
      * @param range the range which defines the boundaries of the loop
      */
-    record ColMajor(Range2d range) implements Loop2d {
+    record ColFirst(Range2d range) implements Loop2d {
 
         /**
          * Column-major implementation of the loop strategy
          *
          * @param extent the extent which defines the boundaries of the loop
          */
-        public ColMajor(final Extent2d extent) {
+        public ColFirst(final Extent2d extent) {
             this(new Range2d(extent));
         }
 

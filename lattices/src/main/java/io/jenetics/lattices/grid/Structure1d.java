@@ -83,8 +83,8 @@ public record Structure1d(Extent1d extent, Order1d order) {
             return new Structure1d(
                 new Extent1d(range.size()),
                 new StrideOrder1d(
-                    ord.start() + ord.stride()*range.start(),
-                    ord.stride()
+                    ord.start().value() + ord.stride().value()*range.start(),
+                    ord.stride().value()
                 )
             );
         } else {
@@ -107,12 +107,12 @@ public record Structure1d(Extent1d extent, Order1d order) {
             return new Structure1d(
                 new Extent1d(
                     extent.size() != 0
-                        ? (extent.size() - 1)/stride.stride() + 1
+                        ? (extent.size() - 1)/stride.value() + 1
                         : 0
                 ),
                 new StrideOrder1d(
-                    ord.start(),
-                    ord.stride()*stride.stride()
+                    ord.start().value(),
+                    ord.stride().value()*stride.value()
                 )
             );
         } else {

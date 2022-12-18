@@ -30,7 +30,6 @@ import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.Extent1d;
 import io.jenetics.lattices.grid.Factory2d;
-import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.grid.Range2d;
 import io.jenetics.lattices.grid.StrideOrder2d;
 import io.jenetics.lattices.grid.Structure1d;
@@ -106,7 +105,7 @@ public class DoubleMatrix2d
         } else {
             final var elems = array.like(range.size());
 
-            final var loop = new Loop2d.RowMajor(struct.extent());
+            final var loop = new RowFirst(struct.extent());
             loop.forEach((r, c) ->
                 elems.set(
                     struct.order().index(r, c),

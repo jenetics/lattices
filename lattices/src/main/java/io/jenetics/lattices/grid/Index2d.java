@@ -20,26 +20,20 @@
 package io.jenetics.lattices.grid;
 
 /**
- * Represents the <em>row-major</em> order.
+ * Represents a 2-d index.
  *
- * @param start the index of the first element
- * @param stride the number of indexes between any two elements
+ * @param row the row index
+ * @param col the column index
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
+public record Index2d(int row, int col) {
 
-    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
-
-    public StrideOrder1d(final int start, final int stride) {
-        this(new Index1d(start), new Stride1d(stride));
-    }
-
-    @Override
-    public int index(final int rank) {
-        return start.value() + rank*stride.value();
-    }
+    /**
+     * Index where row and column is zero.
+     */
+    public static final Index2d ZERO = new Index2d(0, 0);
 
 }
