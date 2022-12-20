@@ -195,7 +195,7 @@ public interface Loop2d {
         }
 
         @Override
-        public void forEach(IntIntConsumer action) {
+        public void forEach(final IntIntConsumer action) {
             requireNonNull(action);
 
             for (int c = range.start().col(),
@@ -203,7 +203,7 @@ public interface Loop2d {
                  c < w; ++c)
             {
                 for (int r = range.start().row(),
-                     h = range.start().col() + range.extent().cols();
+                     h = range.start().row() + range.extent().rows();
                      r < h; ++r)
                 {
                     action.accept(r, c);
@@ -220,7 +220,7 @@ public interface Loop2d {
                  c < w; ++c)
             {
                 for (int r = range.start().row(),
-                     h = range.start().col() + range.extent().cols();
+                     h = range.start().row() + range.extent().rows();
                      r < h; ++r)
                 {
                     if (predicate.test(r, c)) {
@@ -241,7 +241,7 @@ public interface Loop2d {
                  c < w; ++c)
             {
                 for (int r = range.start().row(),
-                     h = range.start().col() + range.extent().cols();
+                     h = range.start().row() + range.extent().rows();
                      r < h; ++r)
                 {
                     if (!predicate.test(r, c)) {
@@ -262,7 +262,7 @@ public interface Loop2d {
                  c < w; ++c)
             {
                 for (int r = range.start().row(),
-                     h = range.start().col() + range.extent().cols();
+                     h = range.start().row() + range.extent().rows();
                      r < h; ++r)
                 {
                     if (predicate.test(r, c)) {
