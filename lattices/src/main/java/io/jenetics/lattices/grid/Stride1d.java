@@ -33,7 +33,7 @@ public record Stride1d(int value) {
     public Stride1d {
         if (value < 0) {
             throw new IllegalArgumentException(
-                "Stride must not be negative: " + value
+                "Stride must not be negative: [%d].".formatted(value)
             );
         }
     }

@@ -34,7 +34,8 @@ public record Stride2d(int row, int col) {
     public Stride2d {
         if (row < 0 || col < 0) {
             throw new IllegalArgumentException(
-                "Strides must not be negative: %s.".formatted(this)
+                "Strides must not be negative: [%d, %d]."
+                    .formatted(row, col)
             );
         }
     }

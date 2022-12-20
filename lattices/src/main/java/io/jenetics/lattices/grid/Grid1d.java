@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 /**
- * 1-d structural mixin interface.
+ * Base interface for 1-d grids.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -29,34 +29,34 @@ package io.jenetics.lattices.grid;
 public interface Grid1d extends Loopable1d {
 
     /**
-     * Return the structure for 2-d structures.
+     * Return the structure for structures.
      *
-     * @return the structure for 2-d structures
+     * @return the structure for structures
      */
     Structure1d structure();
 
     /**
-     * Return the dimension of {@code this} 2-d structures.
+     * Return the dimension of {@code this} structures.
      *
-     * @return the dimension of {@code this} 2-d structures
+     * @return the dimension of {@code this} structures
      */
     default Extent1d extent() {
         return structure().extent();
     }
 
     /**
-     * Return the defined order of {@code this} 2-d structures.
+     * Return the defined order of {@code this} structures.
      *
-     * @return the defined order of {@code this} 2-d structures
+     * @return the defined order of {@code this} structures
      */
     default Order1d order() {
         return structure().order();
     }
 
     /**
-     * Return the number of cells of this {@code this} 2-d structures.
+     * Return the number of cells of this {@code this} structures.
      *
-     * @return the number of cells of this {@code this} 2-d structures
+     * @return the number of cells of this {@code this} structures
      */
     default int size() {
         return extent().size();

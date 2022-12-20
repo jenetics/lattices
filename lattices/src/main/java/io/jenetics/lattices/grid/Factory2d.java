@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 /**
- * Factory interface for creating 2-d matrices.
+ * Factory interface for creating 2-d structures.
  *
  * @param <T> the type created by the factory
  *
