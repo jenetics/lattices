@@ -62,7 +62,10 @@ public record Range1d(Index1d start, Extent1d extent) {
 
     @Override
     public String toString() {
-        return "[%d..%d]".formatted(start.value(), extent.size());
+        return "[%d..%d]".formatted(
+            start.value(),
+            start.value() + extent.size()
+        );
     }
 
 }

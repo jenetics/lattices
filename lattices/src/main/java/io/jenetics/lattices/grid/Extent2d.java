@@ -22,8 +22,8 @@ package io.jenetics.lattices.grid;
 /**
  * The extent of 2-d structures.
  *
- * @param rows the number of rows
- * @param cols the number of columns
+ * @param rows the number of rows, must be greater or equal zero
+ * @param cols the number of columns, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -32,14 +32,10 @@ package io.jenetics.lattices.grid;
 public record Extent2d(int rows, int cols) {
 
     public Extent2d {
-        if (rows < 0) {
+        if (rows < 0 || cols < 0) {
             throw new IllegalArgumentException(
-                "Number of rows must greater or equal than start: " + rows
-            );
-        }
-        if (cols < 0) {
-            throw new IllegalArgumentException(
-                "Number of columns must greater or equal than start: " + cols
+                "Extent must be greater or equal zero: [%d, %d]."
+                    .formatted(rows, cols)
             );
         }
     }
@@ -56,7 +52,7 @@ public record Extent2d(int rows, int cols) {
 
     @Override
     public String toString() {
-        return "[%s x %s]".formatted(rows(), cols());
+        return "[%d, %d]".formatted(rows(), cols());
     }
 
 }

@@ -20,9 +20,9 @@
 package io.jenetics.lattices.grid;
 
 /**
- * The extent of 2-d structures.
+ * The extent of 2-1 structures.
  *
- * @param size the number of elements
+ * @param size the number of elements, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -33,14 +33,14 @@ public record Extent1d(int size) {
     public Extent1d {
         if (size < 0) {
             throw new IllegalArgumentException(
-                "Size must greater or equal than start: " + size
+                "Extent must be greater or equal zero: [%d].".formatted(size)
             );
         }
     }
 
     @Override
     public String toString() {
-        return "[%s]".formatted(size());
+        return "[%d]".formatted(size());
     }
 
 }
