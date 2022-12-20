@@ -21,13 +21,25 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
 
+/**
+ * Object grid class.
+ *
+ * @param <T> the grid element type
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
+ */
 public class ObjectGrid1d<T> implements Grid1d {
 
     /**
@@ -104,6 +116,27 @@ public class ObjectGrid1d<T> implements Grid1d {
      */
     public void set(final int index, final T value) {
         array.set(order().index(index),  value);
+    }
+
+    /**
+     * Return an iterator of the grid elements.
+     *
+     * @return a new grid element iterator
+     */
+    public Iterator<T> iterator() {
+        return new ObjectGrid1dIterator<>(this);
+    }
+
+    /**
+     * Return a new stream of the grid elements.
+     *
+     * @return a new grid element stream
+     */
+    public Stream<T> stream() {
+        return StreamSupport.stream(
+            ((Iterable<T>)this::iterator).spliterator(),
+            false
+        );
     }
 
     /**
@@ -212,37 +245,6 @@ public class ObjectGrid1d<T> implements Grid1d {
             other.set(i, tmp);
         });
     }
-
-//    /**
-//     * Applies a function to each cell and aggregates the results.
-//     * Returns a value {@code v} such that {@code v == a(size())} where
-//     * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-//     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
-//     *
-//     * @param reducer an aggregation function taking as first argument the
-//     *        current aggregation and as second argument the transformed current
-//     *        cell value
-//     * @param f a function transforming the current cell value
-//     * @return the aggregated measure
-//     */
-//    public double reduce(
-//        final DoubleBinaryOperator reducer,
-//        final DoubleUnaryOperator f
-//    ) {
-//        requireNonNull(reducer);
-//        requireNonNull(f);
-//
-//        if (size() == 0) {
-//            return Double.NaN;
-//        }
-//
-//        double a = f.applyAsDouble(get(size() - 1));
-//        for (int i = size() - 1; --i >= 0;) {
-//            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
-//        }
-//
-//        return a;
-//    }
 
     /**
      * Checks whether the given matrices have the same dimension and contains
