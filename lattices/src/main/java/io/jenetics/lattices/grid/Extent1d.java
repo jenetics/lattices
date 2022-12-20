@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 /**
- * The extent of 2-1 structures.
+ * The extent of 1-d structures.
  *
  * @param size the number of elements, must be greater or equal zero
  *
@@ -28,7 +28,7 @@ package io.jenetics.lattices.grid;
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) {
+public record Extent1d(int size) implements Comparable<Extent1d> {
 
     public Extent1d {
         if (size < 0) {
@@ -36,6 +36,11 @@ public record Extent1d(int size) {
                 "Extent must be greater or equal zero: [%d].".formatted(size)
             );
         }
+    }
+
+    @Override
+    public int compareTo(final Extent1d other) {
+        return Integer.compare(size, other.size);
     }
 
     @Override

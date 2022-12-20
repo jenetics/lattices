@@ -25,7 +25,6 @@ import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.grid.Index1d;
 import io.jenetics.lattices.grid.Index2d;

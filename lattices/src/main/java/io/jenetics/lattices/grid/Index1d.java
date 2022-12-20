@@ -28,11 +28,26 @@ package io.jenetics.lattices.grid;
  * @since 3.0
  * @version 3.0
  */
-public record Index1d(int value) {
+public record Index1d(int value) implements Comparable<Index1d> {
 
     /**
      * Zero index.
      */
     public static final Index1d ZERO = new Index1d(0);
 
+    /**
+     * Return a new range from {@code this} <em>to</em> {@code end}.
+     *
+     * @param end the end index of the created range, exclusively
+     * @return a new range from {@code this} <em>to</em> {@code end}
+     * @throws IllegalArgumentException if {@code this >= end}
+     */
+    public Range1d to(final Index1d end) {
+        return new Range1d(this, end);
+    }
+
+    @Override
+    public int compareTo(final Index1d other) {
+        return Integer.compare(value, other.value);
+    }
 }
