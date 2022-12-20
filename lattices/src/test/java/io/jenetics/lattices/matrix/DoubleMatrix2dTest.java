@@ -29,6 +29,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.grid.Index2d;
 import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.grid.Range2d;
 import io.jenetics.lattices.grid.Stride2d;
@@ -47,8 +48,8 @@ public class DoubleMatrix2dTest {
 
             final var loop = new Loop2d.RowFirst(range);
             loop.forEach((r, c) -> {
-                final var i = r - range.row();
-                final var j = c - range.col();
+                final var i = r - range.start().row();
+                final var j = c - range.start().col();
 
                 assertThat(copy.get(i, j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
@@ -60,46 +61,46 @@ public class DoubleMatrix2dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
-            { next(new Extent2d(10, 10)), new Range2d(0, 0, 10, 10) },
-            { next(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
-            { next(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
-            { next(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
-            { next(new Extent2d(50, 10)), new Range2d(23, 3, 16, 7) },
-            { next(new Extent2d(77, 59)), new Range2d(23, 3, 16, 7) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(10, 10)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(5, 5)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(5, 5), new Extent2d(5, 5)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(2, 3), new Extent2d(7, 4)) },
+            { next(new Extent2d(50, 10)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
+            { next(new Extent2d(77, 59)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
 
             // Test also matrix views.
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 7, 20, 30))
+                    .view(new Range2d(new Index2d(3, 7), new Extent2d(20, 30)))
                     .transpose(),
-                new Range2d(12, 3, 5, 7),
+                new Range2d(new Index2d(12, 3), new Extent2d(5, 7)),
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(0, 0, 20, 30)),
-                new Range2d(1, 3, 11, 7)
+                    .view(new Range2d(new Index2d(0, 0), new Extent2d(20, 30))),
+                new Range2d(new Index2d(1, 3), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(0, 0, 20, 30)),
-                new Range2d(0, 0, 11, 7)
+                    .view(new Range2d(new Index2d(0, 0), new Extent2d(20, 30))),
+                new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30)),
-                new Range2d(0, 0, 11, 7)
+                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))),
+                new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30))
-                    .view(new Range2d(3, 2, 10, 20)),
-                new Range2d(0, 0, 5, 7)
+                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))
+                    .view(new Range2d(new Index2d(3, 2), new Extent2d(10, 20))),
+                new Range2d(new Index2d(0, 0), new Extent2d(5, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30))
+                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))
                     .view(new Stride2d(2, 3)),
-                new Range2d(1, 2, 5, 4)
+                new Range2d(new Index2d(1, 2), new Extent2d(5, 4))
             },
         };
     }
@@ -111,8 +112,8 @@ public class DoubleMatrix2dTest {
 
             final var loop = new Loop2d.RowFirst(range);
             loop.forEach((r, c) -> {
-                final var i = r - range.row();
-                final var j = c - range.col();
+                final var i = r - range.start().row();
+                final var j = c - range.start().col();
 
                 assertThat(view.get(i, j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix.copy(range), view))

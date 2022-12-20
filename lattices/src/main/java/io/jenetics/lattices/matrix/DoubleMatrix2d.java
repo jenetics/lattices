@@ -109,7 +109,7 @@ public class DoubleMatrix2d
             loop.forEach((r, c) ->
                 elems.set(
                     struct.order().index(r, c),
-                    get(r + range.row(), c + range.col())
+                    get(r + range.start().row(), c + range.start().col())
                 )
             );
 

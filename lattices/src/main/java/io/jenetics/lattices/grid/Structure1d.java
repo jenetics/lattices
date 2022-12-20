@@ -75,15 +75,16 @@ public record Structure1d(Extent1d extent, Order1d order) {
      *         is not an instance of {@link StrideOrder1d}
      */
     public Structure1d view(final Range1d range) {
-        if (range.start() + range.size() > extent.size()) {
+        if (range.start().value() + range.extent().size() > extent.size()) {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
 
         if (order instanceof StrideOrder1d ord) {
             return new Structure1d(
-                new Extent1d(range.size()),
+                range.extent(),
                 new StrideOrder1d(
-                    ord.start().value() + ord.stride().value()*range.start(),
+                    ord.start().value() +
+                        ord.stride().value()*range.start().value(),
                     ord.stride().value()
                 )
             );
@@ -136,10 +137,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
         checkRange(range);
 
         if (order instanceof StrideOrder1d) {
-            return new Structure1d(
-                new Extent1d(range.size()),
-                StrideOrder1d.DEFAULT
-            );
+            return new Structure1d(range.extent(), StrideOrder1d.DEFAULT);
         } else {
             throw new UnsupportedOperationException(
                 "Range view structure not supported by " + order
@@ -148,7 +146,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
     }
 
     private void checkRange(final Range1d range) {
-        if (range.size() > extent.size()) {
+        if (range.extent().size() > extent.size()) {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
     }

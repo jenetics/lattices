@@ -32,7 +32,9 @@ public record Extent1d(int size) {
 
     public Extent1d {
         if (size < 0) {
-            throw new IllegalArgumentException("Size must greater or equal than start: " + size);
+            throw new IllegalArgumentException(
+                "Size must greater or equal than start: " + size
+            );
         }
     }
 

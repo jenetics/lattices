@@ -31,12 +31,12 @@ public class Structure1dTest {
     @Test
     public void viewRange() {
         final var struct = new Structure1d(new Extent1d(78));
-        final var range = new Range1d(12, 13);
+        final var range = new Range1d(new Index1d(12), new Extent1d(13));
         final var view = struct.view(range);
 
-        assertThat(view.extent().size()).isEqualTo(range.size());
-        for (int i = 0; i < range.size(); ++i) {
-            assertThat(view.order().index(i)).isEqualTo(i + range.start());
+        assertThat(view.extent().size()).isEqualTo(range.extent().size());
+        for (int i = 0; i < range.extent().size(); ++i) {
+            assertThat(view.order().index(i)).isEqualTo(i + range.start().value());
         }
     }
 

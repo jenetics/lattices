@@ -19,24 +19,35 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
  * @param start the start index of the range
- * @param size the size of the range
+ * @param extent the size of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Range1d(int start, int size) {
+public record Range1d(Index1d start, Extent1d extent) {
 
     public Range1d {
-        if (start < 0 || size < 0) {
-            throw new IllegalArgumentException(
-                "Invalid range: [%d..%d].".formatted(start, size)
-            );
-        }
+        requireNonNull(start);
+        requireNonNull(extent);
+    }
+
+    /**
+     * Create a new range object with the given {@code start} and {@code end}
+     * index.
+     *
+     * @param start the start index, inclusively
+     * @param end the end index, exclusively
+     * @throws IllegalArgumentException if {@code start >= end}
+     */
+    public Range1d(final Index1d start, final Index1d end) {
+        this(start, new Extent1d(end.value() - start.value()));
     }
 
     /**
@@ -46,12 +57,12 @@ public record Range1d(int start, int size) {
      * @param extent the extent of the new range
      */
     public Range1d(final Extent1d extent) {
-        this(0, extent.size());
+        this(Index1d.ZERO, extent);
     }
 
     @Override
     public String toString() {
-        return "[%d..%d]".formatted(start, size);
+        return "[%d..%d]".formatted(start.value(), extent.size());
     }
 
 }

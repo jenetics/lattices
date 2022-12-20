@@ -19,46 +19,66 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
- * @param row the row where the range starts
- * @param col the column where the range starts
- * @param height the height of the range
- * @param width the size of the range
+ * @param start the range start
+ * @param extent the extent of the range
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Range2d(int row, int col, int height, int width) {
+public record Range2d(Index2d start, Extent2d extent) {
 
     public Range2d {
-        if (row < 0 || col < 0 || height < 0 || width < 0) {
-            throw new IllegalArgumentException(
-                "Invalid range: [%d..%d, %d..%d]"
-                    .formatted(row, height, col, width)
-            );
-        }
+        requireNonNull(start);
+        requireNonNull(extent);
     }
 
     /**
-     * Create a new range from the given extent. The start indices ({@link #row}
-     * and {@link #col()}) are set to zero.
+     * Create a new range object with the given {@code start} and {@code end}
+     * index.
+     *
+     * @param start the start index, inclusively
+     * @param end the end index, exclusively
+     * @throws IllegalArgumentException if {@code start >= end}
+     */
+    public Range2d(final Index2d start, final Index2d end) {
+        this(
+            start,
+            new Extent2d(
+                end.row() - start.row(),
+                end.col() - start.col()
+            )
+        );
+    }
+
+    /**
+     * Create a new range from the given extent.
      *
      * @param extent the extent of the new range
      */
     public Range2d(final Extent2d extent) {
-        this(0, 0, extent.rows(), extent.cols());
+        this(Index2d.ZERO, extent);
     }
 
+    /**
+     * Return the number of elements of this range.
+     *
+     * @return the number of elements of this range
+     */
     public int size() {
-        return height*width;
+        return extent.size();
     }
 
     @Override
     public String toString() {
-        return "[%d..%d, %d..%d]".formatted(row, height, col, width);
+        return "[%d..%d, %d..%d]".formatted(
+            start.row(), start.row() + extent.rows(),
+            start.col(), start.col() + extent.cols());
     }
 
 }

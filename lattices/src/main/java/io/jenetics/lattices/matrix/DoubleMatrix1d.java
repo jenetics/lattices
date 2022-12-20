@@ -99,12 +99,15 @@ public class DoubleMatrix1d
         if (structure.order() instanceof StrideOrder1d so) {
             return new DoubleMatrix1d(
                 struct,
-                array.copy(range.start() + so.start().value(), range.size())
+                array.copy(
+                    range.start().value() + so.start().value(),
+                    range.extent().size()
+                )
             );
         } else {
-            final var elems = array.like(range.size());
-            for (int i = 0; i < range.size(); ++i) {
-                elems.set(i, get(i + range.start()));
+            final var elems = array.like(range.extent().size());
+            for (int i = 0; i < range.extent().size(); ++i) {
+                elems.set(i, get(i + range.start().value()));
             }
             return new DoubleMatrix1d(struct, elems);
         }

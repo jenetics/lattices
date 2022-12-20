@@ -24,7 +24,11 @@ import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
+import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.grid.Grids;
+import io.jenetics.lattices.grid.Index1d;
+import io.jenetics.lattices.grid.Index2d;
 import io.jenetics.lattices.grid.Range1d;
 import io.jenetics.lattices.grid.Range2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
@@ -257,7 +261,7 @@ public final class LU {
             if (j < m && context.isNotZero(jj)) {
                 final var multiplier = 1.0/jj;
                 lu.colAt(j)
-                    .view(new Range1d(j + 1, m - (j + 1)))
+                    .view(new Range1d(new Index1d(j + 1), new Extent1d(m - (j + 1))))
                     .assign(v -> v*multiplier);
             }
         }
@@ -278,7 +282,11 @@ public final class LU {
             }
         }
         if (A.cols() > A.rows()) {
-            A.view(new Range2d(0, min, A.rows(), A.cols() - min)).assign(0);
+            final var range = new Range2d(
+                new Index2d(0, min),
+                new Index2d(A.rows(), A.cols() - min)
+            );
+            A.view(range).assign(0);
         }
     }
 
@@ -293,7 +301,11 @@ public final class LU {
             }
         }
         if (A.cols() < A.rows()) {
-            A.view(new Range2d(min, 0, A.rows() - min, A.cols())).assign(0);
+            final var range = new Range2d(
+                new Index2d(0, min),
+                new Index2d(A.rows() - min, A.cols())
+            );
+            A.view(range).assign(0);
         }
     }
 

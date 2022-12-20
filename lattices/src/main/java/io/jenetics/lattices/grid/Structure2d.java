@@ -80,11 +80,11 @@ public record Structure2d(Extent2d extent, Order2d order) {
 
         if (order instanceof StrideOrder2d ord) {
             return new Structure2d(
-                new Extent2d(range.height(), range.width()),
+                range.extent(),
                 new StrideOrder2d(
                     new Index2d(
-                    ord.start().row() + ord.stride().row()*range.row(),
-                    ord.start().col() + ord.stride().col()*range.col()
+                    ord.start().row() + ord.stride().row()*range.start().row(),
+                    ord.start().col() + ord.stride().col()*range.start().col()
                     ),
                     ord.stride()
                 )
@@ -97,8 +97,8 @@ public record Structure2d(Extent2d extent, Order2d order) {
     }
 
     private void checkRange(final Range2d range) {
-        if (range.col() + range.width() > extent.cols() ||
-            range.row() + range.height() > extent.rows())
+        if (range.start().col() + range.extent().cols() > extent.cols() ||
+            range.start().row() + range.extent().rows() > extent.rows())
         {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
@@ -154,8 +154,10 @@ public record Structure2d(Extent2d extent, Order2d order) {
         checkRange(range);
 
         if (order instanceof StrideOrder2d) {
-            final var ext = new Extent2d(range);
-            return new Structure2d(ext, new StrideOrder2d(ext));
+            return new Structure2d(
+                range.extent(),
+                new StrideOrder2d(range.extent())
+            );
         } else {
             throw new UnsupportedOperationException(
                 "Range view structure not supported by " + order

@@ -31,6 +31,9 @@ package io.jenetics.lattices.grid;
  */
 public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
 
+    /**
+     * The default stride.
+     */
     public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
 
     public StrideOrder1d(final int start, final int stride) {

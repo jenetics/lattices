@@ -23,7 +23,9 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkRectangular;
 
 import io.jenetics.lattices.NumericalContext;
+import io.jenetics.lattices.grid.Extent1d;
 import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.grid.Index1d;
 import io.jenetics.lattices.grid.Range1d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
@@ -88,13 +90,13 @@ public final class QR {
         final DoubleMatrix2d Q = QR.like();
         for (int k = QR.cols() - 1; k >= 0; k--) {
             final DoubleMatrix1d QRcolk = QR.colAt(k)
-                .view(new Range1d(k, QR.rows() - k));
+                .view(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k)));
 
             Q.set(k, k, 1);
             for (int j = k; j < QR.cols(); ++j) {
                 if (context.isNotZero(QR.get(k, k))) {
                     final var Qcolj = Q.colAt(j)
-                        .view(new Range1d(k, QR.rows() - k));
+                        .view(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k)));
 
                     double s = -QRcolk.dotProduct(Qcolj)/QR.get(k, k);
                     Qcolj.assign(QRcolk, (a, b) -> Math.fma(b, s, a));
@@ -216,7 +218,8 @@ public final class QR {
 
         final var QRcolumnsPart = new DoubleMatrix1d[n];
         for (int k = 0; k < n; ++k) {
-            QRcolumnsPart[k] = qr.colAt(k).view(new Range1d(k, m - k));
+            QRcolumnsPart[k] = qr.colAt(k)
+                .view(new Range1d(new Index1d(k), new Extent1d(m - k)));
         }
 
         // Main loop.
@@ -239,7 +242,7 @@ public final class QR {
                 // Apply transformation to remaining columns.
                 for (int j = k + 1; j < n; ++j) {
                     final DoubleMatrix1d QRcolj = qr.colAt(j)
-                        .view(new Range1d(k, m - k));
+                        .view(new Range1d(new Index1d(k), new Extent1d(m - k)));
 
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
                     s = -s/qr.get(k, k);

@@ -29,4 +29,10 @@ package io.jenetics.lattices.grid;
  * @version 3.0
  */
 public record Index1d(int value) {
+
+    /**
+     * Zero index.
+     */
+    public static final Index1d ZERO = new Index1d(0);
+
 }
