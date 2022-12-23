@@ -32,9 +32,9 @@ package io.jenetics.lattices.grid;
 public record Stride2d(int row, int col) {
 
     public Stride2d {
-        if (row < 0 || col < 0) {
+        if (row < 1 || col < 1) {
             throw new IllegalArgumentException(
-                "Strides must not be negative: [%d, %d]."
+                "Stride must be positive: [%d, %d]."
                     .formatted(row, col)
             );
         }

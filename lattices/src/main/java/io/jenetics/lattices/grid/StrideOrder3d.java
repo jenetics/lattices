@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Implements a structure order by defining start indexes and strides.
  *
@@ -29,31 +31,35 @@ package io.jenetics.lattices.grid;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder2d(Index2d start, Stride2d stride) implements Order2d {
+public record StrideOrder3d(Index3d start, Stride3d stride) implements Order3d {
+
+    public StrideOrder3d {
+        requireNonNull(start);
+        requireNonNull(stride);
+    }
+
+    public StrideOrder3d(final Index3d start, final Extent3d extent) {
+        this(
+            start,
+            new Stride3d(extent.rows()*extent.cols(), extent.cols(),  1)
+        );
+    }
 
     /**
-     * Create a new row-major {@link Order2d} object for the given matrix
-     * dimension. This is the default implementation for the element order
-     * of the matrix.
+     * Create a new stride-order object,
      *
      * @param extent the structure extent
      */
-    public StrideOrder2d(final Extent2d extent) {
-        this(Index2d.ZERO, new Stride2d(extent.cols(), 1));
-    }
-
-    public StrideOrder2d(final Index2d start, final Extent2d extent) {
-        this(start, new Stride2d(extent.cols(), 1));
+    public StrideOrder3d(final Extent3d extent) {
+        this(Index3d.ZERO, extent);
     }
 
     @Override
-    public int index(final int row, final int col) {
-        return start.row() + row*stride.row() + start.col() + col*stride.col();
-    }
-
-    @Override
-    public StrideOrder2d transpose() {
-        return new StrideOrder2d(start, new Stride2d(stride.col(), stride.row()));
+    public int index(final int slice, final int row, final int col) {
+        return
+            start.slice() + slice*stride.slice() +
+            start.row() + row*stride.row() +
+            start.col() + col*stride.col();
     }
 
 }

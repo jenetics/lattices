@@ -19,23 +19,33 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * Defines a stride.
+ * Defines a 3-d structure, which is defined by the extent of the structure and
+ * the index oder of the underlying 1-d structure.
  *
- * @param value the stride value
+ * @param extent the extent of the structure
+ * @param order the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int value) {
+public record Structure3d(Extent3d extent, Order3d order) {
 
-    public Stride1d {
-        if (value < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d].".formatted(value)
-            );
-        }
+    public Structure3d {
+        requireNonNull(extent);
+        requireNonNull(order);
+    }
+
+    /**
+     * Create a new structure with the given extent and the default element order.
+     *
+     * @param extent the extent of the structure
+     */
+    public Structure3d(final Extent3d extent) {
+        this(extent, new StrideOrder3d(extent));
     }
 
 }

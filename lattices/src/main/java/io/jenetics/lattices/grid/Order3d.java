@@ -27,7 +27,7 @@ package io.jenetics.lattices.grid;
  * @version 3.0
  */
 @FunctionalInterface
-public interface Order2d {
+public interface Order3d {
 
     /**
      * Return the position of the given coordinate within the (virtual or
@@ -35,9 +35,11 @@ public interface Order2d {
      *
      * @param row the row index
      * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @param slice the slice index
+     * @return the (linearized) index of the given {@code slice}, {@code row} and
+     *        {@code col} value
      */
-    int index(final int row, final int col);
+    int index(final int slice, final int row, final int col);
 
     /**
      * Return the position of the element with the given relative {@code index}
@@ -46,17 +48,8 @@ public interface Order2d {
      * @param index the index of the element.
      * @return the (linearized) index of the given {@code index}
      */
-    default int index(final Index2d index) {
-        return index(index.row(), index.col());
-    }
-
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
+    default int index(final Index3d index) {
+        return index(index.slice(), index.row(), index.col());
     }
 
 }

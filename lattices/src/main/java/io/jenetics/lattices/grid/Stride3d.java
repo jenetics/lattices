@@ -20,20 +20,23 @@
 package io.jenetics.lattices.grid;
 
 /**
- * Defines a stride.
+ * Defines row-, column- and slice strides.
  *
- * @param value the stride value
+ * @param row the row stride value
+ * @param col the column stride value
+ * @param slice the slice stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int value) {
+public record Stride3d(int slice, int row, int col) {
 
-    public Stride1d {
-        if (value < 1) {
+    public Stride3d {
+        if (slice < 1 || row < 1 || col < 1) {
             throw new IllegalArgumentException(
-                "Stride must be positive: [%d].".formatted(value)
+                "Stride must be positive: [%d, %d, %d]."
+                    .formatted(slice, row, col)
             );
         }
     }

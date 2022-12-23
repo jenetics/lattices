@@ -20,22 +20,40 @@
 package io.jenetics.lattices.grid;
 
 /**
- * Defines a stride.
+ * The extent of 3-d structures.
  *
- * @param value the stride value
+ * @param rows the number of rows, must be greater or equal zero
+ * @param cols the number of columns, must be greater or equal zero
+ * @param slices the number of slices, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int value) {
+public record Extent3d(int rows, int cols, int slices) {
 
-    public Stride1d {
-        if (value < 1) {
+    public Extent3d {
+        if (rows < 0 || cols < 0 || slices < 0) {
             throw new IllegalArgumentException(
-                "Stride must be positive: [%d].".formatted(value)
+                "Extent must be greater or equal zero: [%d, %d, %d]."
+                    .formatted(rows, cols, slices)
             );
         }
+    }
+
+    /**
+     * The number of matrix elements (cells) a matrix with {@code this}
+     * dimensions consists of.
+     *
+     * @return the number of cells for {@code this} matrix dimension
+     */
+    public int size() {
+        return rows*cols*slices;
+    }
+
+    @Override
+    public String toString() {
+        return "[%d, %d, %d]".formatted(rows(), cols(), slices());
     }
 
 }

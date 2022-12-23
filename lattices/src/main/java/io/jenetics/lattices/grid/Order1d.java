@@ -38,4 +38,15 @@ public interface Order1d {
      */
     int index(final int rank);
 
+    /**
+     * Return the position of the element with the given relative {@code index}
+     * within the (virtual or non-virtual) internal 1-d array.
+     *
+     * @param index the index of the element.
+     * @return the (linearized) index of the given {@code index}
+     */
+    default int index(final Index1d index) {
+        return index(index.value());
+    }
+
 }
