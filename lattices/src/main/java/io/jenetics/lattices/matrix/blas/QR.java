@@ -23,10 +23,10 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkRectangular;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
-import io.jenetics.lattices.grid.Index1d;
-import io.jenetics.lattices.grid.Range1d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 

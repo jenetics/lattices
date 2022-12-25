@@ -30,6 +30,8 @@ import java.util.stream.StreamSupport;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.structure.StrideOrder1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Object grid class.

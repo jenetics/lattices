@@ -27,9 +27,9 @@ import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.Factory1d;
-import io.jenetics.lattices.grid.Range1d;
-import io.jenetics.lattices.grid.StrideOrder1d;
-import io.jenetics.lattices.grid.Structure1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.StrideOrder1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}

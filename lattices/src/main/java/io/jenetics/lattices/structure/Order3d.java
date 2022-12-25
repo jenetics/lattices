@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
  * Represents the order for accessing the linearly stored element data.

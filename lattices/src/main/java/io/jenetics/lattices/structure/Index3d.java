@@ -17,35 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * The extent of 1-d structures.
+ * Represents a 3-d index.
  *
- * @param size the number of elements, must be greater or equal zero
+ * @param row the row index
+ * @param col the column index
+ * @param slice the slice index
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+public record Index3d(int row, int col, int slice) {
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d].".formatted(size)
-            );
-        }
-    }
-
-    @Override
-    public int compareTo(final Extent1d other) {
-        return Integer.compare(size, other.size);
-    }
-
-    @Override
-    public String toString() {
-        return "[%d]".formatted(size());
-    }
+    /**
+     * Index where slice, row and column is zero.
+     */
+    public static final Index3d ZERO = new Index3d(0, 0, 0);
 
 }

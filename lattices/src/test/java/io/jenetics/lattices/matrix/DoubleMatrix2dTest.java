@@ -28,11 +28,11 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.Extent2d;
-import io.jenetics.lattices.grid.Index2d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.grid.Loop2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.Stride2d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.testfuxtures.Colts;
 
 /**

@@ -17,28 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
+
+import static java.util.Objects.requireNonNull;
 
 /**
- * Defines row-, column- and slice strides.
+ * Defines a 3-d structure, which is defined by the extent of the structure and
+ * the index oder of the underlying 1-d structure.
  *
- * @param row the row stride value
- * @param col the column stride value
- * @param slice the slice stride value
+ * @param extent the extent of the structure
+ * @param order the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride3d(int slice, int row, int col) {
+public record Structure3d(Extent3d extent, Order3d order) {
 
-    public Stride3d {
-        if (slice < 1 || row < 1 || col < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d, %d, %d]."
-                    .formatted(slice, row, col)
-            );
-        }
+    public Structure3d {
+        requireNonNull(extent);
+        requireNonNull(order);
+    }
+
+    /**
+     * Create a new structure with the given extent and the default element order.
+     *
+     * @param extent the extent of the structure
+     */
+    public Structure3d(final Extent3d extent) {
+        this(extent, new StrideOrder3d(extent));
     }
 
 }

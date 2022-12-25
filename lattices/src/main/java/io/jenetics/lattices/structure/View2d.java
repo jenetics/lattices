@@ -17,27 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-/**
- * Defines row- and columns strides.
- *
- * @param row the row stride value
- * @param col the column stride value
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public record Stride2d(int row, int col) {
+@FunctionalInterface
+public interface View2d {
 
-    public Stride2d {
-        if (row < 1 || col < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d, %d]."
-                    .formatted(row, col)
-            );
-        }
+    /**
+     * Applies the <em>view</em> transformation of the given {@code structure}.
+     *
+     * @param structure the structure to apply the view transformation on
+     * @return a new <em>view</em>-structure
+     */
+    Structure2d apply(final Structure2d structure);
+
+    static View2d of(final Range2d range) {
+        return null;
+    }
+
+    static View2d of(final Stride2d stride) {
+        return null;
     }
 
 }

@@ -17,27 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Represents the order for accessing the linearly stored matrix data.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 @FunctionalInterface
-public interface Order2d {
+public interface Order1d {
 
     /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
      *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @param rank the rank of the element.
+     * @return the (linearized) index of the given {@code rank}
      */
-    int index(final int row, final int col);
+    int index(final int rank);
 
     /**
      * Return the position of the element with the given relative {@code index}
@@ -46,17 +45,8 @@ public interface Order2d {
      * @param index the index of the element.
      * @return the (linearized) index of the given {@code index}
      */
-    default int index(final Index2d index) {
-        return index(index.row(), index.col());
-    }
-
-    /**
-     * Return a new order function which swaps row index with column index.
-     *
-     * @return a new transposed order function
-     */
-    default Order2d transpose() {
-        return (row, col) -> index(col, row);
+    default int index(final Index1d index) {
+        return index(index.value());
     }
 
 }

@@ -17,35 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
-
-import static java.util.Objects.requireNonNull;
+package io.jenetics.lattices.structure;
 
 /**
- * Defines a 3-d structure, which is defined by the extent of the structure and
- * the index oder of the underlying 1-d structure.
+ * The extent of 1-d structures.
  *
- * @param extent the extent of the structure
- * @param order the element order
+ * @param size the number of elements, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Order3d order) {
+public record Extent1d(int size) implements Comparable<Extent1d> {
 
-    public Structure3d {
-        requireNonNull(extent);
-        requireNonNull(order);
+    public Extent1d {
+        if (size < 0) {
+            throw new IllegalArgumentException(
+                "Extent must be greater or equal zero: [%d].".formatted(size)
+            );
+        }
     }
 
-    /**
-     * Create a new structure with the given extent and the default element order.
-     *
-     * @param extent the extent of the structure
-     */
-    public Structure3d(final Extent3d extent) {
-        this(extent, new StrideOrder3d(extent));
+    @Override
+    public int compareTo(final Extent1d other) {
+        return Integer.compare(size, other.size);
+    }
+
+    @Override
+    public String toString() {
+        return "[%d]".formatted(size());
     }
 
 }

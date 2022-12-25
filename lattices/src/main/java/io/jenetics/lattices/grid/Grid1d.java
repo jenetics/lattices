@@ -19,6 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Order1d;
+import io.jenetics.lattices.structure.Structure1d;
+
 /**
  * Base interface for 1-d grids.
  *

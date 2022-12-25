@@ -27,6 +27,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Index2d;
+import io.jenetics.lattices.structure.Range2d;
+
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */

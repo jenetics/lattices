@@ -17,25 +17,34 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-@FunctionalInterface
-public interface View2d {
+/**
+ * Represents a 2-d index.
+ *
+ * @param row the row index
+ * @param col the column index
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
+ */
+public record Index2d(int row, int col) {
 
     /**
-     * Applies the <em>view</em> transformation of the given {@code structure}.
-     *
-     * @param structure the structure to apply the view transformation on
-     * @return a new <em>view</em>-structure
+     * Index where row and column is zero.
      */
-    Structure2d apply(final Structure2d structure);
+    public static final Index2d ZERO = new Index2d(0, 0);
 
-    static View2d of(final Range2d range) {
-        return null;
-    }
-
-    static View2d of(final Stride2d stride) {
-        return null;
+    /**
+     * Return a new range from {@code this} <em>to</em> {@code end}.
+     *
+     * @param end the end index of the created range, exclusively
+     * @return a new range from {@code this} <em>to</em> {@code end}
+     * @throws IllegalArgumentException if {@code this >= end}
+     */
+    public Range2d to(final Index2d end) {
+        return new Range2d(this, end);
     }
 
 }

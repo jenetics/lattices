@@ -19,6 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Order2d;
+import io.jenetics.lattices.structure.Structure2d;
+
 /**
  * Base interface for 2-d grids.
  *

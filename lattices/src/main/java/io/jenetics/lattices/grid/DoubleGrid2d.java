@@ -27,6 +27,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
  * Generic class for 2-d grids holding {@code double} elements. The

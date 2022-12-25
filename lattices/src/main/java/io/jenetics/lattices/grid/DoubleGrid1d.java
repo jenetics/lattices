@@ -28,6 +28,8 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.structure.StrideOrder1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Generic class for 1-d grids holding {@code double} elements. The

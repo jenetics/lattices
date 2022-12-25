@@ -21,8 +21,8 @@ package io.jenetics.lattices.testfuxtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 

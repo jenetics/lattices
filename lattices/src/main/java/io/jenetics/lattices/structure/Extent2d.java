@@ -17,34 +17,42 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents a 2-d index.
+ * The extent of 2-d structures.
  *
- * @param row the row index
- * @param col the column index
+ * @param rows the number of rows, must be greater or equal zero
+ * @param cols the number of columns, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index2d(int row, int col) {
+public record Extent2d(int rows, int cols) {
+
+    public Extent2d {
+        if (rows < 0 || cols < 0) {
+            throw new IllegalArgumentException(
+                "Extent must be greater or equal zero: [%d, %d]."
+                    .formatted(rows, cols)
+            );
+        }
+    }
 
     /**
-     * Index where row and column is zero.
-     */
-    public static final Index2d ZERO = new Index2d(0, 0);
-
-    /**
-     * Return a new range from {@code this} <em>to</em> {@code end}.
+     * The number of matrix elements (cells) a matrix with {@code this}
+     * dimensions consists of.
      *
-     * @param end the end index of the created range, exclusively
-     * @return a new range from {@code this} <em>to</em> {@code end}
-     * @throws IllegalArgumentException if {@code this >= end}
+     * @return the number of cells for {@code this} matrix dimension
      */
-    public Range2d to(final Index2d end) {
-        return new Range2d(this, end);
+    public int size() {
+        return rows*cols;
+    }
+
+    @Override
+    public String toString() {
+        return "[%d, %d]".formatted(rows(), cols());
     }
 
 }

@@ -20,7 +20,7 @@
 package io.jenetics.lattices.matrix;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.StrideOrder2d;
+import io.jenetics.lattices.structure.StrideOrder2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

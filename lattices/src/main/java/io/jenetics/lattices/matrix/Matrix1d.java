@@ -19,12 +19,12 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.grid.Factory1d;
 import io.jenetics.lattices.grid.Grid1d;
-import io.jenetics.lattices.grid.Range1d;
-import io.jenetics.lattices.grid.Stride1d;
-import io.jenetics.lattices.grid.Structure1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Stride1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * This interface defines the structure for 1-d matrices holding objects or

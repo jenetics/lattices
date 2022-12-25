@@ -23,6 +23,8 @@ import static java.util.Objects.requireNonNull;
 
 import io.jenetics.lattices.function.IntIntConsumer;
 import io.jenetics.lattices.function.IntIntPredicate;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Range2d;
 
 /**
  * Looping strategies for 2-d structures.

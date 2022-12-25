@@ -23,6 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Stride1d;
+import io.jenetics.lattices.structure.Structure1d;
+
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */

@@ -19,12 +19,12 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Grid2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.Stride2d;
-import io.jenetics.lattices.grid.Structure2d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Stride2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
  * This interface defines the structure for 2-d matrices holding objects or

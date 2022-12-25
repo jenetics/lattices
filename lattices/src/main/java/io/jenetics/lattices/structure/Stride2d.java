@@ -17,23 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Defines a stride.
+ * Defines row- and columns strides.
  *
- * @param value the stride value
+ * @param row the row stride value
+ * @param col the column stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int value) {
+public record Stride2d(int row, int col) {
 
-    public Stride1d {
-        if (value < 1) {
+    public Stride2d {
+        if (row < 1 || col < 1) {
             throw new IllegalArgumentException(
-                "Stride must be positive: [%d].".formatted(value)
+                "Stride must be positive: [%d, %d]."
+                    .formatted(row, col)
             );
         }
     }

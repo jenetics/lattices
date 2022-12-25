@@ -28,13 +28,13 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.grid.Factory2d;
-import io.jenetics.lattices.grid.Projection2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.StrideOrder2d;
-import io.jenetics.lattices.grid.Structure1d;
-import io.jenetics.lattices.grid.Structure2d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.StrideOrder2d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements. Instances

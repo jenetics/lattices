@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.blas.Blas;

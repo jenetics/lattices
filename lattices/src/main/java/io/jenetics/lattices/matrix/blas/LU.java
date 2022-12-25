@@ -24,12 +24,12 @@ import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.grid.Grids;
-import io.jenetics.lattices.grid.Index1d;
-import io.jenetics.lattices.grid.Index2d;
-import io.jenetics.lattices.grid.Range1d;
-import io.jenetics.lattices.grid.Range2d;
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Index2d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 

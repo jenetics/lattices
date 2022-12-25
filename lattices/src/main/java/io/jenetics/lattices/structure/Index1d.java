@@ -17,42 +17,37 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * The extent of 2-d structures.
+ * Represents a 1-d index
  *
- * @param rows the number of rows, must be greater or equal zero
- * @param cols the number of columns, must be greater or equal zero
+ * @param value the index value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent2d(int rows, int cols) {
-
-    public Extent2d {
-        if (rows < 0 || cols < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d, %d]."
-                    .formatted(rows, cols)
-            );
-        }
-    }
+public record Index1d(int value) implements Comparable<Index1d> {
 
     /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
-     *
-     * @return the number of cells for {@code this} matrix dimension
+     * Zero index.
      */
-    public int size() {
-        return rows*cols;
+    public static final Index1d ZERO = new Index1d(0);
+
+    /**
+     * Return a new range from {@code this} <em>to</em> {@code end}.
+     *
+     * @param end the end index of the created range, exclusively
+     * @return a new range from {@code this} <em>to</em> {@code end}
+     * @throws IllegalArgumentException if {@code this >= end}
+     */
+    public Range1d to(final Index1d end) {
+        return new Range1d(this, end);
     }
 
     @Override
-    public String toString() {
-        return "[%d, %d]".formatted(rows(), cols());
+    public int compareTo(final Index1d other) {
+        return Integer.compare(value, other.value);
     }
-
 }

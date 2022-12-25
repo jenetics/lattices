@@ -30,7 +30,7 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.matrix.blas.Algebra;
 
 /**
