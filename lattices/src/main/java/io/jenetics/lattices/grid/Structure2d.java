@@ -21,8 +21,6 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.matrix.Matrix1d;
-
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
  * the index order of the underlying 1-d structure.
@@ -176,73 +174,5 @@ public record Structure2d(Extent2d extent, Order2d order) {
             order.transpose()
         );
     }
-
-    /**
-     * Create a new {@link Structure1d} object which can be used to
-     * create a column view {@link Matrix1d}.
-     *
-     * @param index the column index
-     * @return a new {@link Structure1d} object
-     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
-     */
-    public Structure1d colAt(final int index) {
-        if (index < 0 || index >= extent().cols()) {
-            throw new IndexOutOfBoundsException(
-                "Attempted to access " + extent() + " at column=" + index
-            );
-        }
-
-        if (order instanceof StrideOrder2d ord) {
-            return new Structure1d(
-                new Extent1d(extent().rows()),
-                new StrideOrder1d(
-                    ord.index(0, index),
-                    ord.stride().row()
-                )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Column view structure not supported by " + order
-            );
-        }
-    }
-
-    public Structure1d view(final Projection2d projection) {
-        return projection.apply(this);
-    }
-
-//    /**
-//     * Create a new {@link Structure1d} object which can be used to
-//     * create a row view {@link Matrix1d}.
-//     *
-//     * @param index the row index
-//     * @return a new {@link Structure1d} object
-//     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-//     * @throws UnsupportedOperationException if the {@link #order()} function
-//     *         is not an instance of {@link StrideOrder2d}
-//     */
-//    public Structure1d rowAt(final int index) {
-//        if (index < 0 || index >= extent().rows()) {
-//            throw new IndexOutOfBoundsException(
-//                "Attempted to access " + extent() + " at row=" + index
-//            );
-//        }
-//
-//        if (order instanceof StrideOrder2d ord) {
-//            return new Structure1d(
-//                new Extent1d(extent().cols()),
-//                new StrideOrder1d(
-//                    ord.index(index, 0),
-//                    ord.stride().col()
-//                )
-//            );
-//        } else {
-//            throw new UnsupportedOperationException(
-//                "Row view structure not supported by " + order
-//            );
-//        }
-//    }
 
 }

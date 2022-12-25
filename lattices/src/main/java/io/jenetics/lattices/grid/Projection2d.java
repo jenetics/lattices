@@ -25,74 +25,6 @@ package io.jenetics.lattices.grid;
 @FunctionalInterface
 public interface Projection2d {
 
-    record Row(int index) implements Projection2d {
-        public Row {
-            if (index < 0) {
-                throw new IllegalArgumentException(
-                    "Projection index must be greater then zero: " + index
-                );
-            }
-        }
-
-        @Override
-        public Structure1d apply(final Structure2d structure) {
-            if (index >= structure.extent().rows()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + structure.extent() + " at row=" + index
-                );
-            }
-
-            if (structure.order() instanceof StrideOrder2d ord) {
-                return new Structure1d(
-                    new Extent1d(structure.extent().cols()),
-                    new StrideOrder1d(
-                        ord.index(index, 0),
-                        ord.stride().col()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Row view structure not supported by " + structure.order()
-                );
-            }
-        }
-    }
-
-    record Col(int index) implements Projection2d {
-        public Col {
-            if (index < 0) {
-                throw new IllegalArgumentException(
-                    "Projection index must be greater then zero: " + index
-                );
-            }
-        }
-
-        @Override
-        public Structure1d apply(final Structure2d structure) {
-            if (index >= structure.extent().cols()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + structure.extent() + " at column=" +
-                        index()
-                );
-            }
-
-            if (structure.order() instanceof StrideOrder2d ord) {
-                return new Structure1d(
-                    new Extent1d(structure.extent().rows()),
-                    new StrideOrder1d(
-                        ord.index(0, index()),
-                        ord.stride().row()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Column view structure not supported by " + structure.order()
-                );
-            }
-        }
-
-    }
-
     /**
      * Performs the projection the given {@code structure}.
      *
@@ -103,6 +35,12 @@ public interface Projection2d {
 
 
     static Projection2d row(final int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "Projection index must be greater then zero: " + index
+            );
+        }
+
         return structure -> {
             if (index >= structure.extent().rows()) {
                 throw new IndexOutOfBoundsException(
@@ -121,6 +59,37 @@ public interface Projection2d {
             } else {
                 throw new UnsupportedOperationException(
                     "Row view structure not supported by " + structure.order()
+                );
+            }
+        };
+    }
+
+    static Projection2d col(final int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "Projection index must be greater then zero: " + index
+            );
+        }
+
+        return structure -> {
+            if (index >= structure.extent().cols()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + structure.extent() + " at column=" +
+                        index
+                );
+            }
+
+            if (structure.order() instanceof StrideOrder2d ord) {
+                return new Structure1d(
+                    new Extent1d(structure.extent().rows()),
+                    new StrideOrder1d(
+                        ord.index(0, index),
+                        ord.stride().row()
+                    )
+                );
+            } else {
+                throw new UnsupportedOperationException(
+                    "Column view structure not supported by " + structure.order()
                 );
             }
         };

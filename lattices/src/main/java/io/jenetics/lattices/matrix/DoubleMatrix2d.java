@@ -139,7 +139,10 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return new DoubleMatrix1d(structure.colAt(index), array);
+        return new DoubleMatrix1d(
+            Projection2d.col(index).apply(structure),
+            array
+        );
     }
 
     /**
