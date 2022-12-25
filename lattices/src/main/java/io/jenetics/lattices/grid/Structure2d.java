@@ -209,36 +209,40 @@ public record Structure2d(Extent2d extent, Order2d order) {
         }
     }
 
-    /**
-     * Create a new {@link Structure1d} object which can be used to
-     * create a row view {@link Matrix1d}.
-     *
-     * @param index the row index
-     * @return a new {@link Structure1d} object
-     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
-     */
-    public Structure1d rowAt(final int index) {
-        if (index < 0 || index >= extent().rows()) {
-            throw new IndexOutOfBoundsException(
-                "Attempted to access " + extent() + " at row=" + index
-            );
-        }
-
-        if (order instanceof StrideOrder2d ord) {
-            return new Structure1d(
-                new Extent1d(extent().cols()),
-                new StrideOrder1d(
-                    ord.index(index, 0),
-                    ord.stride().col()
-                )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Row view structure not supported by " + order
-            );
-        }
+    public Structure1d view(final Projection2d projection) {
+        return projection.apply(this);
     }
+
+//    /**
+//     * Create a new {@link Structure1d} object which can be used to
+//     * create a row view {@link Matrix1d}.
+//     *
+//     * @param index the row index
+//     * @return a new {@link Structure1d} object
+//     * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
+//     * @throws UnsupportedOperationException if the {@link #order()} function
+//     *         is not an instance of {@link StrideOrder2d}
+//     */
+//    public Structure1d rowAt(final int index) {
+//        if (index < 0 || index >= extent().rows()) {
+//            throw new IndexOutOfBoundsException(
+//                "Attempted to access " + extent() + " at row=" + index
+//            );
+//        }
+//
+//        if (order instanceof StrideOrder2d ord) {
+//            return new Structure1d(
+//                new Extent1d(extent().cols()),
+//                new StrideOrder1d(
+//                    ord.index(index, 0),
+//                    ord.stride().col()
+//                )
+//            );
+//        } else {
+//            throw new UnsupportedOperationException(
+//                "Row view structure not supported by " + order
+//            );
+//        }
+//    }
 
 }

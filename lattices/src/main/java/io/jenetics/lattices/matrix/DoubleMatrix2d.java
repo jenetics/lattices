@@ -30,6 +30,7 @@ import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.Extent1d;
 import io.jenetics.lattices.grid.Factory2d;
+import io.jenetics.lattices.grid.Projection2d;
 import io.jenetics.lattices.grid.Range2d;
 import io.jenetics.lattices.grid.StrideOrder2d;
 import io.jenetics.lattices.grid.Structure1d;
@@ -153,7 +154,10 @@ public class DoubleMatrix2d
      *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(structure.rowAt(index), array);
+        return new DoubleMatrix1d(
+            Projection2d.row(index).apply(structure),
+            array
+        );
     }
 
     /* *************************************************************************
