@@ -19,17 +19,14 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.Self;
+import io.jenetics.lattices.structure.Structure2d;
 
-/**
- * Base interface for 2-d grids.
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public interface Grid2d<G extends Grid2d<G>> extends Loopable2d, Self<G> {
+public interface Producible2d<T> {
 
+    T view(final Structure2d structure);
 
+    T like(final Structure2d structure);
+
+    T copy(final Structure2d structure);
 
 }

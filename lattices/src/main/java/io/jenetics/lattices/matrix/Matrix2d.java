@@ -19,9 +19,9 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public interface Matrix2d<M extends Matrix2d<M>>
-    extends Matrix<M>, Grid2d
+    extends Matrix<M>, Grid2d<M>
 {
 
     /**
