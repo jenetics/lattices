@@ -28,8 +28,19 @@ import io.jenetics.lattices.Self;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid2d<G extends Grid2d<G>> extends Loopable2d, Self<G> {
+public interface Grid2d<G extends Grid2d<G>>
+    extends Structural2d, Loopable2d, Self<G>
+{
 
-
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    @Override
+    default Loop2d loop() {
+        return new Loop2d.RowFirst(extent());
+    }
 
 }

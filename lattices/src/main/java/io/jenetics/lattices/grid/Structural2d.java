@@ -19,7 +19,6 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Order2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -76,16 +75,6 @@ public interface Structural2d {
      */
     default int cols() {
         return extent().cols();
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    default Loop2d loop() {
-        return new Loop2d.RowFirst(extent());
     }
 
 }
