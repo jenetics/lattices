@@ -19,13 +19,27 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
 
-public interface Producible2d<T> {
+public record Structure2dArray<A extends Array<A>>(Structure2d structure, A array)
+    implements Producible2d<Structure2dArray<A>>
+{
+    @Override
+    public Structure2dArray<A> view(final Structure2d structure) {
+        return new Structure2dArray<>(structure, array);
+    }
 
-    T view(final Structure2d structure);
+    @Override
+    public Structure2dArray<A> like(final Extent2d extent) {
+        return new Structure2dArray<>(
+            new Structure2d(extent),
+            array.like(extent.size())
+        );
+    }
 
-    T like(final Extent2d extent);
-
+    public Structure2dArray<A> copy() {
+        return null;
+    }
 }

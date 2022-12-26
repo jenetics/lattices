@@ -45,7 +45,9 @@ public record StrideOrder2d(Index2d start, Stride2d stride) {
     }
 
     public int index(final int row, final int col) {
-        return start.row() + row*stride.row() + start.col() + col*stride.col();
+        return
+            start.row() + row*stride.row() +
+            start.col() + col*stride.col();
     }
 
     public StrideOrder2d transpose() {

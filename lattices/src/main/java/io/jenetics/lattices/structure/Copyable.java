@@ -17,15 +17,8 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Structure2d;
-
-public interface Producible2d<T> {
-
-    T view(final Structure2d structure);
-
-    T like(final Extent2d extent);
-
+public interface Copyable<T> {
+    T copy();
 }

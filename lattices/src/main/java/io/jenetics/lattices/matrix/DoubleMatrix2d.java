@@ -52,7 +52,7 @@ import io.jenetics.lattices.structure.Structure2d;
  */
 public final class DoubleMatrix2d
     extends DoubleGrid2dOps
-    implements Matrix2d<DoubleMatrix2d>
+    implements Matrix2d<DoubleArray, DoubleMatrix2d>
 {
 
     /**
@@ -93,12 +93,13 @@ public final class DoubleMatrix2d
     }
 
     @Override
-    public DoubleMatrix2d view(final Structure2d structure) {
-        return new DoubleMatrix2d(structure, array);
+    public DoubleMatrix2d create(Structure2d structure2d, DoubleArray array) {
+        return new DoubleMatrix2d(structure2d, array);
     }
 
-    public DoubleMatrix2d copy(Structure2d structure) {
-        return null;
+    @Override
+    public DoubleMatrix2d view(final Structure2d structure) {
+        return new DoubleMatrix2d(structure, array);
     }
 
     @Override

@@ -19,14 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
-import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.grid.Grids.checkSameExtent;
-
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
-
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Structure2d;
 
@@ -50,7 +43,7 @@ import io.jenetics.lattices.structure.Structure2d;
  */
 public final class DoubleGrid2d
     extends DoubleGrid2dOps
-    implements Grid2d<DoubleGrid2d>
+    implements Grid2d<DoubleArray, DoubleGrid2d>
 {
 
     /**
@@ -71,13 +64,8 @@ public final class DoubleGrid2d
     }
 
     @Override
-    public DoubleGrid2d view(final Structure2d structure) {
+    public DoubleGrid2d create(Structure2d structure, DoubleArray array) {
         return new DoubleGrid2d(structure, array);
-    }
-
-    @Override
-    public DoubleGrid2d like(final Structure2d structure) {
-        return new DoubleGrid2d(structure, array.like(structure.extent().size()));
     }
 
     @Override

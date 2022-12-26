@@ -19,7 +19,13 @@
  */
 package io.jenetics.lattices.grid;
 
+import java.util.function.Function;
+
 import io.jenetics.lattices.Self;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.structure.Copyable;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
  * Base interface for 2-d grids.
@@ -28,7 +34,29 @@ import io.jenetics.lattices.Self;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid2d<G extends Grid2d<G>>
-    extends Structural2d, Loopable2d, Producible2d<G>, Self<G>
+public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
+    extends Structural2d, Loopable2d, Producible2d<G>, Copyable<G>, Self<G>
 {
+
+    A array();
+
+    G create(final Structure2d structure, final A array);
+
+    @Override
+    default G view(final Structure2d structure) {
+        return create(structure, array());
+    }
+
+    @Override
+    default G like(final Extent2d extent) {
+        return create(
+            new Structure2d(extent),
+            array().like(extent.size())
+        );
+    }
+
+    default G view(final Function<? super Structure2d, Structure2d> f) {
+        return view(f.apply(structure()));
+    }
+
 }

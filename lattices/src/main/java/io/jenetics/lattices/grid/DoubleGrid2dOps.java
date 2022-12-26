@@ -123,9 +123,8 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *         bounds
      */
     public void set(final int row, final int col, final double value) {
-        array.set(structure.order().index(row, col),  value);
+        array.set(order().index(row, col),  value);
     }
-
 
     /**
      * Replaces all cell values of the receiver with the values of another
@@ -140,7 +139,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
             return;
         }
         checkSameExtent(structure, other.structure);
-        loop().forEach((r, c) -> set(r, c, other.get(r, c)));
+        forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
     /**
@@ -163,17 +162,17 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
             );
         }
 
-        for (int r = structure.extent().rows(); --r >= 0;) {
+        for (int r = rows(); --r >= 0;) {
             final double[] row = values[r];
 
-            if (row.length != structure.extent().cols()) {
+            if (row.length != cols()) {
                 throw new IllegalArgumentException(
                     "Values must have the same number of columns: " +
                         row.length + " != " + structure.extent().cols()
                 );
             }
 
-            for (int c = structure.extent().cols(); --c >= 0;) {
+            for (int c = cols(); --c >= 0;) {
                 set(r, c, row[c]);
             }
         }
@@ -185,7 +184,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      * @param value the value to be filled into the cells
      */
     public void assign(final double value) {
-        loop().forEach((r, c) -> set(r, c, value));
+        forEach((r, c) -> set(r, c, value));
     }
 
     /**
@@ -205,7 +204,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
         requireNonNull(f);
         checkSameExtent(structure, y.structure);
 
-        loop().forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
 
     /**
@@ -216,7 +215,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      */
     public void assign(final DoubleUnaryOperator f) {
         requireNonNull(f);
-        loop().forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
     }
 
     /**
@@ -226,7 +225,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      */
     public void swap(final DoubleGrid2dOps other) {
         checkSameExtent(structure, other.structure);
-        loop().forEach((r, c) -> {
+        forEach((r, c) -> {
             final var tmp = get(r, c);
             set(r, c, other.get(r, c));
             other.set(r, c, tmp);
@@ -265,10 +264,10 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
             return Double.NaN;
         }
 
-        double a = f.applyAsDouble(get(structure.extent().rows() - 1, structure.extent().cols() - 1));
+        double a = f.applyAsDouble(get(rows() - 1, cols() - 1));
         int d = 1;
-        for (int r = structure.extent().rows(); --r >= 0;) {
-            for (int c = structure.extent().cols() - d; --c >= 0;) {
+        for (int r = rows(); --r >= 0;) {
+            for (int c = cols() - d; --c >= 0;) {
                 a = reducer.applyAsDouble(a, f.applyAsDouble(get(r, c)));
             }
             d = 0;
@@ -288,7 +287,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
         final var context = NumericalContext.get();
 
         return structure.extent().equals(other.structure.extent()) &&
-            loop().allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
+            allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
     @Override
@@ -310,19 +309,19 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
         final var out = new StringBuilder();
 
         out.append("[");
-        for (int i = 0; i < structure.extent().rows(); ++i) {
+        for (int i = 0; i < rows(); ++i) {
             if (i != 0) {
                 out.append(" ");
             }
             out.append("[");
-            for (int j = 0; j < structure.extent().cols(); ++j) {
+            for (int j = 0; j < cols(); ++j) {
                 out.append(get(i, j));
-                if (j < structure.extent().cols() - 1) {
+                if (j < cols() - 1) {
                     out.append(", ");
                 }
             }
             out.append("]");
-            if (i < structure.extent().rows() - 1) {
+            if (i < rows() - 1) {
                 out.append("\n");
             }
         }

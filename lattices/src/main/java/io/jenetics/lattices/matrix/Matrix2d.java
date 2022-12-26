@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.matrix;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Grid2d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -34,8 +35,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public interface Matrix2d<M extends Matrix2d<M>>
-    extends Matrix<M>, Grid2d<M>
+public interface Matrix2d<A extends Array<A>, M extends Matrix2d<A, M>>
+    extends Matrix<M>, Grid2d<A, M>
 {
 
     /**
@@ -85,14 +86,6 @@ public interface Matrix2d<M extends Matrix2d<M>>
     default M like() {
         return like(structure().like());
     }
-
-    /**
-     * Return a new view of this matrix with the given new {@code structure}.
-     *
-     * @param structure the structure of the created view
-     * @return a new view of the underlying element array
-     */
-    M view(final Structure2d structure);
 
     /**
      * Return a new view of this matrix for the given {@code range}.
