@@ -45,6 +45,7 @@ public class StrideOrder2dTest {
         }
     }
 
+    /*
     @Test
     public void transpose() {
         final var order = new StrideOrder2d(new Index2d(34, 87), new Extent2d(87, 23));
@@ -56,5 +57,6 @@ public class StrideOrder2dTest {
             }
         }
     }
+     */
 
 }

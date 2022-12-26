@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Order2d order) {
+public record Structure2d(Extent2d extent, StrideOrder2d order) {
 
     public Structure2d {
         requireNonNull(extent);
@@ -54,13 +54,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @return a new structure which is like this one
      */
     public Structure2d like() {
-        if (order instanceof StrideOrder2d) {
-            return new Structure2d(extent);
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure2d(extent);
     }
 
     /**
@@ -76,22 +70,16 @@ public record Structure2d(Extent2d extent, Order2d order) {
     public Structure2d view(final Range2d range) {
         checkRange(range);
 
-        if (order instanceof StrideOrder2d ord) {
-            return new Structure2d(
-                range.extent(),
-                new StrideOrder2d(
-                    new Index2d(
-                    ord.start().row() + ord.stride().row()*range.start().row(),
-                    ord.start().col() + ord.stride().col()*range.start().col()
-                    ),
-                    ord.stride()
-                )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure2d(
+            range.extent(),
+            new StrideOrder2d(
+                new Index2d(
+                order.start().row() + order.stride().row()*range.start().row(),
+                order.start().col() + order.stride().col()*range.start().col()
+                ),
+                order.stride()
+            )
+        );
     }
 
     private void checkRange(final Range2d range) {
@@ -113,29 +101,23 @@ public record Structure2d(Extent2d extent, Order2d order) {
      *         is not an instance of {@link StrideOrder2d}
      */
     public Structure2d view(final Stride2d stride) {
-        if (order instanceof StrideOrder2d ord) {
-            return new Structure2d(
-                new Extent2d(
-                    extent.rows() != 0
-                        ? (extent.rows() - 1)/stride.row() + 1
-                        : 0,
-                    extent.cols() != 0
-                        ? (extent.cols() - 1)/ stride.col() + 1
-                        : 0
-                ),
-                new StrideOrder2d(
-                    ord.start(),
-                    new Stride2d(
-                        ord.stride().row()*stride.row(),
-                        ord.stride().col()*stride.col()
-                    )
+        return new Structure2d(
+            new Extent2d(
+                extent.rows() != 0
+                    ? (extent.rows() - 1)/stride.row() + 1
+                    : 0,
+                extent.cols() != 0
+                    ? (extent.cols() - 1)/ stride.col() + 1
+                    : 0
+            ),
+            new StrideOrder2d(
+                order.start(),
+                new Stride2d(
+                    order.stride().row()*stride.row(),
+                    order.stride().col()*stride.col()
                 )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+            )
+        );
     }
 
     /**
@@ -151,16 +133,10 @@ public record Structure2d(Extent2d extent, Order2d order) {
     public Structure2d copy(final Range2d range) {
         checkRange(range);
 
-        if (order instanceof StrideOrder2d) {
-            return new Structure2d(
-                range.extent(),
-                new StrideOrder2d(range.extent())
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure2d(
+            range.extent(),
+            new StrideOrder2d(range.extent())
+        );
     }
 
     /**

@@ -29,12 +29,10 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder2d(Index2d start, Stride2d stride) implements Order2d {
+public record StrideOrder2d(Index2d start, Stride2d stride) {
 
     /**
-     * Create a new row-major {@link Order2d} object for the given matrix
-     * dimension. This is the default implementation for the element order
-     * of the matrix.
+     * Create a new row-major order object for the given dimension.
      *
      * @param extent the structure extent
      */
@@ -42,16 +40,14 @@ public record StrideOrder2d(Index2d start, Stride2d stride) implements Order2d {
         this(Index2d.ZERO, new Stride2d(extent.cols(), 1));
     }
 
-    public StrideOrder2d(final Index2d start, final Extent2d extent) {
-        this(start, new Stride2d(extent.cols(), 1));
+    public StrideOrder2d(final Range2d range) {
+        this(range.start(), new Stride2d(range.extent().cols(), 1));
     }
 
-    @Override
     public int index(final int row, final int col) {
         return start.row() + row*stride.row() + start.col() + col*stride.col();
     }
 
-    @Override
     public StrideOrder2d transpose() {
         return new StrideOrder2d(start, new Stride2d(stride.col(), stride.row()));
     }

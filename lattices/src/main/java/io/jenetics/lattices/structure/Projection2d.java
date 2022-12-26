@@ -48,19 +48,13 @@ public interface Projection2d {
                 );
             }
 
-            if (structure.order() instanceof StrideOrder2d ord) {
-                return new Structure1d(
-                    new Extent1d(structure.extent().cols()),
-                    new StrideOrder1d(
-                        ord.index(index, 0),
-                        ord.stride().col()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Row view structure not supported by " + structure.order()
-                );
-            }
+            return new Structure1d(
+                new Extent1d(structure.extent().cols()),
+                new StrideOrder1d(
+                    structure.order().index(index, 0),
+                    structure.order().stride().col()
+                )
+            );
         };
     }
 
@@ -79,19 +73,13 @@ public interface Projection2d {
                 );
             }
 
-            if (structure.order() instanceof StrideOrder2d ord) {
-                return new Structure1d(
-                    new Extent1d(structure.extent().rows()),
-                    new StrideOrder1d(
-                        ord.index(0, index),
-                        ord.stride().row()
-                    )
-                );
-            } else {
-                throw new UnsupportedOperationException(
-                    "Column view structure not supported by " + structure.order()
-                );
-            }
+            return new Structure1d(
+                new Extent1d(structure.extent().rows()),
+                new StrideOrder1d(
+                    structure.order().index(0, index),
+                    structure.order().stride().row()
+                )
+            );
         };
     }
 

@@ -28,8 +28,9 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.grid.DoubleGrid2dOps;
 import io.jenetics.lattices.grid.Factory2d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.StrideOrder2d;
@@ -49,8 +50,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public class DoubleMatrix2d
-    extends DoubleGrid2d
+public final class DoubleMatrix2d
+    extends DoubleGrid2dOps
     implements Matrix2d<DoubleMatrix2d>
 {
 
@@ -94,6 +95,10 @@ public class DoubleMatrix2d
     @Override
     public DoubleMatrix2d view(final Structure2d structure) {
         return new DoubleMatrix2d(structure, array);
+    }
+
+    public DoubleMatrix2d copy(Structure2d structure) {
+        return null;
     }
 
     @Override

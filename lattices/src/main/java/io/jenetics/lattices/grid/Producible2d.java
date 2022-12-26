@@ -27,6 +27,6 @@ public interface Producible2d<T> {
 
     T like(final Structure2d structure);
 
-    T copy(final Structure2d structure);
+    T copy();
 
 }

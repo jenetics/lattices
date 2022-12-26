@@ -39,9 +39,7 @@ final class DenseDoubleMatrix2dMult {
         final DoubleMatrix2d B,
         final DoubleMatrix2d C
     ) {
-        return A.order() instanceof StrideOrder2d &&
-            B.order() instanceof StrideOrder2d &&
-            C.order() instanceof StrideOrder2d &&
+        return
             A.array() instanceof DenseDoubleArray &&
             B.array() instanceof DenseDoubleArray &&
             C.array() instanceof DenseDoubleArray;
@@ -62,13 +60,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_colStride = ((StrideOrder2d)A.order()).stride().col();
-        final int B_colStride = ((StrideOrder2d)B.order()).stride().col();
-        final int C_colStride = ((StrideOrder2d)C.order()).stride().col();
+        final int A_colStride = A.order().stride().col();
+        final int B_colStride = B.order().stride().col();
+        final int C_colStride = C.order().stride().col();
 
-        final int A_rowStride = ((StrideOrder2d)A.order()).stride().row();
-        final int B_rowStride = ((StrideOrder2d)B.order()).stride().row();
-        final int C_rowStride = ((StrideOrder2d)C.order()).stride().row();
+        final int A_rowStride = A.order().stride().row();
+        final int B_rowStride = B.order().stride().row();
+        final int C_rowStride = C.order().stride().row();
 
         /*
         A is blocked to hide memory latency
