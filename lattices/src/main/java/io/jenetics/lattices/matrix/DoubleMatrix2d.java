@@ -91,7 +91,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
-    public DoubleMatrix1d projection(final Projection2d projection) {
+    public DoubleMatrix1d project(final Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
 
@@ -105,7 +105,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return projection(Projection2d.col(index));
+        return project(Projection2d.col(index));
     }
 
     /**
@@ -118,7 +118,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return projection(Projection2d.row(index));
+        return project(Projection2d.row(index));
     }
 
     /* *************************************************************************

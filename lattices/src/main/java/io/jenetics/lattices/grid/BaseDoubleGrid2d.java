@@ -120,7 +120,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      */
     @Override
     public Loop2d loop() {
-        return new Loop2d.RowFirst(structure.extent());
+        return new Loop2d.RowFirst(extent());
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *         bounds
      */
     public double get(final int row, final int col) {
-        return array.get(structure.order().index(row, col));
+        return array.get(order().index(row, col));
     }
 
     /**
@@ -158,6 +158,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
+    @Override
     public void assign(final G other) {
         if (other == this) {
             return;
@@ -192,7 +193,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
             if (row.length != cols()) {
                 throw new IllegalArgumentException(
                     "Values must have the same number of columns: " +
-                        row.length + " != " + structure.extent().cols()
+                        row.length + " != " + extent().cols()
                 );
             }
 
@@ -284,7 +285,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (structure.extent().size() == 0) {
+        if (extent().size() == 0) {
             return Double.NaN;
         }
 
@@ -310,7 +311,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     public boolean equals(final G other) {
         final var context = NumericalContext.get();
 
-        return structure.extent().equals(other.structure.extent()) &&
+        return extent().equals(other.structure.extent()) &&
             allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
