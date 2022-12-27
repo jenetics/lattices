@@ -82,7 +82,7 @@ public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
      * @return a <em>transposed</em> view of this matrix
      */
     public DoubleMatrix2d transpose() {
-        return create(View2d.TRANSPOSE);
+        return view(View2d.TRANSPOSE);
     }
 
     /**

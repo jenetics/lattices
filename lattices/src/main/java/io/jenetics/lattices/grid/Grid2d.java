@@ -56,16 +56,6 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
     void assign(final G other);
 
     /**
-     * Return a new grid <em>view</em> of the underlying {@link #array()}.
-     *
-     * @param structure the structure of the new grid view
-     * @return a new grid <em>view</em> of the underlying {@link #array()}
-     */
-    default G create(final Structure2d structure) {
-        return create(structure, array());
-    }
-
-    /**
      * Creates a new grid with the given {@code extent} and the properties of
      * the underlying array.
      *
@@ -101,8 +91,8 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G create(final View2d view) {
-        return create(view.apply(structure()));
+    default G view(final View2d view) {
+        return create(view.apply(structure()), array());
     }
 
 }
