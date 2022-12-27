@@ -40,10 +40,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid2d
-    extends DoubleGrid2dOps
-    implements Grid2d<DoubleArray, DoubleGrid2d>
-{
+public final class DoubleGrid2d extends AbstractDoubleGrid2d<DoubleGrid2d> {
 
     /**
      * Create a new 2-d matrix with the given {@code structure} and element
@@ -59,17 +56,7 @@ public final class DoubleGrid2d
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public DoubleGrid2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    @Override
-    public DoubleGrid2d create(final Structure2d structure, final DoubleArray array) {
-        return new DoubleGrid2d(structure, array);
-    }
-
-    @Override
-    public void assign(final DoubleGrid2d other) {
-        super.assign(other);
+        super(structure, array, DoubleGrid2d::new);
     }
 
 }

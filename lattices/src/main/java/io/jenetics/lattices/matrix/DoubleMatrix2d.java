@@ -27,8 +27,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.DoubleGrid2dOps;
+import io.jenetics.lattices.grid.AbstractDoubleGrid2d;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -51,10 +50,7 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix2d
-    extends DoubleGrid2dOps
-    implements Matrix2d<DoubleArray, DoubleMatrix2d>
-{
+public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
@@ -73,17 +69,7 @@ public final class DoubleMatrix2d
      * @param array the element array
      */
     public DoubleMatrix2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    @Override
-    public DoubleMatrix2d create(final Structure2d structure2d, final DoubleArray array) {
-        return new DoubleMatrix2d(structure2d, array);
-    }
-
-    @Override
-    public void assign(final DoubleMatrix2d other) {
-        super.assign(other);
+        super(structure, array, DoubleMatrix2d::new);
     }
 
     /* *************************************************************************

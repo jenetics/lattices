@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
+import java.util.function.BiFunction;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
@@ -29,7 +30,14 @@ import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.structure.Structure2d;
 
-public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
+/**
+ * Abstract double grid implementation.
+ *
+ * @param <G> the grid type
+ */
+public abstract class AbstractDoubleGrid2d<G extends AbstractDoubleGrid2d<G>>
+    implements Grid2d<DoubleArray, G>
+{
 
     /**
      * The structure, which defines the <em>extent</em> of the grid and the
@@ -42,6 +50,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      */
     protected final DoubleArray array;
 
+    private final BiFunction<Structure2d, DoubleArray, G> constructor;
 
     /**
      * Create a new 2-d matrix with the given {@code structure} and element
@@ -49,6 +58,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *
      * @param structure the matrix structure
      * @param array the element array
+     * @param constructor the constructor of the actual grid type
      * @throws IllegalArgumentException if the size of the given {@code array}
      *         is not able to hold the required number of elements. It is still
      *         possible that an {@link IndexOutOfBoundsException} is thrown when
@@ -56,7 +66,11 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    protected DoubleGrid2dOps(final Structure2d structure, final DoubleArray array) {
+    protected AbstractDoubleGrid2d(
+        final Structure2d structure,
+        final DoubleArray array,
+        final BiFunction<? super Structure2d, ? super DoubleArray, ? extends G> constructor
+    ) {
         if (structure.extent().size() > array.length()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
@@ -67,6 +81,10 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
 
         this.structure = structure;
         this.array = array;
+
+        @SuppressWarnings("unchecked")
+        final var ctr = (BiFunction<Structure2d, DoubleArray, G>)constructor;
+        this.constructor = requireNonNull(ctr);
     }
 
     /**
@@ -84,8 +102,14 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *
      * @return the underlying element array
      */
+    @Override
     public DoubleArray array() {
         return array;
+    }
+
+    @Override
+    public G create(final Structure2d structure, final DoubleArray array) {
+        return constructor.apply(structure, array);
     }
 
     /**
@@ -134,7 +158,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
-    public void assign(final DoubleGrid2dOps other) {
+    public void assign(final G other) {
         if (other == this) {
             return;
         }
@@ -198,7 +222,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
     public void assign(
-        final DoubleGrid2dOps y,
+        final G y,
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
@@ -223,7 +247,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    public void swap(final DoubleGrid2dOps other) {
+    public void swap(final G other) {
         checkSameExtent(structure, other.structure);
         forEach((r, c) -> {
             final var tmp = get(r, c);
@@ -283,7 +307,7 @@ public abstract class DoubleGrid2dOps implements Structural2d, Loopable2d {
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final DoubleGrid2dOps other) {
+    public boolean equals(final G other) {
         final var context = NumericalContext.get();
 
         return structure.extent().equals(other.structure.extent()) &&
