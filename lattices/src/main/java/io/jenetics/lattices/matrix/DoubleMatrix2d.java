@@ -159,7 +159,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
         }
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array.like(struct.extent().size());
+            final var elems = array().like(struct.extent().size());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 

@@ -43,12 +43,12 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * The structure, which defines the <em>extent</em> of the grid and the
      * <em>order</em> which determines the index mapping {@code N^2 -> N}.
      */
-    protected final Structure2d structure;
+    private final Structure2d structure;
 
     /**
      * The underlying {@code double[]} array.
      */
-    protected final DoubleArray array;
+    private final DoubleArray array;
 
     private final BiFunction<Structure2d, DoubleArray, G> constructor;
 
@@ -163,7 +163,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         if (other == this) {
             return;
         }
-        checkSameExtent(structure, other.structure);
+        checkSameExtent(structure, other.structure());
         forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
@@ -227,7 +227,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        checkSameExtent(structure, y.structure);
+        checkSameExtent(structure, y.structure());
 
         forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
@@ -249,7 +249,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
     public void swap(final G other) {
-        checkSameExtent(structure, other.structure);
+        checkSameExtent(structure, other.structure());
         forEach((r, c) -> {
             final var tmp = get(r, c);
             set(r, c, other.get(r, c));
@@ -311,7 +311,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     public boolean equals(final G other) {
         final var context = NumericalContext.get();
 
-        return extent().equals(other.structure.extent()) &&
+        return extent().equals(other.extent()) &&
             allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
