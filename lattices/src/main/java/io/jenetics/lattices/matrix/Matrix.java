@@ -19,7 +19,6 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.grid.Grid;
 
@@ -35,12 +34,4 @@ import io.jenetics.lattices.grid.Grid;
 public interface Matrix<A extends Array<A>, M extends Matrix<A, M>>
     extends Grid<A, M>
 {
-
-    /*
-     * Return a new matrix with is like this one.
-     *
-     * @return a new matrix which is like this one
-     */
-    //M like();
-
 }

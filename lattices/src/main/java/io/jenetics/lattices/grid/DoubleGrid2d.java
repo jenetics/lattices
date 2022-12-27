@@ -63,7 +63,7 @@ public final class DoubleGrid2d
     }
 
     @Override
-    public DoubleGrid2d create(Structure2d structure, DoubleArray array) {
+    public DoubleGrid2d create(final Structure2d structure, final DoubleArray array) {
         return new DoubleGrid2d(structure, array);
     }
 

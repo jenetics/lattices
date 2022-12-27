@@ -76,24 +76,6 @@ public final class DoubleMatrix2d
         super(structure, array);
     }
 
-    /**
-     * Create a new matrix <em>view</em> from the given {@code grid}, no data is
-     * actually copied.
-     *
-     * @param grid the data grid
-     */
-    public DoubleMatrix2d(final DoubleGrid2d grid) {
-        this(grid.structure(), grid.array());
-    }
-
-    @Override
-    public Factory2d<DoubleMatrix2d> factory() {
-        return struct -> new DoubleMatrix2d(
-            struct,
-            array.like(struct.extent().size())
-        );
-    }
-
     @Override
     public DoubleMatrix2d create(final Structure2d structure2d, final DoubleArray array) {
         return new DoubleMatrix2d(structure2d, array);
@@ -114,7 +96,7 @@ public final class DoubleMatrix2d
      * @return a <em>transposed</em> view of this matrix
      */
     public DoubleMatrix2d transpose() {
-        return map(View2d.TRANSPOSE);
+        return create(View2d.TRANSPOSE);
     }
 
     /**

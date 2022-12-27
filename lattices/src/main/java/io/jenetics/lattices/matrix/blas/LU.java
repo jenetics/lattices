@@ -286,7 +286,7 @@ public final class LU {
                 new Index2d(0, min),
                 new Index2d(A.rows(), A.cols() - min)
             );
-            A.map(View2d.of(range)).assign(0);
+            A.create(View2d.of(range)).assign(0);
         }
     }
 
@@ -305,7 +305,7 @@ public final class LU {
                 new Index2d(0, min),
                 new Index2d(A.rows() - min, A.cols())
             );
-            A.map(View2d.of(range)).assign(0);
+            A.create(View2d.of(range)).assign(0);
         }
     }
 

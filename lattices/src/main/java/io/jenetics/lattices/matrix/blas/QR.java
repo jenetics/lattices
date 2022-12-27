@@ -183,7 +183,7 @@ public final class QR {
                 }
             }
         }
-        return X.map(View2d.of(new Extent2d(QR.cols(), B.cols())));
+        return X.create(View2d.of(new Extent2d(QR.cols(), B.cols())));
     }
 
     /**

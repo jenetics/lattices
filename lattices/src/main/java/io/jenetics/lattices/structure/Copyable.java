@@ -33,9 +33,9 @@ package io.jenetics.lattices.structure;
 public interface Copyable<T> {
 
     /**
-     * Return a new copy of type {@code T}.
+     * Return a new copy of the specified object.
      *
-     * @return a new copy of type {@code T}.
+     * @return a new copy of the specified.
      */
     T copy();
 

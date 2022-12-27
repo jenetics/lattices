@@ -20,7 +20,6 @@
 package io.jenetics.lattices.matrix;
 
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Grid2d;
 
 /**
@@ -34,21 +33,5 @@ import io.jenetics.lattices.grid.Grid2d;
 public interface Matrix2d<A extends Array<A>, M extends Matrix2d<A, M>>
     extends Matrix<A, M>, Grid2d<A, M>
 {
-
-    /**
-     * Return a matrix factory which is able to creates matrices from the same
-     * kind.
-     *
-     * @return a matrix factory which is able to creates matrices from the same
-     *        kind
-     */
-    Factory2d<M> factory();
-
-//    /**
-//     * Return a transposed view of this matrix.
-//     *
-//     * @return the transposed view of this matrix.
-//     */
-//    M transpose();
 
 }

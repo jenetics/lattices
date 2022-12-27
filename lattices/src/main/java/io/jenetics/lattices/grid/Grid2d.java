@@ -88,18 +88,20 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
         return like(extent());
     }
 
-    /**
-     * Create a new copy of the grid.
-     *
-     * @return a new copy of the grid
-     */
+    @Override
     default G copy() {
         final var copy = like();
         copy.assign(self());
         return copy;
     }
 
-    default G map(final View2d view) {
+    /**
+     * Create a new grid by applying the given {@code view} transformation.
+     *
+     * @param view the grid view transformation to apply
+     * @return a new grid view
+     */
+    default G create(final View2d view) {
         return create(view.apply(structure()));
     }
 
