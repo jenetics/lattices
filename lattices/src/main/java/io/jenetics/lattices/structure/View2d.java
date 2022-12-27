@@ -19,9 +19,17 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
+/**
+ * Functional interface for doing view transformation.
+ */
 @FunctionalInterface
 public interface View2d {
 
+    /**
+     * This function performs a transpose transformation.
+     */
     View2d TRANSPOSE = structure ->  new Structure2d(
         new Extent2d(
             structure.extent().cols(),
@@ -47,7 +55,15 @@ public interface View2d {
      */
     Structure2d apply(final Structure2d structure);
 
+    /**
+     * Return a transformation which creates a view of the given {@code range}.
+     *
+     * @param range the range of the view
+     * @return a transformation which creates a view of the given {@code range}
+     */
     static View2d of(final Range2d range) {
+        requireNonNull(range);
+
         return structure -> new Structure2d(
             range.extent(),
             new StrideOrder2d(
@@ -62,11 +78,25 @@ public interface View2d {
         );
     }
 
+    /**
+     * Return a transformation which creates a view of the given {@code extent}.
+     *
+     * @param extent the extent of the view
+     * @return a transformation which creates a view of the given {@code extent}
+     */
     static View2d of(final Extent2d extent) {
         return of(new Range2d(extent));
     }
 
+    /**
+     * Return a new stride view transformation.
+     *
+     * @param stride the stride of the created view transformation
+     * @return a new stride view transformation
+     */
     static View2d of(final Stride2d stride) {
+        requireNonNull(stride);
+
         return structure -> {
             final var extent = structure.extent();
             final var order = structure.order();
