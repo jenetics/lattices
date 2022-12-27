@@ -28,11 +28,12 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
-import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
+import io.jenetics.lattices.structure.View2d;
 import io.jenetics.lattices.testfuxtures.Colts;
 
 /**
@@ -71,35 +72,35 @@ public class DoubleMatrix2dTest {
             // Test also matrix views.
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(3, 7), new Extent2d(20, 30)))
+                    .view(View2d.of(new Range2d(new Index2d(3, 7), new Extent2d(20, 30))))
                     .transpose(),
                 new Range2d(new Index2d(12, 3), new Extent2d(5, 7)),
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(0, 0), new Extent2d(20, 30))),
+                    .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(1, 3), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(0, 0), new Extent2d(20, 30))),
+                    .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))),
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))
-                    .view(new Range2d(new Index2d(3, 2), new Extent2d(10, 20))),
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(10, 20)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(5, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))
-                    .view(new Stride2d(2, 3)),
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
+                    .view(View2d.of(new Stride2d(2, 3))),
                 new Range2d(new Index2d(1, 2), new Extent2d(5, 4))
             },
         };
@@ -108,7 +109,7 @@ public class DoubleMatrix2dTest {
     @Test(dataProvider = "matricesRanges")
     public void view(final DoubleMatrix2d matrix, final Range2d range) {
         if (range != null) {
-            final var view = matrix.view(range);
+            final var view = matrix.view(View2d.of(range));
 
             final var loop = new Loop2d.RowFirst(range);
             loop.forEach((r, c) -> {
@@ -152,7 +153,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void columnViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.view(range);
+        var A = matrix.view(View2d.of(range));
 
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
@@ -194,7 +195,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void rowViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.view(range);
+        var A = matrix.view(View2d.of(range));
 
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);

@@ -46,7 +46,7 @@ import io.jenetics.lattices.structure.Structure1d;
  */
 public class DoubleMatrix1d
     extends DoubleGrid1d
-    implements Matrix1d<DoubleMatrix1d>
+    implements Matrix1d<DoubleArray, DoubleMatrix1d>
 {
 
     /**

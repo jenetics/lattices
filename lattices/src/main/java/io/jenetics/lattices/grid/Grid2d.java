@@ -21,11 +21,10 @@ package io.jenetics.lattices.grid;
 
 import java.util.function.Function;
 
-import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.structure.Copyable;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Base interface for 2-d grids.
@@ -35,10 +34,9 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structural2d, Loopable2d, Producible2d<G>, Copyable<G>, Self<G>
+    extends Structural2d, Loopable2d, Producible2d<G>, Grid<A, G>
 {
 
-    A array();
 
     G create(final Structure2d structure, final A array);
 
@@ -55,8 +53,12 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
         );
     }
 
-    default G view(final Function<? super Structure2d, Structure2d> f) {
-        return view(f.apply(structure()));
+    default G like() {
+        return like(structure().extent());
+    }
+
+    default G view(final View2d view) {
+        return view(view.apply(structure()));
     }
 
 }

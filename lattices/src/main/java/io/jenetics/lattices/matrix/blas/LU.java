@@ -24,14 +24,15 @@ import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.grid.Grids;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.matrix.DoubleMatrix1d;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Store the result of an <em>LU</em>-decomposition.
@@ -285,7 +286,7 @@ public final class LU {
                 new Index2d(0, min),
                 new Index2d(A.rows(), A.cols() - min)
             );
-            A.view(range).assign(0);
+            A.view(View2d.of(range)).assign(0);
         }
     }
 
@@ -304,7 +305,7 @@ public final class LU {
                 new Index2d(0, min),
                 new Index2d(A.rows() - min, A.cols())
             );
-            A.view(range).assign(0);
+            A.view(View2d.of(range)).assign(0);
         }
     }
 

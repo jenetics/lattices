@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.matrix;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.grid.Factory1d;
 import io.jenetics.lattices.grid.Grid1d;
@@ -34,8 +35,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public interface Matrix1d<M extends Matrix1d<M>>
-    extends Matrix<M>, Grid1d
+public interface Matrix1d<A extends Array<A>, M extends Matrix1d<A, M>>
+    extends Matrix<A, M>, Grid1d
 {
 
     /**
@@ -80,7 +81,7 @@ public interface Matrix1d<M extends Matrix1d<M>>
         return factory().create(size);
     }
 
-    @Override
+    //@Override
     default M like() {
         return like(structure().like());
     }

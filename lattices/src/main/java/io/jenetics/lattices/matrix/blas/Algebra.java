@@ -26,6 +26,7 @@ import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * Linear algebraic matrix operations.
@@ -199,7 +200,7 @@ public final class Algebra {
 
             return inv;
         } else {
-            final var identity = A.like(A.rows(), A.rows());
+            final var identity = A.like(new Extent2d(A.rows(), A.rows()));
             for (int i = A.rows(); --i >= 0;) {
                 identity.set(i, i, 1.0);
             }

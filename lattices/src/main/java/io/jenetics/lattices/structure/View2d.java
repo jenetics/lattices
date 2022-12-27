@@ -31,11 +31,47 @@ public interface View2d {
     Structure2d apply(final Structure2d structure);
 
     static View2d of(final Range2d range) {
-        return null;
+        return structure -> new Structure2d(
+            range.extent(),
+            new StrideOrder2d(
+                new Index2d(
+                    structure.order().start().row() +
+                        structure.order().stride().row()*range.start().row(),
+                    structure.order().start().col() +
+                        structure.order().stride().col()*range.start().col()
+                ),
+                structure.order().stride()
+            )
+        );
+    }
+
+    static View2d of(final Extent2d extent) {
+        return of(new Range2d(extent));
     }
 
     static View2d of(final Stride2d stride) {
-        return null;
+        return structure -> {
+            final var extent = structure.extent();
+            final var order = structure.order();
+
+            return new Structure2d(
+                new Extent2d(
+                    extent.rows() != 0
+                        ? (extent.rows() - 1)/stride.row() + 1
+                        : 0,
+                    extent.cols() != 0
+                        ? (extent.cols() - 1)/stride.col() + 1
+                        : 0
+                ),
+                new StrideOrder2d(
+                    order.start(),
+                    new Stride2d(
+                        order.stride().row()*stride.row(),
+                        order.stride().col()*stride.col()
+                    )
+                )
+            );
+        };
     }
 
 }

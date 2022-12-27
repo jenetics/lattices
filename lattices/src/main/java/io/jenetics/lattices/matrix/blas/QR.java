@@ -23,12 +23,13 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkRectangular;
 
 import io.jenetics.lattices.NumericalContext;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.matrix.DoubleMatrix1d;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Store the result of a <em>QR</em>-decomposition.
@@ -182,7 +183,7 @@ public final class QR {
                 }
             }
         }
-        return X.view(new Extent2d(QR.cols(), B.cols()));
+        return X.view(View2d.of(new Extent2d(QR.cols(), B.cols())));
     }
 
     /**

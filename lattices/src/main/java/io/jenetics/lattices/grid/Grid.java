@@ -17,30 +17,21 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix;
+package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.grid.Grid;
+import io.jenetics.lattices.structure.Copyable;
 
-/**
- * Base interface of all matrix implementations. An matrix is a container of
- * elements, which can be accessed by a <em>multidimensional index</em> and has
- * a fixed number of elements (<em>size</em>).
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public interface Matrix<A extends Array<A>, M extends Matrix<A, M>>
-    extends Grid<A, M>
+public interface Grid<A extends Array<A>, G extends Grid<A, G>>
+    extends Copyable<G>, Self<G>
 {
 
-    /*
-     * Return a new matrix with is like this one.
+    /**
+     * Return the underlying array of this grid.
      *
-     * @return a new matrix which is like this one
+     * @return the underlying array of this grid
      */
-    //M like();
+    A array();
 
 }

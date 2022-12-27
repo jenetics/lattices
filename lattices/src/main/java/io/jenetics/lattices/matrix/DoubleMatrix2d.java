@@ -31,6 +31,7 @@ import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.DoubleGrid2dOps;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.StrideOrder2d;
@@ -102,7 +103,7 @@ public final class DoubleMatrix2d
         return new DoubleMatrix2d(structure, array);
     }
 
-    @Override
+    //@Override
     public DoubleMatrix2d copy(final Range2d range) {
         final var struct = structure.copy(range);
 
@@ -124,7 +125,23 @@ public final class DoubleMatrix2d
         }
     }
 
-    @Override
+    public DoubleMatrix2d copy() {
+        final var range = new Range2d(extent());
+        final var struct = structure.copy(range);
+        final var elems = array.like(range.size());
+
+        final var loop = new RowFirst(extent());
+        loop.forEach((r, c) ->
+            elems.set(
+                struct.order().index(r, c),
+                get(r + range.start().row(), c + range.start().col())
+            )
+        );
+
+        return new DoubleMatrix2d(struct, elems);
+    }
+
+    //@Override
     public DoubleMatrix2d transpose() {
         return new DoubleMatrix2d(structure.transpose(), array);
     }
@@ -285,7 +302,7 @@ public final class DoubleMatrix2d
             return mult(B.transpose(), C, alpha, beta, false, false);
         }
         if (C == null) {
-            return mult(B, like(rows(), B.cols()), alpha, beta, false, false);
+            return mult(B, like(new Extent2d(rows(), B.cols())), alpha, beta, false, false);
         }
 
         final int m = rows();
