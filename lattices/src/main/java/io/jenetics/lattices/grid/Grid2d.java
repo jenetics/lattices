@@ -19,33 +19,59 @@
  */
 package io.jenetics.lattices.grid;
 
-import java.util.function.Function;
-
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
 /**
- * Base interface for 2-d grids.
+ * This interface <em>structures</em> the elements into a 2-dimensional grid.
+ *
+ * @param <A> the array type which stores the grid elements
+ * @param <G> the <em>self</em> grid type
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structural2d, Loopable2d, Producible2d<G>, Grid<A, G>
+    extends Structural2d, Loopable2d, Grid<A, G>
 {
 
-
+    /**
+     * Create a new grid (view) with the given structure and the underlying
+     * data array.
+     *
+     * @param structure the structure of the created grid
+     * @param array the grid elements
+     * @return a new grid (view)
+     */
     G create(final Structure2d structure, final A array);
 
-    @Override
-    default G view(final Structure2d structure) {
+    /**
+     * Assigns the elements of the {@code other} grid to this grid.
+     *
+     * @param other the source of the grid elements
+     */
+    void assign(final G other);
+
+    /**
+     * Return a new grid <em>view</em> of the underlying {@link #array()}.
+     *
+     * @param structure the structure of the new grid view
+     * @return a new grid <em>view</em> of the underlying {@link #array()}
+     */
+    default G create(final Structure2d structure) {
         return create(structure, array());
     }
 
-    @Override
+    /**
+     * Creates a new grid with the given {@code extent} and the properties of
+     * the underlying array.
+     *
+     * @param extent the extent of the new grid
+     * @return a new grid
+     */
     default G like(final Extent2d extent) {
         return create(
             new Structure2d(extent),
@@ -53,12 +79,28 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
         );
     }
 
+    /**
+     * Create a new grid with the same extent and properties as this grid.
+     *
+     * @return a new grid with the same extent and properties as this grid
+     */
     default G like() {
-        return like(structure().extent());
+        return like(extent());
     }
 
-    default G view(final View2d view) {
-        return view(view.apply(structure()));
+    /**
+     * Create a new copy of the grid.
+     *
+     * @return a new copy of the grid
+     */
+    default G copy() {
+        final var copy = like();
+        copy.assign(self());
+        return copy;
+    }
+
+    default G map(final View2d view) {
+        return create(view.apply(structure()));
     }
 
 }

@@ -31,27 +31,23 @@ package io.jenetics.lattices.structure;
  */
 public record StrideOrder2d(Index2d start, Stride2d stride) {
 
+    public StrideOrder2d(final Range2d range) {
+        this(range.start(), new Stride2d(range.extent().cols(), 1));
+    }
+
     /**
      * Create a new row-major order object for the given dimension.
      *
      * @param extent the structure extent
      */
     public StrideOrder2d(final Extent2d extent) {
-        this(Index2d.ZERO, new Stride2d(extent.cols(), 1));
-    }
-
-    public StrideOrder2d(final Range2d range) {
-        this(range.start(), new Stride2d(range.extent().cols(), 1));
+        this(new Range2d(extent));
     }
 
     public int index(final int row, final int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
-    }
-
-    public StrideOrder2d transpose() {
-        return new StrideOrder2d(start, new Stride2d(stride.col(), stride.row()));
     }
 
 }

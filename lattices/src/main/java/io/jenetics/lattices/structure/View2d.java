@@ -22,6 +22,23 @@ package io.jenetics.lattices.structure;
 @FunctionalInterface
 public interface View2d {
 
+    View2d TRANSPOSE = structure ->  new Structure2d(
+        new Extent2d(
+            structure.extent().cols(),
+            structure.extent().rows()
+        ),
+        new StrideOrder2d(
+            new Index2d(
+                structure.order().start().col(),
+                structure.order().start().row()
+            ),
+            new Stride2d(
+                structure.order().stride().col(),
+                structure.order().stride().row()
+            )
+        )
+    );
+
     /**
      * Applies the <em>view</em> transformation of the given {@code structure}.
      *

@@ -23,12 +23,23 @@ import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Copyable;
 
+/**
+ * A grid defines a structure onto a given (one-dimensional) array. Every grid
+ * is <em>just</em> a <em>structural</em> view onto the underlying array. If
+ * you want ot create a copy of the grid, you have to explicitly call the
+ * {@link #copy()} method.
+ *
+ * @see #copy()
+ *
+ * @param <A> the array type which stores the grid elements
+ * @param <G> the <em>self</em> grid type
+ */
 public interface Grid<A extends Array<A>, G extends Grid<A, G>>
     extends Copyable<G>, Self<G>
 {
 
     /**
-     * Return the underlying array of this grid.
+     * Return the underlying (one-dimensional) array of this grid.
      *
      * @return the underlying array of this grid
      */

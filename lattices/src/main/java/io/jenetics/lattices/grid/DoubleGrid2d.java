@@ -20,7 +20,6 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -69,12 +68,8 @@ public final class DoubleGrid2d
     }
 
     @Override
-    public DoubleGrid2d copy() {
-        final var elems = array.like(size());
-
-        final var loop = new RowFirst(extent());
-        loop.forEach((r, c) -> elems.set(order().index(r, c), get(r, c)));
-
-        return new DoubleGrid2d(structure.copy(new Range2d(structure.extent())), elems);
+    public void assign(final DoubleGrid2d other) {
+        super.assign(other);
     }
+
 }

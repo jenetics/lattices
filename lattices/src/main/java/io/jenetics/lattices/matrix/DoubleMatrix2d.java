@@ -33,10 +33,10 @@ import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
-import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.StrideOrder2d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements. Instances
@@ -77,7 +77,8 @@ public final class DoubleMatrix2d
     }
 
     /**
-     * Create a new matrix <em>view</em> from the given {@code grid}.
+     * Create a new matrix <em>view</em> from the given {@code grid}, no data is
+     * actually copied.
      *
      * @param grid the data grid
      */
@@ -94,61 +95,27 @@ public final class DoubleMatrix2d
     }
 
     @Override
-    public DoubleMatrix2d create(Structure2d structure2d, DoubleArray array) {
+    public DoubleMatrix2d create(final Structure2d structure2d, final DoubleArray array) {
         return new DoubleMatrix2d(structure2d, array);
     }
 
     @Override
-    public DoubleMatrix2d view(final Structure2d structure) {
-        return new DoubleMatrix2d(structure, array);
-    }
-
-    //@Override
-    public DoubleMatrix2d copy(final Range2d range) {
-        final var struct = structure.copy(range);
-
-        // Fast track if no range-copy is needed.
-        if (structure.equals(struct)){
-            return new DoubleMatrix2d(structure, array.copy());
-        } else {
-            final var elems = array.like(range.size());
-
-            final var loop = new RowFirst(struct.extent());
-            loop.forEach((r, c) ->
-                elems.set(
-                    struct.order().index(r, c),
-                    get(r + range.start().row(), c + range.start().col())
-                )
-            );
-
-            return new DoubleMatrix2d(struct, elems);
-        }
-    }
-
-    public DoubleMatrix2d copy() {
-        final var range = new Range2d(extent());
-        final var struct = structure.copy(range);
-        final var elems = array.like(range.size());
-
-        final var loop = new RowFirst(extent());
-        loop.forEach((r, c) ->
-            elems.set(
-                struct.order().index(r, c),
-                get(r + range.start().row(), c + range.start().col())
-            )
-        );
-
-        return new DoubleMatrix2d(struct, elems);
-    }
-
-    //@Override
-    public DoubleMatrix2d transpose() {
-        return new DoubleMatrix2d(structure.transpose(), array);
+    public void assign(final DoubleMatrix2d other) {
+        super.assign(other);
     }
 
     /* *************************************************************************
      * Matrix view methods.
      * ************************************************************************/
+
+    /**
+     * Return a <em>transposed</em> view of this matrix.
+     *
+     * @return a <em>transposed</em> view of this matrix
+     */
+    public DoubleMatrix2d transpose() {
+        return map(View2d.TRANSPOSE);
+    }
 
     /**
      * Constructs and returns a <em>view</em> representing the rows of the given
