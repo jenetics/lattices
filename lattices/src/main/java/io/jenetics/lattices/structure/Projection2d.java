@@ -20,7 +20,7 @@
 package io.jenetics.lattices.structure;
 
 /**
- * This interface defines a projection from 2-d to 1-d.
+ * This interface performs a projection from 2-d to 1-d.
  */
 @FunctionalInterface
 public interface Projection2d {
@@ -33,7 +33,13 @@ public interface Projection2d {
      */
     Structure1d apply(final Structure2d structure);
 
-
+    /**
+     * Create a <em>row</em>-projection for the row with the given {@code index}.
+     *
+     * @param index the row index
+     * @return a new <em>row</em>-projection
+     * @throws IllegalArgumentException if the given {@code index} is negative
+     */
     static Projection2d row(final int index) {
         if (index < 0) {
             throw new IllegalArgumentException(
@@ -58,6 +64,14 @@ public interface Projection2d {
         };
     }
 
+    /**
+     * Create a <em>column</em>-projection for the row with the given
+     * {@code index}.
+     *
+     * @param index the column index
+     * @return a new <em>column</em>-projection
+     * @throws IllegalArgumentException if the given {@code index} is negative
+     */
     static Projection2d col(final int index) {
         if (index < 0) {
             throw new IllegalArgumentException(
