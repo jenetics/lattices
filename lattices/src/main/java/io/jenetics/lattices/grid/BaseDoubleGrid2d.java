@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure2d;
  *
  * @param <G> the grid type
  */
-public abstract class AbstractDoubleGrid2d<G extends AbstractDoubleGrid2d<G>>
+public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     implements Grid2d<DoubleArray, G>
 {
 
@@ -66,7 +66,7 @@ public abstract class AbstractDoubleGrid2d<G extends AbstractDoubleGrid2d<G>>
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    protected AbstractDoubleGrid2d(
+    protected BaseDoubleGrid2d(
         final Structure2d structure,
         final DoubleArray array,
         final BiFunction<? super Structure2d, ? super DoubleArray, ? extends G> constructor

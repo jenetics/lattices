@@ -40,7 +40,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid2d extends AbstractDoubleGrid2d<DoubleGrid2d> {
+public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
 
     /**
      * Create a new 2-d matrix with the given {@code structure} and element

@@ -27,7 +27,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.AbstractDoubleGrid2d;
+import io.jenetics.lattices.grid.BaseDoubleGrid2d;
 import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -49,7 +49,7 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
+public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
