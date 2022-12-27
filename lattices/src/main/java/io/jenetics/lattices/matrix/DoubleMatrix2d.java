@@ -32,7 +32,6 @@ import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
-import io.jenetics.lattices.structure.StrideOrder2d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
@@ -86,6 +85,17 @@ public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
     }
 
     /**
+     * Return a 1-d projection from this 2-d matrix. The returned 1-d matrix is
+     * a view onto this matrix {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d matrix
+     */
+    public DoubleMatrix1d projection(final Projection2d projection) {
+        return new DoubleMatrix1d(projection.apply(structure()), array());
+    }
+
+    /**
      * Constructs and returns a <em>view</em> representing the rows of the given
      * column. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
@@ -93,14 +103,9 @@ public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
      * @param index the column index.
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return new DoubleMatrix1d(
-            Projection2d.col(index).apply(structure),
-            array
-        );
+        return projection(Projection2d.col(index));
     }
 
     /**
@@ -111,14 +116,9 @@ public final class DoubleMatrix2d extends AbstractDoubleGrid2d<DoubleMatrix2d> {
      * @param index the row index.
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(
-            Projection2d.row(index).apply(structure),
-            array
-        );
+        return projection(Projection2d.row(index));
     }
 
     /* *************************************************************************
