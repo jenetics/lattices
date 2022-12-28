@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Implements a structure order by defining start indexes and strides.
  *
@@ -30,6 +32,11 @@ package io.jenetics.lattices.structure;
  * @version 3.0
  */
 public record Order2d(Index2d start, Stride2d stride) {
+
+    public Order2d {
+        requireNonNull(start);
+        requireNonNull(stride);
+    }
 
     public Order2d(final Range2d range) {
         this(range.start(), new Stride2d(range.extent().cols(), 1));
