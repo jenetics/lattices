@@ -17,35 +17,48 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Defines a 3-d structure, which is defined by the extent of the structure and
- * the index oder of the underlying 1-d structure.
+ * Implements a structure order by defining start indexes and strides.
  *
- * @param extent the extent of the structure
- * @param order the element order
+ * @param start the start index of the first element
+ * @param stride the element strides
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Order3d order) {
+public record Order3d(Index3d start, Stride3d stride) {
 
-    public Structure3d {
-        requireNonNull(extent);
-        requireNonNull(order);
+    public Order3d {
+        requireNonNull(start);
+        requireNonNull(stride);
+    }
+
+    public Order3d(final Index3d start, final Extent3d extent) {
+        this(
+            start,
+            new Stride3d(extent.rows()*extent.cols(), extent.cols(),  1)
+        );
     }
 
     /**
-     * Create a new structure with the given extent and the default element order.
+     * Create a new stride-order object,
      *
-     * @param extent the extent of the structure
+     * @param extent the structure extent
      */
-    public Structure3d(final Extent3d extent) {
-        this(extent, new StrideOrder3d(extent));
+    public Order3d(final Extent3d extent) {
+        this(Index3d.ZERO, extent);
+    }
+
+    public int index(final int slice, final int row, final int col) {
+        return
+            start.slice() + slice*stride.slice() +
+            start.row() + row*stride.row() +
+            start.col() + col*stride.col();
     }
 
 }

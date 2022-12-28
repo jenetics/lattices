@@ -19,6 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Structure1d;
+
 /**
  * Factory interface for creating 1-d structures.
  *

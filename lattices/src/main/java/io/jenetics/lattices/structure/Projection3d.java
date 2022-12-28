@@ -17,32 +17,33 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents the <em>row-major</em> order.
- *
- * @param start the index of the first element
- * @param stride the number of indexes between any two elements
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
+ * This interface defines a projection from 3-d to 2-d.
  */
-public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
+@FunctionalInterface
+public interface Projection3d {
 
     /**
-     * The default stride.
+     * Performs the projection the given {@code structure}.
+     *
+     * @param structure the structure to apply this projection
+     * @return the projected 2-d structure
      */
-    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
+    Structure2d apply(final Structure3d structure);
 
-    public StrideOrder1d(final int start, final int stride) {
-        this(new Index1d(start), new Stride1d(stride));
+
+    static Projection3d slice(final int index) {
+        return null;
     }
 
-    @Override
-    public int index(final int rank) {
-        return start.value() + rank*stride.value();
+    static Projection3d row(final int index) {
+        return null;
+    }
+
+    static Projection3d col(final int index) {
+        return null;
     }
 
 }

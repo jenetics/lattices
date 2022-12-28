@@ -19,33 +19,30 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.Self;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.structure.Copyable;
+
 /**
- * The extent of 1-d structures.
+ * A grid defines a structure onto a given (one-dimensional) array. Every grid
+ * is <em>just</em> a <em>structural</em> view onto the underlying array. If
+ * you want ot create a copy of the grid, you have to explicitly call the
+ * {@link #copy()} method.
  *
- * @param size the number of elements, must be greater or equal zero
+ * @see #copy()
  *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
+ * @param <A> the array type which stores the grid elements
+ * @param <G> the <em>self</em> grid type
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+public interface Grid<A extends Array<A>, G extends Grid<A, G>>
+    extends Copyable<G>, Self<G>
+{
 
-    public Extent1d {
-        if (size < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d].".formatted(size)
-            );
-        }
-    }
-
-    @Override
-    public int compareTo(final Extent1d other) {
-        return Integer.compare(size, other.size);
-    }
-
-    @Override
-    public String toString() {
-        return "[%d]".formatted(size());
-    }
+    /**
+     * Return the underlying (one-dimensional) array of this grid.
+     *
+     * @return the underlying array of this grid
+     */
+    A array();
 
 }

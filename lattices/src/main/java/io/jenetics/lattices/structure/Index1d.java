@@ -17,32 +17,37 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.testng.annotations.Test;
-
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Structure1d;
+package io.jenetics.lattices.structure;
 
 /**
+ * Represents a 1-d index
+ *
+ * @param value the index value
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public class DoubleGrid1dTest {
+public record Index1d(int value) implements Comparable<Index1d> {
 
-    @Test
-    public void assign() {
-        final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
-        final var grid = new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(extent.size())
-        );
+    /**
+     * Zero index.
+     */
+    public static final Index1d ZERO = new Index1d(0);
 
-        grid.assign(87);
-        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+    /**
+     * Return a new range from {@code this} <em>to</em> {@code end}.
+     *
+     * @param end the end index of the created range, exclusively
+     * @return a new range from {@code this} <em>to</em> {@code end}
+     * @throws IllegalArgumentException if {@code this >= end}
+     */
+    public Range1d to(final Index1d end) {
+        return new Range1d(this, end);
     }
 
+    @Override
+    public int compareTo(final Index1d other) {
+        return Integer.compare(value, other.value);
+    }
 }

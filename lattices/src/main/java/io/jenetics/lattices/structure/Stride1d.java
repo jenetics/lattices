@@ -17,36 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents the order for accessing the linearly stored matrix data.
+ * Defines a stride.
+ *
+ * @param value the stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-@FunctionalInterface
-public interface Order1d {
+public record Stride1d(int value) {
 
-    /**
-     * Return the position of the element with the given relative {@code rank}
-     * within the (virtual or non-virtual) internal 1-d array.
-     *
-     * @param rank the rank of the element.
-     * @return the (linearized) index of the given {@code rank}
-     */
-    int index(final int rank);
-
-    /**
-     * Return the position of the element with the given relative {@code index}
-     * within the (virtual or non-virtual) internal 1-d array.
-     *
-     * @param index the index of the element.
-     * @return the (linearized) index of the given {@code index}
-     */
-    default int index(final Index1d index) {
-        return index(index.value());
+    public Stride1d {
+        if (value < 1) {
+            throw new IllegalArgumentException(
+                "Stride must be positive: [%d].".formatted(value)
+            );
+        }
     }
 
 }

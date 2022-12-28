@@ -17,24 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-/**
- * Represents a 3-d index.
- *
- * @param row the row index
- * @param col the column index
- * @param slice the slice index
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public record Index3d(int row, int col, int slice) {
-
-    /**
-     * Index where slice, row and column is zero.
-     */
-    public static final Index3d ZERO = new Index3d(0, 0, 0);
-
+public interface View3d {
 }

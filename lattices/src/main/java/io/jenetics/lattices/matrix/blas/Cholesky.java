@@ -25,6 +25,7 @@ import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * Store the result of a <em>Cholesky</em>-decomposition.
@@ -120,7 +121,7 @@ public final class Cholesky {
         final var context = NumericalContext.get();
 
         final var n = A.rows();
-        final var L = A.like(n, n);
+        final var L = A.like(new Extent2d(n, n));
         var isSymmetricPositiveDefinite = A.cols() == n;
 
         final var L_rows = new DoubleMatrix1d[n];

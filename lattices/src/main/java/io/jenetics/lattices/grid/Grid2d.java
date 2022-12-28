@@ -19,75 +19,80 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
+
 /**
- * Base interface for 2-d grids.
+ * This interface <em>structures</em> the elements into a 2-dimensional grid.
+ *
+ * @param <A> the array type which stores the grid elements
+ * @param <G> the <em>self</em> grid type
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Grid2d extends Loopable2d {
+public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
+    extends Structural2d, Loopable2d, Grid<A, G>
+{
 
     /**
-     * Return the structure for grid.
+     * Create a new grid (view) with the given structure and the underlying
+     * data array.
      *
-     * @return the structure for grid
+     * @param structure the structure of the created grid
+     * @param array the grid elements
+     * @return a new grid (view)
      */
-    Structure2d structure();
+    G create(final Structure2d structure, final A array);
 
     /**
-     * Return the dimension of {@code this} structures.
+     * Assigns the elements of the {@code other} grid to this grid.
      *
-     * @return the dimension of {@code this} structures
+     * @param other the source of the grid elements
      */
-    default Extent2d extent() {
-        return structure().extent();
+    void assign(final G other);
+
+    /**
+     * Creates a new grid with the given {@code extent} and the properties of
+     * the underlying array.
+     *
+     * @param extent the extent of the new grid
+     * @return a new grid
+     */
+    default G like(final Extent2d extent) {
+        return create(
+            new Structure2d(extent),
+            array().like(extent.size())
+        );
     }
 
     /**
-     * Return the defined order of {@code this} structures.
+     * Create a new grid with the same extent and properties as this grid.
      *
-     * @return the defined order of {@code this} structures
+     * @return a new grid with the same extent and properties as this grid
      */
-    default Order2d order() {
-        return structure().order();
+    default G like() {
+        return like(extent());
+    }
+
+    @Override
+    default G copy() {
+        final var copy = like();
+        copy.assign(self());
+        return copy;
     }
 
     /**
-     * Return the number of cells of this {@code this} structures.
+     * Create a new grid by applying the given {@code view} transformation.
      *
-     * @return the number of cells of this {@code this} structures
+     * @param view the grid view transformation to apply
+     * @return a new grid view
      */
-    default int size() {
-        return extent().size();
-    }
-
-    /**
-     * Return the number of rows of {@code this} structures.
-     *
-     * @return the number of rows of {@code this} structures
-     */
-    default int rows() {
-        return extent().rows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} structures.
-     *
-     * @return the number of columns of {@code this} structures
-     */
-    default int cols() {
-        return extent().cols();
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    default Loop2d loop() {
-        return new RowFirst(extent());
+    default G view(final View2d view) {
+        return create(view.apply(structure()), array());
     }
 
 }

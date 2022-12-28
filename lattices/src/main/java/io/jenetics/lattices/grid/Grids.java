@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Structure2d;
+
 /**
  * Some helper methods for checking pre-conditions.
  *
@@ -38,7 +40,7 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    public static void checkSameExtent(final Grid1d a, final Grid1d b) {
+    public static void checkSameExtent(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         if (!a.extent().equals(b.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
@@ -54,7 +56,23 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    public static void checkSameExtent(final Grid2d a, final Grid2d b) {
+    public static void checkSameExtent(final Structural2d a, final Structural2d b) {
+        if (!a.extent().equals(b.extent())) {
+            throw new IllegalArgumentException(
+                "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
+            );
+        }
+    }
+
+    /**
+     * Checks whether the two given grids have the same extent.
+     *
+     * @param a the first grid to check
+     * @param b the second grid to check
+     * @throws IllegalArgumentException if the given {@code other} extent doesn't
+     *         match
+     */
+    public static void checkSameExtent(final Structure2d a, final Structure2d b) {
         if (!a.extent().equals(b.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
@@ -69,7 +87,7 @@ public final class Grids {
      * @param A the matrix to check
      * @return {@code true} if the {@code A} is square, {@code false} otherwise
      */
-    public static boolean isSquare(final Grid2d A) {
+    public static boolean isSquare(final Structural2d A) {
         return A.rows() == A.cols();
     }
 
@@ -79,7 +97,7 @@ public final class Grids {
      * @param A the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() != A.cols()}
      */
-    public static void checkSquare(final Grid2d A) {
+    public static void checkSquare(final Structural2d A) {
         if (!isSquare(A)) {
             throw new IllegalArgumentException(
                 "Matrix must be square: " + A.extent()
@@ -93,7 +111,7 @@ public final class Grids {
      * @param A the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
-    public static void checkRectangular(final Grid2d A) {
+    public static void checkRectangular(final Structural2d A) {
         if (A.rows() < A.cols()) {
             throw new IllegalArgumentException(
                 "Matrix must be rectangular: " + A.extent()

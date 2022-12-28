@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,7 +46,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @param extent the extent of the structure
      */
     public Structure1d(final Extent1d extent) {
-        this(extent, StrideOrder1d.DEFAULT);
+        this(extent, Order1d.DEFAULT);
     }
 
     /**
@@ -55,13 +55,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @return a new structure which is like this one
      */
     public Structure1d like() {
-        if (order instanceof StrideOrder1d) {
-            return new Structure1d(extent);
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure1d(extent);
     }
 
     /**
@@ -71,28 +65,20 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @return a new structure which defines a view with the given range
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder1d}
      */
     public Structure1d view(final Range1d range) {
         if (range.start().value() + range.extent().size() > extent.size()) {
             throw new IndexOutOfBoundsException(extent + " : " + range);
         }
 
-        if (order instanceof StrideOrder1d ord) {
-            return new Structure1d(
-                range.extent(),
-                new StrideOrder1d(
-                    ord.start().value() +
-                        ord.stride().value()*range.start().value(),
-                    ord.stride().value()
-                )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure1d(
+            range.extent(),
+            new Order1d(
+                order.start().value() +
+                    order.stride().value()*range.start().value(),
+                order.stride().value()
+            )
+        );
     }
 
     /**
@@ -100,27 +86,19 @@ public record Structure1d(Extent1d extent, Order1d order) {
      *
      * @param stride the stride
      * @return a new structure which defines a view with the given range
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder1d}
      */
     public Structure1d view(final Stride1d stride) {
-        if (order instanceof StrideOrder1d ord) {
-            return new Structure1d(
-                new Extent1d(
-                    extent.size() != 0
-                        ? (extent.size() - 1)/stride.value() + 1
-                        : 0
-                ),
-                new StrideOrder1d(
-                    ord.start().value(),
-                    ord.stride().value()*stride.value()
-                )
-            );
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure1d(
+            new Extent1d(
+                extent.size() != 0
+                    ? (extent.size() - 1)/stride.value() + 1
+                    : 0
+            ),
+            new Order1d(
+                order.start().value(),
+                order.stride().value()*stride.value()
+            )
+        );
     }
 
     /**
@@ -131,18 +109,12 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder1d}
+     *         is not an instance of {@link Order1d}
      */
     public Structure1d copy(final Range1d range) {
         checkRange(range);
 
-        if (order instanceof StrideOrder1d) {
-            return new Structure1d(range.extent(), StrideOrder1d.DEFAULT);
-        } else {
-            throw new UnsupportedOperationException(
-                "Range view structure not supported by " + order
-            );
-        }
+        return new Structure1d(range.extent(), Order1d.DEFAULT);
     }
 
     private void checkRange(final Range1d range) {

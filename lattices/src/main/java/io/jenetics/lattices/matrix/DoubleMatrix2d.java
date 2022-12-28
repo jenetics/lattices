@@ -27,13 +27,14 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.Extent1d;
+import io.jenetics.lattices.grid.BaseDoubleGrid2d;
 import io.jenetics.lattices.grid.Factory2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.StrideOrder2d;
-import io.jenetics.lattices.grid.Structure1d;
-import io.jenetics.lattices.grid.Structure2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements. Instances
@@ -48,10 +49,7 @@ import io.jenetics.lattices.grid.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public class DoubleMatrix2d
-    extends DoubleGrid2d
-    implements Matrix2d<DoubleMatrix2d>
-{
+public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
@@ -70,61 +68,32 @@ public class DoubleMatrix2d
      * @param array the element array
      */
     public DoubleMatrix2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    /**
-     * Create a new matrix <em>view</em> from the given {@code grid}.
-     *
-     * @param grid the data grid
-     */
-    public DoubleMatrix2d(final DoubleGrid2d grid) {
-        this(grid.structure(), grid.array());
-    }
-
-    @Override
-    public Factory2d<DoubleMatrix2d> factory() {
-        return struct -> new DoubleMatrix2d(
-            struct,
-            array.like(struct.extent().size())
-        );
-    }
-
-    @Override
-    public DoubleMatrix2d view(final Structure2d structure) {
-        return new DoubleMatrix2d(structure, array);
-    }
-
-    @Override
-    public DoubleMatrix2d copy(final Range2d range) {
-        final var struct = structure.copy(range);
-
-        // Fast track if no range-copy is needed.
-        if (structure.equals(struct)){
-            return new DoubleMatrix2d(structure, array.copy());
-        } else {
-            final var elems = array.like(range.size());
-
-            final var loop = new RowFirst(struct.extent());
-            loop.forEach((r, c) ->
-                elems.set(
-                    struct.order().index(r, c),
-                    get(r + range.start().row(), c + range.start().col())
-                )
-            );
-
-            return new DoubleMatrix2d(struct, elems);
-        }
-    }
-
-    @Override
-    public DoubleMatrix2d transpose() {
-        return new DoubleMatrix2d(structure.transpose(), array);
+        super(structure, array, DoubleMatrix2d::new);
     }
 
     /* *************************************************************************
      * Matrix view methods.
      * ************************************************************************/
+
+    /**
+     * Return a <em>transposed</em> view of this matrix.
+     *
+     * @return a <em>transposed</em> view of this matrix
+     */
+    public DoubleMatrix2d transpose() {
+        return view(View2d.TRANSPOSE);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d matrix. The returned 1-d matrix is
+     * a view onto this matrix {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d matrix
+     */
+    public DoubleMatrix1d project(final Projection2d projection) {
+        return new DoubleMatrix1d(projection.apply(structure()), array());
+    }
 
     /**
      * Constructs and returns a <em>view</em> representing the rows of the given
@@ -134,11 +103,9 @@ public class DoubleMatrix2d
      * @param index the column index.
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return new DoubleMatrix1d(structure.colAt(index), array);
+        return project(Projection2d.col(index));
     }
 
     /**
@@ -149,11 +116,9 @@ public class DoubleMatrix2d
      * @param index the row index.
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(structure.rowAt(index), array);
+        return project(Projection2d.row(index));
     }
 
     /* *************************************************************************
@@ -194,7 +159,7 @@ public class DoubleMatrix2d
         }
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array.like(struct.extent().size());
+            final var elems = array().like(struct.extent().size());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
@@ -272,7 +237,7 @@ public class DoubleMatrix2d
             return mult(B.transpose(), C, alpha, beta, false, false);
         }
         if (C == null) {
-            return mult(B, like(rows(), B.cols()), alpha, beta, false, false);
+            return mult(B, like(new Extent2d(rows(), B.cols())), alpha, beta, false, false);
         }
 
         final int m = rows();

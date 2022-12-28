@@ -17,33 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix;
+package io.jenetics.lattices.structure;
 
-import io.jenetics.lattices.Self;
+import static java.util.Objects.requireNonNull;
 
 /**
- * Base interface of all matrix implementations. An matrix is a container of
- * elements, which can be accessed by a <em>multidimensional index</em> and has
- * a fixed number of elements (<em>size</em>).
+ * Defines a 2-d structure, which is defined by the extent of the structure and
+ * the index order of the underlying 1-d structure.
+ *
+ * @param extent the extent of the structure
+ * @param order the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Matrix<M extends Matrix<M>> extends Self<M> {
+public record Structure2d(Extent2d extent, Order2d order) {
+
+    public Structure2d {
+        requireNonNull(extent);
+        requireNonNull(order);
+    }
 
     /**
-     * Return a new matrix with is like this one.
+     * Create a new structure with the given extent and the default element order.
      *
-     * @return a new matrix which is like this one
+     * @param extent the extent of the structure
      */
-    M like();
-
-    /**
-     * Return a new minimal copy of the underlying element array.
-     *
-     * @return a new minimal copy of the underlying element array
-     */
-    M copy();
+    public Structure2d(final Extent2d extent) {
+        this(extent, new Order2d(extent));
+    }
 
 }

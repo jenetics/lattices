@@ -25,11 +25,9 @@ import java.util.stream.IntStream;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.DoubleGrid1d;
+import io.jenetics.lattices.grid.BaseDoubleGrid1d;
 import io.jenetics.lattices.grid.Factory1d;
-import io.jenetics.lattices.grid.Range1d;
-import io.jenetics.lattices.grid.StrideOrder1d;
-import io.jenetics.lattices.grid.Structure1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}
@@ -44,10 +42,7 @@ import io.jenetics.lattices.grid.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public class DoubleMatrix1d
-    extends DoubleGrid1d
-    implements Matrix1d<DoubleMatrix1d>
-{
+public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
 
     /**
      * Factory for creating dense 1-d double matrices.
@@ -66,51 +61,7 @@ public class DoubleMatrix1d
      * @param array the element array
      */
     public DoubleMatrix1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    /**
-     * Create a new matrix <em>view</em> from the given {@code grid}.
-     *
-     * @param grid the data grid
-     */
-    public DoubleMatrix1d(final DoubleGrid1d grid) {
-        this(grid.structure(), grid.array());
-    }
-
-    @Override
-    public Factory1d<DoubleMatrix1d> factory() {
-        return struct -> new DoubleMatrix1d(
-            struct,
-            array.like(struct.extent().size())
-        );
-    }
-
-    @Override
-    public DoubleMatrix1d view(final Structure1d structure) {
-        return new DoubleMatrix1d(structure, array);
-    }
-
-    @Override
-    public DoubleMatrix1d copy(final Range1d range) {
-        final var struct = structure.copy(range);
-
-        // Check if we can do a fast copy.
-        if (structure.order() instanceof StrideOrder1d so) {
-            return new DoubleMatrix1d(
-                struct,
-                array.copy(
-                    range.start().value() + so.start().value(),
-                    range.extent().size()
-                )
-            );
-        } else {
-            final var elems = array.like(range.extent().size());
-            for (int i = 0; i < range.extent().size(); ++i) {
-                elems.set(i, get(i + range.start().value()));
-            }
-            return new DoubleMatrix1d(struct, elems);
-        }
+        super(structure, array, DoubleMatrix1d::new);
     }
 
     /* *************************************************************************
@@ -138,44 +89,11 @@ public class DoubleMatrix1d
 
         final int to = Math.min(Math.min(size(), y.size()), from + length);
 
-        // Fast track dot-product.
-        /*
-        if (order() instanceof StrideOrder1d so1 &&
-            y.order() instanceof StrideOrder1d so2 &&
-            so1.stride() == 1 &&
-            so2.stride() == 1 &&
-            array instanceof DenseDoubleArray dda1 &&
-            y.array instanceof DenseDoubleArray dda2)
-        {
-
-        } else {
-
-        }
-         */
-
         double sum = 0;
         for (int i = from; i < to; ++i) {
             sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
-
-        /*
-        int tail = from + length;
-        if (size() < tail) {
-            tail = size();
-        }
-        if (y.size() < tail) {
-            tail = y.size();
-        }
-        int l = tail - from;
-
-        double sum = 0;
-        int i = tail - 1;
-        for (int k = l; --k >= 0; --i) {
-            sum = Math.fma(get(i), y.get(i), sum);
-        }
-        return sum;
-         */
     }
 
     /**

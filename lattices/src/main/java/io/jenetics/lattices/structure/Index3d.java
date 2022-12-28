@@ -17,34 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents a 2-d index.
+ * Represents a 3-d index.
  *
  * @param row the row index
  * @param col the column index
+ * @param slice the slice index
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index2d(int row, int col) {
+public record Index3d(int slice, int row, int col) {
 
     /**
-     * Index where row and column is zero.
+     * Index where slice, row and column is zero.
      */
-    public static final Index2d ZERO = new Index2d(0, 0);
-
-    /**
-     * Return a new range from {@code this} <em>to</em> {@code end}.
-     *
-     * @param end the end index of the created range, exclusively
-     * @return a new range from {@code this} <em>to</em> {@code end}
-     * @throws IllegalArgumentException if {@code this >= end}
-     */
-    public Range2d to(final Index2d end) {
-        return new Range2d(this, end);
-    }
+    public static final Index3d ZERO = new Index3d(0, 0, 0);
 
 }

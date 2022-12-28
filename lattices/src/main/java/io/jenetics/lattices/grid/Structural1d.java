@@ -19,37 +19,51 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Order1d;
+import io.jenetics.lattices.structure.Structure1d;
+
 /**
- * Represents the order for accessing the linearly stored element data.
+ * Defines the structure of a grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-@FunctionalInterface
-public interface Order3d {
+public interface Structural1d {
 
     /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
+     * Return the structure for grid.
      *
-     * @param row the row index
-     * @param col the column index
-     * @param slice the slice index
-     * @return the (linearized) index of the given {@code slice}, {@code row} and
-     *        {@code col} value
+     * @return the structure for grid
      */
-    int index(final int slice, final int row, final int col);
+    Structure1d structure();
 
     /**
-     * Return the position of the element with the given relative {@code index}
-     * within the (virtual or non-virtual) internal 1-d array.
+     * Return the dimension of {@code this} structures.
      *
-     * @param index the index of the element.
-     * @return the (linearized) index of the given {@code index}
+     * @return the dimension of {@code this} structures
      */
-    default int index(final Index3d index) {
-        return index(index.slice(), index.row(), index.col());
+    default Extent1d extent() {
+        return structure().extent();
+    }
+
+    /**
+     * Return the defined order of {@code this} structures.
+     *
+     * @return the defined order of {@code this} structures
+     */
+    default Order1d order() {
+        return structure().order();
+    }
+
+    /**
+     * Return the number of cells of this {@code this} structures.
+     *
+     * @return the number of cells of this {@code this} structures
+     */
+    default int size() {
+        return extent().size();
     }
 
 }

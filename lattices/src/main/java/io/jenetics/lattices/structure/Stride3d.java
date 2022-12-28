@@ -17,43 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * The extent of 3-d structures.
+ * Defines row-, column- and slice strides.
  *
- * @param rows the number of rows, must be greater or equal zero
- * @param cols the number of columns, must be greater or equal zero
- * @param slices the number of slices, must be greater or equal zero
+ * @param row the row stride value
+ * @param col the column stride value
+ * @param slice the slice stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent3d(int rows, int cols, int slices) {
+public record Stride3d(int slice, int row, int col) {
 
-    public Extent3d {
-        if (rows < 0 || cols < 0 || slices < 0) {
+    public Stride3d {
+        if (slice < 1 || row < 1 || col < 1) {
             throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d, %d, %d]."
-                    .formatted(rows, cols, slices)
+                "Stride must be positive: [%d, %d, %d]."
+                    .formatted(slice, row, col)
             );
         }
-    }
-
-    /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
-     *
-     * @return the number of cells for {@code this} matrix dimension
-     */
-    public int size() {
-        return rows*cols*slices;
-    }
-
-    @Override
-    public String toString() {
-        return "[%d, %d, %d]".formatted(rows(), cols(), slices());
     }
 
 }

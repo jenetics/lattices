@@ -29,9 +29,9 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.matrix.Matrices;
 import io.jenetics.lattices.matrix.blas.Eigenvalue;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

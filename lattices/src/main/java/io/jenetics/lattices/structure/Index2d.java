@@ -17,23 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Represents a 1-d index
+ * Represents a 2-d index.
  *
- * @param value the index value
+ * @param row the row index
+ * @param col the column index
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index1d(int value) implements Comparable<Index1d> {
+public record Index2d(int row, int col) {
 
     /**
-     * Zero index.
+     * Index where row and column is zero.
      */
-    public static final Index1d ZERO = new Index1d(0);
+    public static final Index2d ZERO = new Index2d(0, 0);
 
     /**
      * Return a new range from {@code this} <em>to</em> {@code end}.
@@ -42,12 +43,8 @@ public record Index1d(int value) implements Comparable<Index1d> {
      * @return a new range from {@code this} <em>to</em> {@code end}
      * @throws IllegalArgumentException if {@code this >= end}
      */
-    public Range1d to(final Index1d end) {
-        return new Range1d(this, end);
+    public Range2d to(final Index2d end) {
+        return new Range2d(this, end);
     }
 
-    @Override
-    public int compareTo(final Index1d other) {
-        return Integer.compare(value, other.value);
-    }
 }

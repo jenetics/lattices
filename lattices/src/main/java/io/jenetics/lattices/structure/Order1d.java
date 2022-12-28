@@ -17,32 +17,38 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.testng.annotations.Test;
-
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Structure1d;
+import static java.util.Objects.requireNonNull;
 
 /**
+ * Represents the <em>row-major</em> order.
+ *
+ * @param start the index of the first element
+ * @param stride the number of indexes between any two elements
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public class DoubleGrid1dTest {
+public record Order1d(Index1d start, Stride1d stride) {
 
-    @Test
-    public void assign() {
-        final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
-        final var grid = new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(extent.size())
-        );
+    /**
+     * The default stride.
+     */
+    public static final Order1d DEFAULT = new Order1d(0, 1);
 
-        grid.assign(87);
-        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+    public Order1d {
+        requireNonNull(start);
+        requireNonNull(stride);
+    }
+
+    public Order1d(final int start, final int stride) {
+        this(new Index1d(start), new Stride1d(stride));
+    }
+
+    public int index(final int rank) {
+        return start.value() + rank*stride.value();
     }
 
 }

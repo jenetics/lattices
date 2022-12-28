@@ -17,32 +17,35 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.testng.annotations.Test;
-
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Structure1d;
+package io.jenetics.lattices.structure;
 
 /**
+ * The extent of 1-d structures.
+ *
+ * @param size the number of elements, must be greater or equal zero
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public class DoubleGrid1dTest {
+public record Extent1d(int size) implements Comparable<Extent1d> {
 
-    @Test
-    public void assign() {
-        final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
-        final var grid = new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(extent.size())
-        );
+    public Extent1d {
+        if (size < 0) {
+            throw new IllegalArgumentException(
+                "Extent must be greater or equal zero: [%d].".formatted(size)
+            );
+        }
+    }
 
-        grid.assign(87);
-        grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+    @Override
+    public int compareTo(final Extent1d other) {
+        return Integer.compare(size, other.size);
+    }
+
+    @Override
+    public String toString() {
+        return "[%d]".formatted(size());
     }
 
 }

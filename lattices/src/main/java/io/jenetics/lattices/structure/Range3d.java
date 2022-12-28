@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,9 +31,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Range2d(Index2d start, Extent2d extent) {
+public record Range3d(Index3d start, Extent3d extent) {
 
-    public Range2d {
+    public Range3d {
         requireNonNull(start);
         requireNonNull(extent);
     }
@@ -46,13 +46,11 @@ public record Range2d(Index2d start, Extent2d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range2d(final Index2d start, final Index2d end) {
+    public Range3d(final Index3d start, final Index3d end) {
         this(
             start,
-            new Extent2d(
-                end.row() - start.row(),
-                end.col() - start.col()
-            )
+            new Extent3d(end.slice() - start.slice(), end.row() - start.row(),
+                end.col() - start.col())
         );
     }
 
@@ -61,8 +59,8 @@ public record Range2d(Index2d start, Extent2d extent) {
      *
      * @param extent the extent of the new range
      */
-    public Range2d(final Extent2d extent) {
-        this(Index2d.ZERO, extent);
+    public Range3d(final Extent3d extent) {
+        this(Index3d.ZERO, extent);
     }
 
     /**
@@ -76,9 +74,11 @@ public record Range2d(Index2d start, Extent2d extent) {
 
     @Override
     public String toString() {
-        return "[%d..%d, %d..%d]".formatted(
+        return "[%d..%d, %d..%d, %d..%d]".formatted(
             start.row(), start.row() + extent.rows(),
-            start.col(), start.col() + extent.cols());
+            start.col(), start.col() + extent.cols(),
+            start.slice(), start.slice() + extent.slices()
+        );
     }
 
 }

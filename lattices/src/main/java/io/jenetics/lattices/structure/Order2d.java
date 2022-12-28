@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,33 +31,28 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder3d(Index3d start, Stride3d stride) implements Order3d {
+public record Order2d(Index2d start, Stride2d stride) {
 
-    public StrideOrder3d {
+    public Order2d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
-    public StrideOrder3d(final Index3d start, final Extent3d extent) {
-        this(
-            start,
-            new Stride3d(extent.rows()*extent.cols(), extent.cols(),  1)
-        );
+    public Order2d(final Range2d range) {
+        this(range.start(), new Stride2d(range.extent().cols(), 1));
     }
 
     /**
-     * Create a new stride-order object,
+     * Create a new row-major order object for the given dimension.
      *
      * @param extent the structure extent
      */
-    public StrideOrder3d(final Extent3d extent) {
-        this(Index3d.ZERO, extent);
+    public Order2d(final Extent2d extent) {
+        this(new Range2d(extent));
     }
 
-    @Override
-    public int index(final int slice, final int row, final int col) {
+    public int index(final int row, final int col) {
         return
-            start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
     }

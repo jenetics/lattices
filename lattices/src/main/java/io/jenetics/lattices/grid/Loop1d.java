@@ -24,6 +24,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Range1d;
+
 /**
  * Looping strategies for 1-d structures.
  *

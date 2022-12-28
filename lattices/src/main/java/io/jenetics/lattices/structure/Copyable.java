@@ -17,27 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 /**
- * Defines row- and columns strides.
+ * This interface indicates, that a class can create a copy of type {@code T}.
+ * Typically, classes which implement this interface, are able to create a copy
+ * from itself.
  *
- * @param row the row stride value
- * @param col the column stride value
+ * @param <T> the type of the copied object
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Stride2d(int row, int col) {
+public interface Copyable<T> {
 
-    public Stride2d {
-        if (row < 1 || col < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d, %d]."
-                    .formatted(row, col)
-            );
-        }
-    }
+    /**
+     * Return a new copy of the specified object.
+     *
+     * @return a new copy of the specified.
+     */
+    T copy();
 
 }

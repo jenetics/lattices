@@ -19,40 +19,45 @@
  */
 package io.jenetics.lattices.grid;
 
-/**
- * The extent of 2-d structures.
- *
- * @param rows the number of rows, must be greater or equal zero
- * @param cols the number of columns, must be greater or equal zero
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public record Extent2d(int rows, int cols) {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    public Extent2d {
-        if (rows < 0 || cols < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d, %d]."
-                    .formatted(rows, cols)
-            );
+import org.testng.annotations.Test;
+
+import io.jenetics.lattices.structure.Order1d;
+
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
+public class Order1DTest {
+
+    @Test
+    public void indexDefaultStride() {
+        final var order = Order1d.DEFAULT;
+
+        for (int i = -10; i < 10; ++i) {
+            assertThat(order.index(i)).isEqualTo(i);
         }
     }
 
-    /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
-     *
-     * @return the number of cells for {@code this} matrix dimension
-     */
-    public int size() {
-        return rows*cols;
+    @Test
+    public void indexNonZeroStart() {
+        final var start = 34;
+        final var order = new Order1d(start, 1);
+
+        for (int i = -10; i < 10; ++i) {
+            assertThat(order.index(i)).isEqualTo(i + start);
+        }
     }
 
-    @Override
-    public String toString() {
-        return "[%d, %d]".formatted(rows(), cols());
+    @Test
+    public void indexWithStride() {
+        final var start = -10;
+        final var stride = 34;
+        final var order = new Order1d(start, stride);
+
+        for (int i = -10; i < 10; ++i) {
+            assertThat(order.index(i)).isEqualTo(start + i*stride);
+        }
     }
 
 }
