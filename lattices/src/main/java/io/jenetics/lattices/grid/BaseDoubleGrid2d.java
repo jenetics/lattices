@@ -223,7 +223,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
     public void assign(
-        final G y,
+        final BaseDoubleGrid2d<?> y,
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
@@ -248,7 +248,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    public void swap(final G other) {
+    public void swap(final BaseDoubleGrid2d<?> other) {
         checkSameExtent(structure, other.structure());
         forEach((r, c) -> {
             final var tmp = get(r, c);
@@ -308,7 +308,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final G other) {
+    public boolean equals(final BaseDoubleGrid2d<?> other) {
         final var context = NumericalContext.get();
 
         return extent().equals(other.extent()) &&

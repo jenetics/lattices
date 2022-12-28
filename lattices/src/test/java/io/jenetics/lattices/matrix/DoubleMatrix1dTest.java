@@ -29,6 +29,7 @@ import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.grid.Loop1d;
 import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.View1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -48,7 +49,7 @@ public class DoubleMatrix1dTest {
     @Test(dataProvider = "matricesRanges")
     public void copy(final DoubleMatrix1d matrix, final Range1d range) {
         if (range != null) {
-            final var copy = matrix.copy(range);
+            final var copy = matrix.view(View1d.of(range)).copy();
 
             final var loop = new Loop1d.Forward(range);
             loop.forEach(i -> {
@@ -73,7 +74,7 @@ public class DoubleMatrix1dTest {
             // Test also matrix views.
             {
                 next(new Extent1d(77))
-                    .view(new Range1d(new Index1d(3), new Extent1d(7))),
+                    .view(View1d.of(new Range1d(new Index1d(3), new Extent1d(7)))),
                 new Range1d(new Index1d(1), new Extent1d(3)),
             }
         };
@@ -82,7 +83,7 @@ public class DoubleMatrix1dTest {
     @Test(dataProvider = "matricesRanges")
     public void view(final DoubleMatrix1d matrix, final Range1d range) {
         if (range != null) {
-            final var copy = matrix.view(range);
+            final var copy = matrix.view(View1d.of(range));
 
             final var loop = new Loop1d.Forward(range);
             loop.forEach(i -> {

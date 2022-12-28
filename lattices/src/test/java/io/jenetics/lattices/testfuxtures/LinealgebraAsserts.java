@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.data.Percentage;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.DoubleGrid1d;
+import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.grid.Grid2d;
 
 /**
@@ -56,7 +56,7 @@ public final class LinealgebraAsserts {
         );
     }
 
-    public static void assertEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
+    public static void assertEquals(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
@@ -64,7 +64,7 @@ public final class LinealgebraAsserts {
         );
     }
 
-    public static void assertNotEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
+    public static void assertNotEquals(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))

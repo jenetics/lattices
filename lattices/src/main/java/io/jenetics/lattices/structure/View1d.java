@@ -19,5 +19,55 @@
  */
 package io.jenetics.lattices.structure;
 
+/**
+ * Functional interface for doing view transformation.
+ */
+@FunctionalInterface
 public interface View1d {
+
+    /**
+     * Applies the <em>view</em> transformation of the given {@code structure}.
+     *
+     * @param structure the structure to apply the view transformation on
+     * @return a new <em>view</em>-structure
+     */
+    Structure1d apply(final Structure1d structure);
+
+    /**
+     * Return a transformation which creates a view of the given {@code range}.
+     *
+     * @param range the range of the view
+     * @return a transformation which creates a view of the given {@code range}
+     */
+    static View1d of(final Range1d range) {
+        return structure -> new Structure1d(
+            range.extent(),
+            new StrideOrder1d(
+                structure.order().start().value() +
+                    structure.order().stride().value()*range.start().value(),
+                structure.order().stride().value()
+            )
+        );
+    }
+
+    /**
+     * Return a new stride view transformation.
+     *
+     * @param stride the stride of the created view transformation
+     * @return a new stride view transformation
+     */
+    static View1d of(final Stride1d stride) {
+        return structure -> new Structure1d(
+            new Extent1d(
+                structure.extent().size() != 0
+                    ? (structure.extent().size() - 1)/stride.value() + 1
+                    : 0
+            ),
+            new StrideOrder1d(
+                structure.order().start().value(),
+                structure.order().stride().value()*stride.value()
+            )
+        );
+    }
+
 }

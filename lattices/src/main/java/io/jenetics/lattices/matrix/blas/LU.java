@@ -32,6 +32,7 @@ import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.View1d;
 import io.jenetics.lattices.structure.View2d;
 
 /**
@@ -261,7 +262,7 @@ public final class LU {
             if (j < m && context.isNotZero(jj)) {
                 final var multiplier = 1.0/jj;
                 lu.colAt(j)
-                    .view(new Range1d(new Index1d(j + 1), new Extent1d(m - (j + 1))))
+                    .view(View1d.of(new Range1d(new Index1d(j + 1), new Extent1d(m - (j + 1)))))
                     .assign(v -> v*multiplier);
             }
         }

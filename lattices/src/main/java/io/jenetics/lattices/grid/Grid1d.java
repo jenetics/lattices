@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Order1d;
 import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.View1d;
 
 /**
  * Base interface for 1-d grids.
@@ -30,51 +31,65 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid1d extends Loopable1d {
+public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
+    extends Structural1d, Loopable1d, Grid<A, G>
+{
 
     /**
-     * Return the structure for structures.
+     * Create a new grid (view) with the given structure and the underlying
+     * data array.
      *
-     * @return the structure for structures
+     * @param structure the structure of the created grid
+     * @param array the grid elements
+     * @return a new grid (view)
      */
-    Structure1d structure();
+    G create(final Structure1d structure, final A array);
 
     /**
-     * Return the dimension of {@code this} structures.
+     * Assigns the elements of the {@code other} grid to this grid.
      *
-     * @return the dimension of {@code this} structures
+     * @param other the source of the grid elements
      */
-    default Extent1d extent() {
-        return structure().extent();
+    void assign(final G other);
+
+    /**
+     * Creates a new grid with the given {@code extent} and the properties of
+     * the underlying array.
+     *
+     * @param extent the extent of the new grid
+     * @return a new grid
+     */
+    default G like(final Extent1d extent) {
+        return create(
+            new Structure1d(extent),
+            array().like(extent.size())
+        );
     }
 
     /**
-     * Return the defined order of {@code this} structures.
+     * Create a new grid with the same extent and properties as this grid.
      *
-     * @return the defined order of {@code this} structures
+     * @return a new grid with the same extent and properties as this grid
      */
-    default Order1d order() {
-        return structure().order();
+    default G like() {
+        return like(extent());
     }
 
-    /**
-     * Return the number of cells of this {@code this} structures.
-     *
-     * @return the number of cells of this {@code this} structures
-     */
-    default int size() {
-        return extent().size();
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
     @Override
-    default Loop1d loop() {
-        return new Loop1d.Forward(extent());
+    default G copy() {
+        final var copy = like();
+        copy.assign(self());
+        return copy;
+    }
+
+    /**
+     * Create a new grid by applying the given {@code view} transformation.
+     *
+     * @param view the grid view transformation to apply
+     * @return a new grid view
+     */
+    default G view(final View1d view) {
+        return create(view.apply(structure()), array());
     }
 
 }

@@ -29,7 +29,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
+public record StrideOrder1d(Index1d start, Stride1d stride) {
 
     /**
      * The default stride.
@@ -40,7 +40,6 @@ public record StrideOrder1d(Index1d start, Stride1d stride) implements Order1d {
         this(new Index1d(start), new Stride1d(stride));
     }
 
-    @Override
     public int index(final int rank) {
         return start.value() + rank*stride.value();
     }

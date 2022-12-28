@@ -29,6 +29,7 @@ import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.View1d;
 import io.jenetics.lattices.structure.View2d;
 
 /**
@@ -91,13 +92,13 @@ public final class QR {
         final DoubleMatrix2d Q = QR.like();
         for (int k = QR.cols() - 1; k >= 0; k--) {
             final DoubleMatrix1d QRcolk = QR.colAt(k)
-                .view(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k)));
+                .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k))));
 
             Q.set(k, k, 1);
             for (int j = k; j < QR.cols(); ++j) {
                 if (context.isNotZero(QR.get(k, k))) {
                     final var Qcolj = Q.colAt(j)
-                        .view(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k)));
+                        .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k))));
 
                     double s = -QRcolk.dotProduct(Qcolj)/QR.get(k, k);
                     Qcolj.assign(QRcolk, (a, b) -> Math.fma(b, s, a));
@@ -220,7 +221,7 @@ public final class QR {
         final var QRcolumnsPart = new DoubleMatrix1d[n];
         for (int k = 0; k < n; ++k) {
             QRcolumnsPart[k] = qr.colAt(k)
-                .view(new Range1d(new Index1d(k), new Extent1d(m - k)));
+                .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(m - k))));
         }
 
         // Main loop.
@@ -243,7 +244,7 @@ public final class QR {
                 // Apply transformation to remaining columns.
                 for (int j = k + 1; j < n; ++j) {
                     final DoubleMatrix1d QRcolj = qr.colAt(j)
-                        .view(new Range1d(new Index1d(k), new Extent1d(m - k)));
+                        .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(m - k))));
 
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
                     s = -s/qr.get(k, k);

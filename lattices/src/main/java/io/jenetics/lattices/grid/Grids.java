@@ -40,7 +40,7 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    public static void checkSameExtent(final Grid1d a, final Grid1d b) {
+    public static void checkSameExtent(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         if (!a.extent().equals(b.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())

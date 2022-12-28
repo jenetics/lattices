@@ -30,30 +30,23 @@ import java.util.stream.StreamSupport;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
-import io.jenetics.lattices.structure.StrideOrder1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Object grid class.
  *
  * @param <T> the grid element type
+ * @param structure The structure, which defines the <em>extent</em> of the grid
+ *        and the <em>order</em> which determines the index mapping {@code N -> N}.
+ * @param array The underlying {@code double[]} array.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
  * @version 3.0
+ * @since 3.0
  */
-public class ObjectGrid1d<T> implements Grid1d {
-
-    /**
-     * The structure, which defines the <em>extent</em> of the grid and the
-     * <em>order</em> which determines the index mapping {@code N -> N}.
-     */
-    protected final Structure1d structure;
-
-    /**
-     * The underlying {@code double[]} array.
-     */
-    protected final ObjectArray<T> array;
+public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
+    implements Grid1d<ObjectArray<T>, ObjectGrid1d<T>>
+{
 
     /**
      * Create a new 1-d grid with the given {@code structure} and element
@@ -62,13 +55,13 @@ public class ObjectGrid1d<T> implements Grid1d {
      * @param structure the matrix structure
      * @param array the element array
      * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
+     * is not able to hold the required number of elements. It is still possible
+     * that an {@link IndexOutOfBoundsException} is thrown when the defined
+     * order of the grid tries to access an array index, which is not within the
+     * bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public ObjectGrid1d(final Structure1d structure, final ObjectArray<T> array) {
+    public ObjectGrid1d {
         if (structure.extent().size() > array.length()) {
             throw new IllegalArgumentException(
                 "The number of available elements is smaller than the number of " +
@@ -76,14 +69,6 @@ public class ObjectGrid1d<T> implements Grid1d {
                         .formatted(structure.extent().size(), array.length())
             );
         }
-
-        this.structure = structure;
-        this.array = array;
-    }
-
-    @Override
-    public Structure1d structure() {
-        return structure;
     }
 
     /**
@@ -91,8 +76,17 @@ public class ObjectGrid1d<T> implements Grid1d {
      *
      * @return the underlying element array
      */
+    @Override
     public ObjectArray<T> array() {
         return array;
+    }
+
+    @Override
+    public ObjectGrid1d<T> create(
+        final Structure1d structure,
+        final ObjectArray<T> array
+    ) {
+        return new ObjectGrid1d<>(structure, array);
     }
 
     /**
@@ -101,7 +95,7 @@ public class ObjectGrid1d<T> implements Grid1d {
      * @param index the index of the cell
      * @return the value of the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
+     * bounds
      */
     public T get(final int index) {
         return array.get(order().index(index));
@@ -112,12 +106,12 @@ public class ObjectGrid1d<T> implements Grid1d {
      * {@code value}.
      *
      * @param index the index of the cell
-     * @param value  the value to be filled into the specified cell
+     * @param value the value to be filled into the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
+     * bounds
      */
     public void set(final int index, final T value) {
-        array.set(order().index(index),  value);
+        array.set(order().index(index), value);
     }
 
     /**
@@ -136,40 +130,19 @@ public class ObjectGrid1d<T> implements Grid1d {
      */
     public Stream<T> stream() {
         return StreamSupport.stream(
-            ((Iterable<T>)this::iterator).spliterator(),
+            ((Iterable<T>) this::iterator).spliterator(),
             false
         );
     }
 
-    /**
-     * Replaces all cell values of the receiver with the values of another
-     * matrix. Both matrices must have the same number of rows and columns.
-     *
-     * @param other the source matrix to copy from (maybe identical to the
-     *        receiver).
-     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
-     */
-    public void assign(final ObjectGrid1d<? extends T> other) {
-        if (other == this) {
-            return;
-        }
-        Grids.checkSameExtent(this, other);
+    @Override
+    public void assign(final ObjectGrid1d<T> other) {
+        forEach(i -> set(i, other.get(i)));
+    }
 
-        // Fast track assign.
-        if (order() instanceof StrideOrder1d so1 &&
-            other.order() instanceof StrideOrder1d so2 &&
-            so1.stride().value() == 1 &&
-            so2.stride().value() == 1 &&
-            array instanceof DenseObjectArray<T> doa1 &&
-            other.array instanceof DenseObjectArray<?> doa2)
-        {
-            System.arraycopy(
-                doa2.elements(), so2.start().value(),
-                doa1.elements(), so1.start().value(), size()
-            );
-        } else {
-            forEach(i -> set(i, other.get(i)));
-        }
+    @Override
+    public Loop1d loop() {
+        return new Forward(extent());
     }
 
     /**
@@ -180,20 +153,7 @@ public class ObjectGrid1d<T> implements Grid1d {
     @SafeVarargs
     @SuppressWarnings("varargs")
     public final void assign(final T... values) {
-        final var size = Math.min(values.length, size());
-
-        // Fast track assign.
-        if (order() instanceof StrideOrder1d so1 &&
-            so1.stride().value() == 1 &&
-            array instanceof DenseObjectArray<T> a1)
-        {
-            System.arraycopy(
-                values, 0, a1.elements(),
-                so1.start().value(), size
-            );
-        } else {
-            forEach(i -> set(i, values[i]));
-        }
+        forEach(i -> set(i, values[i]));
     }
 
     /**
@@ -254,26 +214,22 @@ public class ObjectGrid1d<T> implements Grid1d {
      *
      * @param other the second matrix to compare
      * @return {@code true} if the two given matrices are equal, {@code false}
-     *         otherwise
+     * otherwise
      */
     public boolean equals(final ObjectGrid1d<?> other) {
-
-        return extent().equals(other.extent()) &&
-            allMatch(i -> Objects.equals(get(i), other.get(i)));
+        return extent().equals(other.extent()) && allMatch(i -> Objects.equals(get(i), other.get(i)));
     }
 
     @Override
     public int hashCode() {
-        final int[] hash = new int[] { 37 };
-        forEach(i -> hash[0] += Objects.hashCode(get(i))*17);
+        final int[] hash = new int[]{37};
+        forEach(i -> hash[0] += Objects.hashCode(get(i)) * 17);
         return hash[0];
     }
 
     @Override
     public boolean equals(final Object object) {
-        return object == this ||
-            object instanceof ObjectGrid1d<?> grid &&
-            equals(grid);
+        return object == this || object instanceof ObjectGrid1d<?> grid && equals(grid);
     }
 
     @Override
@@ -294,16 +250,13 @@ public class ObjectGrid1d<T> implements Grid1d {
      * Return a factory for creating dense 1-d object grids.
      *
      * @param __ not used (Java trick for getting "reified" element type)
-     * @return the dense object factory
      * @param <T> the grid element type
+     * @return the dense object factory
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
-        return struct -> new ObjectGrid1d<T>(
-            struct,
-            DenseObjectArray.ofSize(struct.extent().size(), __)
-        );
+        return struct -> new ObjectGrid1d<T>(struct, DenseObjectArray.ofSize(struct.extent().size(), __));
     }
 
 }

@@ -19,9 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.StrideOrder2d;
-import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.StrideOrder1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Defines the structure of a grid.
@@ -30,21 +30,21 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structural2d {
+public interface Structural1d {
 
     /**
      * Return the structure for grid.
      *
      * @return the structure for grid
      */
-    Structure2d structure();
+    Structure1d structure();
 
     /**
      * Return the dimension of {@code this} structures.
      *
      * @return the dimension of {@code this} structures
      */
-    default Extent2d extent() {
+    default Extent1d extent() {
         return structure().extent();
     }
 
@@ -53,7 +53,7 @@ public interface Structural2d {
      *
      * @return the defined order of {@code this} structures
      */
-    default StrideOrder2d order() {
+    default StrideOrder1d order() {
         return structure().order();
     }
 
@@ -64,24 +64,6 @@ public interface Structural2d {
      */
     default int size() {
         return extent().size();
-    }
-
-    /**
-     * Return the number of rows of {@code this} structures.
-     *
-     * @return the number of rows of {@code this} structures
-     */
-    default int rows() {
-        return extent().rows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} structures.
-     *
-     * @return the number of columns of {@code this} structures
-     */
-    default int cols() {
-        return extent().cols();
     }
 
 }
