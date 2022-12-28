@@ -26,10 +26,7 @@ import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.BaseDoubleGrid1d;
-import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.Factory1d;
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.StrideOrder1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**

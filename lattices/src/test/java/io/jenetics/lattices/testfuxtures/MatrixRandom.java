@@ -21,10 +21,10 @@ package io.jenetics.lattices.testfuxtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
