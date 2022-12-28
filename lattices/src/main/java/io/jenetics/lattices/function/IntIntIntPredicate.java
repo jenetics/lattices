@@ -17,20 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.function;
 
 /**
- * Functional interface for doing view transformation.
+ * Represents a predicate (boolean-valued function) of an (int, int, int)-valued
+ * argument.
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
-public interface View3d {
+public interface IntIntIntPredicate {
 
     /**
-     * Applies the <em>view</em> transformation of the given {@code structure}.
+     * Tests whether the two arguments are treated equals.
      *
-     * @param structure the structure to apply the view transformation on
-     * @return a new <em>view</em>-structure
+     * @param i the first value
+     * @param j the second value
+     * @param k the third value
+     * @return {@code true} if the values are treated as equal, {@code false}
+     *         otherwise
      */
-    Structure3d apply(final Structure3d structure);
+    boolean test(final int i, final int j, final int k);
 
 }

@@ -17,20 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.function;
 
 /**
- * Functional interface for doing view transformation.
+ * Represents an operation that accepts an (int, int, int)-valued argument and
+ * returns no result.
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
-public interface View3d {
+public interface IntIntIntConsumer {
 
     /**
-     * Applies the <em>view</em> transformation of the given {@code structure}.
+     * Performs this operation on the given arguments.
      *
-     * @param structure the structure to apply the view transformation on
-     * @return a new <em>view</em>-structure
+     * @param i first value
+     * @param j second value
+     * @param k third value
      */
-    Structure3d apply(final Structure3d structure);
+    void accept(final int i, final int j, final int k);
 
 }
