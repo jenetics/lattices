@@ -56,7 +56,7 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().cols()),
-                new StrideOrder1d(
+                new Order1d(
                     structure.order().index(index, 0),
                     structure.order().stride().col()
                 )
@@ -89,7 +89,7 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().rows()),
-                new StrideOrder1d(
+                new Order1d(
                     structure.order().index(0, index),
                     structure.order().stride().row()
                 )

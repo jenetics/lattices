@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, StrideOrder1d order) {
+public record Structure1d(Extent1d extent, Order1d order) {
 
     public Structure1d {
         requireNonNull(extent);
@@ -46,7 +46,7 @@ public record Structure1d(Extent1d extent, StrideOrder1d order) {
      * @param extent the extent of the structure
      */
     public Structure1d(final Extent1d extent) {
-        this(extent, StrideOrder1d.DEFAULT);
+        this(extent, Order1d.DEFAULT);
     }
 
     /**
@@ -73,7 +73,7 @@ public record Structure1d(Extent1d extent, StrideOrder1d order) {
 
         return new Structure1d(
             range.extent(),
-            new StrideOrder1d(
+            new Order1d(
                 order.start().value() +
                     order.stride().value()*range.start().value(),
                 order.stride().value()
@@ -94,7 +94,7 @@ public record Structure1d(Extent1d extent, StrideOrder1d order) {
                     ? (extent.size() - 1)/stride.value() + 1
                     : 0
             ),
-            new StrideOrder1d(
+            new Order1d(
                 order.start().value(),
                 order.stride().value()*stride.value()
             )
@@ -109,12 +109,12 @@ public record Structure1d(Extent1d extent, StrideOrder1d order) {
      * @throws IndexOutOfBoundsException if the created view structure doesn't
      *         fit into the current structure
      * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder1d}
+     *         is not an instance of {@link Order1d}
      */
     public Structure1d copy(final Range1d range) {
         checkRange(range);
 
-        return new Structure1d(range.extent(), StrideOrder1d.DEFAULT);
+        return new Structure1d(range.extent(), Order1d.DEFAULT);
     }
 
     private void checkRange(final Range1d range) {

@@ -42,7 +42,7 @@ public interface View1d {
     static View1d of(final Range1d range) {
         return structure -> new Structure1d(
             range.extent(),
-            new StrideOrder1d(
+            new Order1d(
                 structure.order().start().value() +
                     structure.order().stride().value()*range.start().value(),
                 structure.order().stride().value()
@@ -63,7 +63,7 @@ public interface View1d {
                     ? (structure.extent().size() - 1)/stride.value() + 1
                     : 0
             ),
-            new StrideOrder1d(
+            new Order1d(
                 structure.order().start().value(),
                 structure.order().stride().value()*stride.value()
             )

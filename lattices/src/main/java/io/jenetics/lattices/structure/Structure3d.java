@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, StrideOrder3d order) {
+public record Structure3d(Extent3d extent, Order3d order) {
 
     public Structure3d {
         requireNonNull(extent);
@@ -45,7 +45,7 @@ public record Structure3d(Extent3d extent, StrideOrder3d order) {
      * @param extent the extent of the structure
      */
     public Structure3d(final Extent3d extent) {
-        this(extent, new StrideOrder3d(extent));
+        this(extent, new Order3d(extent));
     }
 
 }

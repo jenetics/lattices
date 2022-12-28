@@ -29,9 +29,9 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder2d(Index2d start, Stride2d stride) {
+public record Order2d(Index2d start, Stride2d stride) {
 
-    public StrideOrder2d(final Range2d range) {
+    public Order2d(final Range2d range) {
         this(range.start(), new Stride2d(range.extent().cols(), 1));
     }
 
@@ -40,7 +40,7 @@ public record StrideOrder2d(Index2d start, Stride2d stride) {
      *
      * @param extent the structure extent
      */
-    public StrideOrder2d(final Extent2d extent) {
+    public Order2d(final Extent2d extent) {
         this(new Range2d(extent));
     }
 

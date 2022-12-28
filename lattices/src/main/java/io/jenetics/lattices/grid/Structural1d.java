@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.StrideOrder1d;
+import io.jenetics.lattices.structure.Order1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -53,7 +53,7 @@ public interface Structural1d {
      *
      * @return the defined order of {@code this} structures
      */
-    default StrideOrder1d order() {
+    default Order1d order() {
         return structure().order();
     }
 

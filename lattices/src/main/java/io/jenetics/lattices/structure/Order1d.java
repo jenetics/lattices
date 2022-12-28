@@ -29,14 +29,14 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder1d(Index1d start, Stride1d stride) {
+public record Order1d(Index1d start, Stride1d stride) {
 
     /**
      * The default stride.
      */
-    public static final StrideOrder1d DEFAULT = new StrideOrder1d(0, 1);
+    public static final Order1d DEFAULT = new Order1d(0, 1);
 
-    public StrideOrder1d(final int start, final int stride) {
+    public Order1d(final int start, final int stride) {
         this(new Index1d(start), new Stride1d(stride));
     }
 

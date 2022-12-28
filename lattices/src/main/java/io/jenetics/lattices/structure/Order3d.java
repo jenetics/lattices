@@ -31,14 +31,14 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder3d(Index3d start, Stride3d stride) {
+public record Order3d(Index3d start, Stride3d stride) {
 
-    public StrideOrder3d {
+    public Order3d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
-    public StrideOrder3d(final Index3d start, final Extent3d extent) {
+    public Order3d(final Index3d start, final Extent3d extent) {
         this(
             start,
             new Stride3d(extent.rows()*extent.cols(), extent.cols(),  1)
@@ -50,7 +50,7 @@ public record StrideOrder3d(Index3d start, Stride3d stride) {
      *
      * @param extent the structure extent
      */
-    public StrideOrder3d(final Extent3d extent) {
+    public Order3d(final Extent3d extent) {
         this(Index3d.ZERO, extent);
     }
 

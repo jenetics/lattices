@@ -35,7 +35,7 @@ public interface View2d {
             structure.extent().cols(),
             structure.extent().rows()
         ),
-        new StrideOrder2d(
+        new Order2d(
             new Index2d(
                 structure.order().start().col(),
                 structure.order().start().row()
@@ -66,7 +66,7 @@ public interface View2d {
 
         return structure -> new Structure2d(
             range.extent(),
-            new StrideOrder2d(
+            new Order2d(
                 new Index2d(
                     structure.order().start().row() +
                         structure.order().stride().row()*range.start().row(),
@@ -110,7 +110,7 @@ public interface View2d {
                         ? (extent.cols() - 1)/stride.col() + 1
                         : 0
                 ),
-                new StrideOrder2d(
+                new Order2d(
                     order.start(),
                     new Stride2d(
                         order.stride().row()*stride.row(),
