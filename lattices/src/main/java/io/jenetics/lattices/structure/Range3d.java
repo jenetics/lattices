@@ -49,11 +49,8 @@ public record Range3d(Index3d start, Extent3d extent) {
     public Range3d(final Index3d start, final Index3d end) {
         this(
             start,
-            new Extent3d(
-                end.row() - start.row(),
-                end.col() - start.col(),
-                end.slice() - start.slice()
-            )
+            new Extent3d(end.slice() - start.slice(), end.row() - start.row(),
+                end.col() - start.col())
         );
     }
 

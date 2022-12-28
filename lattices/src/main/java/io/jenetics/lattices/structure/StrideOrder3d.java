@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record StrideOrder3d(Index3d start, Stride3d stride) implements Order3d {
+public record StrideOrder3d(Index3d start, Stride3d stride) {
 
     public StrideOrder3d {
         requireNonNull(start);
@@ -54,7 +54,6 @@ public record StrideOrder3d(Index3d start, Stride3d stride) implements Order3d {
         this(Index3d.ZERO, extent);
     }
 
-    @Override
     public int index(final int slice, final int row, final int col) {
         return
             start.slice() + slice*stride.slice() +

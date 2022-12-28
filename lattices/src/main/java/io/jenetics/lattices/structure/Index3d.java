@@ -30,7 +30,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Index3d(int row, int col, int slice) {
+public record Index3d(int slice, int row, int col) {
 
     /**
      * Index where slice, row and column is zero.
