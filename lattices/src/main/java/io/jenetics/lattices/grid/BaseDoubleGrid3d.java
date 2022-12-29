@@ -35,7 +35,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @param <G> the grid type
  */
 public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
-    implements Grid3d<DoubleArray, G> {
+    implements Grid3d<DoubleArray, G>
+{
 
     /**
      * The structure, which defines the <em>extent</em> of the grid and the

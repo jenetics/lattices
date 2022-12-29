@@ -20,18 +20,18 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * Generic class for 1-d grids holding {@code double} elements. The
- * {@code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code double[]}
- * array. The following example shows how to create such a grid view from a given
- * {@code double[]} array.
+ * Generic class for 3-d grids holding {@code double} elements. The
+ * {@code DoubleGrid2d} is <em>just</em> a 3-d view onto a 1-d Java
+ * {@code double[]} array. The following example shows how to create such a grid
+ * view from a given {@code double[]} array.
  *
  * <pre>{@code
- * final var values = new double[100];
- * final var grid = new DoubleGrid1d(
- *     new Structure1d(new Extent1d(100)),
+ * final var values = new double[3*50*100];
+ * final var grid = new DoubleGrid3d(
+ *     new Structure3d(new Extent3d(3, 50, 100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -40,10 +40,10 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
+public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
 
     /**
-     * Create a new 1-d grid with the given {@code structure} and element
+     * Create a new 3-d matrix with the given {@code structure} and element
      * {@code array}.
      *
      * @param structure the matrix structure
@@ -55,8 +55,8 @@ public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid1d::new);
+    public DoubleGrid3d(final Structure3d structure, final DoubleArray array) {
+        super(structure, array, DoubleGrid3d::new);
     }
 
 }

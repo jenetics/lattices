@@ -256,7 +256,10 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
-        return struct -> new ObjectGrid1d<T>(struct, DenseObjectArray.ofSize(struct.extent().size(), __));
+        return struct -> new ObjectGrid1d<T>(
+            struct,
+            DenseObjectArray.ofSize(struct.extent().size(), __)
+        );
     }
 
 }
