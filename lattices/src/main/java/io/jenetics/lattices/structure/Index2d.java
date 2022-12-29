@@ -36,15 +36,4 @@ public record Index2d(int row, int col) {
      */
     public static final Index2d ZERO = new Index2d(0, 0);
 
-    /**
-     * Return a new range from {@code this} <em>to</em> {@code end}.
-     *
-     * @param end the end index of the created range, exclusively
-     * @return a new range from {@code this} <em>to</em> {@code end}
-     * @throws IllegalArgumentException if {@code this >= end}
-     */
-    public Range2d to(final Index2d end) {
-        return new Range2d(this, end);
-    }
-
 }

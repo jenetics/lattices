@@ -21,7 +21,6 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.structure.Copyable;
 
 /**
  * A grid defines a structure onto a given (one-dimensional) array. Every grid
