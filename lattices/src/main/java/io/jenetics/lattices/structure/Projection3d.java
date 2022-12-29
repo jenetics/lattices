@@ -34,16 +34,128 @@ public interface Projection3d {
     Structure2d apply(final Structure3d structure);
 
 
+    /**
+     * Create a <em>slice</em>-projection for the slice with the given
+     * {@code index}.
+     *
+     * @param index the column index
+     * @return a new <em>slice</em>-projection
+     * @throws IllegalArgumentException if the given {@code index} is negative
+     */
     static Projection3d slice(final int index) {
-        return null;
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "Projection index must be greater then zero: " + index
+            );
+        }
+
+        return structure -> {
+            if (index >= structure.extent().slices()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + structure.extent() + " at column=" +
+                        index
+                );
+            }
+
+            return new Structure2d(
+                new Extent2d(
+                    structure.extent().rows(),
+                    structure.extent().cols()
+                ),
+                new Order2d(
+                    new Index2d(
+                        structure.order().start().row(),
+                        structure.order().index(index, 0, 0)
+                    ),
+                    new Stride2d(
+                        structure.order().stride().row(),
+                        structure.order().stride().col()
+                    )
+                )
+            );
+        };
     }
 
+    /**
+     * Create a <em>row</em>-projection for the row with the given {@code index}.
+     *
+     * @param index the row index
+     * @return a new <em>row</em>-projection
+     * @throws IllegalArgumentException if the given {@code index} is negative
+     */
     static Projection3d row(final int index) {
-        return null;
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "Projection index must be greater then zero: " + index
+            );
+        }
+
+        return structure -> {
+            if (index >= structure.extent().rows()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + structure.extent() + " at row=" + index
+                );
+            }
+
+            return new Structure2d(
+                new Extent2d(
+                    structure.extent().slices(),
+                    structure.extent().cols()
+                ),
+                new Order2d(
+                    new Index2d(
+                        structure.order().start().slice(),
+                        structure.order().index(0, index, 0)
+                    ),
+                    new Stride2d(
+                        structure.order().stride().slice(),
+                        structure.order().stride().col()
+                    )
+                )
+            );
+        };
     }
 
+    /**
+     * Create a <em>column</em>-projection for the column with the given
+     * {@code index}.
+     *
+     * @param index the column index
+     * @return a new <em>column</em>-projection
+     * @throws IllegalArgumentException if the given {@code index} is negative
+     */
     static Projection3d col(final int index) {
-        return null;
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "Projection index must be greater then zero: " + index
+            );
+        }
+
+        return structure -> {
+            if (index >= structure.extent().cols()) {
+                throw new IndexOutOfBoundsException(
+                    "Attempted to access " + structure.extent() + " at column=" +
+                        index
+                );
+            }
+
+            return new Structure2d(
+                new Extent2d(
+                    structure.extent().slices(),
+                    structure.extent().rows()
+                ),
+                new Order2d(
+                    new Index2d(
+                        structure.order().start().slice(),
+                        structure.order().index(0, 0, index)
+                    ),
+                    new Stride2d(
+                        structure.order().stride().slice(),
+                        structure.order().stride().row()
+                    )
+                )
+            );
+        };
     }
 
 }
