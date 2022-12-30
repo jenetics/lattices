@@ -96,4 +96,15 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
         return create(view.apply(structure()), array());
     }
 
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    @Override
+    default Loop3d loop() {
+        return new Loop3d.SliceFirst(extent());
+    }
+
 }

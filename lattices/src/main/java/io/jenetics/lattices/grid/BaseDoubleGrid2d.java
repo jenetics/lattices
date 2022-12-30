@@ -113,18 +113,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     }
 
     /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    public Loop2d loop() {
-        return new Loop2d.RowFirst(extent());
-    }
-
-    /**
-     * Returns the matrix cell value at coordinate {@code [row, col]}.
+     * Returns the grid cell value at coordinate {@code [row, col]}.
      *
      * @param row the index of the row-coordinate
      * @param col the index of the column-coordinate
@@ -137,7 +126,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
+     * Sets the grid cell at coordinate {@code [row, col]} to the specified
      * {@code value}.
      *
      * @param row the index of the row-coordinate

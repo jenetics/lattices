@@ -71,16 +71,6 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
         }
     }
 
-    /**
-     * Return the underlying element array.
-     *
-     * @return the underlying element array
-     */
-    @Override
-    public ObjectArray<T> array() {
-        return array;
-    }
-
     @Override
     public ObjectGrid1d<T> create(
         final Structure1d structure,

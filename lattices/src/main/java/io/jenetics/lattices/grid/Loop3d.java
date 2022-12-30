@@ -21,6 +21,10 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.function.IntIntIntConsumer;
 import io.jenetics.lattices.function.IntIntIntPredicate;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Range3d;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Looping strategies for 3-d structures.
@@ -77,5 +81,113 @@ public interface Loop3d {
      *         {@code false}
      */
     boolean nonMatch(final IntIntIntPredicate predicate);
+
+
+    record SliceFirst(Range3d range) implements Loop3d {
+
+        public SliceFirst(final Extent3d extent) {
+            this(new Range3d(extent));
+        }
+
+        @Override
+        public void forEach(final IntIntIntConsumer action) {
+            requireNonNull(action);
+
+            for (int s = range.start().slice(),
+                 d = range.start().row() + range.extent().rows();
+                 s < d; ++s)
+            {
+                for (int r = range.start().row(),
+                     h = range.start().row() + range.extent().rows();
+                     r < h; ++r)
+                {
+                    for (int c = range.start().col(),
+                         w = range.start().col() + range.extent().cols();
+                         c < w; ++c)
+                    {
+                        action.accept(s, r, c);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public boolean anyMatch(final IntIntIntPredicate predicate) {
+            requireNonNull(predicate);
+
+            for (int s = range.start().slice(),
+                 d = range.start().row() + range.extent().rows();
+                 s < d; ++s)
+            {
+                for (int r = range.start().row(),
+                     h = range.start().row() + range.extent().rows();
+                     r < h; ++r)
+                {
+                    for (int c = range.start().col(),
+                         w = range.start().col() + range.extent().cols();
+                         c < w; ++c)
+                    {
+                        if (predicate.test(s, r, c)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean allMatch(final IntIntIntPredicate predicate) {
+            requireNonNull(predicate);
+
+            for (int s = range.start().slice(),
+                 d = range.start().row() + range.extent().rows();
+                 s < d; ++s)
+            {
+                for (int r = range.start().row(),
+                     h = range.start().row() + range.extent().rows();
+                     r < h; ++r)
+                {
+                    for (int c = range.start().col(),
+                         w = range.start().col() + range.extent().cols();
+                         c < w; ++c)
+                    {
+                        if (!predicate.test(s, r, c)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public boolean nonMatch(final IntIntIntPredicate predicate) {
+            requireNonNull(predicate);
+
+            for (int s = range.start().slice(),
+                 d = range.start().row() + range.extent().rows();
+                 s < d; ++s)
+            {
+                for (int r = range.start().row(),
+                     h = range.start().row() + range.extent().rows();
+                     r < h; ++r)
+                {
+                    for (int c = range.start().col(),
+                         w = range.start().col() + range.extent().cols();
+                         c < w; ++c)
+                    {
+                        if (predicate.test(s, r, c)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
 
 }
