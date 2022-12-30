@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -41,6 +42,15 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
+
+    /**
+     * Factory for creating dense 1-d double grids.
+     */
+    public static final Factory1d<DoubleGrid1d> DENSE = struct ->
+        new DoubleGrid1d(
+            struct,
+            DenseDoubleArray.ofSize(struct.extent().size())
+        );
 
     /**
      * Create a new 1-d grid with the given {@code structure} and element

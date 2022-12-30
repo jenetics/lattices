@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -42,6 +43,15 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
+
+    /**
+     * Factory for creating dense 3-d double grids.
+     */
+    public static final Factory3d<DoubleGrid3d> DENSE = struct ->
+        new DoubleGrid3d(
+            struct,
+            DenseDoubleArray.ofSize(struct.extent().size())
+        );
 
     /**
      * Create a new 3-d matrix with the given {@code structure} and element

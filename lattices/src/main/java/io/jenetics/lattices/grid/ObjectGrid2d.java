@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -111,6 +112,22 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      */
     public ObjectGrid1d<T> project(final Projection2d projection) {
         return new ObjectGrid1d<>(projection.apply(structure()), array());
+    }
+
+    /**
+     * Return a factory for creating dense 2-d object grids.
+     *
+     * @param __ not used (Java trick for getting "reified" element type)
+     * @param <T> the grid element type
+     * @return the dense object factory
+     */
+    @SuppressWarnings("varargs")
+    @SafeVarargs
+    public static <T> Factory2d<ObjectGrid2d<T>> dense(final T... __) {
+        return struct -> new ObjectGrid2d<T>(
+            struct,
+            DenseObjectArray.ofSize(struct.extent().size(), __)
+        );
     }
 
 }

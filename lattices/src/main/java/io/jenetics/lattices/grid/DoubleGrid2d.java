@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -42,6 +43,15 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
+
+    /**
+     * Factory for creating dense 2-d double grids.
+     */
+    public static final Factory2d<DoubleGrid2d> DENSE = struct ->
+        new DoubleGrid2d(
+            struct,
+            DenseDoubleArray.ofSize(struct.extent().size())
+        );
 
     /**
      * Create a new 2-d matrix with the given {@code structure} and element
