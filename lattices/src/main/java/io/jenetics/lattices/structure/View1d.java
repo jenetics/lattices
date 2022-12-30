@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Functional interface for doing view transformation.
  */
@@ -40,6 +42,8 @@ public interface View1d {
      * @return a transformation which creates a view of the given {@code range}
      */
     static View1d of(final Range1d range) {
+        requireNonNull(range);
+
         return structure -> new Structure1d(
             range.extent(),
             new Order1d(
@@ -51,12 +55,33 @@ public interface View1d {
     }
 
     /**
+     * Return a transformation which creates a view of the given {@code start}.
+     *
+     * @param start the start of the view
+     * @return a transformation which creates a view of the given {@code start}
+     */
+    static View1d of(final Index1d start) {
+        requireNonNull(start);
+
+        return structure -> View1d
+            .of(
+                new Range1d(
+                    start,
+                    new Extent1d(structure.extent().size() - start.value())
+                )
+            )
+            .apply(structure);
+    }
+
+    /**
      * Return a new stride view transformation.
      *
      * @param stride the stride of the created view transformation
      * @return a new stride view transformation
      */
     static View1d of(final Stride1d stride) {
+        requireNonNull(stride);
+
         return structure -> new Structure1d(
             new Extent1d(
                 structure.extent().size() != 0

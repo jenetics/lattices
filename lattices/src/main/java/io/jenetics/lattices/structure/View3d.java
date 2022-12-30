@@ -62,6 +62,29 @@ public interface View3d {
     }
 
     /**
+     * Return a transformation which creates a view of the given {@code start}.
+     *
+     * @param start the start of the view
+     * @return a transformation which creates a view of the given {@code start}
+     */
+    static View3d of(final Index3d start) {
+        requireNonNull(start);
+
+        return structure -> View3d
+            .of(
+                new Range3d(
+                    start,
+                    new Extent3d(
+                        structure.extent().slices() - start.slice(),
+                        structure.extent().rows() - start.row(),
+                        structure.extent().cols() - start.col()
+                    )
+                )
+            )
+            .apply(structure);
+    }
+
+    /**
      * Return a transformation which creates a view of the given {@code extent}.
      *
      * @param extent the extent of the view
