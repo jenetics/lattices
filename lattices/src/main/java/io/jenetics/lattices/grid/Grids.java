@@ -19,7 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Structural1d;
 import io.jenetics.lattices.structure.Structural2d;
+import io.jenetics.lattices.structure.Structural3d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -41,7 +43,7 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    public static void checkSameExtent(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
+    public static void checkSameExtent(final Structural1d a, final Structural1d b) {
         if (!a.extent().equals(b.extent())) {
             throw new IllegalArgumentException(
                 "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
@@ -73,6 +75,22 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
+    public static void checkSameExtent(final Structural3d a, final Structural3d b) {
+        if (!a.extent().equals(b.extent())) {
+            throw new IllegalArgumentException(
+                "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
+            );
+        }
+    }
+
+    /**
+     * Checks whether the two given grids have the same extent.
+     *
+     * @param a the first grid to check
+     * @param b the second grid to check
+     * @throws IllegalArgumentException if the given {@code other} extent doesn't
+     *         match
+     */
     public static void checkSameExtent(final Structure2d a, final Structure2d b) {
         if (!a.extent().equals(b.extent())) {
             throw new IllegalArgumentException(
@@ -85,23 +103,23 @@ public final class Grids {
      * A matrix {@code A} is <em>square</em> if it has the same number of rows
      * and columns.
      *
-     * @param A the matrix to check
+     * @param a the matrix to check
      * @return {@code true} if the {@code A} is square, {@code false} otherwise
      */
-    public static boolean isSquare(final Structural2d A) {
-        return A.rows() == A.cols();
+    public static boolean isSquare(final Structural2d a) {
+        return a.rows() == a.cols();
     }
 
     /**
      * Checks whether the given matrix {@code A} is <em>square</em>.
      *
-     * @param A the matrix to check
+     * @param a the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() != A.cols()}
      */
-    public static void checkSquare(final Structural2d A) {
-        if (!isSquare(A)) {
+    public static void checkSquare(final Structural2d a) {
+        if (!isSquare(a)) {
             throw new IllegalArgumentException(
-                "Matrix must be square: " + A.extent()
+                "Matrix must be square: " + a.extent()
             );
         }
     }
@@ -109,13 +127,13 @@ public final class Grids {
     /**
      * Checks whether the given matrix {@code A} is <em>rectangular</em>.
      *
-     * @param A the matrix to check
+     * @param a the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
-    public static void checkRectangular(final Structural2d A) {
-        if (A.rows() < A.cols()) {
+    public static void checkRectangular(final Structural2d a) {
+        if (a.rows() < a.cols()) {
             throw new IllegalArgumentException(
-                "Matrix must be rectangular: " + A.extent()
+                "Matrix must be rectangular: " + a.extent()
             );
         }
     }

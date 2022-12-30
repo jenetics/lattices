@@ -31,11 +31,18 @@ package io.jenetics.lattices.structure;
  */
 public record Extent2d(int rows, int cols) {
 
+    /**
+     * Create a new 2-d extent.
+     *
+     * @param rows the number of rows
+     * @param cols the number of cols
+     * @throws IndexOutOfBoundsException if one of the arguments is smaller than
+     *         zero or {@code rows*cols > Integer.MAX_VALUE}
+     */
     public Extent2d {
-        if (rows < 0 || cols < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d, %d]."
-                    .formatted(rows, cols)
+        if (rows < 0 || cols < 0 || (long)rows*(long)cols > Integer.MAX_VALUE) {
+            throw new IndexOutOfBoundsException(
+                "Extent is out of bounds: [%d, %d].".formatted(rows, cols)
             );
         }
     }

@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import java.util.Objects;
+
 /**
  * This interface performs a projection from 2-d to 1-d.
  */
@@ -38,21 +40,13 @@ public interface Projection2d {
      *
      * @param index the row index
      * @return a new <em>row</em>-projection
-     * @throws IllegalArgumentException if the given {@code index} is negative
+     * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
     static Projection2d row(final int index) {
-        if (index < 0) {
-            throw new IllegalArgumentException(
-                "Projection index must be greater then zero: " + index
-            );
-        }
+        Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            if (index >= structure.extent().rows()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + structure.extent() + " at row=" + index
-                );
-            }
+            Objects.checkIndex(index, structure.extent().rows());
 
             return new Structure1d(
                 new Extent1d(structure.extent().cols()),
@@ -70,22 +64,13 @@ public interface Projection2d {
      *
      * @param index the column index
      * @return a new <em>column</em>-projection
-     * @throws IllegalArgumentException if the given {@code index} is negative
+     * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
     static Projection2d col(final int index) {
-        if (index < 0) {
-            throw new IllegalArgumentException(
-                "Projection index must be greater then zero: " + index
-            );
-        }
+        Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            if (index >= structure.extent().cols()) {
-                throw new IndexOutOfBoundsException(
-                    "Attempted to access " + structure.extent() + " at column=" +
-                        index
-                );
-            }
+            Objects.checkIndex(index, structure.extent().cols());
 
             return new Structure1d(
                 new Extent1d(structure.extent().rows()),

@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
 import java.util.function.DoubleBinaryOperator;
@@ -156,7 +157,8 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
         if (other == this) {
             return;
         }
-        Grids.checkSameExtent(this, other);
+        checkSameExtent(this, other);
+
         forEach(i -> set(i, other.get(i)));
     }
 
@@ -202,7 +204,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param f the combiner function
      */
     public void assign(final BaseDoubleGrid1d<?> a, final DoubleBinaryOperator f) {
-        Grids.checkSameExtent(this, a);
+        checkSameExtent(this, a);
         forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
@@ -212,7 +214,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
     public void swap(final BaseDoubleGrid1d<?> other) {
-        Grids.checkSameExtent(this, other);
+        checkSameExtent(this, other);
         forEach(i -> {
             final var tmp = get(i);
             set(i, other.get(i));

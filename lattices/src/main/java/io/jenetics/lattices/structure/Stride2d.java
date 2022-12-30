@@ -31,11 +31,18 @@ package io.jenetics.lattices.structure;
  */
 public record Stride2d(int row, int col) {
 
+    /**
+     * Create a new 2-stride.
+     *
+     * @param row the row stride
+     * @param col the column stride
+     * @throws IndexOutOfBoundsException if the one of the strides is smaller
+     *         than one
+     */
     public Stride2d {
         if (row < 1 || col < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d, %d]."
-                    .formatted(row, col)
+            throw new IndexOutOfBoundsException(
+                "Stride must be positive: [%d, %d].".formatted(row, col)
             );
         }
     }

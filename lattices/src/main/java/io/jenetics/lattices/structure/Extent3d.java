@@ -33,9 +33,11 @@ package io.jenetics.lattices.structure;
 public record Extent3d(int slices, int rows, int cols) {
 
     public Extent3d {
-        if (rows < 0 || cols < 0 || slices < 0) {
+        if (rows < 0 || cols < 0 || slices < 0 ||
+            (long)rows*(long)cols*(long)slices > Integer.MAX_VALUE)
+        {
             throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d, %d, %d]."
+                "Extent is out of bounds: [%d, %d, %d]."
                     .formatted(slices, rows, cols)
             );
         }

@@ -30,10 +30,16 @@ package io.jenetics.lattices.structure;
  */
 public record Extent1d(int size) implements Comparable<Extent1d> {
 
+    /**
+     * Create a new 1-d extent with the given size.
+     *
+     * @param size the size of the extent
+     * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
+     */
     public Extent1d {
         if (size < 0) {
-            throw new IllegalArgumentException(
-                "Extent must be greater or equal zero: [%d].".formatted(size)
+            throw new IndexOutOfBoundsException(
+                "Extent is out of bounds: [%d].".formatted(size)
             );
         }
     }

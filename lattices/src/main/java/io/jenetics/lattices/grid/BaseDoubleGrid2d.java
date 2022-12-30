@@ -216,7 +216,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        checkSameExtent(structure, y.structure());
+        checkSameExtent(this, y);
 
         forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
@@ -238,7 +238,8 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
     public void swap(final BaseDoubleGrid2d<?> other) {
-        checkSameExtent(structure, other.structure());
+        checkSameExtent(this, other);
+
         forEach((r, c) -> {
             final var tmp = get(r, c);
             set(r, c, other.get(r, c));

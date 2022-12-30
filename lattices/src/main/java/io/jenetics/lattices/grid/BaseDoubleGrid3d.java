@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
 import java.util.function.DoubleBinaryOperator;
@@ -174,33 +175,43 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * and have exactly the same number of rows and columns as the receiver.
      *
      * @param values the values to be filled into the cells.
-     * @throws IllegalArgumentException if
-     * {@code !extent().equals(other.extent())}
-     * @implNote The {@code values} are copied and subsequent chances to the
-     * {@code values} are not reflected in the matrix, and vice-versa
+     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
+     *
+     * @implNote
+     * The {@code values} are copied and subsequent chances to the {@code values}
+     * are not reflected in the matrix, and vice-versa
      */
     public void assign(final double[][][] values) {
-//        if (values.length != structure.extent().rows()) {
-//            throw new IllegalArgumentException(
-//                "Values must have the same number of rows: " +
-//                    values.length + " != " + structure.extent().rows()
-//            );
-//        }
-//
-//        for (int r = rows(); --r >= 0;) {
-//            final double[] row = values[r];
-//
-//            if (row.length != cols()) {
-//                throw new IllegalArgumentException(
-//                    "Values must have the same number of columns: " +
-//                        row.length + " != " + extent().cols()
-//                );
-//            }
-//
-//            for (int c = cols(); --c >= 0;) {
-//                set(r, c, row[c]);
-//            }
-//        }
+        if (values.length != structure.extent().slices()) {
+            throw new IllegalArgumentException(
+                "Values must have the same number of slices: " +
+                    values.length + " != " + structure.extent().slices()
+            );
+        }
+
+        for (int s = slices(); --s >= 0;) {
+            final var slice = values[s];
+            if (slice.length != rows()) {
+                throw new IllegalArgumentException(
+                    "Values must have the same number of rows: " +
+                        slice.length + " != " + extent().rows()
+                );
+            }
+
+            for (int r = rows(); --r >= 0;) {
+                final var row = slice[r];
+                if (row.length != cols()) {
+                    throw new IllegalArgumentException(
+                        "Values must have the same number of columns: " +
+                            row.length + " != " + extent().cols()
+                    );
+                }
+
+                for (int c = cols(); --c >= 0;) {
+                    set(s, r, c, row[c]);
+                }
+            }
+        }
     }
 
     /**
@@ -224,7 +235,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      */
     public void assign(final BaseDoubleGrid3d<?> y, final DoubleBinaryOperator f) {
         requireNonNull(f);
-        //checkSameExtent(structure, y.structure());
+        checkSameExtent(this, y);
 
         forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c))));
     }
