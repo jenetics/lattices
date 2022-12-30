@@ -94,7 +94,7 @@ public interface Loop3d {
             requireNonNull(action);
 
             for (int s = range.start().slice(),
-                 d = range.start().row() + range.extent().rows();
+                 d = range.start().slice() + range.extent().slices();
                  s < d; ++s)
             {
                 for (int r = range.start().row(),
@@ -116,7 +116,7 @@ public interface Loop3d {
             requireNonNull(predicate);
 
             for (int s = range.start().slice(),
-                 d = range.start().row() + range.extent().rows();
+                 d = range.start().slice() + range.extent().slices();
                  s < d; ++s)
             {
                 for (int r = range.start().row(),
@@ -142,7 +142,7 @@ public interface Loop3d {
             requireNonNull(predicate);
 
             for (int s = range.start().slice(),
-                 d = range.start().row() + range.extent().rows();
+                 d = range.start().slice() + range.extent().slices();
                  s < d; ++s)
             {
                 for (int r = range.start().row(),
@@ -168,7 +168,7 @@ public interface Loop3d {
             requireNonNull(predicate);
 
             for (int s = range.start().slice(),
-                 d = range.start().row() + range.extent().rows();
+                 d = range.start().slice() + range.extent().slices();
                  s < d; ++s)
             {
                 for (int r = range.start().row(),
