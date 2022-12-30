@@ -70,4 +70,14 @@ public record Order2d(Index2d start, Stride2d stride) {
             start.col() + col*stride.col();
     }
 
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index2d index) {
+        return index(index.row(), index.col());
+    }
+
 }

@@ -79,4 +79,14 @@ public record Order3d(Index3d start, Stride3d stride) {
             start.col() + col*stride.col();
     }
 
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index3d index) {
+        return index(index.col(), index.row(), index.col());
+    }
+
 }

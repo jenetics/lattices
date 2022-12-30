@@ -58,4 +58,14 @@ public record Order1d(Index1d start, Stride1d stride) {
         return start.value() + rank*stride.value();
     }
 
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index1d index) {
+        return index(index.value());
+    }
+
 }
