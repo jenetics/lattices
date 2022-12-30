@@ -23,14 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
-import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
 /**
@@ -39,11 +37,7 @@ import io.jenetics.lattices.structure.View2d;
 public class ObjectGrid2dTest {
 
     private static ObjectGrid2d<String> grid(final Extent2d extent) {
-        final var grid = new ObjectGrid2d<>(
-            new Structure2d(extent),
-            new DenseObjectArray<>(new String[extent.size()])
-        );
-
+        final var grid = ObjectGrid2d.<String>dense().create(extent);
         grid.forEach((r, c) -> grid.set(r, c, "%d_%d".formatted(r, c)));
         return grid;
     }
