@@ -24,8 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.array.DenseObjectArray;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Index3d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Range3d;
 import io.jenetics.lattices.structure.Stride3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -116,6 +120,102 @@ public class ObjectGrid3dTest {
             final var value = view.get(s, r, c);
 
             final var expected = "%d_%d_%d".formatted(s*2, r*3, c*4);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionSlice() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid.project(Projection3d.slice(3));
+        assertThat(projection.extent()).isEqualTo(new Extent2d(7, 9));
+
+        projection.forEach((r, c) -> {
+            final var value = projection.get(r, c);
+
+            final var expected = "%d_%d_%d".formatted(3, r, c);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionSliceRow() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid
+            .project(Projection3d.slice(3))
+            .project(Projection2d.row(3));
+        assertThat(projection.extent()).isEqualTo(new Extent1d(9));
+
+        projection.forEach(i -> {
+            final var value = projection.get(i);
+
+            final var expected = "%d_%d_%d".formatted(3, 3, i);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionSliceCol() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid
+            .project(Projection3d.slice(3))
+            .project(Projection2d.col(3));
+        assertThat(projection.extent()).isEqualTo(new Extent1d(7));
+
+        projection.forEach(i -> {
+            final var value = projection.get(i);
+
+            final var expected = "%d_%d_%d".formatted(3, i, 3);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionRow() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid.project(Projection3d.row(3));
+        assertThat(projection.extent()).isEqualTo(new Extent2d(5, 9));
+
+        projection.forEach((r, c) -> {
+            final var value = projection.get(r, c);
+
+            final var expected = "%d_%d_%d".formatted(r, 3, c);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionRowCol() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid
+            .project(Projection3d.row(3))
+            .project(Projection2d.col(3));
+        assertThat(projection.extent()).isEqualTo(new Extent1d(5));
+
+        projection.forEach(i -> {
+            final var value = projection.get(i);
+
+            final var expected = "%d_%d_%d".formatted(i, 3, 3);
+            assertThat(value).isEqualTo(expected);
+        });
+    }
+
+    @Test
+    public void projectionCol() {
+        final var grid = grid(new Extent3d(5, 7, 9));
+
+        final var projection = grid.project(Projection3d.col(3));
+        assertThat(projection.extent()).isEqualTo(new Extent2d(5, 7));
+
+        projection.forEach((r, c) -> {
+            final var value = projection.get(r, c);
+
+            final var expected = "%d_%d_%d".formatted(r, c, 3);
             assertThat(value).isEqualTo(expected);
         });
     }

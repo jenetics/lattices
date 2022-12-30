@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -101,6 +102,17 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      */
     public void set(final int slice, final int row, final int col, final T value) {
         array.set(order().index(slice, row, col), value);
+    }
+
+    /**
+     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
+     */
+    public ObjectGrid2d<T> project(final Projection3d projection) {
+        return new ObjectGrid2d<>(projection.apply(structure()), array());
     }
 
 }
