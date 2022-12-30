@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Structural2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**

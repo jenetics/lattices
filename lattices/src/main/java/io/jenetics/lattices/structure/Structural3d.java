@@ -17,11 +17,11 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Order1d;
-import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Order3d;
+import io.jenetics.lattices.structure.Structure3d;
 
 /**
  * Defines the structure of a grid.
@@ -30,21 +30,21 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structural1d {
+public interface Structural3d {
 
     /**
      * Return the structure for grid.
      *
      * @return the structure for grid
      */
-    Structure1d structure();
+    Structure3d structure();
 
     /**
      * Return the dimension of {@code this} structures.
      *
      * @return the dimension of {@code this} structures
      */
-    default Extent1d extent() {
+    default Extent3d extent() {
         return structure().extent();
     }
 
@@ -53,7 +53,7 @@ public interface Structural1d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Order1d order() {
+    default Order3d order() {
         return structure().order();
     }
 
@@ -64,6 +64,33 @@ public interface Structural1d {
      */
     default int size() {
         return extent().size();
+    }
+
+    /**
+     * Return the number of slices of {@code this} structures.
+     *
+     * @return the number of slices of {@code this} structures
+     */
+    default int slices() {
+        return extent().slices();
+    }
+
+    /**
+     * Return the number of rows of {@code this} structures.
+     *
+     * @return the number of rows of {@code this} structures
+     */
+    default int rows() {
+        return extent().rows();
+    }
+
+    /**
+     * Return the number of columns of {@code this} structures.
+     *
+     * @return the number of columns of {@code this} structures
+     */
+    default int cols() {
+        return extent().cols();
     }
 
 }

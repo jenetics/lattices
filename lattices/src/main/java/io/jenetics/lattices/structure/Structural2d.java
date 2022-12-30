@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.structure;
 
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Order2d;
