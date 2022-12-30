@@ -20,6 +20,8 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -57,6 +59,17 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
      */
     public DoubleGrid2d(final Structure2d structure, final DoubleArray array) {
         super(structure, array, DoubleGrid2d::new);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
+     */
+    public DoubleGrid1d project(final Projection2d projection) {
+        return new DoubleGrid1d(projection.apply(structure()), array());
     }
 
 }

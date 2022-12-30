@@ -155,9 +155,9 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * matrix. Both matrices must have the same number of rows and columns.
      *
      * @param other the source matrix to copy from (maybe identical to the
-     * receiver).
+     *        receiver).
      * @throws IllegalArgumentException if
-     * {@code !extent().equals(other.extent())}
+     *         {@code !extent().equals(other.extent())}
      */
     @Override
     public void assign(final G other) {
