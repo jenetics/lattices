@@ -19,12 +19,12 @@
  */
 package io.jenetics.lattices.grid;
 
+import static java.util.Objects.requireNonNull;
+
 import io.jenetics.lattices.function.IntIntIntConsumer;
 import io.jenetics.lattices.function.IntIntIntPredicate;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Range3d;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Looping strategies for 3-d structures.

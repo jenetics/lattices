@@ -20,7 +20,6 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 

@@ -19,10 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Order1d;
-import io.jenetics.lattices.structure.Structure1d;
-
 /**
  * Defines the structure of a grid.
  *
