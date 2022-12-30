@@ -112,7 +112,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public ObjectGrid2d<T> project(final Projection3d projection) {
+    public ObjectGrid2d<T> view(final Projection3d projection) {
         return new ObjectGrid2d<>(projection.apply(structure()), array());
     }
 

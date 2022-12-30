@@ -128,7 +128,7 @@ public class ObjectGrid3dTest {
     public void projectionSlice() {
         final var grid = grid(new Extent3d(5, 7, 9));
 
-        final var projection = grid.project(Projection3d.slice(3));
+        final var projection = grid.view(Projection3d.slice(3));
         assertThat(projection.extent()).isEqualTo(new Extent2d(7, 9));
 
         projection.forEach((r, c) -> {
@@ -144,8 +144,8 @@ public class ObjectGrid3dTest {
         final var grid = grid(new Extent3d(5, 7, 9));
 
         final var projection = grid
-            .project(Projection3d.slice(3))
-            .project(Projection2d.row(3));
+            .view(Projection3d.slice(3))
+            .view(Projection2d.row(3));
         assertThat(projection.extent()).isEqualTo(new Extent1d(9));
 
         projection.forEach(i -> {
@@ -161,8 +161,8 @@ public class ObjectGrid3dTest {
         final var grid = grid(new Extent3d(5, 7, 9));
 
         final var projection = grid
-            .project(Projection3d.slice(3))
-            .project(Projection2d.col(3));
+            .view(Projection3d.slice(3))
+            .view(Projection2d.col(3));
         assertThat(projection.extent()).isEqualTo(new Extent1d(7));
 
         projection.forEach(i -> {
@@ -177,7 +177,7 @@ public class ObjectGrid3dTest {
     public void projectionRow() {
         final var grid = grid(new Extent3d(5, 7, 9));
 
-        final var projection = grid.project(Projection3d.row(3));
+        final var projection = grid.view(Projection3d.row(3));
         assertThat(projection.extent()).isEqualTo(new Extent2d(5, 9));
 
         projection.forEach((r, c) -> {
@@ -193,8 +193,8 @@ public class ObjectGrid3dTest {
         final var grid = grid(new Extent3d(5, 7, 9));
 
         final var projection = grid
-            .project(Projection3d.row(3))
-            .project(Projection2d.col(3));
+            .view(Projection3d.row(3))
+            .view(Projection2d.col(3));
         assertThat(projection.extent()).isEqualTo(new Extent1d(5));
 
         projection.forEach(i -> {
@@ -209,7 +209,7 @@ public class ObjectGrid3dTest {
     public void projectionCol() {
         final var grid = grid(new Extent3d(5, 7, 9));
 
-        final var projection = grid.project(Projection3d.col(3));
+        final var projection = grid.view(Projection3d.col(3));
         assertThat(projection.extent()).isEqualTo(new Extent2d(5, 7));
 
         projection.forEach((r, c) -> {
