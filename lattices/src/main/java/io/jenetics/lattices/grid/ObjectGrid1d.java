@@ -26,6 +26,7 @@ import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -169,16 +170,39 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      *
      * @param a the grid used for the update
      * @param f the combiner function
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
      */
-    public void assign(final ObjectGrid1d<? extends T> a, final BinaryOperator<T> f) {
+    public void assign(
+        final ObjectGrid1d<? extends T> a,
+        final BinaryOperator<T> f
+    ) {
         checkSameExtent(extent(), a.extent());
         forEach(i -> set(i, f.apply(get(i), a.get(i))));
     }
 
     /**
+     * Updates this grid with the values of {@code a} which are transformed by
+     * the given function {@code f}.
+     * <pre>{@code
+     * this[i] = f(a[i])
+     * }</pre>
+     *
+     * @param a the grid used for the update
+     * @param f the mapping function
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
+     */
+    public <A> void assign(
+        final ObjectGrid1d<? extends A> a,
+        final Function<? super A, ? extends T> f
+    ) {
+        checkSameExtent(extent(), a.extent());
+        forEach(i -> set(i, f.apply(a.get(i))));
+    }
+
+    /**
      * Swaps each element {@code this[i]} with {@code other[i]}.
      *
-     * @throws IllegalArgumentException if {@code size() != other.size()}.
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
      */
     public void swap(final ObjectGrid1d<T> other) {
         checkSameExtent(extent(), other.extent());

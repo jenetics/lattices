@@ -172,7 +172,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         }
 
         for (int r = rows(); --r >= 0;) {
-            final double[] row = values[r];
+            final var row = values[r];
 
             if (row.length != cols()) {
                 throw new IllegalArgumentException(
@@ -188,7 +188,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
     }
 
     /**
-     * Sets all cells to the state specified by {@code values}.
+     * Sets all cells to the state specified by the {@code value}.
      *
      * @param value the value to be filled into the cells
      */

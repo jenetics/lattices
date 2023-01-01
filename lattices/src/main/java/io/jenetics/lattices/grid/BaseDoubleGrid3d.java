@@ -149,7 +149,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
         if (other == this) {
             return;
         }
-        //checkSameExtent(structure, other.structure());
+        checkSameExtent(extent(), other.extent());
         forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
     }
 
@@ -159,7 +159,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * and have exactly the same number of rows and columns as the receiver.
      *
      * @param values the values to be filled into the cells.
-     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
      *
      * @implNote
      * The {@code values} are copied and subsequent chances to the {@code values}
@@ -217,7 +217,10 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * {@code y}
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
-    public void assign(final BaseDoubleGrid3d<?> y, final DoubleBinaryOperator f) {
+    public void assign(
+        final BaseDoubleGrid3d<?> y,
+        final DoubleBinaryOperator f
+    ) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
