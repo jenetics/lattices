@@ -2,8 +2,8 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.IntIntConsumer;
-import io.jenetics.lattices.function.IntIntPredicate;
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Range2d;
 
@@ -24,7 +24,7 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public void forEach(final IntIntConsumer action) {
+    public void forEach(final Int2Consumer action) {
         requireNonNull(action);
 
         for (int r = range.start().row(),
@@ -41,7 +41,7 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean anyMatch(final IntIntPredicate predicate) {
+    public boolean anyMatch(final Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),
@@ -62,7 +62,7 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean allMatch(final IntIntPredicate predicate) {
+    public boolean allMatch(final Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),
@@ -83,7 +83,7 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean nonMatch(final IntIntPredicate predicate) {
+    public boolean nonMatch(final Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),

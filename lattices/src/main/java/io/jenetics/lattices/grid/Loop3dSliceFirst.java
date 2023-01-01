@@ -21,8 +21,8 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.IntIntIntConsumer;
-import io.jenetics.lattices.function.IntIntIntPredicate;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Range3d;
 
@@ -38,7 +38,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public void forEach(final IntIntIntConsumer action) {
+    public void forEach(final Int3Consumer action) {
         requireNonNull(action);
 
         for (int s = range.start().slice(),
@@ -60,7 +60,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean anyMatch(final IntIntIntPredicate predicate) {
+    public boolean anyMatch(final Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
@@ -86,7 +86,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean allMatch(final IntIntIntPredicate predicate) {
+    public boolean allMatch(final Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
@@ -112,7 +112,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean nonMatch(final IntIntIntPredicate predicate) {
+    public boolean nonMatch(final Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),

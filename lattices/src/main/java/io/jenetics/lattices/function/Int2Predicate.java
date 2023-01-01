@@ -28,7 +28,7 @@ package io.jenetics.lattices.function;
  * @version 3.0
  */
 @FunctionalInterface
-public interface IntIntPredicate {
+public interface Int2Predicate {
 
     /**
      * Tests whether the two arguments are treated equals.

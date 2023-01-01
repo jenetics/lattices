@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.function.IntIntIntConsumer;
-import io.jenetics.lattices.function.IntIntIntPredicate;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 
 /**
  * Defines the looping strategy of a 3-d grid.
@@ -39,22 +39,22 @@ public interface Loopable3d extends Loop3d {
     Loop3d loop();
 
     @Override
-    default void forEach(final IntIntIntConsumer action) {
+    default void forEach(final Int3Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(final IntIntIntPredicate predicate) {
+    default boolean anyMatch(final Int3Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(final IntIntIntPredicate predicate) {
+    default boolean allMatch(final Int3Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(final IntIntIntPredicate predicate) {
+    default boolean nonMatch(final Int3Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 

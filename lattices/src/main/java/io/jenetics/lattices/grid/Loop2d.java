@@ -21,8 +21,8 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.IntIntConsumer;
-import io.jenetics.lattices.function.IntIntPredicate;
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Range2d;
 
@@ -40,7 +40,7 @@ public interface Loop2d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final IntIntConsumer action);
+    void forEach(final Int2Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -52,7 +52,7 @@ public interface Loop2d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final IntIntPredicate predicate);
+    boolean anyMatch(final Int2Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -67,7 +67,7 @@ public interface Loop2d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final IntIntPredicate predicate);
+    boolean allMatch(final Int2Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -80,7 +80,7 @@ public interface Loop2d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final IntIntPredicate predicate);
+    boolean nonMatch(final Int2Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.

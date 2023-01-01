@@ -20,7 +20,7 @@
 package io.jenetics.lattices.function;
 
 /**
- * Represents an operation that accepts an (int, int, int)-valued argument and
+ * Represents an operation that accepts an (int, int)-valued argument and
  * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -28,15 +28,13 @@ package io.jenetics.lattices.function;
  * @version 3.0
  */
 @FunctionalInterface
-public interface IntIntIntConsumer {
+public interface Int2Consumer {
 
     /**
      * Performs this operation on the given arguments.
      *
      * @param i first value
      * @param j second value
-     * @param k third value
      */
-    void accept(final int i, final int j, final int k);
-
+    void accept(final int i, final int j);
 }

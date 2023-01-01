@@ -20,25 +20,23 @@
 package io.jenetics.lattices.function;
 
 /**
- * Represents a predicate (boolean-valued function) of an (int, int, int)-valued
- * argument.
+ * Represents an operation that accepts an (int, int, int)-valued argument and
+ * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 @FunctionalInterface
-public interface IntIntIntPredicate {
+public interface Int3Consumer {
 
     /**
-     * Tests whether the two arguments are treated equals.
+     * Performs this operation on the given arguments.
      *
-     * @param i the first value
-     * @param j the second value
-     * @param k the third value
-     * @return {@code true} if the values are treated as equal, {@code false}
-     *         otherwise
+     * @param i first value
+     * @param j second value
+     * @param k third value
      */
-    boolean test(final int i, final int j, final int k);
+    void accept(final int i, final int j, final int k);
 
 }

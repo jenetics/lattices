@@ -21,8 +21,8 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.IntIntIntConsumer;
-import io.jenetics.lattices.function.IntIntIntPredicate;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Range3d;
 
@@ -40,7 +40,7 @@ public interface Loop3d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final IntIntIntConsumer action);
+    void forEach(final Int3Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -52,7 +52,7 @@ public interface Loop3d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final IntIntIntPredicate predicate);
+    boolean anyMatch(final Int3Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -67,7 +67,7 @@ public interface Loop3d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final IntIntIntPredicate predicate);
+    boolean allMatch(final Int3Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -80,7 +80,7 @@ public interface Loop3d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final IntIntIntPredicate predicate);
+    boolean nonMatch(final Int3Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.

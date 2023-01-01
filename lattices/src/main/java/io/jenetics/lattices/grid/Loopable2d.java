@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.function.IntIntConsumer;
-import io.jenetics.lattices.function.IntIntPredicate;
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
 
 /**
  * Defines the looping strategy of a 2-d grid.
@@ -39,22 +39,22 @@ public interface Loopable2d extends Loop2d {
     Loop2d loop();
 
     @Override
-    default void forEach(final IntIntConsumer action) {
+    default void forEach(final Int2Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(final IntIntPredicate predicate) {
+    default boolean anyMatch(final Int2Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(final IntIntPredicate predicate) {
+    default boolean allMatch(final Int2Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(final IntIntPredicate predicate) {
+    default boolean nonMatch(final Int2Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 
