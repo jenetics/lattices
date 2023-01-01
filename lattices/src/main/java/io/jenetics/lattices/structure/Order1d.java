@@ -47,8 +47,25 @@ public record Order1d(Index1d start, Stride1d stride) {
         this(new Index1d(start), new Stride1d(stride));
     }
 
+    /**
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
+     *
+     * @param rank the rank of the element.
+     * @return the (linearized) index of the given {@code rank}
+     */
     public int index(final int rank) {
         return start.value() + rank*stride.value();
+    }
+
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index1d index) {
+        return index(index.value());
     }
 
 }

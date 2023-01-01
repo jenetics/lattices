@@ -28,7 +28,7 @@ package io.jenetics.lattices.function;
  * @version 3.0
  */
 @FunctionalInterface
-public interface IntIntConsumer {
+public interface Int2Consumer {
 
     /**
      * Performs this operation on the given arguments.

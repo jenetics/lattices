@@ -30,9 +30,16 @@ package io.jenetics.lattices.structure;
  */
 public record Stride1d(int value) {
 
+    /**
+     * Create a new 1-d stride
+     *
+     * @param value the stride value
+     * @throws IndexOutOfBoundsException if the {@code value} is smaller than
+     *         one
+     */
     public Stride1d {
         if (value < 1) {
-            throw new IllegalArgumentException(
+            throw new IndexOutOfBoundsException(
                 "Stride must be positive: [%d].".formatted(value)
             );
         }

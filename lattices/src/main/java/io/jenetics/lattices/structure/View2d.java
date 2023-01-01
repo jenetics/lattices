@@ -79,6 +79,28 @@ public interface View2d {
     }
 
     /**
+     * Return a transformation which creates a view of the given {@code start}.
+     *
+     * @param start the start of the view
+     * @return a transformation which creates a view of the given {@code start}
+     */
+    static View2d of(final Index2d start) {
+        requireNonNull(start);
+
+        return structure -> View2d
+            .of(
+                new Range2d(
+                    start,
+                    new Extent2d(
+                        structure.extent().rows() - start.row(),
+                        structure.extent().cols() - start.col()
+                    )
+                )
+            )
+            .apply(structure);
+    }
+
+    /**
      * Return a transformation which creates a view of the given {@code extent}.
      *
      * @param extent the extent of the view

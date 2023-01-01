@@ -17,41 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.function;
 
 /**
- * The extent of 1-d structures.
- *
- * @param size the number of elements, must be greater or equal zero
+ * Represents a predicate (boolean-valued function) of an (int, int)-valued
+ * argument.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+@FunctionalInterface
+public interface Int2Predicate {
 
     /**
-     * Create a new 1-d extent with the given size.
+     * Tests whether the two arguments are treated equals.
      *
-     * @param size the size of the extent
-     * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
+     * @param i the first value
+     * @param j the second value
+     * @return {@code true} if the values are treated as equal, {@code false}
+     *         otherwise
      */
-    public Extent1d {
-        if (size < 0) {
-            throw new IndexOutOfBoundsException(
-                "Extent is out of bounds: [%d].".formatted(size)
-            );
-        }
-    }
-
-    @Override
-    public int compareTo(final Extent1d other) {
-        return Integer.compare(size, other.size);
-    }
-
-    @Override
-    public String toString() {
-        return "[%d]".formatted(size());
-    }
-
+    boolean test(final int i, final int j);
 }

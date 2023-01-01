@@ -38,10 +38,19 @@ public record Order3d(Index3d start, Stride3d stride) {
         requireNonNull(stride);
     }
 
-    public Order3d(final Index3d start, final Extent3d extent) {
+    /**
+     * Create a new order for the given range.
+     *
+     * @param range the range of the order
+     */
+    public Order3d(final Range3d range) {
         this(
-            start,
-            new Stride3d(extent.rows()*extent.cols(), extent.cols(),  1)
+            range.start(),
+            new Stride3d(
+                range.extent().rows()*range.extent().cols(),
+                range.extent().cols(),
+                1
+            )
         );
     }
 
@@ -51,14 +60,34 @@ public record Order3d(Index3d start, Stride3d stride) {
      * @param extent the structure extent
      */
     public Order3d(final Extent3d extent) {
-        this(Index3d.ZERO, extent);
+        this(new Range3d(extent));
     }
 
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     *
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code slice}, {@code row}
+     *         and {@code col}
+     */
     public int index(final int slice, final int row, final int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
+    }
+
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index3d index) {
+        return index(index.col(), index.row(), index.col());
     }
 
 }

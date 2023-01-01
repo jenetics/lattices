@@ -17,26 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.function;
 
 /**
- * This interface indicates, that a class can create a copy of type {@code T}.
- * Typically, classes which implement this interface, are able to create a copy
- * from itself.
- *
- * @param <T> the type of the copied object
+ * Represents an operation that accepts an (int, int, int)-valued argument and
+ * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Copyable<T> {
+@FunctionalInterface
+public interface Int3Consumer {
 
     /**
-     * Return a new copy of the specified object.
+     * Performs this operation on the given arguments.
      *
-     * @return a new copy of the specified.
+     * @param i first value
+     * @param j second value
+     * @param k third value
      */
-    T copy();
+    void accept(final int i, final int j, final int k);
 
 }

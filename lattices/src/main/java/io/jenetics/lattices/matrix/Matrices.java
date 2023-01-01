@@ -19,8 +19,9 @@
  */
 package io.jenetics.lattices.matrix;
 
+import static io.jenetics.lattices.grid.Grids.checkSquare;
+
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Grids;
 
 /**
  * Some helper methods for checking pre-conditions.
@@ -97,7 +98,7 @@ public final class Matrices {
      * @throws IllegalArgumentException if {@code !isSquare(A)}
      */
     public static boolean isSymmetric(final DoubleMatrix2d A) {
-        Grids.checkSquare(A);
+        checkSquare(A.extent());
         return A.equals(A.transpose());
     }
 

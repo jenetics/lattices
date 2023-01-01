@@ -20,14 +20,14 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structural2d;
-import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.structure.View2d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Range3d;
+import io.jenetics.lattices.structure.Structural3d;
+import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.structure.View3d;
 
 /**
- * This interface <em>structures</em> the elements into a 2-dimensional grid.
+ * This interface <em>structures</em> the elements into a 3-dimensional grid.
  *
  * @param <A> the array type which stores the grid elements
  * @param <G> the <em>self</em> grid type
@@ -36,8 +36,8 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structural2d, Loopable2d, Grid<A, G>
+public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
+    extends Structural3d, Loopable3d, Grid<A, G>
 {
 
     /**
@@ -48,7 +48,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure2d structure, final A array);
+    G create(final Structure3d structure, final A array);
 
     /**
      * Assigns the elements of the {@code other} grid to this grid.
@@ -64,9 +64,9 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent2d extent) {
+    default G like(final Extent3d extent) {
         return create(
-            new Structure2d(extent),
+            new Structure3d(extent),
             array().like(extent.size())
         );
     }
@@ -93,7 +93,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View2d view) {
+    default G view(final View3d view) {
         return create(view.apply(structure()), array());
     }
 
@@ -104,8 +104,8 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @return the looping strategy of this structural
      */
     @Override
-    default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
+    default Loop3d loop() {
+        return Loop3d.of(new Range3d(extent()));
     }
 
 }

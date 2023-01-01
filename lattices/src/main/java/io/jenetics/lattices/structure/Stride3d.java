@@ -32,11 +32,19 @@ package io.jenetics.lattices.structure;
  */
 public record Stride3d(int slice, int row, int col) {
 
+    /**
+     * Create a new 3-d stride.
+     *
+     * @param slice the slice stride
+     * @param row the row stride
+     * @param col the column stride
+     * @throws IndexOutOfBoundsException if the one of the strides is smaller
+     *         than one
+     */
     public Stride3d {
         if (slice < 1 || row < 1 || col < 1) {
-            throw new IllegalArgumentException(
-                "Stride must be positive: [%d, %d, %d]."
-                    .formatted(slice, row, col)
+            throw new IndexOutOfBoundsException(
+                "Stride must be positive: [%d, %d, %d].".formatted(slice, row, col)
             );
         }
     }

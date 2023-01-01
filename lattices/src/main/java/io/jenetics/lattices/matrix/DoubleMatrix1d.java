@@ -47,10 +47,10 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory1d<DoubleMatrix1d> DENSE = struct ->
+    public static final Factory1d<DoubleMatrix1d> DENSE = structure ->
         new DoubleMatrix1d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**

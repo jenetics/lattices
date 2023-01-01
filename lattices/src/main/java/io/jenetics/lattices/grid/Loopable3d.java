@@ -17,41 +17,45 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.grid;
+
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 
 /**
- * The extent of 1-d structures.
- *
- * @param size the number of elements, must be greater or equal zero
+ * Defines the looping strategy of a 3-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+public interface Loopable3d extends Loop3d {
 
     /**
-     * Create a new 1-d extent with the given size.
+     * Return the looping strategy.
      *
-     * @param size the size of the extent
-     * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
+     * @return the looping strategy
      */
-    public Extent1d {
-        if (size < 0) {
-            throw new IndexOutOfBoundsException(
-                "Extent is out of bounds: [%d].".formatted(size)
-            );
-        }
+    Loop3d loop();
+
+    @Override
+    default void forEach(final Int3Consumer action) {
+        loop().forEach(action);
     }
 
     @Override
-    public int compareTo(final Extent1d other) {
-        return Integer.compare(size, other.size);
+    default boolean anyMatch(final Int3Predicate predicate) {
+        return loop().anyMatch(predicate);
     }
 
     @Override
-    public String toString() {
-        return "[%d]".formatted(size());
+    default boolean allMatch(final Int3Predicate predicate) {
+        return loop().allMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(final Int3Predicate predicate) {
+        return loop().nonMatch(predicate);
     }
 
 }

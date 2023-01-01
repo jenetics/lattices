@@ -17,26 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.function;
+package io.jenetics.lattices.grid;
 
 /**
- * Represents a predicate (boolean-valued function) of an (int, int)-valued
- * argument.
+ * This interface indicates, that a class can create a copy of type {@code T}.
+ * Typically, classes which implement this interface, are able to create a copy
+ * from itself.
+ *
+ * @param <T> the type of the copied object
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-@FunctionalInterface
-public interface IntIntPredicate {
+public interface Copyable<T> {
 
     /**
-     * Tests whether the two arguments are treated equals.
+     * Return a new copy of the specified object.
      *
-     * @param i the first value
-     * @param j the second value
-     * @return {@code true} if the values are treated as equal, {@code false}
-     *         otherwise
+     * @return a new copy of the specified.
      */
-    boolean test(final int i, final int j);
+    T copy();
+
 }

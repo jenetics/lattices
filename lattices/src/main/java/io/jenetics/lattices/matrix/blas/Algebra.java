@@ -192,7 +192,7 @@ public final class Algebra {
      * @throws IllegalArgumentException if the given matrix is singular
      */
     public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
-        if (isSquare(A) && isDiagonal(A)) {
+        if (isSquare(A.extent()) && isDiagonal(A)) {
             final var inv = A.copy();
             if (!diagonalInverse(inv)) {
                 throw new IllegalArgumentException("Matrix to invert is singular.");
@@ -210,7 +210,7 @@ public final class Algebra {
     }
 
     private static boolean diagonalInverse(final DoubleMatrix2d A) {
-        checkSquare(A);
+        checkSquare(A.extent());
 
         final NumericalContext context = NumericalContext.get();
         boolean nonSingular = true;

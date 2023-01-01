@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
-import io.jenetics.lattices.function.IntIntConsumer;
+import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
 /**
@@ -58,7 +58,7 @@ final class Permutations {
      * @param swapper the swapper function
      *  @param indexes the permutation {@code indexes}
      */
-    static void permute(final IntIntConsumer swapper, final int[] indexes) {
+    static void permute(final Int2Consumer swapper, final int[] indexes) {
         final int[] tracks = new int[indexes.length];
         for (int i = 0; i < indexes.length; ++i) {
             tracks[i] = i;

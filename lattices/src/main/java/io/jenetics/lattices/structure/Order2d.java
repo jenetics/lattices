@@ -38,6 +38,11 @@ public record Order2d(Index2d start, Stride2d stride) {
         requireNonNull(stride);
     }
 
+    /**
+     * Create a new order for the given range.
+     *
+     * @param range the range of the order
+     */
     public Order2d(final Range2d range) {
         this(range.start(), new Stride2d(range.extent().cols(), 1));
     }
@@ -51,10 +56,28 @@ public record Order2d(Index2d start, Stride2d stride) {
         this(new Range2d(extent));
     }
 
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     *
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code row} and {@code col}
+     */
     public int index(final int row, final int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
+    }
+
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int index(final Index2d index) {
+        return index(index.row(), index.col());
     }
 
 }

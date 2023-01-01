@@ -21,10 +21,10 @@ package io.jenetics.lattices.matrix.blas;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkRectangular;
+import static io.jenetics.lattices.grid.Grids.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;
@@ -111,7 +111,7 @@ public final class LU {
      * @throws IllegalArgumentException if the matrix is not square
      */
     public double det() {
-        Grids.checkSquare(LU);
+        checkSquare(LU.extent());
 
         if (singular) {
             return 0;
@@ -134,7 +134,7 @@ public final class LU {
      *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
      */
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
-        checkRectangular(LU);
+        checkRectangular(LU.extent());
 
         final var X = B.copy();
         final int m = LU.rows();

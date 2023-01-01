@@ -23,7 +23,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
 /**
- * Defines the looping strategy of a grid.
+ * Defines the looping strategy of a 1-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -32,9 +32,9 @@ import java.util.function.IntPredicate;
 public interface Loopable1d extends Loop1d {
 
     /**
-     * Return the looping strategy.
+     * Return the default looping strategy.
      *
-     * @return the looping strategy
+     * @return the default looping strategy
      */
     Loop1d loop();
 
