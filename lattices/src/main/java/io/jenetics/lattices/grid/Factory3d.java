@@ -24,7 +24,7 @@ import io.jenetics.lattices.structure.Order3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * Factory interface for creating 2-d structures.
+ * Factory interface for creating 3-d structures.
  *
  * @param <T> the type created by the factory
  *

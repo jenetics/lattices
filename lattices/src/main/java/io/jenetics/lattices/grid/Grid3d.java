@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Range3d;
 import io.jenetics.lattices.structure.Structural3d;
 import io.jenetics.lattices.structure.Structure3d;
 import io.jenetics.lattices.structure.View3d;
@@ -104,7 +105,7 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      */
     @Override
     default Loop3d loop() {
-        return new Loop3d.SliceFirst(extent());
+        return Loop3d.of(new Range3d(extent()));
     }
 
 }

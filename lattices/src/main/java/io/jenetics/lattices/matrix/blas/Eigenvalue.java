@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
+import static io.jenetics.lattices.grid.Grids.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSymmetric;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -59,7 +59,7 @@ public final class Eigenvalue {
     }
 
     private void init(final DoubleMatrix2d A) {
-        Grids.checkSquare(A);
+        checkSquare(A.extent());
 
         n = A.cols();
         d = new double[n];

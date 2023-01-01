@@ -46,10 +46,10 @@ public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
     /**
      * Factory for creating dense 1-d double grids.
      */
-    public static final Factory1d<DoubleGrid1d> DENSE = struct ->
+    public static final Factory1d<DoubleGrid1d> DENSE = structure ->
         new DoubleGrid1d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**

@@ -47,10 +47,10 @@ public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
     /**
      * Factory for creating dense 3-d double grids.
      */
-    public static final Factory3d<DoubleGrid3d> DENSE = struct ->
+    public static final Factory3d<DoubleGrid3d> DENSE = structure ->
         new DoubleGrid3d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**

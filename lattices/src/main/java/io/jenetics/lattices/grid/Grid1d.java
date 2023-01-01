@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.Structural1d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.View1d;
@@ -91,6 +92,17 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      */
     default G view(final View1d view) {
         return create(view.apply(structure()), array());
+    }
+
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    @Override
+    default Loop1d loop() {
+        return Loop1d.of(new Range1d(extent()));
     }
 
 }

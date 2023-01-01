@@ -210,7 +210,7 @@ public final class QR {
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static QR decompose(final DoubleMatrix2d A) {
-        checkRectangular(A);
+        checkRectangular(A.extent());
 
         final var qr = A.copy();
 

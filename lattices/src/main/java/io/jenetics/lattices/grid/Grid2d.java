@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Structural2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
@@ -104,7 +105,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      */
     @Override
     default Loop2d loop() {
-        return new Loop2d.RowFirst(extent());
+        return Loop2d.of(new Range2d(extent()));
     }
 
 }

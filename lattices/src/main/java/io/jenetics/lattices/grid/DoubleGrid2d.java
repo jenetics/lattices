@@ -47,10 +47,10 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
     /**
      * Factory for creating dense 2-d double grids.
      */
-    public static final Factory2d<DoubleGrid2d> DENSE = struct ->
+    public static final Factory2d<DoubleGrid2d> DENSE = structure ->
         new DoubleGrid2d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**

@@ -22,8 +22,8 @@ package io.jenetics.lattices.matrix.blas;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static io.jenetics.lattices.grid.Grids.checkRectangular;
 
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -49,7 +49,7 @@ public final class SingularValue {
     }
 
     private void init(final DoubleMatrix2d Arg) {
-        Grids.checkRectangular(Arg);
+        checkRectangular(Arg.extent());
 
         // Derived from LINPACK code.
         // Initialize.

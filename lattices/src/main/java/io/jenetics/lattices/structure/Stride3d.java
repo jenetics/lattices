@@ -43,7 +43,7 @@ public record Stride3d(int slice, int row, int col) {
      */
     public Stride3d {
         if (slice < 1 || row < 1 || col < 1) {
-            throw new IllegalArgumentException(
+            throw new IndexOutOfBoundsException(
                 "Stride must be positive: [%d, %d, %d].".formatted(slice, row, col)
             );
         }

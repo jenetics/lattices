@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
@@ -71,13 +72,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         final DoubleArray array,
         final BiFunction<? super Structure2d, ? super DoubleArray, ? extends G> constructor
     ) {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %s > %s."
-                        .formatted(structure.extent(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
 
         this.structure = structure;
         this.array = array;
@@ -152,7 +147,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         if (other == this) {
             return;
         }
-        checkSameExtent(structure, other.structure());
+        checkSameExtent(extent(), other.extent());
         forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
@@ -216,7 +211,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         final DoubleBinaryOperator f
     ) {
         requireNonNull(f);
-        checkSameExtent(this, y);
+        checkSameExtent(extent(), y.extent());
 
         forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
@@ -238,7 +233,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
     public void swap(final BaseDoubleGrid2d<?> other) {
-        checkSameExtent(this, other);
+        checkSameExtent(extent(), other.extent());
 
         forEach((r, c) -> {
             final var tmp = get(r, c);

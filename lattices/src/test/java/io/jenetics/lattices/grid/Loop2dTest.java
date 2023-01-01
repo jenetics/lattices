@@ -75,15 +75,15 @@ public class Loop2dTest {
     public Object[][] loops() {
         return new Object[][] {
             {
-                new Loop2d.RowFirst(new Extent2d(11, 5)),
+                new Loop2dRowFirst(new Extent2d(11, 5)),
                 new Result(0, 0, 10, 4, 55)
             },
             {
-                new Loop2d.RowFirst(new Range2d(new Index2d(2, 2), new Extent2d(11, 5))),
+                new Loop2dRowFirst(new Range2d(new Index2d(2, 2), new Extent2d(11, 5))),
                 new Result(2, 2, 12, 6, 55)
             },
             {
-                new Loop2d.ColFirst(new Extent2d(11, 5)),
+                new Loop2dColFirst(new Extent2d(11, 5)),
                 new Result(0, 0, 10, 4, 55)
             }
         };

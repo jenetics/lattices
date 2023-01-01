@@ -23,7 +23,7 @@ import io.jenetics.lattices.function.IntIntIntConsumer;
 import io.jenetics.lattices.function.IntIntIntPredicate;
 
 /**
- * Defines the looping strategy of a grid.
+ * Defines the looping strategy of a 3-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0

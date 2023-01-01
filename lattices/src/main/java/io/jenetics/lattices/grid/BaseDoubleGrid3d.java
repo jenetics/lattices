@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
@@ -71,13 +72,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
         final DoubleArray array,
         final BiFunction<? super Structure3d, ? super DoubleArray, ? extends G> constructor
     ) {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %s > %s."
-                        .formatted(structure.extent(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
 
         this.structure = structure;
         this.array = array;
@@ -109,17 +104,6 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
     @Override
     public G create(final Structure3d structure, final DoubleArray array) {
         return constructor.apply(structure, array);
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    public Loop3d loop() {
-        return null; //new Loop2d.RowFirst(extent());
     }
 
     /**
@@ -235,7 +219,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      */
     public void assign(final BaseDoubleGrid3d<?> y, final DoubleBinaryOperator f) {
         requireNonNull(f);
-        checkSameExtent(this, y);
+        checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c))));
     }
@@ -257,7 +241,8 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
     public void swap(final BaseDoubleGrid3d<?> other) {
-        //checkSameExtent(structure, other.structure());
+        checkSameExtent(extent(), other.extent());
+
         forEach((s, r, c) -> {
             final var tmp = get(s, r, c);
             set(s, r, c, other.get(s, r, c));

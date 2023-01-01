@@ -83,198 +83,24 @@ public interface Loop2d {
     boolean nonMatch(final IntIntPredicate predicate);
 
     /**
-     * Row-major loop implementation. The rows and columns are iterated forward.
+     * Return a <em>default</em> loop implementation with the given {@code range}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
      */
-    record RowFirst(Range2d range) implements Loop2d {
-
-        /**
-         * Row-major implementation of the loop strategy
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public RowFirst(final Extent2d extent) {
-            this(new Range2d(extent));
-        }
-
-        @Override
-        public void forEach(final IntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().rows();
-                 r < h; ++r)
-            {
-                for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().cols();
-                     c < w; ++c)
-                {
-                    action.accept(r, c);
-                }
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().rows();
-                 r < h; ++r)
-            {
-                for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().cols();
-                     c < w; ++c)
-                {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().rows();
-                 r < h; ++r)
-            {
-                for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().cols();
-                     c < w; ++c)
-                {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().rows();
-                 r < h; ++r)
-            {
-                for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().cols();
-                     c < w; ++c)
-                {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+    static Loop2d of(final Range2d range) {
+        requireNonNull(range);
+        return new Loop2dRowFirst(range);
     }
 
     /**
-     * Column-major loop implementation. he rows and columns are iterated
-     * forward.
+     * Return a <em>default</em> loop implementation with the given {@code extent}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
      */
-    record ColFirst(Range2d range) implements Loop2d {
-
-        /**
-         * Column-major implementation of the loop strategy
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public ColFirst(final Extent2d extent) {
-            this(new Range2d(extent));
-        }
-
-        @Override
-        public void forEach(final IntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().cols();
-                 c < w; ++c)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    action.accept(r, c);
-                }
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().cols();
-                 c < w; ++c)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().cols();
-                 c < w; ++c)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().cols();
-                 c < w; ++c)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+    static Loop2d of(final Extent2d extent) {
+        return of(new Range2d(extent));
     }
 
 }

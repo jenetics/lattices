@@ -19,13 +19,16 @@
  */
 package io.jenetics.lattices.grid;
 
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * Object grid class.
+ * Object 2-d grid implementation.
  *
  * @param <T> the grid element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
@@ -54,13 +57,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public ObjectGrid2d {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %d > %d."
-                        .formatted(structure.extent().size(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
     }
 
     @Override
@@ -73,6 +70,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
 
     @Override
     public void assign(final ObjectGrid2d<T> other) {
+        checkSameExtent(extent(), other.extent());
         forEach((r, c) -> set(r, c, other.get(r, c)));
     }
 
@@ -124,9 +122,9 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory2d<ObjectGrid2d<T>> dense(final T... __) {
-        return struct -> new ObjectGrid2d<T>(
-            struct,
-            DenseObjectArray.ofSize(struct.extent().size(), __)
+        return structure -> new ObjectGrid2d<T>(
+            structure,
+            DenseObjectArray.ofSize(structure.extent().size(), __)
         );
     }
 

@@ -61,27 +61,27 @@ public class Loop1dTest {
     public Object[][] loops() {
         return new Object[][] {
             {
-                new Loop1d.Forward(new Extent1d(11)),
+                new Loop1dForward(new Extent1d(11)),
                 new Result(0, 10, 11)
             },
             {
-                new Loop1d.Forward(new Range1d(new Index1d(11), new Extent1d(10))),
+                new Loop1dForward(new Range1d(new Index1d(11), new Extent1d(10))),
                 new Result(11, 20, 10)
             },
             {
-                new Loop1d.Forward(new Range1d(new Index1d(11), new Index1d(20))),
+                new Loop1dForward(new Range1d(new Index1d(11), new Index1d(20))),
                 new Result(11, 19, 9)
             },
             {
-                new Loop1d.Backward(new Extent1d(11)),
+                new Loop1dBackward(new Extent1d(11)),
                 new Result(10, 0, 11)
             },
             {
-                new Loop1d.Backward(new Range1d(new Index1d(11), new Extent1d(10))),
+                new Loop1dBackward(new Range1d(new Index1d(11), new Extent1d(10))),
                 new Result(20, 11, 10)
             },
             {
-                new Loop1d.Backward(new Range1d(new Index1d(11), new Index1d(20))),
+                new Loop1dBackward(new Range1d(new Index1d(11), new Index1d(20))),
                 new Result(19, 11, 9)
             }
         };

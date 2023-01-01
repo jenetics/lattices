@@ -19,13 +19,16 @@
  */
 package io.jenetics.lattices.grid;
 
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * Object grid class.
+ * Object 3-d grid implementation.
  *
  * @param <T> the grid element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
@@ -54,13 +57,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public ObjectGrid3d {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %d > %d."
-                        .formatted(structure.extent().size(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
     }
 
     @Override
@@ -73,6 +70,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
 
     @Override
     public void assign(final ObjectGrid3d<T> other) {
+        checkSameExtent(extent(), other.extent());
         forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
     }
 
@@ -126,9 +124,9 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory3d<ObjectGrid3d<T>> dense(final T... __) {
-        return struct -> new ObjectGrid3d<T>(
-            struct,
-            DenseObjectArray.ofSize(struct.extent().size(), __)
+        return structure -> new ObjectGrid3d<T>(
+            structure,
+            DenseObjectArray.ofSize(structure.extent().size(), __)
         );
     }
 

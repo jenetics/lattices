@@ -82,112 +82,25 @@ public interface Loop3d {
      */
     boolean nonMatch(final IntIntIntPredicate predicate);
 
+    /**
+     * Return a <em>default</em> loop implementation with the given {@code range}.
+     *
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
+     */
+    static Loop3d of(final Range3d range) {
+        requireNonNull(range);
+        return new Loop3dSliceFirst(range);
+    }
 
-    record SliceFirst(Range3d range) implements Loop3d {
-
-        public SliceFirst(final Extent3d extent) {
-            this(new Range3d(extent));
-        }
-
-        @Override
-        public void forEach(final IntIntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int s = range.start().slice(),
-                 d = range.start().slice() + range.extent().slices();
-                 s < d; ++s)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    for (int c = range.start().col(),
-                         w = range.start().col() + range.extent().cols();
-                         c < w; ++c)
-                    {
-                        action.accept(s, r, c);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntIntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int s = range.start().slice(),
-                 d = range.start().slice() + range.extent().slices();
-                 s < d; ++s)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    for (int c = range.start().col(),
-                         w = range.start().col() + range.extent().cols();
-                         c < w; ++c)
-                    {
-                        if (predicate.test(s, r, c)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntIntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int s = range.start().slice(),
-                 d = range.start().slice() + range.extent().slices();
-                 s < d; ++s)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    for (int c = range.start().col(),
-                         w = range.start().col() + range.extent().cols();
-                         c < w; ++c)
-                    {
-                        if (!predicate.test(s, r, c)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntIntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int s = range.start().slice(),
-                 d = range.start().slice() + range.extent().slices();
-                 s < d; ++s)
-            {
-                for (int r = range.start().row(),
-                     h = range.start().row() + range.extent().rows();
-                     r < h; ++r)
-                {
-                    for (int c = range.start().col(),
-                         w = range.start().col() + range.extent().cols();
-                         c < w; ++c)
-                    {
-                        if (predicate.test(s, r, c)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
+    /**
+     * Return a <em>default</em> loop implementation with the given {@code extent}.
+     *
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
+     */
+    static Loop3d of(final Extent3d extent) {
+        return of(new Range3d(extent));
     }
 
 }

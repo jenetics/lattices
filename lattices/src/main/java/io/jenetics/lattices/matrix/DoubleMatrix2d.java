@@ -54,10 +54,10 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Factory2d<DoubleMatrix2d> DENSE = struct ->
+    public static final Factory2d<DoubleMatrix2d> DENSE = structure ->
         new DoubleMatrix2d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**

@@ -116,7 +116,7 @@ public final class Cholesky {
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static Cholesky decompose(final DoubleMatrix2d A) {
-        checkRectangular(A);
+        checkRectangular(A.extent());
 
         final var context = NumericalContext.get();
 
@@ -130,15 +130,16 @@ public final class Cholesky {
         }
 
         // Main loop.
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < n; ++j) {
             double d = 0.0;
-            for (int k = 0; k < j; k++) {
+            for (int k = 0; k < j; ++k) {
                 double s = L_rows[k].dotProduct(L_rows[j], 0, k);
 
                 s = (A.get(j, k) - s)/L.get(k, k);
                 L_rows[j].set(k, s);
                 d = Math.fma(s, s, d);
-                isSymmetricPositiveDefinite = isSymmetricPositiveDefinite &&
+                isSymmetricPositiveDefinite =
+                    isSymmetricPositiveDefinite &&
                     context.equals(A.get(k, j), A.get(j, k));
             }
             d = A.get(j, j) - d;

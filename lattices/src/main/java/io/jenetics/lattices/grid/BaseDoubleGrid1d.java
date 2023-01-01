@@ -20,6 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
@@ -71,13 +72,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
         final DoubleArray array,
         final BiFunction<? super Structure1d, ? super DoubleArray, ? extends G> constructor
     ) {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %d > %d."
-                        .formatted(structure.extent().size(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
 
         this.structure = structure;
         this.array = array;
@@ -106,18 +101,6 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
     public G create(final Structure1d structure, final DoubleArray array) {
         return constructor.apply(structure, array);
     }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    public Loop1d loop() {
-        return new Loop1d.Forward(extent());
-    }
-
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.
@@ -157,7 +140,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
         if (other == this) {
             return;
         }
-        checkSameExtent(this, other);
+        checkSameExtent(extent(), other.extent());
 
         forEach(i -> set(i, other.get(i)));
     }
@@ -204,7 +187,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param f the combiner function
      */
     public void assign(final BaseDoubleGrid1d<?> a, final DoubleBinaryOperator f) {
-        checkSameExtent(this, a);
+        checkSameExtent(extent(), a.extent());
         forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
@@ -214,7 +197,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
     public void swap(final BaseDoubleGrid1d<?> other) {
-        checkSameExtent(this, other);
+        checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
             set(i, other.get(i));

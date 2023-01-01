@@ -70,7 +70,8 @@ public record Order3d(Index3d start, Stride3d stride) {
      * @param slice the slice index
      * @param row the row index
      * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @return the (linearized) index of the given {@code slice}, {@code row}
+     *         and {@code col}
      */
     public int index(final int slice, final int row, final int col) {
         return

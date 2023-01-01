@@ -20,6 +20,8 @@
 package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -33,7 +35,7 @@ import io.jenetics.lattices.array.ObjectArray;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
- * Object grid class.
+ * Object 1-d grid implementation.
  *
  * @param <T> the grid element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
@@ -62,13 +64,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public ObjectGrid1d {
-        if (structure.extent().size() > array.length()) {
-            throw new IllegalArgumentException(
-                "The number of available elements is smaller than the number of " +
-                    "required grid cells: %d > %d."
-                        .formatted(structure.extent().size(), array.length())
-            );
-        }
+        checkArraySize(structure.extent(), array.length());
     }
 
     @Override
@@ -127,12 +123,8 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
 
     @Override
     public void assign(final ObjectGrid1d<T> other) {
+        checkSameExtent(extent(), other.extent());
         forEach(i -> set(i, other.get(i)));
-    }
-
-    @Override
-    public Loop1d loop() {
-        return new Forward(extent());
     }
 
     /**
@@ -179,7 +171,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * @param f the combiner function
      */
     public void assign(final ObjectGrid1d<? extends T> a, final BinaryOperator<T> f) {
-        Grids.checkSameExtent(this, a);
+        checkSameExtent(extent(), a.extent());
         forEach(i -> set(i, f.apply(get(i), a.get(i))));
     }
 
@@ -189,7 +181,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
     public void swap(final ObjectGrid1d<T> other) {
-        Grids.checkSameExtent(this, other);
+        checkSameExtent(extent(), other.extent());
 
         forEach(i -> {
             final var tmp = get(i);
@@ -207,7 +199,8 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * otherwise
      */
     public boolean equals(final ObjectGrid1d<?> other) {
-        return extent().equals(other.extent()) && allMatch(i -> Objects.equals(get(i), other.get(i)));
+        return extent().equals(other.extent()) &&
+            allMatch(i -> Objects.equals(get(i), other.get(i)));
     }
 
     @Override
@@ -219,7 +212,9 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
 
     @Override
     public boolean equals(final Object object) {
-        return object == this || object instanceof ObjectGrid1d<?> grid && equals(grid);
+        return object == this ||
+            object instanceof ObjectGrid1d<?> grid &&
+                equals(grid);
     }
 
     @Override
@@ -246,9 +241,9 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
-        return struct -> new ObjectGrid1d<T>(
-            struct,
-            DenseObjectArray.ofSize(struct.extent().size(), __)
+        return structure -> new ObjectGrid1d<T>(
+            structure,
+            DenseObjectArray.ofSize(structure.extent().size(), __)
         );
     }
 
