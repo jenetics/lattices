@@ -19,22 +19,22 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.array.DenseIntArray;
+import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * Generic class for 3-d grids holding {@code double} elements. The
- * {@code DoubleGrid3d} is <em>just</em> a 3-d view onto a 1-d Java
- * {@code double[]} array. The following example shows how to create such a grid
- * view from a given {@code double[]} array.
+ * Generic class for 3-d grids holding {@code int} elements. The
+ * {@code IntGrid3d} is <em>just</em> a 3-d view onto a 1-d Java
+ * {@code int[]} array. The following example shows how to create such a grid
+ * view from a given {@code int[]} array.
  *
  * <pre>{@code
- * final var values = new double[3*50*100];
- * final var grid = new DoubleGrid3d(
+ * final var values = new int[3*50*100];
+ * final var grid = new IntGrid3d(
  *     new Structure3d(new Extent3d(3, 50, 100)),
- *     new DenseDoubleArray(values)
+ *     new DenseIntArray(values)
  * );
  * }</pre>
  *
@@ -42,15 +42,15 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
+public final class IntGrid3d extends BaseIntGrid3d<IntGrid3d> {
 
     /**
      * Factory for creating dense 3-d double grids.
      */
-    public static final Factory3d<DoubleGrid3d> DENSE = structure ->
-        new DoubleGrid3d(
+    public static final Factory3d<IntGrid3d> DENSE = structure ->
+        new IntGrid3d(
             structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+            DenseIntArray.ofSize(structure.extent().size())
         );
 
     /**
@@ -66,8 +66,8 @@ public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public DoubleGrid3d(final Structure3d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid3d::new);
+    public IntGrid3d(final Structure3d structure, final IntArray array) {
+        super(structure, array, IntGrid3d::new);
     }
 
     /**
@@ -75,10 +75,10 @@ public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
      * a view onto this grid {@link #array()}.
      *
      * @param projection the projection to apply
-     * @return a 2-d projection from this 3-d grid
+     * @return a 2-d projection from this 1-d grid
      */
-    public DoubleGrid2d view(final Projection3d projection) {
-        return new DoubleGrid2d(projection.apply(structure()), array());
+    public IntGrid2d view(final Projection3d projection) {
+        return new IntGrid2d(projection.apply(structure()), array());
     }
 
 }

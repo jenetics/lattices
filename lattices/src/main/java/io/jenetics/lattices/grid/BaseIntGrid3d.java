@@ -19,25 +19,26 @@
  */
 package io.jenetics.lattices.grid;
 
-import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.grid.Grids.checkArraySize;
-import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.structure.Structure3d;
 
 import java.util.function.BiFunction;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongUnaryOperator;
 
-import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Structure3d;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Abstract double grid implementation.
  *
  * @param <G> the grid type
  */
-public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
-    implements Grid3d<DoubleArray, G>
+public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
+    implements Grid3d<IntArray, G>
 {
 
     /**
@@ -47,11 +48,11 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
     private final Structure3d structure;
 
     /**
-     * The underlying {@code double[]} array.
+     * The underlying {@code int[]} array.
      */
-    private final DoubleArray array;
+    private final IntArray array;
 
-    private final BiFunction<Structure3d, DoubleArray, G> constructor;
+    private final BiFunction<Structure3d, IntArray, G> constructor;
 
     /**
      * Create a new 3-d grid with the given {@code structure} and element
@@ -67,17 +68,17 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    protected BaseDoubleGrid3d(
+    protected BaseIntGrid3d(
         final Structure3d structure,
-        final DoubleArray array,
-        final BiFunction<? super Structure3d, ? super DoubleArray, ? extends G> constructor
+        final IntArray array,
+        final BiFunction<? super Structure3d, ? super IntArray, ? extends G> constructor
     ) {
         checkArraySize(structure.extent(), array.length());
 
         this.structure = structure;
         this.array = array;
 
-        @SuppressWarnings("unchecked") final var ctr = (BiFunction<Structure3d, DoubleArray, G>) constructor;
+        @SuppressWarnings("unchecked") final var ctr = (BiFunction<Structure3d, IntArray, G>) constructor;
         this.constructor = requireNonNull(ctr);
     }
 
@@ -97,12 +98,12 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @return the underlying element array
      */
     @Override
-    public DoubleArray array() {
+    public IntArray array() {
         return array;
     }
 
     @Override
-    public G create(final Structure3d structure, final DoubleArray array) {
+    public G create(final Structure3d structure, final IntArray array) {
         return constructor.apply(structure, array);
     }
 
@@ -116,7 +117,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    public double get(final int slice, final int row, final int col) {
+    public int get(final int slice, final int row, final int col) {
         return array.get(order().index(slice, row, col));
     }
 
@@ -131,7 +132,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    public void set(final int slice, final int row, final int col, final double value) {
+    public void set(final int slice, final int row, final int col, final int value) {
         array.set(order().index(slice, row, col), value);
     }
 
@@ -165,7 +166,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    public void assign(final double[][][] values) {
+    public void assign(final int[][][] values) {
         if (values.length != structure.extent().slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -203,7 +204,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      *
      * @param value the value to be filled into the cells
      */
-    public void assign(final double value) {
+    public void assign(final int value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -218,13 +219,13 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
     public void assign(
-        final BaseDoubleGrid3d<?> y,
-        final DoubleBinaryOperator f
+        final BaseIntGrid3d<?> y,
+        final IntBinaryOperator f
     ) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
-        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c), y.get(s, r, c))));
     }
 
     /**
@@ -233,9 +234,9 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final DoubleUnaryOperator f) {
+    public void assign(final IntUnaryOperator f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c))));
     }
 
     /**
@@ -243,7 +244,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    public void swap(final BaseDoubleGrid3d<?> other) {
+    public void swap(final BaseIntGrid3d<?> other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -275,20 +276,20 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @param f a function transforming the current cell value
      * @return the aggregated value
      */
-    public double reduce(final DoubleBinaryOperator reducer, final DoubleUnaryOperator f) {
+    public long reduce(final LongBinaryOperator reducer, final LongUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return Double.NaN;
+            return 0;
         }
 
-        double a = f.applyAsDouble(get(slices() - 1, rows() - 1, cols() - 1));
+        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0; ) {
             for (int r = rows(); --r >= 0; ) {
                 for (int c = cols() - d; --c >= 0; ) {
-                    a = reducer.applyAsDouble(a, f.applyAsDouble(get(s, r, c)));
+                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
                 }
                 d = 0;
             }
@@ -304,24 +305,22 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    public boolean equals(final BaseDoubleGrid3d<?> other) {
-        final var context = NumericalContext.get();
-
+    public boolean equals(final BaseIntGrid3d<?> other) {
         return extent().equals(other.extent()) &&
-            allMatch((s, r, c) -> context.equals(get(s, r, c), other.get(s, r, c)));
+            allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
     }
 
     @Override
     public int hashCode() {
         final int[] hash = new int[]{37};
-        forEach((i, j, k) -> hash[0] += Double.hashCode(get(i, j, k)) * 17);
+        forEach((i, j, k) -> hash[0] += Integer.hashCode(get(i, j, k)) * 17);
         return hash[0];
     }
 
     @Override
     public boolean equals(final Object object) {
         return object == this ||
-            object instanceof  BaseDoubleGrid3d<?> grid &&
+            object instanceof  BaseIntGrid3d<?> grid &&
                 equals(grid);
     }
 

@@ -19,22 +19,22 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Projection3d;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.array.DenseIntArray;
+import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * Generic class for 3-d grids holding {@code double} elements. The
- * {@code DoubleGrid3d} is <em>just</em> a 3-d view onto a 1-d Java
- * {@code double[]} array. The following example shows how to create such a grid
- * view from a given {@code double[]} array.
+ * Generic class for 2-d grids holding {@code int} elements. The
+ * {@code IntGrid2d} is <em>just</em> a 2-d view onto a 1-d Java
+ * {@code int[]} array. The following example shows how to create such a grid
+ * view from a given {@code int[]} array.
  *
  * <pre>{@code
- * final var values = new double[3*50*100];
- * final var grid = new DoubleGrid3d(
- *     new Structure3d(new Extent3d(3, 50, 100)),
- *     new DenseDoubleArray(values)
+ * final var values = new int[50*100];
+ * final var grid = new IntGrid2d(
+ *     new Structure2d(new Extent2d(50, 100)),
+ *     new DenseIntArray(values)
  * );
  * }</pre>
  *
@@ -42,19 +42,19 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
+public final class IntGrid2d extends BaseIntGrid2d<IntGrid2d> {
 
     /**
-     * Factory for creating dense 3-d double grids.
+     * Factory for creating dense 2-d int grids.
      */
-    public static final Factory3d<DoubleGrid3d> DENSE = structure ->
-        new DoubleGrid3d(
+    public static final Factory2d<IntGrid2d> DENSE = structure ->
+        new IntGrid2d(
             structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+            DenseIntArray.ofSize(structure.extent().size())
         );
 
     /**
-     * Create a new 3-d matrix with the given {@code structure} and element
+     * Create a new 2-d matrix with the given {@code structure} and element
      * {@code array}.
      *
      * @param structure the matrix structure
@@ -66,19 +66,19 @@ public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public DoubleGrid3d(final Structure3d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid3d::new);
+    public IntGrid2d(final Structure2d structure, final IntArray array) {
+        super(structure, array, IntGrid2d::new);
     }
 
     /**
-     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
      * a view onto this grid {@link #array()}.
      *
      * @param projection the projection to apply
-     * @return a 2-d projection from this 3-d grid
+     * @return a 1-d projection from this 2-d grid
      */
-    public DoubleGrid2d view(final Projection3d projection) {
-        return new DoubleGrid2d(projection.apply(structure()), array());
+    public IntGrid1d view(final Projection2d projection) {
+        return new IntGrid1d(projection.apply(structure()), array());
     }
 
 }

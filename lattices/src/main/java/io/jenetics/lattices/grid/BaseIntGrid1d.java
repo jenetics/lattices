@@ -249,10 +249,8 @@ public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
      *         otherwise
      */
     public boolean equals(final BaseIntGrid1d<?> other) {
-        final var context = NumericalContext.get();
-
         return extent().equals(other.extent()) &&
-            allMatch(i -> context.equals(get(i), other.get(i)));
+            allMatch(i -> get(i) == other.get(i));
     }
 
     @Override
