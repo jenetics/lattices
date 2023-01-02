@@ -19,52 +19,113 @@
  */
 package io.jenetics.lattices.array;
 
-import static java.util.Objects.requireNonNull;
-
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.Objects.checkFromIndexSize;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of a <em>dense</em> array of {@code Object} values.
  *
  * @param elements the underlying {@code Object} element values
+ * @param from the index of the first array element (inclusively)
+ * @param length the length of the sub-array
  * @param <T> the value type
  */
-public record DenseObjectArray<T>(T[] elements) implements ObjectArray<T> {
+public record DenseObjectArray<T>(T[] elements, int from, int length)
+    implements ObjectArray<T>
+{
 
+    /**
+     * Create a new <em>dense</em> double array with the given values
+     *
+     * @param elements the underlying {@code double} element values
+     * @param from the index of the first array element (inclusively)
+     * @param length the length of the sub-array
+     * @throws IndexOutOfBoundsException if the given {@code from} value and
+     *         {@code length} is out of bounds
+     */
     public DenseObjectArray {
         requireNonNull(elements);
+        checkFromIndexSize(from, length, elements.length);
+    }
+
+    /**
+     * Create a new <em>dense</em> double array with the given values
+     *
+     * @param elements the underlying {@code double} element values
+     * @param from the index of the first array element (inclusively)
+     * @throws IndexOutOfBoundsException if the given {@code from} value is out
+     *         of bounds
+     */
+    public DenseObjectArray(final T[] elements, int from) {
+        this(elements, from, elements.length - from);
+    }
+
+    /**
+     * Create a new <em>dense</em> array of {@code double} values.
+     *
+     * @param elements the underlying {@code double} element values
+     */
+    public DenseObjectArray(final T[] elements) {
+        this(elements, 0, elements.length);
     }
 
     @Override
     public T get(final int index) {
-        return elements[index];
+        return elements[index + from];
     }
 
     @Override
     public void set(final int index, final T value) {
-        elements[index] = value;
+        elements[index + from] = value;
     }
 
     @Override
     public int length() {
-        return elements.length;
+        return length;
     }
 
     @Override
-    public ObjectArray<T> copy() {
-        return new DenseObjectArray<>(elements.clone());
+    public DenseObjectArray<T> copy() {
+        final var elems = Arrays.copyOfRange(elements, from, from + length);
+        return new DenseObjectArray<>(elems);
     }
 
     @Override
-    public ObjectArray<T> copy(final int start, final int length) {
-        final var array = Arrays.copyOfRange(elements, start, start + length);
+    public DenseObjectArray<T> copy(final int start, final int length) {
+        final var array = Arrays.copyOfRange(
+            elements,
+            start + from, start + from + length
+        );
         return new DenseObjectArray<>(array);
     }
 
     @Override
-    public ObjectArray<T> like(final int length) {
+    public DenseObjectArray<T> like(final int length) {
         return ofSize(length);
+    }
+
+    /**
+     * Return a double stream from the given array.
+     *
+     * @return a double stream from the given array
+     */
+    public Stream<T> stream() {
+        return IntStream.range(0, length())
+            .mapToObj(this::get);
+    }
+
+    @Override
+    public String toString() {
+        return stream()
+            .map(Objects::toString)
+            .collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**
@@ -75,16 +136,11 @@ public record DenseObjectArray<T>(T[] elements) implements ObjectArray<T> {
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs
-    public static <T> ObjectArray<T> ofSize(final int length, final T... __) {
+    public static <T> DenseObjectArray<T> ofSize(final int length, final T... __) {
         @SuppressWarnings("unchecked")
         final T[] elements = (T[])Array
             .newInstance(__.getClass().getComponentType(), length);
         return new DenseObjectArray<>(elements);
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(elements);
     }
 
 }
