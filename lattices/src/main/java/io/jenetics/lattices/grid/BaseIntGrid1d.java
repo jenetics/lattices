@@ -19,10 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.array.IntArray;
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Structure1d;
+import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
 import java.util.function.BiFunction;
 import java.util.function.IntBinaryOperator;
@@ -30,9 +29,9 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.LongBinaryOperator;
 import java.util.function.LongUnaryOperator;
 
-import static io.jenetics.lattices.grid.Grids.checkArraySize;
-import static io.jenetics.lattices.grid.Grids.checkSameExtent;
-import static java.util.Objects.requireNonNull;
+import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Abstract int grid implementation.

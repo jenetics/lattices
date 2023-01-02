@@ -19,13 +19,13 @@
  */
 package io.jenetics.lattices.array;
 
+import static java.util.Objects.checkFromIndexSize;
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-
-import static java.util.Objects.checkFromIndexSize;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of a <em>dense</em> array of {@code double} values.

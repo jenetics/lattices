@@ -19,15 +19,15 @@
  */
 package io.jenetics.lattices.array;
 
+import static java.util.Objects.checkFromIndexSize;
+import static java.util.Objects.requireNonNull;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static java.util.Objects.checkFromIndexSize;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of a <em>dense</em> array of {@code Object} values.
