@@ -19,26 +19,28 @@
  */
 package io.jenetics.lattices.grid;
 
-import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.grid.Grids.checkArraySize;
-import static io.jenetics.lattices.grid.Grids.checkSameExtent;
-
-import java.util.function.BiFunction;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
-
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
+import java.util.function.BiFunction;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongUnaryOperator;
+
+import static io.jenetics.lattices.grid.Grids.checkArraySize;
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+import static java.util.Objects.requireNonNull;
+
 /**
- * Abstract double grid implementation.
+ * Abstract int grid implementation.
  *
  * @param <G> the grid type
  */
-public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
-    implements Grid1d<DoubleArray, G>
+public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
+    implements Grid1d<IntArray, G>
 {
 
     /**
@@ -48,11 +50,11 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
     private final Structure1d structure;
 
     /**
-     * The underlying {@code double[]} array.
+     * The underlying {@code int[]} array.
      */
-    private final DoubleArray array;
+    private final IntArray array;
 
-    private final BiFunction<Structure1d, DoubleArray, G> constructor;
+    private final BiFunction<Structure1d, IntArray, G> constructor;
 
     /**
      * Create a new 1-d grid with the given {@code structure} and element
@@ -68,10 +70,10 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      *         which is not within the bounds of the {@code array}.
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    protected BaseDoubleGrid1d(
+    protected BaseIntGrid1d(
         final Structure1d structure,
-        final DoubleArray array,
-        final BiFunction<? super Structure1d, ? super DoubleArray, ? extends G> constructor
+        final IntArray array,
+        final BiFunction<? super Structure1d, ? super IntArray, ? extends G> constructor
     ) {
         checkArraySize(structure.extent(), array.length());
 
@@ -79,7 +81,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
         this.array = array;
 
         @SuppressWarnings("unchecked")
-        final var ctr = (BiFunction<Structure1d, DoubleArray, G>)constructor;
+        final var ctr = (BiFunction<Structure1d, IntArray, G>)constructor;
         this.constructor = requireNonNull(ctr);
     }
 
@@ -94,12 +96,12 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @return the underlying element array
      */
     @Override
-    public DoubleArray array() {
+    public IntArray array() {
         return array;
     }
 
     @Override
-    public G create(final Structure1d structure, final DoubleArray array) {
+    public G create(final Structure1d structure, final IntArray array) {
         return constructor.apply(structure, array);
     }
 
@@ -111,7 +113,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    public double get(final int index) {
+    public int get(final int index) {
         return array.get(order().index(index));
     }
 
@@ -124,7 +126,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    public void set(final int index, final double value) {
+    public void set(final int index, final int value) {
         array.set(order().index(index),  value);
     }
 
@@ -151,7 +153,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      *
      * @param values the values to be filled into the cells
      */
-    public void assign(final double[] values) {
+    public void assign(final int[] values) {
         checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
@@ -161,7 +163,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      *
      * @param value the value to be filled into the cells
      */
-    public void assign(final double value) {
+    public void assign(final int value) {
         forEach(i -> set(i, value));
     }
 
@@ -173,9 +175,9 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final DoubleUnaryOperator f) {
+    public void assign(final IntUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsDouble(get(i))));
+        forEach(i -> set(i, f.applyAsInt(get(i))));
     }
 
     /**
@@ -188,9 +190,9 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    public void assign(final BaseDoubleGrid1d<?> a, final DoubleBinaryOperator f) {
+    public void assign(final BaseIntGrid1d<?> a, final IntBinaryOperator f) {
         checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
+        forEach(i -> set(i, f.applyAsInt(get(i), a.get(i))));
     }
 
     /**
@@ -198,7 +200,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    public void swap(final BaseDoubleGrid1d<?> other) {
+    public void swap(final BaseIntGrid1d<?> other) {
         checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
@@ -219,20 +221,20 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param f a function transforming the current cell value
      * @return the aggregated measure
      */
-    public double reduce(
-        final DoubleBinaryOperator reducer,
-        final DoubleUnaryOperator f
+    public long reduce(
+        final LongBinaryOperator reducer,
+        final LongUnaryOperator f
     ) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return Double.NaN;
+            return 0;
         }
 
-        double a = f.applyAsDouble(get(size() - 1));
+        long a = f.applyAsLong(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
+            a = reducer.applyAsLong(a, f.applyAsLong(get(i)));
         }
 
         return a;
@@ -246,7 +248,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final BaseDoubleGrid1d<?> other) {
+    public boolean equals(final BaseIntGrid1d<?> other) {
         final var context = NumericalContext.get();
 
         return extent().equals(other.extent()) &&
@@ -256,14 +258,14 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
     @Override
     public int hashCode() {
         final int[] hash = new int[] { 37 };
-        forEach(i -> hash[0] += Double.hashCode(get(i))*17);
+        forEach(i -> hash[0] += Integer.hashCode(get(i))*17);
         return hash[0];
     }
 
     @Override
     public boolean equals(final Object object) {
         return object == this ||
-            object instanceof BaseDoubleGrid1d<?> grid &&
+            object instanceof BaseIntGrid1d<?> grid &&
                 equals(grid);
     }
 
