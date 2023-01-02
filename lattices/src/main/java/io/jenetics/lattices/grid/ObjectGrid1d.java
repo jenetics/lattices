@@ -33,6 +33,7 @@ import java.util.stream.StreamSupport;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -136,6 +137,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     @SafeVarargs
     @SuppressWarnings("varargs")
     public final void assign(final T... values) {
+        checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
 

@@ -29,6 +29,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -151,6 +152,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param values the values to be filled into the cells
      */
     public void assign(final double[] values) {
+        checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
 

@@ -38,7 +38,7 @@ import io.jenetics.lattices.structure.Structure3d;
  *
  * @param <T> the grid element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
- *        and the <em>order</em> which determines the index mapping {@code N -> N}.
+ *        and the <em>order</em> which determines the index mapping {@code N -> N^3}.
  * @param array The underlying {@code double[]} array.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
