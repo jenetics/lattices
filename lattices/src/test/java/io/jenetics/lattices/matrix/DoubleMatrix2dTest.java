@@ -28,6 +28,7 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
@@ -311,6 +312,20 @@ public class DoubleMatrix2dTest {
 
         final var copy2 = new Structure2d(new Extent2d(3, 6));
         assertThat(copy2).isNotEqualTo(structure);
+    }
+
+    @Test
+    public void foo() {
+        final var matrix = new DoubleMatrix2d(
+            new Structure2d(new Extent2d(3, 4)),
+            new DenseDoubleArray(new double[] {
+                1, 2,  3,  4,
+                5, 6,  7,  8,
+                9, 10, 11, 12
+            })
+        );
+
+        System.out.println(matrix);
     }
 
 }
