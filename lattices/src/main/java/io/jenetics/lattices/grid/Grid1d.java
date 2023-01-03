@@ -27,7 +27,7 @@ import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.View1d;
 
 /**
- * Base interface for 1-d grids.
+ * This interface <em>structures</em> the elements into a 1-dimensional grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
