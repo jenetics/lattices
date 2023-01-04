@@ -59,13 +59,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_colStride = A.order().stride().col();
-        final int B_colStride = B.order().stride().col();
-        final int C_colStride = C.order().stride().col();
+        final int A_col_stride = A.order().stride().col();
+        final int B_col_stride = B.order().stride().col();
+        final int C_col_stride = C.order().stride().col();
 
-        final int A_rowStride = A.order().stride().row();
-        final int B_rowStride = B.order().stride().row();
-        final int C_rowStride = C.order().stride().row();
+        final int A_row_stride = A.order().stride().row();
+        final int B_row_stride = B.order().stride().row();
+        final int C_row_stride = C.order().stride().row();
 
         /*
         A is blocked to hide memory latency
@@ -110,25 +110,25 @@ final class DenseDoubleMatrix2dMult {
                     int B_k = B_j;
                     double s = 0;
 
-                    A_k -= A_colStride;
-                    B_k -= B_rowStride;
+                    A_k -= A_col_stride;
+                    B_k -= B_row_stride;
 
                     for (int k = n%4; --k >= 0;) {
-                        s = Math.fma(A_array[A_k += A_colStride], B_array[B_k += B_rowStride], s);
+                        s = Math.fma(A_array[A_k += A_col_stride], B_array[B_k += B_row_stride], s);
                     }
                     for (int k = n/4; --k >= 0;) {
-                        s += A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride];
+                        s += A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride];
                     }
 
                     C_array[C_i] = Math.fma(alpha, s,  beta*C_array[C_i]);
-                    A_i += A_rowStride;
-                    C_i += C_rowStride;
+                    A_i += A_row_stride;
+                    C_i += C_row_stride;
                 }
-                B_j += B_colStride;
-                C_j += C_colStride;
+                B_j += B_col_stride;
+                C_j += C_col_stride;
             }
         }
     }
