@@ -91,7 +91,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
-    public DoubleMatrix1d view(final Projection2d projection) {
+    public DoubleMatrix1d project(final Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
 
@@ -100,14 +100,14 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * column. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
-     * @see #view(Projection2d)
+     * @see #project(Projection2d)
      *
      * @param index the column index.
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return view(Projection2d.col(index));
+        return project(Projection2d.col(index));
     }
 
     /**
@@ -115,14 +115,14 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * given row. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
-     * @see #view(Projection2d)
+     * @see #project(Projection2d)
      *
      * @param index the row index.
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return view(Projection2d.row(index));
+        return project(Projection2d.row(index));
     }
 
     /* *************************************************************************

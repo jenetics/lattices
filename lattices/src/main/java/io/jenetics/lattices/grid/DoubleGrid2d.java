@@ -77,7 +77,7 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public DoubleGrid1d view(final Projection2d projection) {
+    public DoubleGrid1d project(final Projection2d projection) {
         return new DoubleGrid1d(projection.apply(structure()), array());
     }
 

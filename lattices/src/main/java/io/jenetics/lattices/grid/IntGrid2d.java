@@ -77,7 +77,7 @@ public final class IntGrid2d extends BaseIntGrid2d<IntGrid2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public IntGrid1d view(final Projection2d projection) {
+    public IntGrid1d project(final Projection2d projection) {
         return new IntGrid1d(projection.apply(structure()), array());
     }
 
