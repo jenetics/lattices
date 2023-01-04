@@ -215,7 +215,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * @param f a function object taking as first argument the current cell's
      * value of {@code this}, and as second argument the current cell's value of
      * {@code y}
-     * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
+     * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
     public void assign(
         final BaseDoubleGrid3d<?> y,
@@ -224,7 +224,9 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
-        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c))));
+        forEach((s, r, c) ->
+            set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c)))
+        );
     }
 
     /**

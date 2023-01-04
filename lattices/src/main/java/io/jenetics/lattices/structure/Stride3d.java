@@ -20,11 +20,11 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Defines row-, column- and slice strides.
+ * Defines slice, row and column strides.
  *
+ * @param slice the slice stride value
  * @param row the row stride value
  * @param col the column stride value
- * @param slice the slice stride value
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0

@@ -33,9 +33,7 @@ package io.jenetics.lattices.structure;
 public record Extent3d(int slices, int rows, int cols) {
 
     public Extent3d {
-        if (rows < 0 || cols < 0 || slices < 0 ||
-            (long)rows*(long)cols*(long)slices > Integer.MAX_VALUE)
-        {
+        if (slices < 0 || rows < 0 || cols < 0 || multNotSave(slices, rows, cols)) {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d, %d]."
                     .formatted(slices, rows, cols)
@@ -43,11 +41,20 @@ public record Extent3d(int slices, int rows, int cols) {
         }
     }
 
+    private static boolean multNotSave(final int x, final int y, final int z) {
+        final long r1 = (long)x*(long)y;
+        if ((int)r1 == r1) {
+            final long r2 = r1*(long)z;
+            return (int)r2 != r2;
+        } else {
+            return true;
+        }
+    }
+
     /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
+     * The number of elements of the structure.
      *
-     * @return the number of cells for {@code this} matrix dimension
+     * @return the number of cells of the structure
      */
     public int size() {
         return slices*rows*cols;

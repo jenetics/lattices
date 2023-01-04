@@ -87,7 +87,7 @@ public record Order3d(Index3d start, Stride3d stride) {
      * @return the array index
      */
     public int index(final Index3d index) {
-        return index(index.col(), index.row(), index.col());
+        return index(index.slice(), index.row(), index.col());
     }
 
 }

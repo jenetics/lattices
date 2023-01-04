@@ -40,18 +40,22 @@ public record Extent2d(int rows, int cols) {
      *         zero or {@code rows*cols > Integer.MAX_VALUE}
      */
     public Extent2d {
-        if (rows < 0 || cols < 0 || (long)rows*(long)cols > Integer.MAX_VALUE) {
+        if (rows < 0 || cols < 0 || multNotSave(rows, cols)) {
             throw new IndexOutOfBoundsException(
                 "Extent is out of bounds: [%d, %d].".formatted(rows, cols)
             );
         }
     }
 
+    private static boolean multNotSave(final int x, final int y) {
+        long r = (long)x*(long)y;
+        return (int)r != r;
+    }
+
     /**
-     * The number of matrix elements (cells) a matrix with {@code this}
-     * dimensions consists of.
+     * The number of elements of the structure.
      *
-     * @return the number of cells for {@code this} matrix dimension
+     * @return the number of cells of the structure
      */
     public int size() {
         return rows*cols;
