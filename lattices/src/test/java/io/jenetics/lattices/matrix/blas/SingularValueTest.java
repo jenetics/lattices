@@ -17,46 +17,48 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfuxtures.Colts.toColt;
 import static io.jenetics.lattices.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.lattices.testfuxtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.lattices.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.QRDecomposition;
+import cern.colt.matrix.linalg.SingularValueDecomposition;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.matrix.blas.QR;
+import io.jenetics.lattices.matrix.Matrices;
+import io.jenetics.lattices.matrix.blas.SingularValue;
 import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class QRTest {
+public class SingularValueTest {
 
     @Test(invocationCount = 5)
     public void decompose() {
         final var A = next(new Extent2d(50, 50));
+        assertThat(Matrices.isSymmetric(A)).isFalse();
 
-        final var expected = new QRDecomposition(toColt(A));
-        final var qr = QR.decompose(A);
+        final var expected = new SingularValueDecomposition(toColt(A));
+        final var singular = SingularValue.decompose(A);
 
-        assertEquals(qr.Q(), toLinealgebra(expected.getQ()));
-        assertEquals(qr.R(), toLinealgebra(expected.getR()));
-        assertEquals(qr.H(), toLinealgebra(expected.getH()));
-    }
-
-    @Test(invocationCount = 5)
-    public void solver() {
-        final var extent = new Extent2d(50, 50);
-        final var A = next(extent);
-        final var B = next(new Extent2d(extent.rows(), 100));
+        assertEquals(singular.S(), toLinealgebra(expected.getS()));
+        assertEquals(singular.U(), toLinealgebra(expected.getU()));
+        assertEquals(singular.V(), toLinealgebra(expected.getV()));
+        assertThat(singular.rank()).isEqualTo(expected.rank());
+        assertThat(singular.norm2())
+            .isCloseTo(expected.norm2(), EPSILON);
+        assertThat(singular.cond())
+            .isCloseTo(expected.cond(), EPSILON);
 
         assertEquals(
-            QR.decompose(A).solve(B),
-            toLinealgebra(new QRDecomposition(toColt(A)).solve(toColt(B)))
+            singular.values(),
+            toLinealgebra(expected.getSingularValues())
         );
     }
 

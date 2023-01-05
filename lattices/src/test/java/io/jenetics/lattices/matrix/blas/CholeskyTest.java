@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfuxtures.Colts.toColt;

@@ -17,49 +17,46 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfuxtures.Colts.toColt;
 import static io.jenetics.lattices.testfuxtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfuxtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.LUDecomposition;
+import cern.colt.matrix.linalg.QRDecomposition;
 
-import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.matrix.blas.LU;
+import io.jenetics.lattices.matrix.blas.QR;
 import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class LUTest {
+public class QRTest {
 
     @Test(invocationCount = 5)
     public void decompose() {
         final var A = next(new Extent2d(50, 50));
 
-        final var expected = new LUDecomposition(toColt(A));
-        final var lu = LU.decompose(A);
+        final var expected = new QRDecomposition(toColt(A));
+        final var qr = QR.decompose(A);
 
-        assertEquals(lu.L(), toLinealgebra(expected.getL()));
-        assertEquals(lu.U(), toLinealgebra(expected.getU()));
-        assertThat(lu.det())
-            .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
+        assertEquals(qr.Q(), toLinealgebra(expected.getQ()));
+        assertEquals(qr.R(), toLinealgebra(expected.getR()));
+        assertEquals(qr.H(), toLinealgebra(expected.getH()));
     }
 
     @Test(invocationCount = 5)
     public void solver() {
-        final var extent = new Extent2d(55, 55);
+        final var extent = new Extent2d(50, 50);
         final var A = next(extent);
-        final var B = next(extent);
+        final var B = next(new Extent2d(extent.rows(), 100));
 
         assertEquals(
-            LU.decompose(A).solve(B),
-            toLinealgebra(new LUDecomposition(toColt(A)).solve(toColt(B)))
+            QR.decompose(A).solve(B),
+            toLinealgebra(new QRDecomposition(toColt(A)).solve(toColt(B)))
         );
     }
 

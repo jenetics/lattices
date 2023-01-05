@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.blas;
+package io.jenetics.lattices.matrix.blas;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfuxtures.LinealgebraAsserts.assertEquals;
@@ -39,7 +39,6 @@ import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
-import io.jenetics.lattices.matrix.blas.Blas;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.testfuxtures.Colts;
 import io.jenetics.lattices.testfuxtures.DoubleGrid1dComparator;
