@@ -48,7 +48,7 @@ public final class Algebra {
      * @return the one-norm of {@code x}
      */
     public static double norm1(final DoubleMatrix1d x) {
-        return x.size() == 0 ? 0 : x.reduce(Double::sum, Math::abs);
+        return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
     /**
@@ -96,11 +96,7 @@ public final class Algebra {
      * @return the infinity-norm of the given vector
      */
     public static double normInf(final DoubleMatrix1d x) {
-        if (x.size() == 0) {
-            return 0;
-        } else {
-            return x.reduce(Math::max, Math::abs);
-        }
+        return x.reduce(Math::max, Math::abs).orElse(0);
     }
 
     /**

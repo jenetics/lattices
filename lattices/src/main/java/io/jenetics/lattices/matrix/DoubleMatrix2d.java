@@ -310,11 +310,8 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @return the sum of all cells
      */
     public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
+        return reduce(Double::sum, DoubleUnaryOperator.identity())
+            .orElse(0);
     }
 
     @Override

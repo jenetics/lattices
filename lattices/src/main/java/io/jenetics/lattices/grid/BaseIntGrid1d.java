@@ -23,11 +23,10 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
+import java.util.OptionalInt;
 import java.util.function.BiFunction;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntUnaryOperator;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongUnaryOperator;
 
 import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.structure.Extent1d;
@@ -210,9 +209,6 @@ public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
 
     /**
      * Applies a function to each cell and aggregates the results.
-     * Returns a value {@code v} such that {@code v == a(size())} where
-     * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
      *
      * @param reducer an aggregation function taking as first argument the
      *        current aggregation and as second argument the transformed current
@@ -220,23 +216,21 @@ public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
      * @param f a function transforming the current cell value
      * @return the aggregated measure
      */
-    public long reduce(
-        final LongBinaryOperator reducer,
-        final LongUnaryOperator f
-    ) {
+    public OptionalInt
+    reduce(final IntBinaryOperator reducer, final IntUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return 0;
+            return OptionalInt.empty();
         }
 
-        long a = f.applyAsLong(get(size() - 1));
+        var a = f.applyAsInt(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsLong(a, f.applyAsLong(get(i)));
+            a = reducer.applyAsInt(a, f.applyAsInt(get(i)));
         }
 
-        return a;
+        return OptionalInt.of(a);
     }
 
     /**

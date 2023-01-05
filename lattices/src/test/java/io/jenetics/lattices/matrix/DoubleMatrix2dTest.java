@@ -260,7 +260,7 @@ public class DoubleMatrix2dTest {
             {10, 11, 12}
         });
 
-        final var result = matrix.reduce(Double::sum, a -> 2*a);
+        final var result = matrix.reduce(Double::sum, a -> 2*a).orElseThrow();
         assertThat(result).isEqualTo(156);
     }
 

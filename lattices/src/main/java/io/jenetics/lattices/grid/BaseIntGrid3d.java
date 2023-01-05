@@ -23,11 +23,10 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
+import java.util.OptionalInt;
 import java.util.function.BiFunction;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntUnaryOperator;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongUnaryOperator;
 
 import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.structure.Structure3d;
@@ -255,11 +254,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
     }
 
     /**
-     * Applies a function to each cell and aggregates the results. Returns a
-     * value <em>v</em> such that <em>v==a(size())</em> where
-     * <em>a(i) == reduce(a(i - 1), f(get(slice, row, col)))</em> and
-     * terminators are
-     * <em>a(1) == f(get(0, 0, 0)), a(0) == Double.NaN</em>.
+     * Applies a function to each cell and aggregates the results.
      * <p><b>Example:</b></p>
      * <pre>
      * 2 x 2 matrix
@@ -276,25 +271,26 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @param f a function transforming the current cell value
      * @return the aggregated value
      */
-    public long reduce(final LongBinaryOperator reducer, final LongUnaryOperator f) {
+    public OptionalInt
+    reduce(final IntBinaryOperator reducer, final IntUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return 0;
+            return OptionalInt.empty();
         }
 
-        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
+        var a = f.applyAsInt(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
-        for (int s = slices(); --s >= 0; ) {
-            for (int r = rows(); --r >= 0; ) {
-                for (int c = cols() - d; --c >= 0; ) {
-                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
+        for (int s = slices(); --s >= 0;) {
+            for (int r = rows(); --r >= 0;) {
+                for (int c = cols() - d; --c >= 0;) {
+                    a = reducer.applyAsInt(a, f.applyAsInt(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return a;
+        return OptionalInt.of(a);
     }
 
     /**

@@ -23,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
+import java.util.OptionalDouble;
 import java.util.function.BiFunction;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -211,7 +212,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * Applies a function to each cell and aggregates the results.
      * Returns a value {@code v} such that {@code v == a(size())} where
      * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-     * {@code a(1) == f(get(0)), a(0)==Double.NaN}.
+     * {@code a(1) == f(get(0)), a(0) == OptionalDouble.empty()}.
      *
      * @param reducer an aggregation function taking as first argument the
      *        current aggregation and as second argument the transformed current
@@ -219,15 +220,13 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * @param f a function transforming the current cell value
      * @return the aggregated measure
      */
-    public double reduce(
-        final DoubleBinaryOperator reducer,
-        final DoubleUnaryOperator f
-    ) {
+    public OptionalDouble
+    reduce(final DoubleBinaryOperator reducer, final DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return Double.NaN;
+            return OptionalDouble.empty();
         }
 
         double a = f.applyAsDouble(get(size() - 1));
@@ -235,7 +234,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
             a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
         }
 
-        return a;
+        return OptionalDouble.of(a);
     }
 
     /**

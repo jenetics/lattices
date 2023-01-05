@@ -227,7 +227,7 @@ public interface Blas {
      * @param x the input vector
      */
     default double dasum(final DoubleMatrix1d x) {
-        return x.reduce(Double::sum, Math::abs);
+        return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
     /**

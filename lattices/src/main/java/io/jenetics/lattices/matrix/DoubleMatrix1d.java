@@ -114,9 +114,8 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
      * @return the sum of the vector elements
      */
     public double sum() {
-        return size() == 0
-            ? 0
-            : reduce(Double::sum, DoubleUnaryOperator.identity());
+        return reduce(Double::sum, DoubleUnaryOperator.identity())
+            .orElse(0);
     }
 
     /**
