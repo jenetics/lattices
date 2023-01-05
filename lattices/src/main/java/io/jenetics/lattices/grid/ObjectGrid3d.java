@@ -192,7 +192,9 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
         final BinaryOperator<T> f
     ) {
         checkSameExtent(extent(), a.extent());
-        forEach((s, r, c) -> set(s, r, c, f.apply(get(s, r, c), a.get(s, r, c))));
+        forEach((s, r, c) ->
+            set(s, r, c, f.apply(get(s, r, c), a.get(s, r, c)))
+        );
     }
 
     /**

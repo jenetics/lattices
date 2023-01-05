@@ -188,6 +188,14 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * <pre>{@code
      * this[i] = f(a[i])
      * }</pre>
+     * This can be used to assign a grid of strings from a grid of integers.
+     * <pre>{@code
+     * final ObjectGrid1d<Integer> ints = ObjectGrid1d.<Integer>dense().create(15);
+     * final ObjectGrid2d<String> strings = ObjectGrid2d.<String>dense().create(15);
+     *
+     * ints.forEach(i -> ints.set(i, i));
+     * strings.assign(ints, Object::toString);
+     * }</pre>
      *
      * @param a the grid used for the update
      * @param f the mapping function

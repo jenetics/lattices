@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
 public record Order1d(Index1d start, Stride1d stride) {
 
     /**
-     * The default stride.
+     * The default order.
      */
     public static final Order1d DEFAULT = new Order1d(0, 1);
 
@@ -51,11 +51,11 @@ public record Order1d(Index1d start, Stride1d stride) {
      * Return the position of the element with the given relative {@code rank}
      * within the (virtual or non-virtual) internal 1-d array.
      *
-     * @param rank the rank of the element.
-     * @return the (linearized) index of the given {@code rank}
+     * @param index the index of the element.
+     * @return the (linearized) index of the given {@code index}
      */
-    public int index(final int rank) {
-        return start.value() + rank*stride.value();
+    public int index(final int index) {
+        return start.value() + index*stride.value();
     }
 
     /**

@@ -289,9 +289,9 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
 
         double a = f.applyAsDouble(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
-        for (int s = slices(); --s >= 0; ) {
-            for (int r = rows(); --r >= 0; ) {
-                for (int c = cols() - d; --c >= 0; ) {
+        for (int s = slices(); --s >= 0;) {
+            for (int r = rows(); --r >= 0;) {
+                for (int c = cols() - d; --c >= 0;) {
                     a = reducer.applyAsDouble(a, f.applyAsDouble(get(s, r, c)));
                 }
                 d = 0;

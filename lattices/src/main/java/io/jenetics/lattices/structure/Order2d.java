@@ -39,7 +39,7 @@ public record Order2d(Index2d start, Stride2d stride) {
     }
 
     /**
-     * Create a new order for the given range.
+     * Create a new (row-major) order for the given range.
      *
      * @param range the range of the order
      */
