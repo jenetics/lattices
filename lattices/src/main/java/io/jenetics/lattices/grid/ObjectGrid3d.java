@@ -201,6 +201,18 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      * <pre>{@code
      * this[i, j, k] = f(a[i, j, k])
      * }</pre>
+     * <pre>{@code
+     * final ObjectGrid3d<Integer> ints = ObjectGrid3d
+     *     .<Integer>dense()
+     *     .create(10, 15, 40);
+     *
+     * final ObjectGrid3d<String> strings = ObjectGrid3d
+     *     .<String>dense()
+     *     .create(10, 15, 40);
+     *
+     * ints.forEach((s, r, c) -> ints.set(s, r, c, s*r*c));
+     * strings.assign(ints, Object::toString);
+     * }</pre>
      *
      * @param a the grid used for the update
      * @param f the mapping function

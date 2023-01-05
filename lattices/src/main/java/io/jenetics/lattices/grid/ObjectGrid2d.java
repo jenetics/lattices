@@ -193,6 +193,19 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      * <pre>{@code
      * this[i, j] = f(a[i, j])
      * }</pre>
+     * This can be used to assign a grid of strings from a grid of integers.
+     * <pre>{@code
+     * final ObjectGrid2d<Integer> ints = ObjectGrid2d
+     *     .<Integer>dense()
+     *     .create(10, 15);
+     *
+     * final ObjectGrid2d<String> strings = ObjectGrid2d
+     *     .<String>dense()
+     *     .create(10, 15);
+     *
+     * ints.forEach((r, c) -> ints.set(r, c, r*c));
+     * strings.assign(ints, Object::toString);
+     * }</pre>
      *
      * @param a the grid used for the update
      * @param f the mapping function

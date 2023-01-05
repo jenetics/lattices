@@ -178,4 +178,22 @@ public class ObjectGrid2dTest {
         });
     }
 
+    @Test
+    public void mapAssign() {
+        final ObjectGrid2d<Integer> ints = ObjectGrid2d
+            .<Integer>dense()
+            .create(10, 15);
+
+        final ObjectGrid2d<String> strings = ObjectGrid2d
+            .<String>dense()
+            .create(10, 15);
+
+        ints.forEach((r, c) -> ints.set(r, c, r*c));
+        strings.assign(ints, Object::toString);
+
+        strings.forEach((r, c) ->
+            assertThat(strings.get(r, c)).isEqualTo("" + (r*c))
+        );
+    }
+
 }
