@@ -72,7 +72,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
         final IntArray array,
         final BiFunction<? super Structure3d, ? super IntArray, ? extends G> constructor
     ) {
-        checkArraySize(structure.extent(), array.length());
+        checkArraySize(structure, array.length());
 
         this.structure = structure;
         this.array = array;
@@ -269,7 +269,8 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * current aggregation and as second argument the transformed current cell
      * value
      * @param f a function transforming the current cell value
-     * @return the aggregated value
+     * @return the aggregated measure or {@link OptionalInt#empty()} if
+     *         {@code size() == 0}
      */
     public OptionalInt
     reduce(final IntBinaryOperator reducer, final IntUnaryOperator f) {

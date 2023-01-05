@@ -73,7 +73,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
         final DoubleArray array,
         final BiFunction<? super Structure2d, ? super DoubleArray, ? extends G> constructor
     ) {
-        checkArraySize(structure.extent(), array.length());
+        checkArraySize(structure, array.length());
 
         this.structure = structure;
         this.array = array;
@@ -247,7 +247,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      * Applies a function to each cell and aggregates the results. Returns a
      * value <em>v</em> such that <em>v==a(size())</em> where
      * <em>a(i) == reduce(a(i - 1), f(get(row, col)))</em> and terminators are
-     * <em>a(1) == f(get(0,0)), a(0) == OptionalDouble.empty()</em>.
+     * <em>a(1) == f(get(0,0))</em>.
      * <p><b>Example:</b></p>
      * <pre>
      * 2 x 2 matrix
@@ -262,7 +262,8 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *        current aggregation and as second argument the transformed current
      *        cell value
      * @param f a function transforming the current cell value
-     * @return the aggregated value
+     * @return the aggregated measure or {@link OptionalDouble#empty()} if
+     *         {@code size() == 0}
      */
     public OptionalDouble
     reduce(final DoubleBinaryOperator reducer, final DoubleUnaryOperator f) {

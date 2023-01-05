@@ -74,7 +74,7 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
         final DoubleArray array,
         final BiFunction<? super Structure1d, ? super DoubleArray, ? extends G> constructor
     ) {
-        checkArraySize(structure.extent(), array.length());
+        checkArraySize(structure, array.length());
 
         this.structure = structure;
         this.array = array;
@@ -212,13 +212,14 @@ public abstract class BaseDoubleGrid1d<G extends BaseDoubleGrid1d<G>>
      * Applies a function to each cell and aggregates the results.
      * Returns a value {@code v} such that {@code v == a(size())} where
      * {@code a(i) == reducer( a(i - 1), f(get(i)) )} and terminators are
-     * {@code a(1) == f(get(0)), a(0) == OptionalDouble.empty()}.
+     * {@code a(1) == f(get(0))}.
      *
      * @param reducer an aggregation function taking as first argument the
      *        current aggregation and as second argument the transformed current
      *        cell value
      * @param f a function transforming the current cell value
-     * @return the aggregated measure
+     * @return the aggregated measure or {@link OptionalDouble#empty()} if
+     *         {@code size() == 0}
      */
     public OptionalDouble
     reduce(final DoubleBinaryOperator reducer, final DoubleUnaryOperator f) {

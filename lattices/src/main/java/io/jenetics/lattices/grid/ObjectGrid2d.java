@@ -63,7 +63,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public ObjectGrid2d {
-        checkArraySize(structure.extent(), array.length());
+        checkArraySize(structure, array.length());
     }
 
     @Override

@@ -22,6 +22,9 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.Structure3d;
 
 /**
  * Some helper methods for checking pre-conditions.
@@ -35,64 +38,79 @@ public final class Grids {
     }
 
     /**
-     * Check whether the extent has fewer elements than the storing array.
+     * Check whether the structure has fewer elements than the storing array.
      *
-     * @param extent the grid extent
+     * @param structure the grid structure
      * @param length the array length
      * @throws IllegalArgumentException if the array has fewer elements than
      *         required
      */
-    public static void checkArraySize(final Extent1d extent, final int length) {
-        if (extent.size() > length) {
+    public static void checkArraySize(final Structure1d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().size() - 1
+        );
+
+        if (maxIndex >= length) {
             throw new IllegalArgumentException(
-                "The number of available array elements is smaller than the number of " +
-                    "required grid cells for %s: %d > %d.".formatted(
-                        extent,
-                        extent.size(),
-                        length
-                    )
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
             );
         }
     }
 
     /**
-     * Check whether the extent has fewer elements than the storing array.
+     * Check whether the structure has fewer elements than the storing array.
      *
-     * @param extent the grid extent
+     * @param structure the grid structure
      * @param length the array length
      * @throws IllegalArgumentException if the array has fewer elements than
      *         required
      */
-    public static void checkArraySize(final Extent2d extent, final int length) {
-        if (extent.size() > length) {
+    public static void checkArraySize(final Structure2d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().rows() - 1,
+            structure.extent().cols() - 1
+        );
+
+        if (maxIndex >= length) {
             throw new IllegalArgumentException(
-                "The number of available array elements is smaller than the number of " +
-                    "required grid cells for %s: %d > %d.".formatted(
-                        extent,
-                        extent.size(),
-                        length
-                    )
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
             );
         }
     }
 
     /**
-     * Check whether the extent has fewer elements than the storing array.
+     * Check whether the structure has fewer elements than the storing array.
      *
-     * @param extent the grid extent
+     * @param structure the grid structure
      * @param length the array length
      * @throws IllegalArgumentException if the array has fewer elements than
      *         required
      */
-    public static void checkArraySize(final Extent3d extent, final int length) {
-        if (extent.size() > length) {
+    public static void checkArraySize(final Structure3d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().slices() - 1,
+            structure.extent().rows() - 1,
+            structure.extent().cols() - 1
+        );
+
+        if (maxIndex >= length) {
             throw new IllegalArgumentException(
-                "The number of available array elements is smaller than the number of " +
-                    "required grid cells for %s: %d > %d.".formatted(
-                        extent,
-                        extent.size(),
-                        length
-                    )
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
             );
         }
     }

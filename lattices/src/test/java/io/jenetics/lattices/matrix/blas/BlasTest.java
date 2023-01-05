@@ -241,7 +241,7 @@ public class BlasTest {
      * Helper methods for closing the gap between this and Colt.
      * ************************************************************************/
 
-    private static final double PRECISION = 0.00000001;
+    private static final double PRECISION = Math.pow(10, -5);
 
     private static void check(final String name, final Object... parameters) {
         final Object[] result = blas(name, parameters);

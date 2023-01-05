@@ -30,7 +30,6 @@ import cern.colt.matrix.linalg.LUDecomposition;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.matrix.blas.LU;
 import io.jenetics.lattices.structure.Extent2d;
 
 /**

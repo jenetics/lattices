@@ -66,7 +66,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * @throws NullPointerException if one of the arguments is {@code null}
      */
     public ObjectGrid1d {
-        checkArraySize(structure.extent(), array.length());
+        checkArraySize(structure, array.length());
     }
 
     @Override
