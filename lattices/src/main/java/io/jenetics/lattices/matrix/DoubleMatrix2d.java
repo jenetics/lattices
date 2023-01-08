@@ -321,4 +321,34 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
             equals(matrix);
     }
 
+    /**
+     * Return a 2-d matrix view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 matrix.
+     * <pre>{@code
+     * final var matrix = DoubleMatrix2d.of(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned matrix
+     * @return a matrix view of the given input data
+     * @throws IllegalArgumentException if the desired extent of the matrix
+     *         requires fewer elements than given
+     */
+    public static DoubleMatrix2d of(final Extent2d extent, final double... values) {
+        return new DoubleMatrix2d(
+            new Structure2d(extent),
+            new DenseDoubleArray(values)
+        );
+    }
+
 }
