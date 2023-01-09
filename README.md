@@ -59,13 +59,11 @@ A.assign(new double[][] {
 
 // "Direct" creation from element array. Faster and
 // doesn't create additional objects.
-final var B = new DoubleMatrix2d(
-    new Structure2d(new Extent2d(3, 3)),
-    new DenseDoubleMatrix(new double[] {
-        10, 11, 12
-        13, 14, 15,
-        16, 17, 18
-    })
+final var B = DoubleMatrix2d.of(
+    new Extent2d(3, 3),
+    10, 11, 12
+    13, 14, 15,
+    16, 17, 18
 );
     
 // Create a new matrix with the same extent than B.
