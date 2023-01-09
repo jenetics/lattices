@@ -19,8 +19,10 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
+import static io.jenetics.lattices.grid.Grids.checkSameExtent;
+import static io.jenetics.lattices.grid.Grids.checkSquare;
+
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -138,7 +140,7 @@ public interface Blas {
         final double c,
         final double s
     ) {
-        Grids.checkSameExtent(x, y);
+        checkSameExtent(x.extent(), y.extent());
 
         final var tmp = x.copy();
 
@@ -225,7 +227,7 @@ public interface Blas {
      * @param x the input vector
      */
     default double dasum(final DoubleMatrix1d x) {
-        return x.reduce(Double::sum, Math::abs);
+        return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
     /**
@@ -340,7 +342,7 @@ public interface Blas {
         final double beta,
         final DoubleMatrix1d y
     ) {
-        Grids.checkSquare(A);
+        checkSquare(A.extent());
 
         if (isUpperTriangular) {
             A = A.transpose();
@@ -387,7 +389,7 @@ public interface Blas {
         DoubleMatrix2d A,
         final DoubleMatrix1d x
     ) {
-        Grids.checkSquare(A);
+        checkSquare(A.extent());
 
         if (transposeA) {
             A = A.transpose();

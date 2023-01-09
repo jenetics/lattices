@@ -25,9 +25,11 @@ import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.Extent1d;
 import io.jenetics.lattices.grid.Loop1d;
-import io.jenetics.lattices.grid.Range1d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.View1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -47,11 +49,10 @@ public class DoubleMatrix1dTest {
     @Test(dataProvider = "matricesRanges")
     public void copy(final DoubleMatrix1d matrix, final Range1d range) {
         if (range != null) {
-            final var copy = matrix.copy(range);
+            final var copy = matrix.view(View1d.of(range)).copy();
 
-            final var loop = new Loop1d.Forward(range);
-            loop.forEach(i -> {
-                final var j = i - range.start();
+            Loop1d.of(range).forEach(i -> {
+                final var j = i - range.start().value();
 
                 assertThat(copy.get(j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
@@ -63,17 +64,17 @@ public class DoubleMatrix1dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
-            { next(new Extent1d(10)), new Range1d(0, 0) },
-            { next(new Extent1d(10)), new Range1d(5, 5) },
-            { next(new Extent1d(10)), new Range1d(2, 3) },
-            { next(new Extent1d(50)), new Range1d(23, 3) },
-            { next(new Extent1d(77)), new Range1d(23, 3) },
+            { next(new Extent1d(10)), new Range1d(new Index1d(0), new Extent1d(0)) },
+            { next(new Extent1d(10)), new Range1d(new Index1d(5), new Extent1d(5)) },
+            { next(new Extent1d(10)), new Range1d(new Index1d(2), new Extent1d(3)) },
+            { next(new Extent1d(50)), new Range1d(new Index1d(23), new Extent1d(3)) },
+            { next(new Extent1d(77)), new Range1d(new Index1d(23), new Extent1d(3)) },
 
             // Test also matrix views.
             {
                 next(new Extent1d(77))
-                    .view(new Range1d(3, 7)),
-                new Range1d(1, 3),
+                    .view(View1d.of(new Range1d(new Index1d(3), new Extent1d(7)))),
+                new Range1d(new Index1d(1), new Extent1d(3)),
             }
         };
     }
@@ -81,11 +82,10 @@ public class DoubleMatrix1dTest {
     @Test(dataProvider = "matricesRanges")
     public void view(final DoubleMatrix1d matrix, final Range1d range) {
         if (range != null) {
-            final var copy = matrix.view(range);
+            final var copy = matrix.view(View1d.of(range));
 
-            final var loop = new Loop1d.Forward(range);
-            loop.forEach(i -> {
-                final var j = i - range.start();
+            Loop1d.of(range).forEach(i -> {
+                final var j = i - range.start().value();
 
                 assertThat(copy.get(j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))

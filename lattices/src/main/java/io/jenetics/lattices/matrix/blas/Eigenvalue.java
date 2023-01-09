@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
+import static io.jenetics.lattices.grid.Grids.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSymmetric;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -59,7 +59,7 @@ public final class Eigenvalue {
     }
 
     private void init(final DoubleMatrix2d A) {
-        Grids.checkSquare(A);
+        checkSquare(A.extent());
 
         n = A.cols();
         d = new double[n];
@@ -122,7 +122,8 @@ public final class Eigenvalue {
                 // Generate Householder vector.
                 for (int k = 0; k < i; ++k) {
                     d[k] /= scale;
-                    h += d[k]*d[k];
+                    //h += d[k]*d[k];
+                    h = Math.fma(d[k], d[k], h);
                 }
                 double f = d[i - 1];
                 double g = Math.sqrt(h);
@@ -130,7 +131,8 @@ public final class Eigenvalue {
                     g = -g;
                 }
                 e[i] = scale*g;
-                h = h - f * g;
+                //h = h - f * g;
+                h = -Math.fma(f, g, -h);
                 d[i - 1] = f - g;
                 for (int j = 0; j < i; ++j) {
                     e[j] = 0.0;
@@ -140,17 +142,21 @@ public final class Eigenvalue {
                 for (int j = 0; j < i; ++j) {
                     f = d[j];
                     V.set(j, i, f);
-                    g = e[j] + V.get(j, j)*f;
+                    //g = e[j] + V.get(j, j)*f;
+                    g = Math.fma(V.get(j, j), f, e[j]);
                     for (int k = j + 1; k <= i - 1; ++k) {
-                        g += V.get(k, j)*d[k];
-                        e[k] += V.get(k, j)*f;
+                        //g += V.get(k, j)*d[k];
+                        g = Math.fma(V.get(k, j), d[k], g);
+                        //e[k] += V.get(k, j)*f;
+                        e[k] = Math.fma(V.get(k, j), f, e[k]);
                     }
                     e[j] = g;
                 }
                 f = 0.0;
                 for (int j = 0; j < i; ++j) {
                     e[j] /= h;
-                    f += e[j] * d[j];
+                    //f += e[j] * d[j];
+                    f = Math.fma(e[j], d[j], f);
                 }
                 double hh = f / (h + h);
                 for (int j = 0; j < i; ++j) {
@@ -181,10 +187,12 @@ public final class Eigenvalue {
                 for (int j = 0; j <= i; ++j) {
                     double g = 0.0;
                     for (int k = 0; k <= i; ++k) {
-                        g += V.get(k, i + 1)*V.get(k, j);
+                        //g += V.get(k, i + 1)*V.get(k, j);
+                        g = Math.fma(V.get(k, i + 1), V.get(k, j), g);
                     }
                     for (int k = 0; k <= i; k++) {
-                        V.set(k, j, V.get(k, j) - g*d[k]);
+                        //V.set(k, j, V.get(k, j) - g*d[k]);
+                        V.set(k, j, -Math.fma(g, d[k], -V.get(k, j)));
                     }
                 }
             }
@@ -329,20 +337,20 @@ public final class Eigenvalue {
             // Scale column.
             double scale = 0.0;
             for (int i = m; i <= high; ++i) {
-                scale = scale + Math.abs(H[i][m - 1]);
+                scale += Math.abs(H[i][m - 1]);
             }
             if (context.isNotZero(scale)) {
                 // Compute Householder transformation.
                 double h = 0.0;
                 for (int i = high; i >= m; i--) {
                     ort[i] = H[i][m - 1]/scale;
-                    h += ort[i]*ort[i];
+                    h = Math.fma(ort[i], ort[i], h);
                 }
                 double g = Math.sqrt(h);
                 if (ort[m] > 0) {
                     g = -g;
                 }
-                h = h - ort[m]*g;
+                h = -Math.fma(ort[m], g, -h);
                 ort[m] = ort[m] - g;
 
                 // Apply Householder similarity transformation
@@ -351,26 +359,26 @@ public final class Eigenvalue {
                 for (int j = m; j < n; ++j) {
                     double f = 0.0;
                     for (int i = high; i >= m; i--) {
-                        f += ort[i]*H[i][j];
+                        f = Math.fma(ort[i], H[i][j], f);
                     }
                     f = f/h;
                     for (int i = m; i <= high; ++i) {
-                        H[i][j] -= f*ort[i];
+                        H[i][j] = -Math.fma(f, ort[i], -H[i][j]);
                     }
                 }
 
                 for (int i = 0; i <= high; ++i) {
                     double f = 0.0;
                     for (int j = high; j >= m; j--) {
-                        f += ort[j]*H[i][j];
+                        f = Math.fma(ort[j], H[i][j], f);
                     }
                     f = f/h;
                     for (int j = m; j <= high; ++j) {
-                        H[i][j] -= f*ort[j];
+                        H[i][j] = -Math.fma(f, ort[j], -H[i][j]);
                     }
                 }
                 ort[m] = scale*ort[m];
-                H[m][m - 1] = scale * g;
+                H[m][m - 1] = scale*g;
             }
         }
 
@@ -385,12 +393,12 @@ public final class Eigenvalue {
                 for (int j = m; j <= high; ++j) {
                     double g = 0.0;
                     for (int i = m; i <= high; ++i) {
-                        g += ort[i]*V.get(i, j);
+                        g = Math.fma(ort[i], V.get(i, j), g);
                     }
                     // Double division avoids possible underflow
                     g = (g / ort[m]) / H[m][m - 1];
                     for (int i = m; i <= high; i++) {
-                        V.set(i, j, V.get(i, j) + g*ort[i]);
+                        V.set(i, j, Math.fma(g, ort[i], V.get(i, j)));
                     }
                 }
             }
@@ -419,7 +427,7 @@ public final class Eigenvalue {
 
         double norm = 0.0;
         for (int i = 0; i < nn; ++i) {
-            if (i < low | i > high) {
+            if (i < low || i > high) {
                 d[i] = H[i][i];
                 e[i] = 0.0;
             }
@@ -486,7 +494,7 @@ public final class Eigenvalue {
                     s = Math.abs(x) + Math.abs(z);
                     p = x / s;
                     q = z / s;
-                    r = Math.sqrt(p * p + q * q);
+                    r = Math.hypot(p, q);
                     p = p / r;
                     q = q / r;
 
@@ -494,8 +502,8 @@ public final class Eigenvalue {
 
                     for (int j = n - 1; j < nn; ++j) {
                         z = H[n - 1][j];
-                        H[n - 1][j] = q * z + p * H[n][j];
-                        H[n][j] = q * H[n][j] - p * z;
+                        H[n - 1][j] = q*z + p*H[n][j];
+                        H[n][j] = q*H[n][j] - p*z;
                     }
 
                     // Column modification
@@ -697,7 +705,7 @@ public final class Eigenvalue {
                     w = H[i][i] - p;
                     r = 0.0;
                     for (int j = l; j <= n; j++) {
-                        r = r + H[i][j] * H[j][n];
+                        r = Math.fma(H[i][j], H[j][n], r);
                     }
                     if (e[i] < 0.0) {
                         z = w;
@@ -759,8 +767,8 @@ public final class Eigenvalue {
                     ra = 0.0;
                     sa = 0.0;
                     for (int j = l; j <= n; j++) {
-                        ra = ra + H[i][j] * H[j][n - 1];
-                        sa = sa + H[i][j] * H[j][n];
+                        ra = Math.fma(H[i][j], H[j][n - 1], ra);
+                        sa = Math.fma(H[i][j], H[j][n], sa);
                     }
                     w = H[i][i] - p;
 
@@ -829,7 +837,7 @@ public final class Eigenvalue {
             for (int i = low; i <= high; i++) {
                 z = 0.0;
                 for (int k = low; k <= Math.min(j, high); k++) {
-                    z = z + V.get(i, k)*H[k][j];
+                    z = Math.fma(V.get(i, k), H[k][j], z);
                 }
                 V.set(i, j, z);
             }

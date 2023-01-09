@@ -21,8 +21,10 @@ package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.IntIntConsumer;
-import io.jenetics.lattices.function.IntIntPredicate;
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Range2d;
 
 /**
  * Looping strategies for 2-d structures.
@@ -38,7 +40,7 @@ public interface Loop2d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final IntIntConsumer action);
+    void forEach(final Int2Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -50,7 +52,7 @@ public interface Loop2d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final IntIntPredicate predicate);
+    boolean anyMatch(final Int2Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -65,7 +67,7 @@ public interface Loop2d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final IntIntPredicate predicate);
+    boolean allMatch(final Int2Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -78,153 +80,27 @@ public interface Loop2d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final IntIntPredicate predicate);
+    boolean nonMatch(final Int2Predicate predicate);
 
     /**
-     * Row-major loop implementation. The rows and columns are iterated forward.
+     * Return a <em>default</em> loop implementation with the given {@code range}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
      */
-    record RowMajor(Range2d range) implements Loop2d {
-
-        /**
-         * Row-major implementation of the loop strategy
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public RowMajor(final Extent2d extent) {
-            this(new Range2d(extent));
-        }
-
-        @Override
-        public void forEach(final IntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.col(); c < range.width(); ++c) {
-                    action.accept(r, c);
-                }
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.col(); c < range.width(); ++c) {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.col(); c < range.width(); ++c) {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int r = range.row(); r < range.height(); ++r) {
-                for (int c = range.col(); c < range.width(); ++c) {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+    static Loop2d of(final Range2d range) {
+        requireNonNull(range);
+        return new Loop2dRowFirst(range);
     }
 
     /**
-     * Column-major loop implementation. he rows and columns are iterated
-     * forward.
+     * Return a <em>default</em> loop implementation with the given {@code extent}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
      */
-    record ColMajor(Range2d range) implements Loop2d {
-
-        /**
-         * Column-major implementation of the loop strategy
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public ColMajor(final Extent2d extent) {
-            this(new Range2d(extent));
-        }
-
-        @Override
-        public void forEach(IntIntConsumer action) {
-            requireNonNull(action);
-
-            for (int c = range.col(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    action.accept(r, c);
-                }
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.col(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (predicate.test(r, c)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.col(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (!predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntIntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int c = range.col(); c < range.width(); ++c) {
-                for (int r = range.row(); r < range.height(); ++r) {
-                    if (predicate.test(r, c)) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+    static Loop2d of(final Extent2d extent) {
+        return of(new Range2d(extent));
     }
 
 }

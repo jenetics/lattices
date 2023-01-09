@@ -28,10 +28,14 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.Loop2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.Stride2d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Index2d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Stride2d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
 import io.jenetics.lattices.testfuxtures.Colts;
 
 /**
@@ -43,12 +47,11 @@ public class DoubleMatrix2dTest {
     @Test(dataProvider = "matricesRanges")
     public void copy(final DoubleMatrix2d matrix, final Range2d range) {
         if (range != null) {
-            final var copy = matrix.copy(range);
+            final var copy = matrix.view(View2d.of(range)).copy();
 
-            final var loop = new Loop2d.RowMajor(range);
-            loop.forEach((r, c) -> {
-                final var i = r - range.row();
-                final var j = c - range.col();
+            Loop2d.of(range).forEach((r, c) -> {
+                final var i = r - range.start().row();
+                final var j = c - range.start().col();
 
                 assertThat(copy.get(i, j))
                     .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix, copy))
@@ -60,46 +63,46 @@ public class DoubleMatrix2dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
-            { next(new Extent2d(10, 10)), new Range2d(0, 0, 10, 10) },
-            { next(new Extent2d(10, 10)), new Range2d(0, 0, 5, 5) },
-            { next(new Extent2d(10, 10)), new Range2d(5, 5, 5, 5) },
-            { next(new Extent2d(10, 10)), new Range2d(2, 3, 7, 4) },
-            { next(new Extent2d(50, 10)), new Range2d(23, 3, 16, 7) },
-            { next(new Extent2d(77, 59)), new Range2d(23, 3, 16, 7) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(10, 10)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(5, 5)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(5, 5), new Extent2d(5, 5)) },
+            { next(new Extent2d(10, 10)), new Range2d(new Index2d(2, 3), new Extent2d(7, 4)) },
+            { next(new Extent2d(50, 10)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
+            { next(new Extent2d(77, 59)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
 
             // Test also matrix views.
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 7, 20, 30))
+                    .view(View2d.of(new Range2d(new Index2d(3, 7), new Extent2d(20, 30))))
                     .transpose(),
-                new Range2d(12, 3, 5, 7),
+                new Range2d(new Index2d(12, 3), new Extent2d(5, 7)),
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(0, 0, 20, 30)),
-                new Range2d(1, 3, 11, 7)
+                    .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
+                new Range2d(new Index2d(1, 3), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(0, 0, 20, 30)),
-                new Range2d(0, 0, 11, 7)
+                    .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
+                new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30)),
-                new Range2d(0, 0, 11, 7)
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))),
+                new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30))
-                    .view(new Range2d(3, 2, 10, 20)),
-                new Range2d(0, 0, 5, 7)
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(10, 20)))),
+                new Range2d(new Index2d(0, 0), new Extent2d(5, 7))
             },
             {
                 next(new Extent2d(77, 59))
-                    .view(new Range2d(3, 2, 20, 30))
-                    .view(new Stride2d(2, 3)),
-                new Range2d(1, 2, 5, 4)
+                    .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
+                    .view(View2d.of(new Stride2d(2, 3))),
+                new Range2d(new Index2d(1, 2), new Extent2d(5, 4))
             },
         };
     }
@@ -107,15 +110,15 @@ public class DoubleMatrix2dTest {
     @Test(dataProvider = "matricesRanges")
     public void view(final DoubleMatrix2d matrix, final Range2d range) {
         if (range != null) {
-            final var view = matrix.view(range);
+            final var view = matrix.view(View2d.of(range));
 
-            final var loop = new Loop2d.RowMajor(range);
-            loop.forEach((r, c) -> {
-                final var i = r - range.row();
-                final var j = c - range.col();
+            Loop2d.of(range).forEach((r, c) -> {
+                final var i = r - range.start().row();
+                final var j = c - range.start().col();
 
                 assertThat(view.get(i, j))
-                    .withFailMessage("Expected \n%s\nbut got\n%s".formatted(matrix.copy(range), view))
+                    .withFailMessage("Expected \n%s\nbut got\n%s"
+                        .formatted(matrix.view(View2d.of(range)).copy(), view))
                     .isEqualTo(matrix.get(r, c));
             });
         }
@@ -137,7 +140,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void columnViewFromMatrixCopy(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.copy(range);
+        var A = matrix.view(View2d.of(range)).copy();
 
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
@@ -151,7 +154,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void columnViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.view(range);
+        var A = matrix.view(View2d.of(range));
 
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
@@ -179,7 +182,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void rowViewFromMatrixCopy(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.copy(range);
+        var A = matrix.view(View2d.of(range)).copy();
 
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
@@ -193,7 +196,7 @@ public class DoubleMatrix2dTest {
 
     @Test(dataProvider = "matricesRanges")
     public void rowViewFromMatrixView(final DoubleMatrix2d matrix, final Range2d range) {
-        var A = matrix.view(range);
+        var A = matrix.view(View2d.of(range));
 
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
@@ -211,8 +214,7 @@ public class DoubleMatrix2dTest {
         assertThat(A.cols()).isEqualTo(matrix.rows());
         assertThat(A.rows()).isEqualTo(matrix.cols());
 
-        final var loop = new Loop2d.RowMajor(matrix.extent());
-        loop.forEach((r, c) ->
+        Loop2d.of(range).forEach((r, c) ->
             assertThat(matrix.get(r, c)).isEqualTo(A.get(c, r))
         );
     }
@@ -258,7 +260,7 @@ public class DoubleMatrix2dTest {
             {10, 11, 12}
         });
 
-        final var result = matrix.reduce(Double::sum, a -> 2*a);
+        final var result = matrix.reduce(Double::sum, a -> 2*a).orElseThrow();
         assertThat(result).isEqualTo(156);
     }
 
@@ -294,9 +296,45 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        new Loop2d.RowMajor(a.extent()).forEach((r, c) ->
+        Loop2d.of(new Range2d(a.extent())).forEach((r, c) ->
             assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
         );
+    }
+
+    @Test
+    public void isView() {
+        final var extent = new Extent2d(4, 6);
+        final var matrix = DoubleMatrix2d.DENSE.create(extent);
+
+        final var structure = matrix.structure();
+        final var copy = new Structure2d(extent);
+        assertThat(copy).isEqualTo(structure);
+
+        final var copy2 = new Structure2d(new Extent2d(3, 6));
+        assertThat(copy2).isNotEqualTo(structure);
+    }
+
+    @Test
+    public void foo() {
+        final var matrix = new DoubleMatrix2d(
+            new Structure2d(new Extent2d(3, 4)),
+            new DenseDoubleArray(new double[] {
+                1, 2,  3,  4,
+                5, 6,  7,  8,
+                9, 10, 11, 12
+            })
+        );
+
+        System.out.println(matrix);
+
+        final var foo = DoubleMatrix2d.of(
+            new Extent2d(3, 4),
+            1, 2,  3,  4,
+            5, 6,  7,  8,
+            9, 10, 11, 12
+        );
+
+        System.out.println(foo);
     }
 
 }

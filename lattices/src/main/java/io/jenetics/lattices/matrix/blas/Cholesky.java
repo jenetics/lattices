@@ -25,6 +25,7 @@ import static io.jenetics.lattices.grid.Grids.checkRectangular;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * Store the result of a <em>Cholesky</em>-decomposition.
@@ -33,7 +34,7 @@ import io.jenetics.lattices.matrix.DoubleMatrix2d;
  * @since 3.0
  * @version 3.0
  */
-public class Cholesky {
+public final class Cholesky {
 
     private final DoubleMatrix2d L;
     private final boolean symmetricPositiveDefinite;
@@ -57,7 +58,7 @@ public class Cholesky {
      * @return {@code L}
      */
     public DoubleMatrix2d L() {
-        return L;
+        return L.copy();
     }
 
     /**
@@ -74,7 +75,7 @@ public class Cholesky {
     /**
      * Solves {@code A*X = B} and returns {@code X}.
      *
-     * @param B a atrix with as many rows as {@code A} and any number of columns
+     * @param B a matrix with as many rows as {@code A} and any number of columns
      * @return {@code X} so that {@code L*L'*X = B}
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code !isSymmetricPositiveDefinite()}
@@ -84,18 +85,18 @@ public class Cholesky {
 
         for (int c = 0; c < B.cols(); ++c) {
             // Solve L*Y = B;
-            for (int i = 0; i < L.rows(); i++) {
+            for (int i = 0; i < L.rows(); ++i) {
                 double sum = B.get(i, c);
-                for (int k = i - 1; k >= 0; k--) {
+                for (int k = i - 1; k >= 0; --k) {
                     sum = -Math.fma(L.get(i, k), X.get(k, c), -sum);
                 }
                 X.set(i, c, sum/L.get(i, i));
             }
 
             // Solve L'*X = Y;
-            for (int i = L.rows() - 1; i >= 0; i--) {
+            for (int i = L.rows() - 1; i >= 0; --i) {
                 double sum = X.get(i, c);
-                for (int k = i + 1; k < L.rows(); k++) {
+                for (int k = i + 1; k < L.rows(); ++k) {
                     sum = -Math.fma(L.get(k, i), X.get(k, c), -sum);
                 }
                 X.set(i, c, sum/L.get(i, i));
@@ -115,29 +116,30 @@ public class Cholesky {
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
     public static Cholesky decompose(final DoubleMatrix2d A) {
-        checkRectangular(A);
+        checkRectangular(A.extent());
 
         final var context = NumericalContext.get();
 
         final var n = A.rows();
-        final var L = A.like(n, n);
+        final var L = A.like(new Extent2d(n, n));
         var isSymmetricPositiveDefinite = A.cols() == n;
 
-        final var Lrows = new DoubleMatrix1d[n];
+        final var L_rows = new DoubleMatrix1d[n];
         for (int j = 0; j < A.rows(); j++) {
-            Lrows[j] = L.rowAt(j);
+            L_rows[j] = L.rowAt(j);
         }
 
         // Main loop.
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < n; ++j) {
             double d = 0.0;
-            for (int k = 0; k < j; k++) {
-                double s = Lrows[k].dotProduct(Lrows[j], 0, k);
+            for (int k = 0; k < j; ++k) {
+                double s = L_rows[k].dotProduct(L_rows[j], 0, k);
 
                 s = (A.get(j, k) - s)/L.get(k, k);
-                Lrows[j].set(k, s);
+                L_rows[j].set(k, s);
                 d = Math.fma(s, s, d);
-                isSymmetricPositiveDefinite = isSymmetricPositiveDefinite &&
+                isSymmetricPositiveDefinite =
+                    isSymmetricPositiveDefinite &&
                     context.equals(A.get(k, j), A.get(j, k));
             }
             d = A.get(j, j) - d;

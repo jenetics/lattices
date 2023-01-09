@@ -19,50 +19,79 @@
  */
 package io.jenetics.lattices.grid;
 
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Structural1d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.View1d;
 
 /**
- * 1-d structural mixin interface.
+ * This interface <em>structures</em> the elements into a 1-dimensional grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Grid1d extends Loop1d {
+public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
+    extends Structural1d, Loopable1d, Grid<A, G>
+{
 
     /**
-     * Return the structure for 2-d structures.
+     * Create a new grid (view) with the given structure and the underlying
+     * data array.
      *
-     * @return the structure for 2-d structures
+     * @param structure the structure of the created grid
+     * @param array the grid elements
+     * @return a new grid (view)
      */
-    Structure1d structure();
+    G create(final Structure1d structure, final A array);
 
     /**
-     * Return the dimension of {@code this} 2-d structures.
+     * Assigns the elements of the {@code other} grid to this grid.
      *
-     * @return the dimension of {@code this} 2-d structures
+     * @param other the source of the grid elements
      */
-    default Extent1d extent() {
-        return structure().extent();
+    void assign(final G other);
+
+    /**
+     * Creates a new grid with the given {@code extent} and the properties of
+     * the underlying array.
+     *
+     * @param extent the extent of the new grid
+     * @return a new grid
+     */
+    default G like(final Extent1d extent) {
+        return create(
+            new Structure1d(extent),
+            array().like(extent.size())
+        );
     }
 
     /**
-     * Return the defined order of {@code this} 2-d structures.
+     * Create a new grid with the same extent and properties as this grid.
      *
-     * @return the defined order of {@code this} 2-d structures
+     * @return a new grid with the same extent and properties as this grid
      */
-    default Order1d order() {
-        return structure().order();
+    default G like() {
+        return like(extent());
+    }
+
+    @Override
+    default G copy() {
+        final var copy = like();
+        copy.assign(self());
+        return copy;
     }
 
     /**
-     * Return the number of cells of this {@code this} 2-d structures.
+     * Create a new grid by applying the given {@code view} transformation.
      *
-     * @return the number of cells of this {@code this} 2-d structures
+     * @param view the grid view transformation to apply
+     * @return a new grid view
      */
-    default int size() {
-        return extent().size();
+    default G view(final View1d view) {
+        return create(view.apply(structure()), array());
     }
 
     /**
@@ -71,28 +100,9 @@ public interface Grid1d extends Loop1d {
      *
      * @return the looping strategy of this structural
      */
+    @Override
     default Loop1d loop() {
-        return new Loop1d.Forward(extent());
-    }
-
-    @Override
-    default void forEach(final IntConsumer action) {
-        loop().forEach(action);
-    }
-
-    @Override
-    default boolean anyMatch(final IntPredicate predicate) {
-        return loop().anyMatch(predicate);
-    }
-
-    @Override
-    default boolean allMatch(final IntPredicate predicate) {
-        return loop().allMatch(predicate);
-    }
-
-    @Override
-    default boolean nonMatch(final IntPredicate predicate) {
-        return loop().nonMatch(predicate);
+        return Loop1d.of(new Range1d(extent()));
     }
 
 }

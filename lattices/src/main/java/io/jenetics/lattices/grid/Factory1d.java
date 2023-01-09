@@ -19,8 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Structure1d;
+
 /**
- * Factory interface for creating 1-d matrices.
+ * Factory interface for creating 1-d structures.
  *
  * @param <T> the type created by the factory
  *
@@ -34,7 +37,7 @@ public interface Factory1d<T> {
     /**
      * Create a new matrix with the given {@code structure}.
      *
-     * @param structure the structure of the new matrix
+     * @param structure the structure of the new object
      * @return a new matrix with the given {@code structure}
      */
     T create(final Structure1d structure);
@@ -43,18 +46,18 @@ public interface Factory1d<T> {
      * Create a new matrix with the given {@code dimension} and default
      * <em>order</em>.
      *
-     * @param dim the dimension of the created array
-     * @return a new matrix with the given {@code dimension}
+     * @param extent the extent of the created object
+     * @return a new object with the given {@code extent}
      */
-    default T create(final Extent1d dim) {
-        return create(new Structure1d(dim));
+    default T create(final Extent1d extent) {
+        return create(new Structure1d(extent));
     }
 
     /**
      * Create a new matrix with the given {@code size}.
      *
-     * @param size the number of matrix elements
-     * @return a new matrix with the given size
+     * @param size the number of element
+     * @return a new structure with the given size
      */
     default T create(final int size) {
         return create(new Extent1d(size));

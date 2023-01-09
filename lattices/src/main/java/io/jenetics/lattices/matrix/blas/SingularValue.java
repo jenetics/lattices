@@ -22,8 +22,8 @@ package io.jenetics.lattices.matrix.blas;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static io.jenetics.lattices.grid.Grids.checkRectangular;
 
-import io.jenetics.lattices.grid.Grids;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -49,7 +49,7 @@ public final class SingularValue {
     }
 
     private void init(final DoubleMatrix2d Arg) {
-        Grids.checkRectangular(Arg);
+        checkRectangular(Arg.extent());
 
         // Derived from LINPACK code.
         // Initialize.
@@ -72,37 +72,37 @@ public final class SingularValue {
 
         int nct = min(m - 1, n);
         int nrt = max(0, min(n - 2, m));
-        for (int k = 0; k < max(nct, nrt); k++) {
+        for (int k = 0; k < max(nct, nrt); ++k) {
             if (k < nct) {
 
                 // Compute the transformation for the k-th column and
                 // place the k-th diagonal in s[k].
                 // Compute 2-norm of k-th column without under/overflow.
                 s[k] = 0;
-                for (int i = k; i < m; i++) {
+                for (int i = k; i < m; ++i) {
                     s[k] = Math.hypot(s[k], A[i][k]);
                 }
                 if (s[k] != 0.0) {
                     if (A[k][k] < 0.0) {
                         s[k] = -s[k];
                     }
-                    for (int i = k; i < m; i++) {
+                    for (int i = k; i < m; ++i) {
                         A[i][k] /= s[k];
                     }
                     A[k][k] += 1.0;
                 }
                 s[k] = -s[k];
             }
-            for (int j = k + 1; j < n; j++) {
+            for (int j = k + 1; j < n; ++j) {
                 if ((k < nct) & (s[k] != 0.0)) {
                     // Apply the transformation.
                     double t = 0;
-                    for (int i = k; i < m; i++) {
-                        t += A[i][k] * A[i][j];
+                    for (int i = k; i < m; ++i) {
+                        t = Math.fma(A[i][k], A[i][j], t);
                     }
-                    t = -t / A[k][k];
-                    for (int i = k; i < m; i++) {
-                        A[i][j] += t * A[i][k];
+                    t = -t/A[k][k];
+                    for (int i = k; i < m; ++i) {
+                        A[i][j] = Math.fma(t, A[i][k], A[i][j]);
                     }
                 }
 
@@ -113,7 +113,7 @@ public final class SingularValue {
             if (wantu && (k < nct)) {
                 // Place the transformation in U for subsequent back
                 // multiplication.
-                for (int i = k; i < m; i++) {
+                for (int i = k; i < m; ++i) {
                     U[i][k] = A[i][k];
                 }
             }
@@ -123,14 +123,14 @@ public final class SingularValue {
                 // k-th super-diagonal in e[k].
                 // Compute 2-norm without under/overflow.
                 e[k] = 0;
-                for (int i = k + 1; i < n; i++) {
+                for (int i = k + 1; i < n; ++i) {
                     e[k] = Math.hypot(e[k], e[i]);
                 }
                 if (e[k] != 0.0) {
                     if (e[k + 1] < 0.0) {
                         e[k] = -e[k];
                     }
-                    for (int i = k + 1; i < n; i++) {
+                    for (int i = k + 1; i < n; ++i) {
                         e[i] /= e[k];
                     }
                     e[k + 1] += 1.0;
@@ -140,25 +140,25 @@ public final class SingularValue {
 
                     // Apply the transformation.
 
-                    for (int i = k + 1; i < m; i++) {
+                    for (int i = k + 1; i < m; ++i) {
                         work[i] = 0.0;
                     }
-                    for (int j = k + 1; j < n; j++) {
-                        for (int i = k + 1; i < m; i++) {
-                            work[i] += e[j] * A[i][j];
+                    for (int j = k + 1; j < n; ++j) {
+                        for (int i = k + 1; i < m; ++i) {
+                            work[i] = Math.fma(e[j], A[i][j], work[i]);
                         }
                     }
-                    for (int j = k + 1; j < n; j++) {
+                    for (int j = k + 1; j < n; ++j) {
                         double t = -e[j] / e[k + 1];
-                        for (int i = k + 1; i < m; i++) {
-                            A[i][j] += t * work[i];
+                        for (int i = k + 1; i < m; ++i) {
+                            A[i][j] = Math.fma(t, work[i], A[i][j]);
                         }
                     }
                 }
                 if (wantv) {
                     // Place the transformation in V for subsequent
                     // back multiplication.
-                    for (int i = k + 1; i < n; i++) {
+                    for (int i = k + 1; i < n; ++i) {
                         V[i][k] = e[i];
                     }
                 }
@@ -182,33 +182,33 @@ public final class SingularValue {
         // If required, generate U.
 
         if (wantu) {
-            for (int j = nct; j < nu; j++) {
-                for (int i = 0; i < m; i++) {
+            for (int j = nct; j < nu; ++j) {
+                for (int i = 0; i < m; ++i) {
                     U[i][j] = 0.0;
                 }
                 U[j][j] = 1.0;
             }
-            for (int k = nct - 1; k >= 0; k--) {
+            for (int k = nct - 1; k >= 0; --k) {
                 if (s[k] != 0.0) {
-                    for (int j = k + 1; j < nu; j++) {
+                    for (int j = k + 1; j < nu; ++j) {
                         double t = 0;
-                        for (int i = k; i < m; i++) {
-                            t += U[i][k] * U[i][j];
+                        for (int i = k; i < m; ++i) {
+                            t = Math.fma(U[i][k], U[i][j], t);
                         }
                         t = -t / U[k][k];
-                        for (int i = k; i < m; i++) {
-                            U[i][j] += t * U[i][k];
+                        for (int i = k; i < m; ++i) {
+                            U[i][j] = Math.fma(t, U[i][k], U[i][j]);
                         }
                     }
-                    for (int i = k; i < m; i++) {
+                    for (int i = k; i < m; ++i) {
                         U[i][k] = -U[i][k];
                     }
                     U[k][k] = 1.0 + U[k][k];
-                    for (int i = 0; i < k - 1; i++) {
+                    for (int i = 0; i < k - 1; ++i) {
                         U[i][k] = 0.0;
                     }
                 } else {
-                    for (int i = 0; i < m; i++) {
+                    for (int i = 0; i < m; ++i) {
                         U[i][k] = 0.0;
                     }
                     U[k][k] = 1.0;
@@ -218,20 +218,20 @@ public final class SingularValue {
 
         // If required, generate V.
         if (wantv) {
-            for (int k = n - 1; k >= 0; k--) {
+            for (int k = n - 1; k >= 0; --k) {
                 if ((k < nrt) & (e[k] != 0.0)) {
-                    for (int j = k + 1; j < nu; j++) {
+                    for (int j = k + 1; j < nu; ++j) {
                         double t = 0;
-                        for (int i = k + 1; i < n; i++) {
-                            t += V[i][k] * V[i][j];
+                        for (int i = k + 1; i < n; ++i) {
+                            t = Math.fma(V[i][k], V[i][j], t);
                         }
                         t = -t / V[k + 1][k];
                         for (int i = k + 1; i < n; i++) {
-                            V[i][j] += t * V[i][k];
+                            V[i][j] = Math.fma(t, V[i][k], V[i][j]);
                         }
                     }
                 }
-                for (int i = 0; i < n; i++) {
+                for (int i = 0; i < n; ++i) {
                     V[i][k] = 0.0;
                 }
                 V[k][k] = 1.0;
@@ -257,7 +257,7 @@ public final class SingularValue {
             //              s(k), ..., s(p) are not negligible (qr step).
             // case = 4     if e(p-1) is negligible (convergence).
 
-            for (k = p - 2; k >= -1; k--) {
+            for (k = p - 2; k >= -1; --k) {
                 if (k == -1) {
                     break;
                 }
@@ -298,7 +298,7 @@ public final class SingularValue {
                 case 1 -> {
                     double f = e[p - 2];
                     e[p - 2] = 0.0;
-                    for (int j = p - 2; j >= k; j--) {
+                    for (int j = p - 2; j >= k; --j) {
                         double t = Math.hypot(s[j], f);
                         double cs = s[j] / t;
                         double sn = f / t;
@@ -308,7 +308,7 @@ public final class SingularValue {
                             e[j - 1] = cs * e[j - 1];
                         }
                         if (wantv) {
-                            for (int i = 0; i < n; i++) {
+                            for (int i = 0; i < n; ++i) {
                                 t = cs * V[i][j] + sn * V[i][p - 1];
                                 V[i][p - 1] = -sn * V[i][j] + cs * V[i][p - 1];
                                 V[i][j] = t;
@@ -321,7 +321,7 @@ public final class SingularValue {
                 case 2 -> {
                     double f = e[k - 1];
                     e[k - 1] = 0.0;
-                    for (int j = k; j < p; j++) {
+                    for (int j = k; j < p; ++j) {
                         double t = Math.hypot(s[j], f);
                         double cs = s[j] / t;
                         double sn = f / t;
@@ -329,7 +329,7 @@ public final class SingularValue {
                         f = -sn * e[j];
                         e[j] = cs * e[j];
                         if (wantu) {
-                            for (int i = 0; i < m; i++) {
+                            for (int i = 0; i < m; ++i) {
                                 t = cs * U[i][j] + sn * U[i][k - 1];
                                 U[i][k - 1] = -sn * U[i][j] + cs * U[i][k - 1];
                                 U[i][j] = t;
@@ -351,7 +351,7 @@ public final class SingularValue {
                     double c = (sp * epm1) * (sp * epm1);
                     double shift = 0.0;
                     if ((b != 0.0) | (c != 0.0)) {
-                        shift = Math.sqrt(b * b + c);
+                        shift = Math.sqrt(Math.fma(b, b, c));
                         if (b < 0.0) {
                             shift = -shift;
                         }
@@ -361,7 +361,7 @@ public final class SingularValue {
                     double g = sk * ek;
 
                     // Chase zeros.
-                    for (int j = k; j < p - 1; j++) {
+                    for (int j = k; j < p - 1; ++j) {
                         double t = Math.hypot(f, g);
                         double cs = f / t;
                         double sn = g / t;
@@ -373,7 +373,7 @@ public final class SingularValue {
                         g = sn * s[j + 1];
                         s[j + 1] = cs * s[j + 1];
                         if (wantv) {
-                            for (int i = 0; i < n; i++) {
+                            for (int i = 0; i < n; ++i) {
                                 t = cs * V[i][j] + sn * V[i][j + 1];
                                 V[i][j + 1] = -sn * V[i][j] + cs * V[i][j + 1];
                                 V[i][j] = t;
@@ -388,7 +388,7 @@ public final class SingularValue {
                         g = sn * e[j + 1];
                         e[j + 1] = cs * e[j + 1];
                         if (wantu && (j < m - 1)) {
-                            for (int i = 0; i < m; i++) {
+                            for (int i = 0; i < m; ++i) {
                                 t = cs * U[i][j] + sn * U[i][j + 1];
                                 U[i][j + 1] = -sn * U[i][j] + cs * U[i][j + 1];
                                 U[i][j] = t;
@@ -405,7 +405,7 @@ public final class SingularValue {
                     if (s[k] <= 0.0) {
                         s[k] = (s[k] < 0.0 ? -s[k] : 0.0);
                         if (wantv) {
-                            for (int i = 0; i <= pp; i++) {
+                            for (int i = 0; i <= pp; ++i) {
                                 V[i][k] = -V[i][k];
                             }
                         }
@@ -420,14 +420,14 @@ public final class SingularValue {
                         s[k] = s[k + 1];
                         s[k + 1] = t;
                         if (wantv && (k < n - 1)) {
-                            for (int i = 0; i < n; i++) {
+                            for (int i = 0; i < n; ++i) {
                                 t = V[i][k + 1];
                                 V[i][k + 1] = V[i][k];
                                 V[i][k] = t;
                             }
                         }
                         if (wantu && (k < m - 1)) {
-                            for (int i = 0; i < m; i++) {
+                            for (int i = 0; i < m; ++i) {
                                 t = U[i][k + 1];
                                 U[i][k + 1] = U[i][k];
                                 U[i][k] = t;

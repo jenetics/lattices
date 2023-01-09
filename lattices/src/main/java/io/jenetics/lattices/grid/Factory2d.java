@@ -19,8 +19,12 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Order2d;
+import io.jenetics.lattices.structure.Structure2d;
+
 /**
- * Factory interface for creating 2-d matrices.
+ * Factory interface for creating 2-d structures.
  *
  * @param <T> the type created by the factory
  *
@@ -47,7 +51,7 @@ public interface Factory2d<T> {
      * @return a new structure with the given {@code extent}
      */
     default T create(final Extent2d extent) {
-        return create(new Structure2d(extent, new StrideOrder2d(extent)));
+        return create(new Structure2d(extent, new Order2d(extent)));
     }
 
     /**

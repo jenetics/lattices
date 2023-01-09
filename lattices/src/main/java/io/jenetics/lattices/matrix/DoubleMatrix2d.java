@@ -20,22 +20,21 @@
 package io.jenetics.lattices.matrix;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
+import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.denseMult;
+import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
+import io.jenetics.lattices.grid.BaseDoubleGrid2d;
 import io.jenetics.lattices.grid.Factory2d;
-import io.jenetics.lattices.grid.Loop2d;
-import io.jenetics.lattices.grid.Range2d;
-import io.jenetics.lattices.grid.StrideOrder2d;
-import io.jenetics.lattices.grid.Structure1d;
-import io.jenetics.lattices.grid.Structure2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.View2d;
 
 /**
  * Generic class for 2-d matrices holding {@code double} elements. Instances
@@ -50,18 +49,15 @@ import io.jenetics.lattices.grid.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public class DoubleMatrix2d
-    extends DoubleGrid2d
-    implements Matrix2d<DoubleMatrix2d>
-{
+public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Factory2d<DoubleMatrix2d> DENSE = struct ->
+    public static final Factory2d<DoubleMatrix2d> DENSE = structure ->
         new DoubleMatrix2d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**
@@ -72,60 +68,7 @@ public class DoubleMatrix2d
      * @param array the element array
      */
     public DoubleMatrix2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    /**
-     * Create a new matrix <em>view</em> from the given {@code grid}.
-     *
-     * @param grid the data grid
-     */
-    public DoubleMatrix2d(final DoubleGrid2d grid) {
-        this(grid.structure(), grid.array());
-    }
-
-    @Override
-    public Factory2d<DoubleMatrix2d> factory() {
-        return struct -> new DoubleMatrix2d(
-            struct,
-            array.like(struct.extent().size())
-        );
-    }
-
-    @Override
-    public DoubleMatrix2d view(final Structure2d structure) {
-        return new DoubleMatrix2d(structure, array);
-    }
-
-    @Override
-    public DoubleMatrix2d copy(final Range2d range) {
-        // Fast copy, if applicable.
-        if (range.row() == 0 &&
-            range.col() == 0 &&
-            range.height() == rows() &&
-            range.width() == cols() &&
-            structure.order().equals(new StrideOrder2d(new Extent2d(range))))
-        {
-            return new DoubleMatrix2d(structure, array.copy());
-        } else {
-            final var struct = structure.copy(range);
-            final var elems = array.like(range.size());
-
-            final var loop = new Loop2d.RowMajor(struct.extent());
-            loop.forEach((r, c) ->
-                elems.set(
-                    struct.order().index(r, c),
-                    get(r + range.row(), c + range.col())
-                )
-            );
-
-            return new DoubleMatrix2d(struct, elems);
-        }
-    }
-
-    @Override
-    public DoubleMatrix2d transpose() {
-        return new DoubleMatrix2d(structure.transpose(), array);
+        super(structure, array, DoubleMatrix2d::new);
     }
 
     /* *************************************************************************
@@ -133,18 +76,38 @@ public class DoubleMatrix2d
      * ************************************************************************/
 
     /**
+     * Return a <em>transposed</em> view of this matrix.
+     *
+     * @return a <em>transposed</em> view of this matrix
+     */
+    public DoubleMatrix2d transpose() {
+        return view(View2d.TRANSPOSE);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d matrix. The returned 1-d matrix is
+     * a view onto this matrix {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d matrix
+     */
+    public DoubleMatrix1d project(final Projection2d projection) {
+        return new DoubleMatrix1d(projection.apply(structure()), array());
+    }
+
+    /**
      * Constructs and returns a <em>view</em> representing the rows of the given
      * column. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
+     * @see #project(Projection2d)
+     *
      * @param index the column index.
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d colAt(final int index) {
-        return new DoubleMatrix1d(structure.colAt(index), array);
+        return project(Projection2d.col(index));
     }
 
     /**
@@ -152,14 +115,14 @@ public class DoubleMatrix2d
      * given row. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
+     * @see #project(Projection2d)
+     *
      * @param index the row index.
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
-     * @throws UnsupportedOperationException if the {@link #order()} function
-     *         is not an instance of {@link StrideOrder2d}
      */
     public DoubleMatrix1d rowAt(final int index) {
-        return new DoubleMatrix1d(structure.rowAt(index), array);
+        return project(Projection2d.row(index));
     }
 
     /* *************************************************************************
@@ -168,13 +131,13 @@ public class DoubleMatrix2d
 
     /**
      * Linear algebraic matrix-vector multiplication
-     * <pre>
+     * <pre>{@code
      *     z = alpha * A * y + beta*z
      *     z[i] = alpha*Sum(A[i, j] * y[j]) + beta*z[i],
      *           i = 0..A.rows() - 1, j = 0..y.size() - 1
      *     where
      *     A == this
-     * </pre>
+     * }</pre>
      *
      * @implNote
      * Matrix shape conformance is checked <em>after</em> potential
@@ -196,13 +159,11 @@ public class DoubleMatrix2d
         final boolean transposeA
     ) {
         if (transposeA) {
-            return view(structure().transpose())
-                .mult(y, z, alpha, beta, false);
+            return transpose().mult(y, z, alpha, beta, false);
         }
-
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array.like(struct.extent().size());
+            final var elems = array().like(struct.extent().size());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
@@ -212,12 +173,12 @@ public class DoubleMatrix2d
             );
         }
 
-        for (int i = rows(); --i >= 0; ) {
+        for (int r = 0; r < rows(); ++r) {
             double s = 0;
-            for (int j = cols(); --j >= 0;) {
-                s = Math.fma(get(i, j), y.get(j), s);
+            for (int c = 0; c < cols(); ++c) {
+                s = Math.fma(get(r, c), y.get(c), s);
             }
-            z.set(i, Math.fma(alpha, s, beta*z.get(i)));
+            z.set(r, Math.fma(alpha, s, beta*z.get(r)));
         }
 
         return z;
@@ -274,18 +235,13 @@ public class DoubleMatrix2d
         requireNonNull(B);
 
         if (transposeA) {
-            return view(structure().transpose())
-                .mult(B, C, alpha, beta, false, transposeB);
+            return transpose().mult(B, C, alpha, beta, false, transposeB);
         }
         if (transposeB) {
-            return mult(
-                B.view(B.structure().transpose()), C,
-                alpha, beta, false, false
-            );
+            return mult(B.transpose(), C, alpha, beta, false, false);
         }
-
         if (C == null) {
-            return mult(B, like(rows(), B.cols()), alpha, beta, false, false);
+            return mult(B, like(new Extent2d(rows(), B.cols())), alpha, beta, false, false);
         }
 
         final int m = rows();
@@ -294,7 +250,7 @@ public class DoubleMatrix2d
 
         if (B.rows() != n) {
             throw new IllegalArgumentException(
-                "2-d matrix inner dimensions must be equal:" +
+                "Matrix inner dimensions must be equal:" +
                     extent() + ", " + B.extent()
             );
         }
@@ -311,13 +267,18 @@ public class DoubleMatrix2d
             );
         }
 
-        for (int j = p; --j >= 0;) {
-            for (int i = m; --i >= 0;) {
-                double s = 0;
-                for (int k = n; --k >= 0;) {
-                    s = Math.fma(get(i, k), B.get(k, j), s);
+        // If dense matrix multiplication doesn't apply, do classic variant.
+        if (isDense(this, B, C)) {
+            denseMult(this, B, C, alpha, beta);
+        } else {
+            for (int j = p; --j >= 0;) {
+                for (int i = m; --i >= 0;) {
+                    double s = 0;
+                    for (int k = n; --k >= 0;) {
+                        s = Math.fma(get(i, k), B.get(k, j), s);
+                    }
+                    C.set(i, j, Math.fma(alpha, s, beta*C.get(i, j)));
                 }
-                C.set(i, j, Math.fma(alpha, s, beta*C.get(i, j)));
             }
         }
 
@@ -349,18 +310,45 @@ public class DoubleMatrix2d
      * @return the sum of all cells
      */
     public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
+        return reduce(Double::sum, DoubleUnaryOperator.identity())
+            .orElse(0);
     }
 
     @Override
     public boolean equals(final Object object) {
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
-            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
+            equals(matrix);
+    }
+
+    /**
+     * Return a 2-d matrix view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 matrix.
+     * <pre>{@code
+     * final var matrix = DoubleMatrix2d.of(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned matrix values
+     * @return a matrix view of the given input data
+     * @throws IllegalArgumentException if the desired extent of the matrix
+     *         requires fewer elements than given
+     */
+    public static DoubleMatrix2d of(final Extent2d extent, final double... values) {
+        return new DoubleMatrix2d(
+            new Structure2d(extent),
+            new DenseDoubleArray(values)
+        );
     }
 
 }

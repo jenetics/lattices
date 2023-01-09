@@ -49,6 +49,7 @@ for (var value : data) {
 _Matrices_ are extending _grids_ and share the same design principles. They are also highly configurable and are _just_ multidimensional _views_ onto the underlying one-dimensional arrays. Additionally, they support the usual linear algebra functionality.
 
 ```java
+// Creating matrix via factory.
 final var A = DoubleMatrix2d.DENSE.create(3, 3);
 A.assign(new double[][] {
     {1, 2, 3},
@@ -56,12 +57,14 @@ A.assign(new double[][] {
     {7, 8, 9}
 });
 
-final var B = DoubleMatrix2d.DENSE.create(3, 3);
-B.assign(new double[][] {
-    {10, 11, 12},
-    {13, 14, 15},
-    {16, 17, 18}
-});
+// "Direct" creation from element array. Faster and
+// doesn't create additional objects.
+final var B = DoubleMatrix2d.of(
+    new Extent2d(3, 3),
+    10, 11, 12
+    13, 14, 15,
+    16, 17, 18
+);
     
 // Create a new matrix with the same extent than B.
 var C = B.like();

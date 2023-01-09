@@ -24,6 +24,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Range1d;
+
 /**
  * Looping strategies for 1-d structures.
  *
@@ -81,127 +84,24 @@ public interface Loop1d {
     boolean nonMatch(final IntPredicate predicate);
 
     /**
-     * Implements a forward loop iteration.
+     * Return a <em>default</em> loop implementation with the given {@code range}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
      */
-    record Forward(Range1d range) implements Loop1d {
-
-        /**
-         * Implements a forward loop iteration.
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public Forward(final Extent1d extent) {
-            this(new Range1d(extent));
-        }
-
-        @Override
-        public void forEach(final IntConsumer action) {
-            requireNonNull(action);
-
-            for (int i = range.start(); i < range.size(); ++i) {
-                action.accept(i);
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.start(); i < range.size(); ++i) {
-                if (predicate.test(i)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.start(); i < range.size(); ++i) {
-                if (!predicate.test(i)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.start(); i < range.size(); ++i) {
-                if (predicate.test(i)) {
-                    return false;
-                }
-            }
-            return true;
-        }
+    static Loop1d of(final Range1d range) {
+        requireNonNull(range);
+        return new Loop1dForward(range);
     }
 
     /**
-     * Implements a backward loop iteration.
+     * Return a <em>default</em> loop implementation with the given {@code extent}.
      *
-     * @param range the range which defines the boundaries of the loop
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
      */
-    record Backward(Range1d range) implements Loop1d {
-
-        /**
-         * Implements a backward loop iteration.
-         *
-         * @param extent the extent which defines the boundaries of the loop
-         */
-        public Backward(final Extent1d extent) {
-            this(new Range1d(extent));
-        }
-
-        @Override
-        public void forEach(final IntConsumer action) {
-            requireNonNull(action);
-
-            for (int i = range.size(); --i >= range.start();) {
-                action.accept(i);
-            }
-        }
-
-        @Override
-        public boolean anyMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.size(); --i >= range.start();) {
-                if (predicate.test(i)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public boolean allMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.size(); --i >= range.start();) {
-                if (!predicate.test(i)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean nonMatch(final IntPredicate predicate) {
-            requireNonNull(predicate);
-
-            for (int i = range.size(); --i >= range.start();) {
-                if (predicate.test(i)) {
-                    return false;
-                }
-            }
-            return true;
-        }
+    static Loop1d of(final Extent1d extent) {
+        return of(new Range1d(extent));
     }
 
 }

@@ -21,10 +21,10 @@ package io.jenetics.lattices.testfuxtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.lattices.grid.Extent1d;
-import io.jenetics.lattices.grid.Extent2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -35,7 +35,7 @@ public final class MatrixRandom {
 
     public static DoubleMatrix2d next(final Extent2d extent, final RandomGenerator random) {
         final var result = DoubleMatrix2d.DENSE.create(extent);
-        result.assign(a -> random.nextInt(10_000)/100.0);
+        result.assign(a -> random.nextInt(10_000)/10.0);
         return result;
     }
 
@@ -49,7 +49,7 @@ public final class MatrixRandom {
 
     public static DoubleMatrix1d next(final Extent1d extent, final RandomGenerator random) {
         final var result = DoubleMatrix1d.DENSE.create(extent);
-        result.assign(a -> random.nextInt(10_000)/100.0);
+        result.assign(a -> random.nextInt(10_000)/10.0);
         return result;
     }
 

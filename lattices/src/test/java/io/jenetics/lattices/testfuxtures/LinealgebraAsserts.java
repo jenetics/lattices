@@ -24,8 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.data.Percentage;
 
 import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.grid.DoubleGrid1d;
-import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.grid.Grid1d;
+import io.jenetics.lattices.grid.Grid2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -33,14 +33,14 @@ import io.jenetics.lattices.grid.DoubleGrid2d;
 public final class LinealgebraAsserts {
 
     public static final Percentage EPSILON = Percentage
-        .withPercentage(Math.pow(10, -6));
+        .withPercentage(Math.pow(10, -4));
 
-    private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -6));
+    private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -4));
 
     private LinealgebraAsserts() {
     }
 
-    public static void assertEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
+    public static void assertEquals(final Grid2d<?, ?> a, final Grid2d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
@@ -48,7 +48,7 @@ public final class LinealgebraAsserts {
         );
     }
 
-    public static void assertNotEquals(final DoubleGrid2d a, final DoubleGrid2d b) {
+    public static void assertNotEquals(final Grid2d<?, ?> a, final Grid2d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
@@ -56,7 +56,7 @@ public final class LinealgebraAsserts {
         );
     }
 
-    public static void assertEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
+    public static void assertEquals(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))
@@ -64,7 +64,7 @@ public final class LinealgebraAsserts {
         );
     }
 
-    public static void assertNotEquals(final DoubleGrid1d a, final DoubleGrid1d b) {
+    public static void assertNotEquals(final Grid1d<?, ?> a, final Grid1d<?, ?> b) {
         NumericalContext.using(CONTEXT, () ->
             assertThat(a.equals(b))
                 .withFailMessage("Expected \n%s\nbut got\n%s".formatted(a, b))

@@ -166,11 +166,11 @@ fun setupJavadoc(project: Project) {
 		doclet.charSet = "UTF-8"
 		doclet.linkSource(true)
 		doclet.linksOffline(
-			"https://docs.oracle.com/javase/8/docs/api",
+			"https://docs.oracle.com/javase/17/docs/api",
 			"${project.rootDir}/buildSrc/resources/javadoc/java.se"
 		)
-		doclet.windowTitle = "Colt ${project.version}"
-		doclet.docTitle = "<h1>Colt ${project.version}</h1>"
+		doclet.windowTitle = "Lattices ${project.version}"
+		doclet.docTitle = "<h1>Lattices ${project.version}</h1>"
 		doclet.bottom = "&copy; ${Env.COPYRIGHT_YEAR} Franz Wilhelmst&ouml;tter  &nbsp;<i>(${Env.BUILD_DATE})</i>"
 		doclet.stylesheetFile = project.file("${project.rootDir}/buildSrc/resources/javadoc/stylesheet.css")
 

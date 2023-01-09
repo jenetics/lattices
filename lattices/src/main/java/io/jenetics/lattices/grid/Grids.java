@@ -19,6 +19,13 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.Structure3d;
+
 /**
  * Some helper methods for checking pre-conditions.
  *
@@ -31,17 +38,79 @@ public final class Grids {
     }
 
     /**
-     * Checks whether the two given grids have the same extent.
+     * Check whether the structure has fewer elements than the storing array.
      *
-     * @param a the first grid to check
-     * @param b the second grid to check
-     * @throws IllegalArgumentException if the given {@code other} extent doesn't
-     *         match
+     * @param structure the grid structure
+     * @param length the array length
+     * @throws IllegalArgumentException if the array has fewer elements than
+     *         required
      */
-    public static void checkSameExtent(final Grid1d a, final Grid1d b) {
-        if (!a.extent().equals(b.extent())) {
+    public static void checkArraySize(final Structure1d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().size() - 1
+        );
+
+        if (maxIndex >= length) {
             throw new IllegalArgumentException(
-                "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
+            );
+        }
+    }
+
+    /**
+     * Check whether the structure has fewer elements than the storing array.
+     *
+     * @param structure the grid structure
+     * @param length the array length
+     * @throws IllegalArgumentException if the array has fewer elements than
+     *         required
+     */
+    public static void checkArraySize(final Structure2d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().rows() - 1,
+            structure.extent().cols() - 1
+        );
+
+        if (maxIndex >= length) {
+            throw new IllegalArgumentException(
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
+            );
+        }
+    }
+
+    /**
+     * Check whether the structure has fewer elements than the storing array.
+     *
+     * @param structure the grid structure
+     * @param length the array length
+     * @throws IllegalArgumentException if the array has fewer elements than
+     *         required
+     */
+    public static void checkArraySize(final Structure3d structure, final int length) {
+        if (structure.extent().size() == 0) {
+            return;
+        }
+
+        final var maxIndex = structure.order().index(
+            structure.extent().slices() - 1,
+            structure.extent().rows() - 1,
+            structure.extent().cols() - 1
+        );
+
+        if (maxIndex >= length) {
+            throw new IllegalArgumentException(
+                "The array is smaller than the required maximal index: %d <= %d."
+                    .formatted(length, maxIndex)
             );
         }
     }
@@ -54,49 +123,81 @@ public final class Grids {
      * @throws IllegalArgumentException if the given {@code other} extent doesn't
      *         match
      */
-    public static void checkSameExtent(final Grid2d a, final Grid2d b) {
-        if (!a.extent().equals(b.extent())) {
+    public static void checkSameExtent(final Extent1d a, final Extent1d b) {
+        if (!a.equals(b)) {
             throw new IllegalArgumentException(
-                "Incompatible extent: %s != %s.".formatted(a.extent(), b.extent())
+                "Incompatible extent: %s != %s.".formatted(a, b)
             );
         }
     }
 
     /**
-     * A matrix {@code A} is <em>square</em> if it has the same number of rows
-     * and columns.
+     * Checks whether the two given grids have the same extent.
      *
-     * @param A the matrix to check
-     * @return {@code true} if the {@code A} is square, {@code false} otherwise
+     * @param a the first grid to check
+     * @param b the second grid to check
+     * @throws IllegalArgumentException if the given {@code other} extent doesn't
+     *         match
      */
-    public static boolean isSquare(final Grid2d A) {
-        return A.rows() == A.cols();
+    public static void checkSameExtent(final Extent2d a, final Extent2d b) {
+        if (!a.equals(b)) {
+            throw new IllegalArgumentException(
+                "Incompatible extent: %s != %s.".formatted(a, b)
+            );
+        }
+    }
+
+    /**
+     * Checks whether the two given grids have the same extent.
+     *
+     * @param a the first grid to check
+     * @param b the second grid to check
+     * @throws IllegalArgumentException if the given {@code other} extent doesn't
+     *         match
+     */
+    public static void checkSameExtent(final Extent3d a, final Extent3d b) {
+        if (!a.equals(b)) {
+            throw new IllegalArgumentException(
+                "Incompatible extent: %s != %s.".formatted(a, b)
+            );
+        }
+    }
+
+    /**
+     * Checks if a given extent is <em>square</em>; if it has the same number of
+     * rows and columns.
+     *
+     * @param a the extent to check
+     * @return {@code true} if the {@code a} is square, {@code false} otherwise
+     */
+    public static boolean isSquare(final Extent2d a) {
+        return a.rows() == a.cols();
     }
 
     /**
      * Checks whether the given matrix {@code A} is <em>square</em>.
      *
-     * @param A the matrix to check
+     * @param a the matrix to check
      * @throws IllegalArgumentException if {@code A.rows() != A.cols()}
      */
-    public static void checkSquare(final Grid2d A) {
-        if (!isSquare(A)) {
+    public static void checkSquare(final Extent2d a) {
+        if (!isSquare(a)) {
             throw new IllegalArgumentException(
-                "Matrix must be square: " + A.extent()
+                "Grid extent must be square: " + a
             );
         }
     }
 
     /**
-     * Checks whether the given matrix {@code A} is <em>rectangular</em>.
+     * Checks whether the given extent {@code a} is <em>rectangular</em>.
      *
-     * @param A the matrix to check
-     * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
+     * @param a the extent to check
+     * @throws IllegalArgumentException if {@code a.rows() < a.cols()}
      */
-    public static void checkRectangular(final Grid2d A) {
-        if (A.rows() < A.cols()) {
+    public static void checkRectangular(final Extent2d a) {
+        if (a.rows() < a.cols()) {
             throw new IllegalArgumentException(
-                "Matrix must be rectangular: " + A.extent()
+                "Grid extent must be rectangular: " + a
             );
         }
     }

@@ -19,19 +19,16 @@
  */
 package io.jenetics.lattices.matrix;
 
-import static io.jenetics.lattices.NumericalContext.ZERO_EPSILON;
-
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.DoubleGrid1d;
+import io.jenetics.lattices.grid.BaseDoubleGrid1d;
 import io.jenetics.lattices.grid.Factory1d;
-import io.jenetics.lattices.grid.Range1d;
-import io.jenetics.lattices.grid.StrideOrder1d;
-import io.jenetics.lattices.grid.Structure1d;
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Generic class for 1-d matrices (aka <em>vectors</em>) holding {@code double}
@@ -46,18 +43,15 @@ import io.jenetics.lattices.grid.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public class DoubleMatrix1d
-    extends DoubleGrid1d
-    implements Matrix1d<DoubleMatrix1d>
-{
+public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
 
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory1d<DoubleMatrix1d> DENSE = struct ->
+    public static final Factory1d<DoubleMatrix1d> DENSE = structure ->
         new DoubleMatrix1d(
-            struct,
-            DenseDoubleArray.ofSize(struct.extent().size())
+            structure,
+            DenseDoubleArray.ofSize(structure.extent().size())
         );
 
     /**
@@ -68,48 +62,7 @@ public class DoubleMatrix1d
      * @param array the element array
      */
     public DoubleMatrix1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array);
-    }
-
-    /**
-     * Create a new matrix <em>view</em> from the given {@code grid}.
-     *
-     * @param grid the data grid
-     */
-    public DoubleMatrix1d(final DoubleGrid1d grid) {
-        this(grid.structure(), grid.array());
-    }
-
-    @Override
-    public Factory1d<DoubleMatrix1d> factory() {
-        return struct -> new DoubleMatrix1d(
-            struct,
-            array.like(struct.extent().size())
-        );
-    }
-
-    @Override
-    public DoubleMatrix1d view(final Structure1d structure) {
-        return new DoubleMatrix1d(structure, array);
-    }
-
-    @Override
-    public DoubleMatrix1d copy(final Range1d range) {
-        final var struct = structure.copy(range);
-
-        // Check if we can to a fast copy.
-        if (structure.order() instanceof StrideOrder1d so) {
-            return new DoubleMatrix1d(
-                struct,
-                array.copy(range.start() + so.start(), range.size())
-            );
-        } else {
-            final var elems = array.like(range.size());
-            for (int i = 0; i < range.size(); ++i) {
-                elems.set(i, get(i + range.start()));
-            }
-            return new DoubleMatrix1d(struct, elems);
-        }
+        super(structure, array, DoubleMatrix1d::new);
     }
 
     /* *************************************************************************
@@ -118,14 +71,13 @@ public class DoubleMatrix1d
 
     /**
      * Returns the dot product of two vectors x and y, which is
-     * {@code Sum(x[i]*y[i])}, where {@code x == this}.
-     * Operates on cells at indexes {@code from ..
-     * Min(size(), y.size(), from + length) - 1}.
+     * {@code Sum(x[i]*y[i])}, where {@code x == this}. Operates on cells at
+     * indexes {@code from .. Min(size(), y.size(), from + length) - 1}.
      *
      * @param y the second vector
      * @param from the first index to be considered
      * @param length the number of cells to be considered
-     * @return the sum of products, start if {@code from<0 || length<0}
+     * @return the sum of products, start if {@code from < 0 || length < 0}
      */
     public double dotProduct(
         final DoubleMatrix1d y,
@@ -136,18 +88,10 @@ public class DoubleMatrix1d
             return 0;
         }
 
-        int tail = from + length;
-        if (size() < tail) {
-            tail = size();
-        }
-        if (y.size() < tail) {
-            tail = y.size();
-        }
-        int l = tail - from;
+        final int to = Math.min(Math.min(size(), y.size()), from + length);
 
         double sum = 0;
-        int i = tail - 1;
-        for (int k = l; --k >= 0; i--) {
+        for (int i = from; i < to; ++i) {
             sum = Math.fma(get(i), y.get(i), sum);
         }
         return sum;
@@ -168,47 +112,39 @@ public class DoubleMatrix1d
     /**
      * Returns the sum of all cells {@code Sum(x[i])}.
      *
-     * @return the sum
+     * @return the sum of the vector elements
      */
     public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
+        return reduce(Double::sum, DoubleUnaryOperator.identity())
+            .orElse(0);
     }
 
     /**
-     * Returns the number of cells having non-zero values, ignores tolerance.
+     * Return the number of cells having non-zero values.
+     *
+     * @return the number of cells having non-zero values
      */
     public int cardinality() {
+        final var context = NumericalContext.get();
+
         int cardinality = 0;
-        for (int i = size(); --i >= 0; ) {
-            if (Double.compare(get(i), 0) != 0) {
-                cardinality++;
+        for (int i = 0; i < size(); ++i) {
+            if (context.isZero(get(i))) {
+                ++cardinality;
             }
         }
         return cardinality;
     }
 
     /**
-     * Returns the number of cells having non-zero values, but at most
-     * {@code maxCardinality}.
+     * Return the indices of non-zero values.
+     *
+     * @return the indices of non-zero values
      */
-    public int cardinality(final int maxCardinality, final NumericalContext context) {
-        int cardinality = 0;
-        int i = size();
-        while (--i >= 0 && cardinality < maxCardinality) {
-            if (context.isNotZero(get(i))) {
-                cardinality++;
-            }
-        }
-        return cardinality;
-    }
+    public int[] nonZeroIndices() {
+        final var context = NumericalContext.get();
 
-    public int[] nonZeroIndices(final NumericalContext context) {
         final var indices = IntStream.builder();
-
         for (int i = 0; i < size(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);
@@ -222,7 +158,24 @@ public class DoubleMatrix1d
     public boolean equals(final Object object) {
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
-            NumericalContext.with(ZERO_EPSILON, () -> equals(matrix));
+            equals(matrix);
+    }
+
+    /**
+     * Return a 1-d matrix view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned matrix
+     * @return a matrix view of the given input data
+     */
+    public static DoubleMatrix1d of(final double... values) {
+        return new DoubleMatrix1d(
+            new Structure1d(new Extent1d(values.length)),
+            new DenseDoubleArray(values)
+        );
     }
 
 }

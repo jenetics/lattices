@@ -26,6 +26,7 @@ import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * Linear algebraic matrix operations.
@@ -47,11 +48,7 @@ public final class Algebra {
      * @return the one-norm of {@code x}
      */
     public static double norm1(final DoubleMatrix1d x) {
-        if (x.size() == 0) {
-            return 0;
-        } else {
-            return x.reduce(Double::sum, Math::abs);
-        }
+        return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
     /**
@@ -99,11 +96,7 @@ public final class Algebra {
      * @return the infinity-norm of the given vector
      */
     public static double normInf(final DoubleMatrix1d x) {
-        if (x.size() == 0) {
-            return 0;
-        } else {
-            return x.reduce(Math::max, Math::abs);
-        }
+        return x.reduce(Math::max, Math::abs).orElse(0);
     }
 
     /**
@@ -195,7 +188,7 @@ public final class Algebra {
      * @throws IllegalArgumentException if the given matrix is singular
      */
     public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
-        if (isSquare(A) && isDiagonal(A)) {
+        if (isSquare(A.extent()) && isDiagonal(A)) {
             final var inv = A.copy();
             if (!diagonalInverse(inv)) {
                 throw new IllegalArgumentException("Matrix to invert is singular.");
@@ -203,7 +196,7 @@ public final class Algebra {
 
             return inv;
         } else {
-            final var identity = A.like(A.rows(), A.rows());
+            final var identity = A.like(new Extent2d(A.rows(), A.rows()));
             for (int i = A.rows(); --i >= 0;) {
                 identity.set(i, i, 1.0);
             }
@@ -213,7 +206,7 @@ public final class Algebra {
     }
 
     private static boolean diagonalInverse(final DoubleMatrix2d A) {
-        checkSquare(A);
+        checkSquare(A.extent());
 
         final NumericalContext context = NumericalContext.get();
         boolean nonSingular = true;
