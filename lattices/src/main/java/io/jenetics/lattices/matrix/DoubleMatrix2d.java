@@ -339,7 +339,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * <b>view</b> onto the given input data.
      *
      * @param extent the extent of the given values
-     * @param values the returned matrix
+     * @param values the returned matrix values
      * @return a matrix view of the given input data
      * @throws IllegalArgumentException if the desired extent of the matrix
      *         requires fewer elements than given
