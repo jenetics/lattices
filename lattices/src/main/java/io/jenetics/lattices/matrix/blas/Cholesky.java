@@ -34,7 +34,7 @@ import io.jenetics.lattices.structure.Extent2d;
  * @since 3.0
  * @version 3.0
  */
-public final class Cholesky {
+public final class Cholesky implements Solver {
 
     private final DoubleMatrix2d L;
     private final boolean symmetricPositiveDefinite;
@@ -80,6 +80,7 @@ public final class Cholesky {
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code !isSymmetricPositiveDefinite()}
      */
+    @Override
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
         final var X = B.copy();
 

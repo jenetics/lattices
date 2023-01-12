@@ -42,7 +42,7 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public final class LU {
+public final class LU implements Solver {
 
     private final DoubleMatrix2d LU;
     private final int[] pivot;
@@ -133,6 +133,7 @@ public final class LU {
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
      */
+    @Override
     public DoubleMatrix2d solve(final DoubleMatrix2d B) {
         checkRectangular(LU.extent());
 
