@@ -22,7 +22,8 @@ package io.jenetics.lattices.matrix.blas;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
 /**
- * Solver interface for linear systems.
+ * Solver interface for linear systems for a matrix {@code A} which is part of
+ * the solver instance.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
