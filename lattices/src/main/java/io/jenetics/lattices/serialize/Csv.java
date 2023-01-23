@@ -18,6 +18,9 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.jenetics.lattices.grid.BaseDoubleGrid2d;
+import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.serialize.Lifecycle.Value;
 
 /**
@@ -493,6 +496,33 @@ public final class Csv {
         }
 
         return line.length() > 0;
+    }
+
+
+    /* *************************************************************************
+     * CSV write methods
+     * ************************************************************************/
+
+    @FunctionalInterface
+    interface Accessor<G extends Grid2d<?, G>> {
+        String get(G grid, int row, int col);
+    }
+
+
+    static <G extends Grid2d<?, G>>
+    String write(final G grid, final Accessor<G> accessor) {
+
+
+        return null;
+    }
+
+    static <G extends BaseDoubleGrid2d<G>> String write(final G grid) {
+        return write(grid, (g, r, c) -> Double.toString(g.get(r, c)));
+    }
+
+    void foo() {
+        var matrix = DoubleMatrix2d.DENSE.create(3, 3);
+        write(matrix);
     }
 
 }
