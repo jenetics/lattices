@@ -9,7 +9,7 @@ import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.structure.Projection2d;
 
-public class CsvTest {
+public class CsvSupportTest {
 
 
     @Test

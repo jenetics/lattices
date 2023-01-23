@@ -31,13 +31,13 @@ import io.jenetics.lattices.serialize.Lifecycle.Value;
  * // Read CSV, including multiline CSV files, if properly quoted.
  * final List<String> lines = CSV.LINE_READER.readAll(Path.of("some_file.csv"));
  * final List<List<String>> rows = lines.stream()
- *     .map(CSV::split)
+ *     .map(CsvSupport::split)
  *     .collect(Collectors.toList());
  *
  * // Write CSV.
  * final String csv = rows.stream()
- *     .map(CSV::join)
- *     .collect(CSV.toCSV());
+ *     .map(CsvSupport::join)
+ *     .collect(CsvSupport.toCSV());
  * Files.write(Path.of("some_other_file.csv"), csv.getBytes());
  * }</pre>
  *
@@ -47,11 +47,11 @@ import io.jenetics.lattices.serialize.Lifecycle.Value;
  * @version !__version__!
  * @since !__version__!
  */
-public final class Csv {
+public final class CsvSupport {
 
     /**
      * Interface for reading CSV lines from a given input stream. A default CSV
-     * line reader instances can be obtained with the {@link Csv#LINE_READER} field.
+     * line reader instances can be obtained with the {@link CsvSupport#LINE_READER} field.
      *
      * <pre>{@code
      * // The opened Stream must be closed after usage.
@@ -60,7 +60,7 @@ public final class Csv {
      * }
      * }</pre>
      *
-     * @see Csv#LINE_READER
+     * @see CsvSupport#LINE_READER
      */
     @FunctionalInterface
     public interface LineReader {
@@ -195,7 +195,7 @@ public final class Csv {
      * }
      * }</pre>
      */
-    public static final LineReader LINE_READER = Csv::read;
+    public static final LineReader LINE_READER = CsvSupport::read;
 
     /**
      * The newline string used for writing the CSV file: {@code \r\n}.
@@ -216,7 +216,7 @@ public final class Csv {
     private static final String QUOTE_STR = "\"";
     private static final String DOUBLE_QUOTE_STR = "\"\"";
 
-    private Csv() {
+    private CsvSupport() {
     }
 
     /**
