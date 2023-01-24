@@ -1,3 +1,22 @@
+/*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Author:
+ *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
+ */
 package io.jenetics.lattices.serialize;
 
 import static java.lang.String.format;
@@ -7,9 +26,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,9 +34,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import io.jenetics.lattices.grid.BaseDoubleGrid2d;
-import io.jenetics.lattices.grid.Grid2d;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.serialize.Lifecycle.Value;
 
 /**
@@ -44,158 +57,10 @@ import io.jenetics.lattices.serialize.Lifecycle.Value;
  * @see <a href="https://tools.ietf.org/html/rfc4180">RFC-4180</a>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @version !__version__!
- * @since !__version__!
+ * @version 3.0
+ * @since 3.0
  */
-public final class CsvSupport {
-
-    /**
-     * Interface for reading CSV lines from a given input stream. A default CSV
-     * line reader instances can be obtained with the {@link CsvSupport#LINE_READER} field.
-     *
-     * <pre>{@code
-     * // The opened Stream must be closed after usage.
-     * try (Stream<String> lines = CSV.LINE_READER.read(Path.of("file.csv"))) {
-     *     lines.forEach(System.out::println);
-     * }
-     * }</pre>
-     *
-     * @see CsvSupport#LINE_READER
-     */
-    @FunctionalInterface
-    public interface LineReader {
-
-        /**
-         * Splits the given content of the given {@code reader} into a
-         * {@code Stream} of CSV lines. The lines are split at line breaks, as
-         * long as they are not part of a quoted column. <em>The returned stream
-         * must be closed by the caller, which also closes the given reader.</em>
-         *
-         * <pre>{@code
-         * try (var lines = CSV.LINE_READER.read(reader)) {
-         *     lines.forEach(System.out::println);
-         * }
-         * }</pre>
-         *
-         * @see #read(Path)
-         *
-         * @param reader the reader stream to split into CSV lines
-         * @return the stream of CSV lines
-         */
-        Stream<String> read(final Reader reader);
-
-        /**
-         * Splits the given {@code path} into a {@code Stream} of CSV lines.
-         * The lines are split at line breaks, as long as they are not part of a
-         * quoted column. <em>The returned stream must be closed by the
-         * caller.</em>
-         *
-         * <pre>{@code
-         * try (var lines = CSV.LINE_READER.read(path, UTF_8)) {
-         *     lines.forEach(System.out::println);
-         * }
-         * }</pre>
-         *
-         * @see #read(Reader)
-         *
-         * @param path the CSV file to split
-         * @param cs the charset to use for decoding
-         * @return the stream of CSV lines
-         * @throws IOException if an I/O error occurs
-         */
-        default Stream<String> read(final Path path, final Charset cs)
-            throws IOException
-        {
-            return read(Files.newBufferedReader(path, cs));
-        }
-
-        /**
-         * Splits the given {@code path} into a {@code Stream} of CSV lines.
-         * The lines are split at line breaks, as long as they are not part of a
-         * quoted column. <em>The returned stream must be closed by the
-         * caller.</em>
-         *
-         * <pre>{@code
-         * try (var lines = CSV.LINE_READER.read(path, UTF_8)) {
-         *     lines.forEach(System.out::println);
-         * }
-         * }</pre>
-         *
-         * @see #read(Reader)
-         *
-         * @param path the CSV file to split
-         * @return the stream of CSV lines
-         * @throws IOException if an I/O error occurs
-         */
-        default Stream<String> read(final Path path) throws IOException {
-            return read(path, Charset.defaultCharset());
-        }
-
-        /**
-         * Reads all CSV lines form the given {@code reader}.
-         *
-         * @see #readAll(Path)
-         *
-         * @param reader the CSV {@code reader} stream
-         * @return all CSV lines form the given {@code reader} stream
-         * @throws IOException if an error occurs while reading the CSV lines
-         */
-        default List<String> readAll(final Reader reader)
-            throws IOException
-        {
-            try (var stream = read(reader)) {
-                return stream.collect(Collectors.toList());
-            } catch (UncheckedIOException e) {
-                throw e.getCause();
-            }
-        }
-
-        /**
-         * Reads all CSV lines form the given input {@code path}.
-         *
-         * @see #read(Reader)
-         *
-         * @param path the CSV file to read
-         * @param cs the charset to use for decoding
-         * @return all CSV lines form the given {@code input} stream
-         * @throws IOException if an error occurs while reading the CSV lines
-         */
-        default List<String> readAll(final Path path, final Charset cs)
-            throws IOException
-        {
-            try (var stream = read(path, cs)) {
-                return stream.collect(Collectors.toList());
-            } catch (UncheckedIOException e) {
-                throw e.getCause();
-            }
-        }
-
-        /**
-         * Reads all CSV lines form the given input {@code path}.
-         *
-         * @see #read(Reader)
-         *
-         * @param path the CSV file to read
-         * @return all CSV lines form the given {@code input} stream
-         * @throws IOException if an error occurs while reading the CSV lines
-         */
-        default List<String> readAll(final Path path)
-            throws IOException
-        {
-            return readAll(path, Charset.defaultCharset());
-        }
-    }
-
-    /**
-     * The default CSV line reader.
-     *
-     * <pre>{@code
-     * try (var lines = CSV.LINE_READER.read(path)) {
-     *     lines.forEach(System.out::println);
-     * }
-     * }</pre>
-     */
-    public static final LineReader LINE_READER = CsvSupport::read;
+final class CsvSupport {
 
     /**
      * The newline string used for writing the CSV file: {@code \r\n}.
@@ -416,7 +281,7 @@ public final class CsvSupport {
      *        automatically closed when the returned line stream is closed.
      * @return the stream of CSV lines
      */
-    static Stream<String> read(final Reader reader) {
+    public static Stream<String> read(final Reader reader) {
         final Value<Stream<String>, IOException> result = Value.build(resources -> {
             final var br = reader instanceof BufferedReader
                 ? resources.add((BufferedReader)reader, Closeable::close)
@@ -496,33 +361,6 @@ public final class CsvSupport {
         }
 
         return line.length() > 0;
-    }
-
-
-    /* *************************************************************************
-     * CSV write methods
-     * ************************************************************************/
-
-    @FunctionalInterface
-    interface Accessor<G extends Grid2d<?, G>> {
-        String get(G grid, int row, int col);
-    }
-
-
-    static <G extends Grid2d<?, G>>
-    String write(final G grid, final Accessor<G> accessor) {
-
-
-        return null;
-    }
-
-    static <G extends BaseDoubleGrid2d<G>> String write(final G grid) {
-        return write(grid, (g, r, c) -> Double.toString(g.get(r, c)));
-    }
-
-    void foo() {
-        var matrix = DoubleMatrix2d.DENSE.create(3, 3);
-        write(matrix);
     }
 
 }
