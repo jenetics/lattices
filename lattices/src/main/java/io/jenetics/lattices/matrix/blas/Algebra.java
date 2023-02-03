@@ -174,9 +174,8 @@ public final class Algebra {
         final DoubleMatrix2d A,
         final DoubleMatrix2d B
     ) {
-        return A.rows() == A.cols()
-            ? LU.decompose(A).solve(B)
-            : QR.decompose(A).solve(B);
+        final var solver = A.rows() == A.cols() ? LU.decompose(A) : QR.decompose(A);
+        return solver.solve(B);
     }
 
     /**

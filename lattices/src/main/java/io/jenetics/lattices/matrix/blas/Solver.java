@@ -22,12 +22,23 @@ package io.jenetics.lattices.matrix.blas;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
 /**
+ * Solver interface for linear systems for a matrix {@code A} which is part of
+ * the solver instance.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 public interface Solver {
 
-    void solve(DoubleMatrix2d B);
+    /**
+     * Solves {@code A*X = B} and returns {@code X}.
+     *
+     * @param B a matrix with as many rows as {@code A} and any number of columns
+     * @return {@code X} so that {@code L*L'*X = B}
+     * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
+     *         {@code !isSymmetricPositiveDefinite()}
+     */
+    DoubleMatrix2d solve(final DoubleMatrix2d B);
 
 }

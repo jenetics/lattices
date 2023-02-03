@@ -19,16 +19,10 @@
  */
 
 /**
+ * This package contains classes for reading and writing grid classes.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
+ * @version 3.0
  */
-module io.jenetics.lattices {
-    exports io.jenetics.lattices;
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.blas;
-    exports io.jenetics.lattices.serialize;
-    exports io.jenetics.lattices.structure;
-}
+package io.jenetics.lattices.serialize;
