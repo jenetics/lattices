@@ -31,19 +31,19 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Order1d(Index1d start, Stride1d stride) {
+public record Layout1d(Index1d start, Stride1d stride) {
 
     /**
      * The default order.
      */
-    public static final Order1d DEFAULT = new Order1d(0, 1);
+    public static final Layout1d DEFAULT = new Layout1d(0, 1);
 
-    public Order1d {
+    public Layout1d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
-    public Order1d(final int start, final int stride) {
+    public Layout1d(final int start, final int stride) {
         this(new Index1d(start), new Stride1d(stride));
     }
 
@@ -54,7 +54,7 @@ public record Order1d(Index1d start, Stride1d stride) {
      * @param index the index of the element.
      * @return the (linearized) index of the given {@code index}
      */
-    public int index(final int index) {
+    public int offset(final int index) {
         return start.value() + index*stride.value();
     }
 
@@ -64,8 +64,8 @@ public record Order1d(Index1d start, Stride1d stride) {
      * @param index the dimensional index
      * @return the array index
      */
-    public int index(final Index1d index) {
-        return index(index.value());
+    public int offset(final Index1d index) {
+        return offset(index.value());
     }
 
 }

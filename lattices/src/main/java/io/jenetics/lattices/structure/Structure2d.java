@@ -23,20 +23,20 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
- * the index order of the underlying 1-d structure.
+ * the layout of the underlying 1-d structure.
  *
  * @param extent the extent of the structure
- * @param order the element order
+ * @param layout the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Order2d order) {
+public record Structure2d(Extent2d extent, Layout2d layout) {
 
     public Structure2d {
         requireNonNull(extent);
-        requireNonNull(order);
+        requireNonNull(layout);
     }
 
     /**
@@ -45,7 +45,7 @@ public record Structure2d(Extent2d extent, Order2d order) {
      * @param extent the extent of the structure
      */
     public Structure2d(final Extent2d extent) {
-        this(extent, new Order2d(extent));
+        this(extent, new Layout2d(extent));
     }
 
 }

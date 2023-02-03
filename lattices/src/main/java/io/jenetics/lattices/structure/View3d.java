@@ -47,16 +47,16 @@ public interface View3d {
 
         return structure -> new Structure3d(
             range.extent(),
-            new Order3d(
+            new Layout3d(
                 new Index3d(
-                    structure.order().start().slice() +
-                        structure.order().stride().slice()*range.start().slice(),
-                    structure.order().start().row() +
-                        structure.order().stride().row()*range.start().row(),
-                    structure.order().start().col() +
-                        structure.order().stride().col()*range.start().col()
+                    structure.layout().start().slice() +
+                        structure.layout().stride().slice()*range.start().slice(),
+                    structure.layout().start().row() +
+                        structure.layout().stride().row()*range.start().row(),
+                    structure.layout().start().col() +
+                        structure.layout().stride().col()*range.start().col()
                 ),
-                structure.order().stride()
+                structure.layout().stride()
             )
         );
     }
@@ -105,7 +105,7 @@ public interface View3d {
 
         return structure -> {
             final var extent = structure.extent();
-            final var order = structure.order();
+            final var order = structure.layout();
 
             return new Structure3d(
                 new Extent3d(
@@ -119,7 +119,7 @@ public interface View3d {
                         ? (extent.cols() - 1)/stride.col() + 1
                         : 0
                 ),
-                new Order3d(
+                new Layout3d(
                     order.start(),
                     new Stride3d(
                         order.stride().slice()*stride.slice(),

@@ -118,7 +118,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *         bounds
      */
     public double get(final int row, final int col) {
-        return array.get(order().index(row, col));
+        return array.get(layout().offset(row, col));
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class BaseDoubleGrid2d<G extends BaseDoubleGrid2d<G>>
      *         bounds
      */
     public void set(final int row, final int col, final double value) {
-        array.set(order().index(row, col),  value);
+        array.set(layout().offset(row, col),  value);
     }
 
     /**

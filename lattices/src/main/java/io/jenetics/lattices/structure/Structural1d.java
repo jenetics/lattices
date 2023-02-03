@@ -49,8 +49,8 @@ public interface Structural1d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Order1d order() {
-        return structure().order();
+    default Layout1d layout() {
+        return structure().layout();
     }
 
     /**

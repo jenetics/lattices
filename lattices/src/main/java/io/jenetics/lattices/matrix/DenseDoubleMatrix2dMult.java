@@ -59,13 +59,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_col_stride = A.order().stride().col();
-        final int B_col_stride = B.order().stride().col();
-        final int C_col_stride = C.order().stride().col();
+        final int A_col_stride = A.layout().stride().col();
+        final int B_col_stride = B.layout().stride().col();
+        final int C_col_stride = C.layout().stride().col();
 
-        final int A_row_stride = A.order().stride().row();
-        final int B_row_stride = B.order().stride().row();
-        final int C_row_stride = C.order().stride().row();
+        final int A_row_stride = A.layout().stride().row();
+        final int B_row_stride = B.layout().stride().row();
+        final int C_row_stride = C.layout().stride().row();
 
         /*
         A is blocked to hide memory latency
@@ -94,9 +94,9 @@ final class DenseDoubleMatrix2dMult {
         }
 
         while (--blocks >= 0) {
-            int B_j = B.order().index(0, 0);
-            int A_index = A.order().index(rr, 0);
-            int C_j = C.order().index(rr, 0);
+            int B_j = B.layout().offset(0, 0);
+            int A_index = A.layout().offset(rr, 0);
+            int C_j = C.layout().offset(rr, 0);
             rr += m_block;
             if (blocks == 0) {
                 m_block += m - rr;

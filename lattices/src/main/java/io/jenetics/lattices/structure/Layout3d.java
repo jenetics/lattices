@@ -31,41 +31,51 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Order2d(Index2d start, Stride2d stride) {
+public record Layout3d(Index3d start, Stride3d stride) {
 
-    public Order2d {
+    public Layout3d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
     /**
-     * Create a new (row-major) order for the given range.
+     * Create a new order for the given range.
      *
      * @param range the range of the order
      */
-    public Order2d(final Range2d range) {
-        this(range.start(), new Stride2d(range.extent().cols(), 1));
+    public Layout3d(final Range3d range) {
+        this(
+            range.start(),
+            new Stride3d(
+                range.extent().rows()*range.extent().cols(),
+                range.extent().cols(),
+                1
+            )
+        );
     }
 
     /**
-     * Create a new row-major order object for the given dimension.
+     * Create a new stride-order object,
      *
      * @param extent the structure extent
      */
-    public Order2d(final Extent2d extent) {
-        this(new Range2d(extent));
+    public Layout3d(final Extent3d extent) {
+        this(new Range3d(extent));
     }
 
     /**
      * Return the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-d array.
      *
+     * @param slice the slice index
      * @param row the row index
      * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
+     * @return the (linearized) index of the given {@code slice}, {@code row}
+     *         and {@code col}
      */
-    public int index(final int row, final int col) {
+    public int offset(final int slice, final int row, final int col) {
         return
+            start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
     }
@@ -76,8 +86,8 @@ public record Order2d(Index2d start, Stride2d stride) {
      * @param index the dimensional index
      * @return the array index
      */
-    public int index(final Index2d index) {
-        return index(index.row(), index.col());
+    public int offset(final Index3d index) {
+        return offset(index.slice(), index.row(), index.col());
     }
 
 }

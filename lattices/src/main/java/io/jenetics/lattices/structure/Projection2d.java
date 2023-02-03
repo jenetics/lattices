@@ -50,9 +50,9 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().cols()),
-                new Order1d(
-                    structure.order().index(index, 0),
-                    structure.order().stride().col()
+                new Layout1d(
+                    structure.layout().offset(index, 0),
+                    structure.layout().stride().col()
                 )
             );
         };
@@ -74,9 +74,9 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().rows()),
-                new Order1d(
-                    structure.order().index(0, index),
-                    structure.order().stride().row()
+                new Layout1d(
+                    structure.layout().offset(0, index),
+                    structure.layout().stride().row()
                 )
             );
         };

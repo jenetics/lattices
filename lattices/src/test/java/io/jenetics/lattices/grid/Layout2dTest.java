@@ -23,41 +23,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.structure.Order1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Layout2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Order1DTest {
+public class Layout2dTest {
 
     @Test
-    public void indexDefaultStride() {
-        final var order = Order1d.DEFAULT;
+    public void indexExtent() {
+        final var extent = new Extent2d(23, 43);
+        final var order = new Layout2d(extent);
 
-        for (int i = -10; i < 10; ++i) {
-            assertThat(order.index(i)).isEqualTo(i);
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                final var idx = order.offset(i, j);
+                assertThat(idx).isEqualTo(i*extent.cols() + j);
+            }
         }
     }
 
+    /*
     @Test
-    public void indexNonZeroStart() {
-        final var start = 34;
-        final var order = new Order1d(start, 1);
+    public void transpose() {
+        final var order = new StrideOrder2d(new Index2d(34, 87), new Extent2d(87, 23));
+        final var torder = order.transpose();
 
-        for (int i = -10; i < 10; ++i) {
-            assertThat(order.index(i)).isEqualTo(i + start);
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                assertThat(torder.index(i, j)).isEqualTo(order.index(j, i));
+            }
         }
     }
-
-    @Test
-    public void indexWithStride() {
-        final var start = -10;
-        final var stride = 34;
-        final var order = new Order1d(start, stride);
-
-        for (int i = -10; i < 10; ++i) {
-            assertThat(order.index(i)).isEqualTo(start + i*stride);
-        }
-    }
+     */
 
 }

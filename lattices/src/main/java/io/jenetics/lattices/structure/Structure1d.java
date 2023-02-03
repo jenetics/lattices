@@ -26,17 +26,17 @@ import static java.util.Objects.requireNonNull;
  * the matrix and the index order of the underlying element array.
  *
  * @param extent the extent of the structure
- * @param order the element order
+ * @param layout the element layout
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Order1d order) {
+public record Structure1d(Extent1d extent, Layout1d layout) {
 
     public Structure1d {
         requireNonNull(extent);
-        requireNonNull(order);
+        requireNonNull(layout);
     }
 
     /**
@@ -46,7 +46,7 @@ public record Structure1d(Extent1d extent, Order1d order) {
      * @param extent the extent of the structure
      */
     public Structure1d(final Extent1d extent) {
-        this(extent, Order1d.DEFAULT);
+        this(extent, Layout1d.DEFAULT);
     }
 
 }

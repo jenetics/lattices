@@ -49,8 +49,8 @@ public interface Structural2d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Order2d order() {
-        return structure().order();
+    default Layout2d layout() {
+        return structure().layout();
     }
 
     /**

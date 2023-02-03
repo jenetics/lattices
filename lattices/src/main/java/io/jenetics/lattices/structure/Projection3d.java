@@ -55,14 +55,14 @@ public interface Projection3d {
                     structure.extent().rows(),
                     structure.extent().cols()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().row(),
-                        structure.order().index(index, 0, 0)
+                        structure.layout().start().row(),
+                        structure.layout().offset(index, 0, 0)
                     ),
                     new Stride2d(
-                        structure.order().stride().row(),
-                        structure.order().stride().col()
+                        structure.layout().stride().row(),
+                        structure.layout().stride().col()
                     )
                 )
             );
@@ -87,14 +87,14 @@ public interface Projection3d {
                     structure.extent().slices(),
                     structure.extent().cols()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().slice(),
-                        structure.order().index(0, index, 0)
+                        structure.layout().start().slice(),
+                        structure.layout().offset(0, index, 0)
                     ),
                     new Stride2d(
-                        structure.order().stride().slice(),
-                        structure.order().stride().col()
+                        structure.layout().stride().slice(),
+                        structure.layout().stride().col()
                     )
                 )
             );
@@ -120,14 +120,14 @@ public interface Projection3d {
                     structure.extent().slices(),
                     structure.extent().rows()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().slice(),
-                        structure.order().index(0, 0, index)
+                        structure.layout().start().slice(),
+                        structure.layout().offset(0, 0, index)
                     ),
                     new Stride2d(
-                        structure.order().stride().slice(),
-                        structure.order().stride().row()
+                        structure.layout().stride().slice(),
+                        structure.layout().stride().row()
                     )
                 )
             );

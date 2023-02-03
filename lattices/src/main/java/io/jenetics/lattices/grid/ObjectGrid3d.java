@@ -85,7 +85,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      *         bounds
      */
     public T get(final int slice, final int row, final int col) {
-        return array.get(order().index(slice, row, col));
+        return array.get(layout().offset(slice, row, col));
     }
 
     /**
@@ -100,7 +100,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      *         bounds
      */
     public void set(final int slice, final int row, final int col, final T value) {
-        array.set(order().index(slice, row, col), value);
+        array.set(layout().offset(slice, row, col), value);
     }
 
     @Override

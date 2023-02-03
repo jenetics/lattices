@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Order3d;
+import io.jenetics.lattices.structure.Layout3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -51,7 +51,7 @@ public interface Factory3d<T> {
      * @return a new structure with the given {@code extent}
      */
     default T create(final Extent3d extent) {
-        return create(new Structure3d(extent, new Order3d(extent)));
+        return create(new Structure3d(extent, new Layout3d(extent)));
     }
 
     /**

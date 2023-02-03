@@ -86,7 +86,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * bounds
      */
     public T get(final int index) {
-        return array.get(order().index(index));
+        return array.get(layout().offset(index));
     }
 
     /**
@@ -99,7 +99,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      * bounds
      */
     public void set(final int index, final T value) {
-        array.set(order().index(index), value);
+        array.set(layout().offset(index), value);
     }
 
     /**

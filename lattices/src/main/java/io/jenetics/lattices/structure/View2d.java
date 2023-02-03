@@ -35,14 +35,14 @@ public interface View2d {
             structure.extent().cols(),
             structure.extent().rows()
         ),
-        new Order2d(
+        new Layout2d(
             new Index2d(
-                structure.order().start().col(),
-                structure.order().start().row()
+                structure.layout().start().col(),
+                structure.layout().start().row()
             ),
             new Stride2d(
-                structure.order().stride().col(),
-                structure.order().stride().row()
+                structure.layout().stride().col(),
+                structure.layout().stride().row()
             )
         )
     );
@@ -66,14 +66,14 @@ public interface View2d {
 
         return structure -> new Structure2d(
             range.extent(),
-            new Order2d(
+            new Layout2d(
                 new Index2d(
-                    structure.order().start().row() +
-                        structure.order().stride().row()*range.start().row(),
-                    structure.order().start().col() +
-                        structure.order().stride().col()*range.start().col()
+                    structure.layout().start().row() +
+                        structure.layout().stride().row()*range.start().row(),
+                    structure.layout().start().col() +
+                        structure.layout().stride().col()*range.start().col()
                 ),
-                structure.order().stride()
+                structure.layout().stride()
             )
         );
     }
@@ -121,7 +121,7 @@ public interface View2d {
 
         return structure -> {
             final var extent = structure.extent();
-            final var order = structure.order();
+            final var order = structure.layout();
 
             return new Structure2d(
                 new Extent2d(
@@ -132,7 +132,7 @@ public interface View2d {
                         ? (extent.cols() - 1)/stride.col() + 1
                         : 0
                 ),
-                new Order2d(
+                new Layout2d(
                     order.start(),
                     new Stride2d(
                         order.stride().row()*stride.row(),

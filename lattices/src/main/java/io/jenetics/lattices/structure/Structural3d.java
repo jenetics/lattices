@@ -49,8 +49,8 @@ public interface Structural3d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Order3d order() {
-        return structure().order();
+    default Layout3d layout() {
+        return structure().layout();
     }
 
     /**
