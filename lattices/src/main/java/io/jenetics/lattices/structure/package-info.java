@@ -19,7 +19,17 @@
  */
 
 /**
- * This package contains implementations of grid structures.
+ * This package contains classes, which allows to use one dimensional arrays
+ * (or array like structures) as storage for multidimensional lattices/grids.
+ * The following code snippet shows how to do this for a 2-d double array.
+ * <pre>{@code
+ * final var structure = new Structure2d(new Extent2d(10, 34));
+ * final var layout = structure.layout();
+ *
+ * final var values = new double[structure.extent().size()];
+ * values[layout.offset(3, 5)] = Math.PI;
+ * assert values[layout.offset(3, 5)] == Math.PI;
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
