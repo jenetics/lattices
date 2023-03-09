@@ -39,4 +39,5 @@ public record Index1d(int value) implements Comparable<Index1d> {
     public int compareTo(final Index1d other) {
         return Integer.compare(value, other.value);
     }
+
 }

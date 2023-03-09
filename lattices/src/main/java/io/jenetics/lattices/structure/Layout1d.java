@@ -22,7 +22,8 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Represents the <em>row-major</em> order.
+ * This class defines the layout of the 1-d data onto the 1-d array like data
+ * structure. The layout is defined by the 1-d start index and the 1-d strides.
  *
  * @param start the index of the first element
  * @param stride the number of indexes between any two elements
@@ -66,6 +67,19 @@ public record Layout1d(Index1d start, Stride1d stride) {
      */
     public int offset(final Index1d index) {
         return offset(index.value());
+    }
+
+    /**
+     * Calculates the index for the given {@code offset}. This is the
+     * <em>inverse</em> operation of the {@link #offset(Index1d)} method.
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     */
+    public Index1d index(final int offset) {
+        final int start = offset - this.start.value();
+        final int index = start/stride.value();
+        return new Index1d(index);
     }
 
 }

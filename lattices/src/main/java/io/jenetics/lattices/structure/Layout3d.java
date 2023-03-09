@@ -22,7 +22,8 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Implements a structure order by defining start indexes and strides.
+ * This class defines the layout of the 3-d data onto the 1-d array like data
+ * structure. The layout is defined by the 3-d start index and the 3-d strides.
  *
  * @param start the start index of the first element
  * @param stride the element strides
@@ -88,6 +89,27 @@ public record Layout3d(Index3d start, Stride3d stride) {
      */
     public int offset(final Index3d index) {
         return offset(index.slice(), index.row(), index.col());
+    }
+
+    /**
+     * Calculates the index for the given {@code offset}. This is the
+     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     */
+    public Index3d index(final int offset) {
+        int start = offset - this.start.slice() -
+            this.start.row() -
+            this.start.col();
+
+        final int slice = start/stride.slice();
+        start = start - (slice*stride.slice());
+
+        final int row = start/stride.row();
+        final int col = start - (row*stride.row());
+
+        return new Index3d(slice, row, col);
     }
 
 }
