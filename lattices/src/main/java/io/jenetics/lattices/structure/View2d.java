@@ -53,7 +53,7 @@ public interface View2d {
      * @param structure the structure to apply the view transformation on
      * @return a new <em>view</em>-structure
      */
-    Structure2d apply(final Structure2d structure);
+    Structure2d apply(Structure2d structure);
 
     /**
      * Return a transformation which creates a view of the given {@code range}.
@@ -61,7 +61,7 @@ public interface View2d {
      * @param range the range of the view
      * @return a transformation which creates a view of the given {@code range}
      */
-    static View2d of(final Range2d range) {
+    static View2d of(Range2d range) {
         requireNonNull(range);
 
         return structure -> new Structure2d(
@@ -84,7 +84,7 @@ public interface View2d {
      * @param start the start of the view
      * @return a transformation which creates a view of the given {@code start}
      */
-    static View2d of(final Index2d start) {
+    static View2d of(Index2d start) {
         requireNonNull(start);
 
         return structure -> View2d
@@ -106,7 +106,7 @@ public interface View2d {
      * @param extent the extent of the view
      * @return a transformation which creates a view of the given {@code extent}
      */
-    static View2d of(final Extent2d extent) {
+    static View2d of(Extent2d extent) {
         return of(new Range2d(extent));
     }
 
@@ -116,7 +116,7 @@ public interface View2d {
      * @param stride the stride of the created view transformation
      * @return a new stride view transformation
      */
-    static View2d of(final Stride2d stride) {
+    static View2d of(Stride2d stride) {
         requireNonNull(stride);
 
         return structure -> {

@@ -41,7 +41,7 @@ public record Extent3d(int slices, int rows, int cols) {
         }
     }
 
-    private static boolean multNotSave(final int x, final int y, final int z) {
+    private static boolean multNotSave(int x, int y, int z) {
         final long r1 = (long)x*(long)y;
         if ((int)r1 == r1) {
             final long r2 = r1*(long)z;

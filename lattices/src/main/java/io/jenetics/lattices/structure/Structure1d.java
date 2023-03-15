@@ -45,7 +45,7 @@ public record Structure1d(Extent1d extent, Layout1d layout) {
      *
      * @param extent the extent of the structure
      */
-    public Structure1d(final Extent1d extent) {
+    public Structure1d(Extent1d extent) {
         this(extent, Layout1d.DEFAULT);
     }
 

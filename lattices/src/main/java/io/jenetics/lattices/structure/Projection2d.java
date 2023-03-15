@@ -33,7 +33,7 @@ public interface Projection2d {
      * @param structure the structure to apply this projection
      * @return the projected 1-d structure
      */
-    Structure1d apply(final Structure2d structure);
+    Structure1d apply(Structure2d structure);
 
     /**
      * Create a <em>row</em>-projection for the row with the given {@code index}.
@@ -42,7 +42,7 @@ public interface Projection2d {
      * @return a new <em>row</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection2d row(final int index) {
+    static Projection2d row(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -66,7 +66,7 @@ public interface Projection2d {
      * @return a new <em>column</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection2d col(final int index) {
+    static Projection2d col(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {

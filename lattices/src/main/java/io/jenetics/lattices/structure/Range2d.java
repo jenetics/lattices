@@ -46,7 +46,7 @@ public record Range2d(Index2d start, Extent2d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range2d(final Index2d start, final Index2d end) {
+    public Range2d(Index2d start, Index2d end) {
         this(
             start,
             new Extent2d(

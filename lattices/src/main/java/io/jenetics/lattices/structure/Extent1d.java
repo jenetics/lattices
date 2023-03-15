@@ -45,7 +45,7 @@ public record Extent1d(int size) implements Comparable<Extent1d> {
     }
 
     @Override
-    public int compareTo(final Extent1d other) {
+    public int compareTo(Extent1d other) {
         return Integer.compare(size, other.size);
     }
 

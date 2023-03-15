@@ -44,7 +44,7 @@ public interface Projection3d {
      * @return a new <em>slice</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d slice(final int index) {
+    static Projection3d slice(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -76,7 +76,7 @@ public interface Projection3d {
      * @return a new <em>row</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d row(final int index) {
+    static Projection3d row(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -109,7 +109,7 @@ public interface Projection3d {
      * @return a new <em>column</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d col(final int index) {
+    static Projection3d col(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {

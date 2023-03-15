@@ -44,7 +44,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
      *
      * @param range the range of the order
      */
-    public Layout3d(final Range3d range) {
+    public Layout3d(Range3d range) {
         this(
             range.start(),
             new Stride3d(
@@ -60,7 +60,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
      *
      * @param extent the structure extent
      */
-    public Layout3d(final Extent3d extent) {
+    public Layout3d(Extent3d extent) {
         this(new Range3d(extent));
     }
 
@@ -74,7 +74,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
      * @return the (linearized) index of the given {@code slice}, {@code row}
      *         and {@code col}
      */
-    public int offset(final int slice, final int row, final int col) {
+    public int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
@@ -87,7 +87,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
      * @param index the dimensional index
      * @return the array index
      */
-    public int offset(final Index3d index) {
+    public int offset(Index3d index) {
         return offset(index.slice(), index.row(), index.col());
     }
 
@@ -98,7 +98,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
-    public Index3d index(final int offset) {
+    public Index3d index(int offset) {
         int start = offset - this.start.slice() -
             this.start.row() -
             this.start.col();

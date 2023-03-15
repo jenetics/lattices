@@ -44,7 +44,7 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
      *
      * @param extent the extent of the structure
      */
-    public Structure2d(final Extent2d extent) {
+    public Structure2d(Extent2d extent) {
         this(extent, new Layout2d(extent));
     }
 

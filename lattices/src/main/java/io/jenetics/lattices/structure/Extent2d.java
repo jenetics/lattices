@@ -47,7 +47,7 @@ public record Extent2d(int rows, int cols) {
         }
     }
 
-    private static boolean multNotSave(final int x, final int y) {
+    private static boolean multNotSave(int x, int y) {
         long r = (long)x*(long)y;
         return (int)r != r;
     }

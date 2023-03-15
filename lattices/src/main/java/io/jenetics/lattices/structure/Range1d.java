@@ -46,7 +46,7 @@ public record Range1d(Index1d start, Extent1d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range1d(final Index1d start, final Index1d end) {
+    public Range1d(Index1d start, Index1d end) {
         this(start, new Extent1d(end.value() - start.value()));
     }
 
@@ -56,7 +56,7 @@ public record Range1d(Index1d start, Extent1d extent) {
      *
      * @param extent the extent of the new range
      */
-    public Range1d(final Extent1d extent) {
+    public Range1d(Extent1d extent) {
         this(Index1d.ZERO, extent);
     }
 

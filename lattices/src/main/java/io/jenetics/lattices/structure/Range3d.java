@@ -46,7 +46,7 @@ public record Range3d(Index3d start, Extent3d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range3d(final Index3d start, final Index3d end) {
+    public Range3d(Index3d start, Index3d end) {
         this(
             start,
             new Extent3d(
@@ -61,7 +61,7 @@ public record Range3d(Index3d start, Extent3d extent) {
      *
      * @param extent the extent of the new range
      */
-    public Range3d(final Extent3d extent) {
+    public Range3d(Extent3d extent) {
         this(Index3d.ZERO, extent);
     }
 

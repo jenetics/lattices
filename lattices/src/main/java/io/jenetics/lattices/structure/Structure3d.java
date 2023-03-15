@@ -44,7 +44,7 @@ public record Structure3d(Extent3d extent, Layout3d layout) {
      *
      * @param extent the extent of the structure
      */
-    public Structure3d(final Extent3d extent) {
+    public Structure3d(Extent3d extent) {
         this(extent, new Layout3d(extent));
     }
 

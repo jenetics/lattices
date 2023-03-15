@@ -33,7 +33,7 @@ public interface View1d {
      * @param structure the structure to apply the view transformation on
      * @return a new <em>view</em>-structure
      */
-    Structure1d apply(final Structure1d structure);
+    Structure1d apply(Structure1d structure);
 
     /**
      * Return a transformation which creates a view of the given {@code range}.
@@ -41,7 +41,7 @@ public interface View1d {
      * @param range the range of the view
      * @return a transformation which creates a view of the given {@code range}
      */
-    static View1d of(final Range1d range) {
+    static View1d of(Range1d range) {
         requireNonNull(range);
 
         return structure -> new Structure1d(
@@ -60,7 +60,7 @@ public interface View1d {
      * @param start the start of the view
      * @return a transformation which creates a view of the given {@code start}
      */
-    static View1d of(final Index1d start) {
+    static View1d of(Index1d start) {
         requireNonNull(start);
 
         return structure -> View1d
@@ -79,7 +79,7 @@ public interface View1d {
      * @param stride the stride of the created view transformation
      * @return a new stride view transformation
      */
-    static View1d of(final Stride1d stride) {
+    static View1d of(Stride1d stride) {
         requireNonNull(stride);
 
         return structure -> new Structure1d(

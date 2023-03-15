@@ -44,7 +44,7 @@ public record Layout2d(Index2d start, Stride2d stride) {
      *
      * @param range the range of the order
      */
-    public Layout2d(final Range2d range) {
+    public Layout2d(Range2d range) {
         this(range.start(), new Stride2d(range.extent().cols(), 1));
     }
 
@@ -53,7 +53,7 @@ public record Layout2d(Index2d start, Stride2d stride) {
      *
      * @param extent the structure extent
      */
-    public Layout2d(final Extent2d extent) {
+    public Layout2d(Extent2d extent) {
         this(new Range2d(extent));
     }
 
@@ -65,7 +65,7 @@ public record Layout2d(Index2d start, Stride2d stride) {
      * @param col the column index
      * @return the (linearized) index of the given {@code row} and {@code col}
      */
-    public int offset(final int row, final int col) {
+    public int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
@@ -77,7 +77,7 @@ public record Layout2d(Index2d start, Stride2d stride) {
      * @param index the dimensional index
      * @return the array index
      */
-    public int offset(final Index2d index) {
+    public int offset(Index2d index) {
         return offset(index.row(), index.col());
     }
 
@@ -88,7 +88,7 @@ public record Layout2d(Index2d start, Stride2d stride) {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
-    public Index2d index(final int offset) {
+    public Index2d index(int offset) {
         final int start = offset - this.start.row() - this.start.col();
         final int row = start/stride.row();
         final int col = start - (row*stride.row());

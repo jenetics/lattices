@@ -33,7 +33,7 @@ public interface View3d {
      * @param structure the structure to apply the view transformation on
      * @return a new <em>view</em>-structure
      */
-    Structure3d apply(final Structure3d structure);
+    Structure3d apply(Structure3d structure);
 
 
     /**
@@ -42,7 +42,7 @@ public interface View3d {
      * @param range the range of the view
      * @return a transformation which creates a view of the given {@code range}
      */
-    static View3d of(final Range3d range) {
+    static View3d of(Range3d range) {
         requireNonNull(range);
 
         return structure -> new Structure3d(
@@ -67,7 +67,7 @@ public interface View3d {
      * @param start the start of the view
      * @return a transformation which creates a view of the given {@code start}
      */
-    static View3d of(final Index3d start) {
+    static View3d of(Index3d start) {
         requireNonNull(start);
 
         return structure -> View3d
@@ -90,7 +90,7 @@ public interface View3d {
      * @param extent the extent of the view
      * @return a transformation which creates a view of the given {@code extent}
      */
-    static View3d of(final Extent3d extent) {
+    static View3d of(Extent3d extent) {
         return of(new Range3d(extent));
     }
 
@@ -100,7 +100,7 @@ public interface View3d {
      * @param stride the stride of the created view transformation
      * @return a new stride view transformation
      */
-    static View3d of(final Stride3d stride) {
+    static View3d of(Stride3d stride) {
         requireNonNull(stride);
 
         return structure -> {

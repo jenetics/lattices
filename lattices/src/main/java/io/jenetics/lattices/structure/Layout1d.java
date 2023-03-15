@@ -44,7 +44,7 @@ public record Layout1d(Index1d start, Stride1d stride) {
         requireNonNull(stride);
     }
 
-    public Layout1d(final int start, final int stride) {
+    public Layout1d(int start, int stride) {
         this(new Index1d(start), new Stride1d(stride));
     }
 
@@ -55,7 +55,7 @@ public record Layout1d(Index1d start, Stride1d stride) {
      * @param index the index of the element.
      * @return the (linearized) index of the given {@code index}
      */
-    public int offset(final int index) {
+    public int offset(int index) {
         return start.value() + index*stride.value();
     }
 
@@ -65,7 +65,7 @@ public record Layout1d(Index1d start, Stride1d stride) {
      * @param index the dimensional index
      * @return the array index
      */
-    public int offset(final Index1d index) {
+    public int offset(Index1d index) {
         return offset(index.value());
     }
 
@@ -76,7 +76,7 @@ public record Layout1d(Index1d start, Stride1d stride) {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
-    public Index1d index(final int offset) {
+    public Index1d index(int offset) {
         final int start = offset - this.start.value();
         final int index = start/stride.value();
         return new Index1d(index);
