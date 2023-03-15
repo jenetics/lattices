@@ -23,12 +23,29 @@
  * (or array like structures) as storage for multidimensional lattices/grids.
  * The following code snippet shows how to do this for a 2-d double array.
  * <pre>{@code
- * final var structure = new Structure2d(new Extent2d(10, 34));
- * final var layout = structure.layout();
+ * // Define the structure + extent of your lattices.
+ * final Structure2d structure = new Structure2d(new Extent2d(10, 34));
  *
- * final var values = new double[structure.extent().size()];
- * values[layout.offset(3, 5)] = Math.PI;
- * assert values[layout.offset(3, 5)] == Math.PI;
+ * // The layout of your structure lets you calculate the array offset.
+ * final Layout2d layout = structure.layout();
+ *
+ * // Create the `double[]` array, which stores the data.
+ * final double[] values = new double[structure.extent().size()];
+ *
+ * // The 2-d coordinates you want to access.
+ * final int row = 3;
+ * final int col = 5;
+ *
+ * // The array offset which stores the value at (5, 3).
+ * final int offset = layout.offset(row, col);
+ *
+ * // Write the value to the given coordinate.
+ * values[offset] = Math.PI;
+ *
+ * // Get the index back from a given array offset.
+ * final Index2d index = layout.index(offset);
+ * assert index.row == row;
+ * assert index.col == col;
  * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
