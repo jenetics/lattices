@@ -23,7 +23,20 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
- * the layout of the underlying 1-d structure.
+ * the layout of the underlying 1-d structure. This is the main class for working
+ * with 2-d structures (latices/grids). The {@link View2d} and {@link Projection2d}
+ * functions are used for <em>manipulating</em> this structure object.
+ *
+ * <pre>{@code
+ * // Creating a new structure with the given extent.
+ * final var structure = new Structure2d(new Extent2d(500, 1000));
+ * }</pre>
+ *
+ * @apiNote
+ * Although the structure object consists of an <em>extent</em> and a
+ * <em>layout</em>, it is normally created with the
+ * {@link Structure2d#Structure2d(Extent2d)} constructor, which takes care of
+ * the proper construction of the underlying <em>layout</em>.
  *
  * @param extent the extent of the structure
  * @param layout the element order
@@ -41,6 +54,12 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
 
     /**
      * Create a new structure with the given extent and the default element order.
+     * This is the <em>default</em> constructor used for creating structure
+     * instances.
+     *
+     * @apiNote
+     * This is the <em>default</em> constructor which should be used by the
+     * clients for creating a new <em>structure</em> object.
      *
      * @param extent the extent of the structure
      */

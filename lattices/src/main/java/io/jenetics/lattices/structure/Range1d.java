@@ -51,6 +51,18 @@ public record Range1d(Index1d start, Extent1d extent) {
     }
 
     /**
+     * Create a new range object with the given {@code start} and {@code end}
+     * index.
+     *
+     * @param start the start index, inclusively
+     * @param end the end index, exclusively
+     * @throws IllegalArgumentException if {@code start >= end}
+     */
+    public Range1d(int start, int end) {
+        this(new Index1d(start), new Index1d(end));
+    }
+
+    /**
      * Create a new range from the given extent. The start indices ({@link #start}
      * is set to zero.
      *

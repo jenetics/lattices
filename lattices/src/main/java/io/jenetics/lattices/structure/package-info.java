@@ -48,6 +48,9 @@
  * assert index.col == col;
  * }</pre>
  *
+ * The {@code View} and {@code Projection} functions are used for manipulating
+ * the <em>structure</em> objects.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0

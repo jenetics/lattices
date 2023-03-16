@@ -25,6 +25,13 @@ import static java.util.Objects.requireNonNull;
  * This class defines the layout of the 3-d data onto the 1-d array like data
  * structure. The layout is defined by the 3-d start index and the 3-d strides.
  *
+ * @apiNote
+ * Note, that the direct manipulation/creation of the <em>layout</em> object
+ * usually doesn't lead to the expected result. It is expected that layouts
+ * are created by the <em>structure</em> object; {@link Structure3d#Structure3d(Extent3d)}.
+ *
+ * @see Structure3d
+ *
  * @param start the start index of the first element
  * @param stride the element strides
  *

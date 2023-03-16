@@ -25,6 +25,13 @@ import static java.util.Objects.requireNonNull;
  * This class defines the layout of the 2-d data onto the 1-d array like data
  * structure. The layout is defined by the 2-d start index and the 2-d strides.
  *
+ * @apiNote
+ * Note, that the direct manipulation/creation of the <em>layout</em> object
+ * usually doesn't lead to the expected result. It is expected that layouts
+ * are created by the <em>structure</em> object; {@link Structure2d#Structure2d(Extent2d)}.
+ *
+ * @see Structure2d
+ *
  * @param start the start index of the first element
  * @param stride the element strides
  *

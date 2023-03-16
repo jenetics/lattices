@@ -23,7 +23,20 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
- * the index oder of the underlying 1-d structure.
+ * the index oder of the underlying 1-d structure. The {@link View3d} and
+ * {@link Projection3d} functions are used for <em>manipulating</em> this
+ * structure object.
+ *
+ * <pre>{@code
+ * // Creating a new structure with the given extent.
+ * final var structure = new Structure3d(new Extent3d(500, 1000, 50));
+ * }</pre>
+ *
+ * @apiNote
+ * Although the structure object consists of an <em>extent</em> and a
+ * <em>layout</em>, it is normally created with the
+ * {@link Structure3d#Structure3d(Extent3d)} constructor, which takes care of
+ * the proper construction of the underlying <em>layout</em>.
  *
  * @param extent the extent of the structure
  * @param layout the element order
@@ -40,7 +53,12 @@ public record Structure3d(Extent3d extent, Layout3d layout) {
     }
 
     /**
-     * Create a new structure with the given extent and the default element order.
+     * Create a new structure with the given extent and the default element
+     * order.
+     *
+     * @apiNote
+     * This is the <em>default</em> constructor which should be used by the
+     * clients for creating a new <em>structure</em> object.
      *
      * @param extent the extent of the structure
      */

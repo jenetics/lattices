@@ -23,7 +23,20 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines the structure of a 1-d matrix, which is defined by the dimension of
- * the matrix and the index order of the underlying element array.
+ * the matrix and the index order of the underlying element array. The
+ * {@link View1d} function1 is used for <em>manipulating</em> this structure
+ * object.
+ *
+ * <pre>{@code
+ * // Creating a new structure with the given extent.
+ * final var structure = new Structure1d(new Extent1d(1000));
+ * }</pre>
+ *
+ * @apiNote
+ * Although the structure object consists of an <em>extent</em> and a
+ * <em>layout</em>, it is normally created with the
+ * {@link Structure1d#Structure1d(Extent1d)} constructor, which takes care of
+ * the proper construction of the underlying <em>layout</em>.
  *
  * @param extent the extent of the structure
  * @param layout the element layout
@@ -42,6 +55,10 @@ public record Structure1d(Extent1d extent, Layout1d layout) {
     /**
      * Create a new matrix structure with the given dimension and the default
      * element order.
+     *
+     * @apiNote
+     * This is the <em>default</em> constructor which should be used by the
+     * clients for creating a new <em>structure</em> object.
      *
      * @param extent the extent of the structure
      */
