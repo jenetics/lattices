@@ -25,24 +25,24 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.testfuxtures.Index2dRandom;
+import io.jenetics.lattices.testfuxtures.Index1dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Structure2dTest {
+public class Structure1dTest {
 
-    private final Index2dRandom random =
-        new Index2dRandom(RandomGenerator.getDefault());
+    private final Index1dRandom random =
+        new Index1dRandom(RandomGenerator.getDefault());
 
     @Test
     public void indexOffset() {
-        final var structure = new Structure2d(new Extent2d(100, 400));
+        final var structure = new Structure1d(new Extent1d(400));
         final var layout = structure.layout();
-        final var range = new Range2d(structure.extent());
+        final var range = new Range1d(structure.extent());
 
         for (int i = 0; i < 1000; ++i) {
-            final Index2d index = random.next(range);
+            final Index1d index = random.next(range);
 
             final int offset = layout.offset(index);
             assertThat(offset).isGreaterThan(0);
