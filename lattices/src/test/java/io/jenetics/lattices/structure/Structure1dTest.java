@@ -45,7 +45,8 @@ public class Structure1dTest {
             final Index1d index = random.next(range);
 
             final int offset = layout.offset(index);
-            assertThat(offset).isGreaterThan(0);
+            assertThat(offset).isGreaterThanOrEqualTo(0);
+
             assertThat(layout.index(offset))
                 .withFailMessage("Got %s != expect %s: %s %s"
                     .formatted(layout.index(offset), index, layout.start(), layout.stride()))

@@ -35,6 +35,7 @@ public interface Projection2d {
      */
     Structure1d apply(Structure2d structure);
 
+
     /**
      * Create a <em>row</em>-projection for the row with the given {@code index}.
      *

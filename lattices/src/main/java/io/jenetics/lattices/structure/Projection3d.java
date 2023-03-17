@@ -33,7 +33,7 @@ public interface Projection3d {
      * @param structure the structure to apply this projection
      * @return the projected 2-d structure
      */
-    Structure2d apply(final Structure3d structure);
+    Structure2d apply(Structure3d structure);
 
 
     /**
