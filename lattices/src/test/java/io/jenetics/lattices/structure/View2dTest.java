@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  */
 public class View2dTest {
 
-    private static final Extent2d EXTENT = new Extent2d(100, 100);
+    private static final Extent2d EXTENT = new Extent2d(100, 200);
 
     private static final Structure2d STRUCTURE = new Structure2d(EXTENT);
 
@@ -41,6 +41,24 @@ public class View2dTest {
             return "v_" + index.row() + "_" + index.col();
         })
         .toArray(String[]::new);
+
+
+    @Test
+    public void transpose() {
+        final var structure = View2d.TRANSPOSE.apply(STRUCTURE);
+        assertThat(structure.extent().rows()).isEqualTo(EXTENT.cols());
+        assertThat(structure.extent().cols()).isEqualTo(EXTENT.rows());
+
+        for (int r = 0; r < structure.extent().rows(); ++r) {
+            for (int c = 0; c < structure.extent().cols(); ++c) {
+                final int offset = structure.layout().offset(r, c);
+
+                final var expected = "v_" + c + "_" + r;
+
+                assertThat(ARRAY[offset]).isEqualTo(expected);
+            }
+        }
+    }
 
     @Test(dataProvider = "ranges")
     public void ofRange(Range2d range) {
