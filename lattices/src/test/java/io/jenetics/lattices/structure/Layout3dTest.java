@@ -1,17 +1,56 @@
+/*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Author:
+ *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
+ */
 package io.jenetics.lattices.structure;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.testfuxtures.Index3dRandom;
+
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Layout3dTest {
 
-    @Test
-    public void index() {
-        final var layout = new Layout3d(new Extent3d(45, 46, 47));
-        final var index = new Index3d(23, 15, 12);
-        final var offset = layout.offset(index);
+    private final Index3dRandom random =
+        new Index3dRandom(RandomGenerator.getDefault());
 
-        System.out.println(offset);
-        System.out.println(layout.index(offset));
+    @Test
+    public void indexOffset() {
+        final var range = new Range3d(new Extent3d(50, 100,1000));
+        final var layout = new Layout3d(range);
+
+        for (int i = 0; i < 1000; ++i) {
+            final Index3d index = random.next(range);
+            //System.out.println(index);
+
+            final int offset = layout.offset(index);
+            assertThat(offset).isGreaterThan(0);
+            assertThat(layout.index(offset))
+                .withFailMessage("Got %s != expect %s: %s %s"
+                    .formatted(layout.index(offset), index, layout.start(), layout.stride()))
+                .isEqualTo(index);
+        }
     }
 
 }

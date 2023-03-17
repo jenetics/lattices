@@ -28,12 +28,16 @@ import org.testng.annotations.Test;
 
 import io.jenetics.lattices.testfuxtures.Index1dRandom;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Layout1dTest {
+
+    private final Index1dRandom random =
+        new Index1dRandom(RandomGenerator.getDefault());
 
     @Test(dataProvider = "layouts")
     public void indexOffset(Layout1d layout) {
-        final var random = new Index1dRandom(RandomGenerator.getDefault());
-
         final var range = new Range1d(0, 1_000_000);
         for (int i = 0; i < 100; ++i) {
             final Index1d index = random.next(range);

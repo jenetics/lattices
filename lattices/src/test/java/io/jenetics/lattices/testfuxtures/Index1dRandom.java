@@ -24,6 +24,9 @@ import java.util.random.RandomGenerator;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Index1dRandom {
 
     private final RandomGenerator random;

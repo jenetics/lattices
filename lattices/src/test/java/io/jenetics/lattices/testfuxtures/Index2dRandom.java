@@ -25,6 +25,9 @@ import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.structure.Range2d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Index2dRandom {
 
     private final RandomGenerator random;

@@ -106,15 +106,16 @@ public record Layout3d(Index3d start, Stride3d stride) {
      * @return the index for the given {@code offset}
      */
     public Index3d index(int offset) {
-        int start = offset - this.start.slice() -
+        int start = offset -
+            this.start.slice() -
             this.start.row() -
             this.start.col();
 
         final int slice = start/stride.slice();
-        start = start - (slice*stride.slice());
+        start = start - slice*stride.slice();
 
         final int row = start/stride.row();
-        final int col = start - (row*stride.row());
+        final int col = start - row*stride.row();
 
         return new Index3d(slice, row, col);
     }

@@ -20,28 +20,26 @@
 package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 
 import java.util.random.RandomGenerator;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.testfuxtures.Index2dRandom;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Layout2dTest {
 
-    @Test(dataProvider = "layouts")
-    public void indexOffset(Layout2d layout) {
-        final var random = new Index2dRandom(RandomGenerator.getDefault());
+    private final Index2dRandom random =
+        new Index2dRandom(RandomGenerator.getDefault());
 
-        var lo = new Layout2d(new Range2d(new Index2d(0, 0), new Extent2d(100,1000)));
-        var os = lo.offset(new Index2d(99, 999));
-        System.out.println(os);
-        var idx = lo.index(os);
-        System.out.println(idx);
+    @Test
+    public void indexOffset() {
+        final var range = new Range2d(new Extent2d(100,1000));
+        final var layout = new Layout2d(range);
 
-        final var range = new Range2d(layout.start(), new Extent2d(100,1000));
         for (int i = 0; i < 1000; ++i) {
             final Index2d index = random.next(range);
 
@@ -52,25 +50,6 @@ public class Layout2dTest {
                     .formatted(layout.index(offset), index, layout.start(), layout.stride()))
                 .isEqualTo(index);
         }
-    }
-
-    @DataProvider
-    public Object[][] layouts() {
-        return new Object[][] {
-            //{ new Layout2d(new Range2d(new Index2d(0, 0), new Extent2d(100,1000))) }
-            { new Layout2d(new Range2d(new Index2d(5, 5), new Extent2d(100,1000))) }
-        };
-    }
-
-    @Test
-    public void foo() {
-        final var structure = new Structure2d(new Extent2d(10, 10));
-        final var s1 = View2d.of(new Index2d(2, 2)).apply(structure);
-
-        System.out.println(s1.layout().offset(0, 0));
-        var offset = s1.layout().offset(8, 8);
-        var index = s1.layout().index(offset);
-        System.out.println(index);
     }
 
 }

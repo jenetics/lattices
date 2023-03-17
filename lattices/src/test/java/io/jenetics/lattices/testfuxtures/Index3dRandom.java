@@ -25,6 +25,9 @@ import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Index3d;
 import io.jenetics.lattices.structure.Range3d;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ */
 public class Index3dRandom {
 
     private final RandomGenerator random;
@@ -39,15 +42,15 @@ public class Index3dRandom {
 
         final int slice = random.nextInt(
             start.slice(),
-            start.slice() + bound.slices() + 1
+            start.slice() + bound.slices()
         );
         final int row = random.nextInt(
             start.row(),
-            start.row() + bound.rows() + 1
+            start.row() + bound.rows()
         );
         final int col = random.nextInt(
             start.col(),
-            start.col() + bound.cols() + 1
+            start.col() + bound.cols()
         );
 
         return new Index3d(slice, row, col);

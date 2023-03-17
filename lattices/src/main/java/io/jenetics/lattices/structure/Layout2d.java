@@ -96,9 +96,13 @@ public record Layout2d(Index2d start, Stride2d stride) {
      * @return the index for the given {@code offset}
      */
     public Index2d index(int offset) {
-        final int start = offset - this.start.row() - this.start.col();
+        final int start = offset -
+            this.start.row() -
+            this.start.col();
+
         final int row = start/stride.row();
-        final int col = start - (row*stride.row());
+        final int col = start - row*stride.row();
+
         return new Index2d(row, col);
     }
 
