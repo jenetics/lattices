@@ -107,7 +107,7 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
      */
     public static DoubleGrid2d of(final Extent2d extent, final double... values) {
         return new DoubleGrid2d(
-            new Structure2d(extent),
+            Structure2d.of(extent),
             new DenseDoubleArray(values)
         );
     }

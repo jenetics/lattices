@@ -37,7 +37,7 @@ public class Structure1dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = new Structure1d(new Extent1d(400));
+        final var structure = Structure1d.of(new Extent1d(400));
         final var layout = structure.layout();
         final var range = new Range1d(structure.extent());
 

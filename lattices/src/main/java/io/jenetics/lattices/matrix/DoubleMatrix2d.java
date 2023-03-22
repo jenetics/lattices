@@ -162,7 +162,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
             return transpose().mult(y, z, alpha, beta, false);
         }
         if (z == null) {
-            final var struct = new Structure1d(new Extent1d(rows()));
+            final var struct = Structure1d.of(new Extent1d(rows()));
             final var elems = array().like(struct.extent().size());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
@@ -346,7 +346,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      */
     public static DoubleMatrix2d of(final Extent2d extent, final double... values) {
         return new DoubleMatrix2d(
-            new Structure2d(extent),
+            Structure2d.of(extent),
             new DenseDoubleArray(values)
         );
     }

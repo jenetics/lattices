@@ -307,17 +307,17 @@ public class DoubleMatrix2dTest {
         final var matrix = DoubleMatrix2d.DENSE.create(extent);
 
         final var structure = matrix.structure();
-        final var copy = new Structure2d(extent);
+        final var copy = Structure2d.of(extent);
         assertThat(copy).isEqualTo(structure);
 
-        final var copy2 = new Structure2d(new Extent2d(3, 6));
+        final var copy2 = Structure2d.of(new Extent2d(3, 6));
         assertThat(copy2).isNotEqualTo(structure);
     }
 
     @Test
     public void foo() {
         final var matrix = new DoubleMatrix2d(
-            new Structure2d(new Extent2d(3, 4)),
+            Structure2d.of(new Extent2d(3, 4)),
             new DenseDoubleArray(new double[] {
                 1, 2,  3,  4,
                 5, 6,  7,  8,

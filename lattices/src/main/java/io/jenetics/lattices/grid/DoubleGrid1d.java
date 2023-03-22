@@ -82,7 +82,7 @@ public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
      */
     public static DoubleGrid1d of(final double... values) {
         return new DoubleGrid1d(
-            new Structure1d(new Extent1d(values.length)),
+            Structure1d.of(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

@@ -38,7 +38,7 @@ public class DoubleGrid2dTest {
     @Test
     public void setAndGet() {
         final var extent = new Extent2d(100, 20);
-        final var structure = new Structure2d(extent);
+        final var structure = Structure2d.of(extent);
         final var grid = new DoubleGrid2d(
             structure,
             DenseDoubleArray.ofSize(extent.size())
@@ -98,7 +98,7 @@ public class DoubleGrid2dTest {
         final var array = new DenseDoubleArray(data);
 
         // Define the structure (extent) of your 2-d grid.
-        final var structure = new Structure2d(new Extent2d(10, 15));
+        final var structure = Structure2d.of(new Extent2d(10, 15));
         // Create the grid with your defined structure and data.
         // The grid is a 2-d view onto your one-dimensional double array.
         final var grid = new DoubleGrid2d(structure, array);

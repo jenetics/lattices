@@ -29,14 +29,8 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = new Structure2d(new Extent2d(500, 1000));
+ * final var structure = Structure2d.of(new Extent2d(500, 1000));
  * }</pre>
- *
- * @apiNote
- * Although the structure object consists of an <em>extent</em> and a
- * <em>layout</em>, it is normally created with the
- * {@link Structure2d#Structure2d(Extent2d)} constructor, which takes care of
- * the proper construction of the underlying <em>layout</em>.
  *
  * @param extent the extent of the structure
  * @param layout the element order
@@ -53,18 +47,15 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
     }
 
     /**
-     * Create a new structure with the given extent and the default element order.
-     * This is the <em>default</em> constructor used for creating structure
-     * instances.
-     *
-     * @apiNote
-     * This is the <em>default</em> constructor which should be used by the
-     * clients for creating a new <em>structure</em> object.
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
      *
      * @param extent the extent of the structure
+     * @return a new structure object with the given extent
      */
-    public Structure2d(Extent2d extent) {
-        this(extent, new Layout2d(extent));
+    public static Structure2d of(Extent2d extent) {
+        return new Structure2d(extent, new Layout2d(extent));
     }
 
 }

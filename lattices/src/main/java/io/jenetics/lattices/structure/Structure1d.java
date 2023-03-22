@@ -29,14 +29,8 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = new Structure1d(new Extent1d(1000));
+ * final var structure = Structure1d.of(new Extent1d(1000));
  * }</pre>
- *
- * @apiNote
- * Although the structure object consists of an <em>extent</em> and a
- * <em>layout</em>, it is normally created with the
- * {@link Structure1d#Structure1d(Extent1d)} constructor, which takes care of
- * the proper construction of the underlying <em>layout</em>.
  *
  * @param extent the extent of the structure
  * @param layout the element layout
@@ -54,16 +48,14 @@ public record Structure1d(Extent1d extent, Layout1d layout) {
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order.
-     *
-     * @apiNote
-     * This is the <em>default</em> constructor which should be used by the
-     * clients for creating a new <em>structure</em> object.
+     * element order. This is the usual way for creating instances of structure
+     * objects.
      *
      * @param extent the extent of the structure
+     * @return a new structure object with the given extent
      */
-    public Structure1d(Extent1d extent) {
-        this(extent, Layout1d.DEFAULT);
+    public static Structure1d of(Extent1d extent) {
+        return new Structure1d(extent, Layout1d.DEFAULT);
     }
 
 }

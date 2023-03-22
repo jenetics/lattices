@@ -173,7 +173,7 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
      */
     public static DoubleMatrix1d of(final double... values) {
         return new DoubleMatrix1d(
-            new Structure1d(new Extent1d(values.length)),
+            Structure1d.of(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

@@ -82,7 +82,7 @@ public final class IntGrid1d extends BaseIntGrid1d<IntGrid1d> {
      */
     public static IntGrid1d of(final int... values) {
         return new IntGrid1d(
-            new Structure1d(new Extent1d(values.length)),
+            Structure1d.of(new Extent1d(values.length)),
             new DenseIntArray(values)
         );
     }

@@ -50,7 +50,7 @@ public interface Factory1d<T> {
      * @return a new object with the given {@code extent}
      */
     default T create(final Extent1d extent) {
-        return create(new Structure1d(extent));
+        return create(Structure1d.of(extent));
     }
 
     /**

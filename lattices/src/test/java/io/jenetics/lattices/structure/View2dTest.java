@@ -33,7 +33,7 @@ public class View2dTest {
 
     private static final Extent2d EXTENT = new Extent2d(100, 200);
 
-    private static final Structure2d STRUCTURE = new Structure2d(EXTENT);
+    private static final Structure2d STRUCTURE = Structure2d.of(EXTENT);
 
     private static final String[] ARRAY = IntStream.range(0, EXTENT.size())
         .mapToObj(i -> {

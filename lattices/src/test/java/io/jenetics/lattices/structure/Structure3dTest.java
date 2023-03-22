@@ -37,7 +37,7 @@ public class Structure3dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = new Structure3d(new Extent3d(100, 400, 78));
+        final var structure = Structure3d.of(new Extent3d(100, 400, 78));
         final var layout = structure.layout();
         final var range = new Range3d(structure.extent());
 

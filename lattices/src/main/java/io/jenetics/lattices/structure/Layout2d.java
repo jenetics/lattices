@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
  * @apiNote
  * Note, that the direct manipulation/creation of the <em>layout</em> object
  * usually doesn't lead to the expected result. It is expected that layouts
- * are created by the <em>structure</em> object; {@link Structure2d#Structure2d(Extent2d)}.
+ * are created by the <em>structure</em> object; {@link Structure2d#of(Extent2d)}.
  *
  * @see Structure2d
  *

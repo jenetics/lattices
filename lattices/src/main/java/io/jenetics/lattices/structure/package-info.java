@@ -24,7 +24,7 @@
  * The following code snippet shows how to do this for a 2-d double array.
  * <pre>{@code
  * // Define the structure + extent of your lattices.
- * final Structure2d structure = new Structure2d(new Extent2d(10, 34));
+ * final Structure2d structure = Structure2d.of(new Extent2d(10, 34));
  *
  * // The layout of your structure lets you calculate the array offset.
  * final Layout2d layout = structure.layout();

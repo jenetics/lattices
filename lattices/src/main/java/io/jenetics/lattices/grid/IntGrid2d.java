@@ -108,7 +108,7 @@ public final class IntGrid2d extends BaseIntGrid2d<IntGrid2d> {
      */
     public static IntGrid2d of(final Extent2d extent, final int... values) {
         return new IntGrid2d(
-            new Structure2d(extent),
+            Structure2d.of(extent),
             new DenseIntArray(values)
         );
     }

@@ -33,7 +33,7 @@ public class View1dTest {
 
     private static final Extent1d EXTENT = new Extent1d(10_000);
 
-    private static final Structure1d STRUCTURE = new Structure1d(EXTENT);
+    private static final Structure1d STRUCTURE = Structure1d.of(EXTENT);
 
     private static final String[] ARRAY = IntStream.range(0, EXTENT.size())
         .mapToObj(i -> {

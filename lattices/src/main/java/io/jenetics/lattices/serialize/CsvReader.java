@@ -75,7 +75,7 @@ public final class CsvReader implements Closeable {
             }
 
             return new ObjectGrid2d<>(
-                new Structure2d(new Extent2d(row, cols)),
+                Structure2d.of(new Extent2d(row, cols)),
                 new DenseObjectArray<>(array.toArray(String[]::new))
             );
         } catch (UncheckedIOException e) {
