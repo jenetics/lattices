@@ -17,25 +17,47 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.util;
+package io.jenetics.lattices.structure;
+
+import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
-
-import io.jenetics.lattices.structure.Index2d;
+import java.util.NoSuchElementException;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-class Index2dIterator implements Iterator<Index2d> {
-    @Override
-    public boolean hasNext() {
-        return false;
+final class Index1dIterator implements Iterator<Index1d> {
+
+    private final Range1d range;
+    private final Stride1d stride;
+
+    private int cursor;
+
+    Index1dIterator(Range1d range, Stride1d stride) {
+        this.range = requireNonNull(range);
+        this.stride = requireNonNull(stride);
+
+        cursor = range.start().value();
     }
 
     @Override
-    public Index2d next() {
-        return null;
+    public boolean hasNext() {
+        return cursor < range.start().value() + range.extent().size();
     }
+
+    @Override
+    public Index1d next() {
+        final int i = cursor;
+
+        if (cursor >= range.start().value() + range.extent().size()) {
+            throw new NoSuchElementException();
+        }
+
+        cursor = i + stride.value();
+        return new Index1d(i);
+    }
+
 }

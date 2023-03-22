@@ -20,7 +20,6 @@
 package io.jenetics.lattices.structure;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
 /**
  * The extent of 2-d structures.
@@ -66,7 +65,7 @@ public record Extent2d(int rows, int cols) implements Iterable<Index2d> {
 
     @Override
     public Iterator<Index2d> iterator() {
-        return null;
+        return new Index2dIterator(new Range2d(this));
     }
 
     @Override

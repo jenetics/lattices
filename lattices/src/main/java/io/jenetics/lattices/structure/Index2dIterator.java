@@ -17,50 +17,57 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.util;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import io.jenetics.lattices.structure.Index1d;
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Stride1d;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-class Index1dIterator implements Iterator<Index1d> {
+final class Index2dIterator implements Iterator<Index2d> {
 
-    private final Range1d range;
-    private final Stride1d stride;
+    private final Range2d range;
 
-    private int cursor;
+    private int rowCursor;
+    private int colCursor;
 
-    Index1dIterator(Range1d range, Stride1d stride) {
+    Index2dIterator(Range2d range) {
         this.range = requireNonNull(range);
-        this.stride = requireNonNull(stride);
 
-        cursor = range.start().value();
+        rowCursor = range.start().row();
+        colCursor = range.start().col();
     }
 
     @Override
     public boolean hasNext() {
-        return cursor < range.start().value() + range.extent().size();
+        return
+            rowCursor < range.start().row() + range.extent().rows() &&
+            colCursor < range.start().col() + range.extent().cols();
     }
 
     @Override
-    public Index1d next() {
-        final int i = cursor;
-        if (cursor >= range.start().value() + range.extent().size()) {
+    public Index2d next() {
+        final int r = rowCursor;
+        final int c = colCursor;
+
+        if (rowCursor >= range.start().row() + range.extent().rows() &&
+            colCursor >= range.start().col() + range.extent().cols())
+        {
             throw new NoSuchElementException();
         }
 
-        cursor = i + stride.value();
-        return new Index1d(i);
+        colCursor = c + 1;
+        if (colCursor >= range.start().col() + range.extent().cols()) {
+            colCursor = range.start().col();
+            rowCursor = r + 1;
+        }
+
+        return new Index2d(r, c);
     }
 
 }

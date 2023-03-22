@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import java.util.Iterator;
+
 /**
  * The extent of 1-d structures.
  *
@@ -28,7 +30,9 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+public record Extent1d(int size)
+    implements Comparable<Extent1d>, Iterable<Index1d>
+{
 
     /**
      * Create a new 1-d extent with the given size.
@@ -52,6 +56,11 @@ public record Extent1d(int size) implements Comparable<Extent1d> {
     @Override
     public String toString() {
         return "[%d]".formatted(size());
+    }
+
+    @Override
+    public Iterator<Index1d> iterator() {
+        return new Index1dIterator(new Range1d(this ), Stride1d.ONE) ;
     }
 
 }

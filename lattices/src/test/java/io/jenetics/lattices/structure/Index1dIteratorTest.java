@@ -17,13 +17,14 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.util;
+package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.structure.Index1dIterator;
 import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.Stride1d;
 

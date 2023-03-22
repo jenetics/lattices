@@ -121,7 +121,7 @@ public class ObjectGrid2dTest {
         final var grid = grid(new Extent2d( 7, 9));
 
         final var projection = grid.project(Projection2d.row(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(9));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(9));
 
         projection.forEach(c -> {
             final var value = projection.get(c);
@@ -137,7 +137,7 @@ public class ObjectGrid2dTest {
             .view(View2d.of(new Index2d(2, 2)));
 
         final var projection = grid.project(Projection2d.row(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(7));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(7));
 
         projection.forEach(c -> {
             final var value = projection.get(c);
@@ -152,7 +152,7 @@ public class ObjectGrid2dTest {
         final var grid = grid(new Extent2d( 7, 9));
 
         final var projection = grid.project(Projection2d.col(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(7));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(7));
 
         projection.forEach(r -> {
             final var value = projection.get(r);
@@ -168,7 +168,7 @@ public class ObjectGrid2dTest {
             .view(View2d.of(new Index2d(2, 2)));
 
         final var projection = grid.project(Projection2d.col(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(5));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(5));
 
         projection.forEach(r -> {
             final var value = projection.get(r);

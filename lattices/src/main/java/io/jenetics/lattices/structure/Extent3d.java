@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import java.util.Iterator;
+
 /**
  * The extent of 3-d structures.
  *
@@ -30,7 +32,9 @@ package io.jenetics.lattices.structure;
  * @version 3.0
  * @since 3.0
  */
-public record Extent3d(int slices, int rows, int cols) {
+public record Extent3d(int slices, int rows, int cols)
+    implements Iterable<Index3d>
+{
 
     public Extent3d {
         if (slices < 0 || rows < 0 || cols < 0 || multNotSave(slices, rows, cols)) {
@@ -58,6 +62,11 @@ public record Extent3d(int slices, int rows, int cols) {
      */
     public int size() {
         return slices*rows*cols;
+    }
+
+    @Override
+    public Iterator<Index3d> iterator() {
+        return new Index3dIterator(new Range3d(this));
     }
 
     @Override

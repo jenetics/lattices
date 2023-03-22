@@ -31,6 +31,11 @@ package io.jenetics.lattices.structure;
 public record Stride1d(int value) {
 
     /**
+     * A stride instance with stride one.
+     */
+    public static final Stride1d ONE = new Stride1d(1);
+
+    /**
      * Create a new 1-d stride
      *
      * @param value the stride value
