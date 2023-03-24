@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Iterator;
+
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
@@ -31,7 +33,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Range3d(Index3d start, Extent3d extent) {
+public record Range3d(Index3d start, Extent3d extent)
+    implements Iterable<Index3d>
+{
 
     public Range3d {
         requireNonNull(start);
@@ -52,7 +56,8 @@ public record Range3d(Index3d start, Extent3d extent) {
             new Extent3d(
                 end.slice() - start.slice(),
                 end.row() - start.row(),
-                end.col() - start.col())
+                end.col() - start.col()
+            )
         );
     }
 
@@ -65,13 +70,9 @@ public record Range3d(Index3d start, Extent3d extent) {
         this(Index3d.ZERO, extent);
     }
 
-    /**
-     * Return the number of elements of this range.
-     *
-     * @return the number of elements of this range
-     */
-    public int size() {
-        return extent.size();
+    @Override
+    public Iterator<Index3d> iterator() {
+        return new Index3dIterator(this);
     }
 
     @Override
