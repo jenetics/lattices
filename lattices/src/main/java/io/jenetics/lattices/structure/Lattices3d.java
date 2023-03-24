@@ -19,6 +19,9 @@
  */
 package io.jenetics.lattices.structure;
 
+import java.util.function.IntFunction;
+import java.util.function.ObjIntConsumer;
+
 /**
  * This class provides structural access to a one-dimensional array.
  *
@@ -39,8 +42,79 @@ public record Lattices3d(Structure3d structure) {
      * @return the element at the given {@code index}
      * @param <T> the lattice element type
      */
+    public <T> T get(IntFunction<T> array, Index3d index) {
+        return array.apply(structure.layout().offset(index));
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> T get(IntFunction<T> array, int slice, int row, int col) {
+        return array.apply(structure.layout().offset(slice, row, col));
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param index the lattice index of the returned element
+     * @param value the new lattice value at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> void set(ObjIntConsumer<T> array, Index3d index, T value) {
+        array.accept(value, structure.layout().offset(index));
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> void set(ObjIntConsumer<T> array, int slice, int row, int col, T value) {
+        array.accept(value, structure.layout().offset(slice, row, col));
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param index the lattice index of the returned element
+     * @return the element at the given {@code index}
+     * @param <T> the lattice element type
+     */
     public <T> T get(T[] array, Index3d index) {
         return array[structure.layout().offset(index)];
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> T get(T[] array, int slice, int row, int col) {
+        return array[structure.layout().offset(slice, row, col)];
     }
 
     /**
@@ -57,6 +131,21 @@ public record Lattices3d(Structure3d structure) {
     }
 
     /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> void set(T[] array, int slice, int row, int col, T value) {
+        array[structure.layout().offset(slice, row, col)] = value;
+    }
+
+    /**
      * Return the lattice element at the given index. The elements are stored in
      * the given {@code array}. This method doesn't do any index checking.
      *
@@ -66,6 +155,20 @@ public record Lattices3d(Structure3d structure) {
      */
     public int get(int[] array, Index3d index) {
         return array[structure.layout().offset(index)];
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     */
+    public int get(int[] array, int slice, int row, int col) {
+        return array[structure.layout().offset(slice, row, col)];
     }
 
     /**
@@ -81,6 +184,20 @@ public record Lattices3d(Structure3d structure) {
     }
 
     /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(int[] array, int slice, int row, int col, int value) {
+        array[structure.layout().offset(slice, row, col)] = value;
+    }
+
+    /**
      * Return the lattice element at the given index. The elements are stored in
      * the given {@code array}. This method doesn't do any index checking.
      *
@@ -90,6 +207,20 @@ public record Lattices3d(Structure3d structure) {
      */
     public long get(long[] array, Index3d index) {
         return array[structure.layout().offset(index)];
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     */
+    public long get(long[] array, int slice, int row, int col) {
+        return array[structure.layout().offset(slice, row, col)];
     }
 
     /**
@@ -105,6 +236,20 @@ public record Lattices3d(Structure3d structure) {
     }
 
     /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(long[] array, int slice, int row, int col, long value) {
+        array[structure.layout().offset(slice, row, col)] = value;
+    }
+
+    /**
      * Return the lattice element at the given index. The elements are stored in
      * the given {@code array}. This method doesn't do any index checking.
      *
@@ -117,6 +262,20 @@ public record Lattices3d(Structure3d structure) {
     }
 
     /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     */
+    public double get(double[] array, int slice, int row, int col) {
+        return array[structure.layout().offset(slice, row, col)];
+    }
+
+    /**
      * Set the lattice element at the given index. The elements are stored in
      * the given {@code array}. This method doesn't do any index checking.
      *
@@ -126,6 +285,20 @@ public record Lattices3d(Structure3d structure) {
      */
     public void set(double[] array, Index3d index, double value) {
         array[structure.layout().offset(index)] = value;
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(double[] array, int slice, int row, int col, double value) {
+        array[structure.layout().offset(slice, row, col)] = value;
     }
 
 }
