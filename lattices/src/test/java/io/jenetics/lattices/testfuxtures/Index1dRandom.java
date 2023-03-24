@@ -37,7 +37,7 @@ public class Index1dRandom {
 
     public Index1d next(Range1d range) {
         final int start = range.start().value();
-        final int bound = range.extent().size();
+        final int bound = range.extent().value();
         return new Index1d(random.nextInt(start, bound));
     }
 

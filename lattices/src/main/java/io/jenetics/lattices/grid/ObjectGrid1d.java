@@ -277,7 +277,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
         return structure -> new ObjectGrid1d<T>(
             structure,
-            DenseObjectArray.ofSize(structure.extent().size(), __)
+            DenseObjectArray.ofSize(structure.extent().value(), __)
         );
     }
 

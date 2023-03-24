@@ -35,7 +35,7 @@ public class View1dTest {
 
     private static final Structure1d STRUCTURE = Structure1d.of(EXTENT);
 
-    private static final String[] ARRAY = IntStream.range(0, EXTENT.size())
+    private static final String[] ARRAY = IntStream.range(0, EXTENT.value())
         .mapToObj(i -> {
             final var index = STRUCTURE.layout().index(i);
             return "v_" + index.value();
@@ -46,10 +46,10 @@ public class View1dTest {
     public void ofRange(Range1d range) {
         final var view = View1d.of(range);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().size())
-            .isEqualTo(range.extent().size());
+        assertThat(structure.extent().value())
+            .isEqualTo(range.extent().value());
 
-        for (int i = 0; i < structure.extent().size(); ++i) {
+        for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
             assertThat(ARRAY[offset])
@@ -71,10 +71,10 @@ public class View1dTest {
     public void ofStart(Index1d start) {
         final var view = View1d.of(start);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().size())
-            .isEqualTo(STRUCTURE.extent().size() - start.value());
+        assertThat(structure.extent().value())
+            .isEqualTo(STRUCTURE.extent().value() - start.value());
 
-        for (int i = 0; i < structure.extent().size(); ++i) {
+        for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
             assertThat(ARRAY[offset])
@@ -95,7 +95,7 @@ public class View1dTest {
         final var view = View1d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
-        for (int i = 0; i < structure.extent().size(); ++i) {
+        for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
             assertThat(ARRAY[offset])

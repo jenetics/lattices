@@ -51,7 +51,7 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
     public static final Factory1d<DoubleMatrix1d> DENSE = structure ->
         new DoubleMatrix1d(
             structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+            DenseDoubleArray.ofSize(structure.extent().value())
         );
 
     /**

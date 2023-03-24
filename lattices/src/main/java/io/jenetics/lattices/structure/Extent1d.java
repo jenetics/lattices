@@ -24,38 +24,47 @@ import java.util.Iterator;
 /**
  * The extent of 1-d structures.
  *
- * @param size the number of elements, must be greater or equal zero
+ * @param value the number of elements, must be greater or equal zero
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size)
+public record Extent1d(int value)
     implements Comparable<Extent1d>, Iterable<Index1d>
 {
 
     /**
      * Create a new 1-d extent with the given size.
      *
-     * @param size the size of the extent
+     * @param value the size of the extent
      * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
      */
     public Extent1d {
-        if (size < 0) {
+        if (value < 0) {
             throw new IndexOutOfBoundsException(
-                "Extent is out of bounds: [%d].".formatted(size)
+                "Extent is out of bounds: [%d].".formatted(value)
             );
         }
     }
 
+    /**
+     * The number of elements of the structure.
+     *
+     * @return the number of cells of the structure
+     */
+    public int size() {
+        return value;
+    }
+
     @Override
     public int compareTo(Extent1d other) {
-        return Integer.compare(size, other.size);
+        return Integer.compare(value, other.value);
     }
 
     @Override
     public String toString() {
-        return "[%d]".formatted(size());
+        return "[%d]".formatted(value());
     }
 
     @Override

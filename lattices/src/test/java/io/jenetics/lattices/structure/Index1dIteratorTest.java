@@ -24,10 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.structure.Index1dIterator;
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Stride1d;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
@@ -41,7 +37,7 @@ public class Index1dIteratorTest {
 
         int calls = 0;
         for (int i = range.start().value();
-             i < range.start().value() + range.extent().size();
+             i < range.start().value() + range.extent().value();
              i += stride.value())
         {
             ++calls;
@@ -49,7 +45,7 @@ public class Index1dIteratorTest {
         }
 
         assertThat(it.hasNext()).isFalse();
-        assertThat(calls).isEqualTo(range.extent().size()/stride.value());
+        assertThat(calls).isEqualTo(range.extent().value()/stride.value());
     }
 
     @DataProvider

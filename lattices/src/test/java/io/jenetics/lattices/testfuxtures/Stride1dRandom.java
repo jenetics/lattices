@@ -15,7 +15,7 @@ public class Stride1dRandom {
 
     public Stride1d next(Range1d range) {
         final int start = range.start().value();
-        final int bound = range.extent().size() + 1;
+        final int bound = range.extent().value() + 1;
         return new Stride1d(random.nextInt(start, bound));
     }
 

@@ -46,12 +46,12 @@ public final class Grids {
      *         required
      */
     public static void checkArraySize(final Structure1d structure, final int length) {
-        if (structure.extent().size() == 0) {
+        if (structure.extent().value() == 0) {
             return;
         }
 
         final var maxIndex = structure.layout().offset(
-            structure.extent().size() - 1
+            structure.extent().value() - 1
         );
 
         if (maxIndex >= length) {

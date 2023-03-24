@@ -118,7 +118,7 @@ public class Projection3dTest {
         final var prj2 = Projection2d.row(32);
         final var structure = prj2.apply(prj3.apply(STRUCTURE));
 
-        for (int i = 0; i < structure.extent().size(); ++i) {
+        for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_32_" + "32_" + i;
@@ -133,7 +133,7 @@ public class Projection3dTest {
         final var prj2 = Projection2d.col(32);
         final var structure = prj2.apply(prj3.apply(STRUCTURE));
 
-        for (int i = 0; i < structure.extent().size(); ++i) {
+        for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_32_" + i +  "_32";

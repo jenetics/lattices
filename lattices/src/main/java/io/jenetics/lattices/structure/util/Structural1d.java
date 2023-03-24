@@ -63,7 +63,7 @@ public interface Structural1d {
      * @return the number of cells of this {@code this} structures
      */
     default int size() {
-        return extent().size();
+        return extent().value();
     }
 
 }

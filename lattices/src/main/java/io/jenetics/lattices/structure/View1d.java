@@ -67,7 +67,7 @@ public interface View1d {
             .of(
                 new Range1d(
                     start,
-                    new Extent1d(structure.extent().size() - start.value())
+                    new Extent1d(structure.extent().value() - start.value())
                 )
             )
             .apply(structure);
@@ -84,8 +84,8 @@ public interface View1d {
 
         return structure -> new Structure1d(
             new Extent1d(
-                structure.extent().size() != 0
-                    ? (structure.extent().size() - 1)/stride.value() + 1
+                structure.extent().value() != 0
+                    ? (structure.extent().value() - 1)/stride.value() + 1
                     : 0
             ),
             new Layout1d(

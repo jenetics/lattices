@@ -50,7 +50,7 @@ public final class IntGrid1d extends BaseIntGrid1d<IntGrid1d> {
     public static final Factory1d<IntGrid1d> DENSE = structure ->
         new IntGrid1d(
             structure,
-            DenseIntArray.ofSize(structure.extent().size())
+            DenseIntArray.ofSize(structure.extent().value())
         );
 
     /**
