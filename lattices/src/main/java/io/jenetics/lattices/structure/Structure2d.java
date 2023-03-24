@@ -58,4 +58,17 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
         return new Structure2d(extent, new Layout2d(extent));
     }
 
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param rows the number of rows of the structure
+     * @param cols the number of columns of the structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure2d of(int rows, int cols) {
+        return of(new Extent2d(rows, cols));
+    }
+
 }

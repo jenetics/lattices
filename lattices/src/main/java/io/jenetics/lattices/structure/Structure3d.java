@@ -58,4 +58,18 @@ public record Structure3d(Extent3d extent, Layout3d layout) {
         return new Structure3d(extent, new Layout3d(extent));
     }
 
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param slices the number of slices of the structure
+     * @param rows the number of rows of the structure
+     * @param cols the number of columns of the structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure3d of(int slices, int rows, int cols) {
+        return of(new Extent3d(slices, rows, cols));
+    }
+
 }

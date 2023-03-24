@@ -58,4 +58,16 @@ public record Structure1d(Extent1d extent, Layout1d layout) {
         return new Structure1d(extent, Layout1d.DEFAULT);
     }
 
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure1d of(int extent) {
+        return of(new Extent1d(extent));
+    }
+
 }
