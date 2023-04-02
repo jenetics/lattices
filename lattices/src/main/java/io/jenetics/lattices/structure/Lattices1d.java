@@ -19,31 +19,26 @@
  */
 package io.jenetics.lattices.structure;
 
-import java.util.function.IntFunction;
-import java.util.function.ObjIntConsumer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class provides structural access to a one-dimensional array.
  *
- * @param structure the defining access structure
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
  * @version 3.0
+ * @since 3.0
  */
-public record Lattices1d(Structure1d structure) {
+public final class Lattices1d {
+
+    private final Structure1d structure;
 
     /**
-     * Return the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
+     * Create a new object for accessing multidimensional data from an array.
      *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @return the element at the given {@code index}
-     * @param <T> the lattice element type
+     * @param structure the defining access structure
      */
-    public <T> T get(IntFunction<T> array, Index1d index) {
-        return array.apply(structure.layout().offset(index));
+    public Lattices1d(Structure1d structure) {
+        this.structure = requireNonNull(structure);
     }
 
     /**
@@ -52,47 +47,8 @@ public record Lattices1d(Structure1d structure) {
      *
      * @param array the array where the elements are stored
      * @param index the lattice index of the returned element
+     * @param <T> the lattice element type
      * @return the element at the given {@code index}
-     * @param <T> the lattice element type
-     */
-    public <T> T get(IntFunction<T> array, int index) {
-        return array.apply(structure.layout().offset(index));
-    }
-
-    /**
-     * Set the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
-     * @param <T> the lattice element type
-     */
-    public <T> void set(ObjIntConsumer<T> array, Index1d index, T value) {
-        array.accept(value, structure.layout().offset(index));
-    }
-
-    /**
-     * Set the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
-     * @param <T> the lattice element type
-     */
-    public <T> void set(ObjIntConsumer<T> array, int index, T value) {
-        array.accept(value, structure.layout().offset(index));
-    }
-
-    /**
-     * Return the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @return the element at the given {@code index}
-     * @param <T> the lattice element type
      */
     public <T> T get(T[] array, Index1d index) {
         return array[structure.layout().offset(index)];
@@ -104,8 +60,8 @@ public record Lattices1d(Structure1d structure) {
      *
      * @param array the array where the elements are stored
      * @param index the lattice index of the returned element
-     * @return the element at the given {@code index}
      * @param <T> the lattice element type
+     * @return the element at the given {@code index}
      */
     public <T> T get(T[] array, int index) {
         return array[structure.layout().offset(index)];
