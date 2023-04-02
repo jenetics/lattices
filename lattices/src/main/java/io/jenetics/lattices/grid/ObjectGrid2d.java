@@ -84,7 +84,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      *         bounds
      */
     public T get(final int row, final int col) {
-        return array.get(layout().offset(row, col));
+        return array.get(mapping().offset(row, col));
     }
 
     /**
@@ -98,7 +98,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      *         bounds
      */
     public void set(final int row, final int col, final T value) {
-        array.set(layout().offset(row, col), value);
+        array.set(mapping().offset(row, col), value);
     }
 
     @Override

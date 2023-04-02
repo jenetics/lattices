@@ -29,34 +29,34 @@ package io.jenetics.lattices.structure;
 public interface Structured1d {
 
     /**
-     * Return the structure for grid.
+     * Return the lattice structure.
      *
-     * @return the structure for grid
+     * @return the lattice structure
      */
     Structure1d structure();
 
     /**
-     * Return the dimension of {@code this} structures.
+     * Return the dimension of {@code this} structure.
      *
-     * @return the dimension of {@code this} structures
+     * @return the dimension of {@code this} structure
      */
     default Extent1d extent() {
         return structure().extent();
     }
 
     /**
-     * Return the defined order of {@code this} structures.
+     * Return the defined offset mapping of {@code this} structure.
      *
-     * @return the defined order of {@code this} structures
+     * @return the defined offset mapping of {@code this} structure
      */
-    default Layout1d layout() {
+    default OffsetMapping1d mapping() {
         return structure().layout();
     }
 
     /**
-     * Return the number of cells of this {@code this} structures.
+     * Return the number of cells of this {@code this} structure.
      *
-     * @return the number of cells of this {@code this} structures
+     * @return the number of cells of this {@code this} structure
      */
     default int size() {
         return extent().value();

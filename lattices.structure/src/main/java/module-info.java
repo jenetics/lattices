@@ -23,4 +23,5 @@
  * @since 3.0
  */
 module io.jenetics.lattices.structure {
+    exports io.jenetics.lattices.structure;
 }

@@ -29,61 +29,61 @@ package io.jenetics.lattices.structure;
 public interface Structured3d {
 
     /**
-     * Return the structure for grid.
+     * Return the lattice structure.
      *
-     * @return the structure for grid
+     * @return the lattice structure
      */
     Structure3d structure();
 
     /**
-     * Return the dimension of {@code this} structures.
+     * Return the dimension of {@code this} structure.
      *
-     * @return the dimension of {@code this} structures
+     * @return the dimension of {@code this} structure
      */
     default Extent3d extent() {
         return structure().extent();
     }
 
     /**
-     * Return the defined order of {@code this} structures.
+     * Return the defined offset mapping of {@code this} structure.
      *
-     * @return the defined order of {@code this} structures
+     * @return the defined offset mapping of {@code this} structure
      */
-    default Layout3d layout() {
+    default OffsetMapping3d mapping() {
         return structure().layout();
     }
 
     /**
-     * Return the number of cells of this {@code this} structures.
+     * Return the number of cells of this {@code this} structure.
      *
-     * @return the number of cells of this {@code this} structures
+     * @return the number of cells of this {@code this} structure
      */
     default int size() {
         return extent().size();
     }
 
     /**
-     * Return the number of slices of {@code this} structures.
+     * Return the number of slices of {@code this} structure.
      *
-     * @return the number of slices of {@code this} structures
+     * @return the number of slices of {@code this} structure
      */
     default int slices() {
         return extent().slices();
     }
 
     /**
-     * Return the number of rows of {@code this} structures.
+     * Return the number of rows of {@code this} structure.
      *
-     * @return the number of rows of {@code this} structures
+     * @return the number of rows of {@code this} structure
      */
     default int rows() {
         return extent().rows();
     }
 
     /**
-     * Return the number of columns of {@code this} structures.
+     * Return the number of columns of {@code this} structure.
      *
-     * @return the number of columns of {@code this} structures
+     * @return the number of columns of {@code this} structure
      */
     default int cols() {
         return extent().cols();
