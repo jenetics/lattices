@@ -17,11 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.util;
-
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Layout2d;
-import io.jenetics.lattices.structure.Structure2d;
+package io.jenetics.lattices.structure;
 
 /**
  * Defines the structure of a grid.

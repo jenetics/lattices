@@ -17,11 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.util;
-
-import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Layout3d;
-import io.jenetics.lattices.structure.Structure3d;
+package io.jenetics.lattices.structure;
 
 /**
  * Defines the structure of a grid.
@@ -30,21 +26,21 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structural3d {
+public interface Structural1d {
 
     /**
      * Return the structure for grid.
      *
      * @return the structure for grid
      */
-    Structure3d structure();
+    Structure1d structure();
 
     /**
      * Return the dimension of {@code this} structures.
      *
      * @return the dimension of {@code this} structures
      */
-    default Extent3d extent() {
+    default Extent1d extent() {
         return structure().extent();
     }
 
@@ -53,7 +49,7 @@ public interface Structural3d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Layout3d layout() {
+    default Layout1d layout() {
         return structure().layout();
     }
 
@@ -63,34 +59,7 @@ public interface Structural3d {
      * @return the number of cells of this {@code this} structures
      */
     default int size() {
-        return extent().size();
-    }
-
-    /**
-     * Return the number of slices of {@code this} structures.
-     *
-     * @return the number of slices of {@code this} structures
-     */
-    default int slices() {
-        return extent().slices();
-    }
-
-    /**
-     * Return the number of rows of {@code this} structures.
-     *
-     * @return the number of rows of {@code this} structures
-     */
-    default int rows() {
-        return extent().rows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} structures.
-     *
-     * @return the number of columns of {@code this} structures
-     */
-    default int cols() {
-        return extent().cols();
+        return extent().value();
     }
 
 }
