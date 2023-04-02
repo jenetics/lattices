@@ -26,21 +26,21 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Structural2d {
+public interface Structured3d {
 
     /**
      * Return the structure for grid.
      *
      * @return the structure for grid
      */
-    Structure2d structure();
+    Structure3d structure();
 
     /**
      * Return the dimension of {@code this} structures.
      *
      * @return the dimension of {@code this} structures
      */
-    default Extent2d extent() {
+    default Extent3d extent() {
         return structure().extent();
     }
 
@@ -49,7 +49,7 @@ public interface Structural2d {
      *
      * @return the defined order of {@code this} structures
      */
-    default Layout2d layout() {
+    default Layout3d layout() {
         return structure().layout();
     }
 
@@ -60,6 +60,15 @@ public interface Structural2d {
      */
     default int size() {
         return extent().size();
+    }
+
+    /**
+     * Return the number of slices of {@code this} structures.
+     *
+     * @return the number of slices of {@code this} structures
+     */
+    default int slices() {
+        return extent().slices();
     }
 
     /**

@@ -22,7 +22,7 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Structural1d;
+import io.jenetics.lattices.structure.Structured1d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.View1d;
 
@@ -34,7 +34,7 @@ import io.jenetics.lattices.structure.View1d;
  * @version 3.0
  */
 public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
-    extends Structural1d, Loopable1d, Grid<A, G>
+    extends Structured1d, Loopable1d, Grid<A, G>
 {
 
     /**

@@ -31,5 +31,4 @@ module io.jenetics.lattices {
     exports io.jenetics.lattices.matrix.blas;
     exports io.jenetics.lattices.serialize;
     exports io.jenetics.lattices.structure;
-    exports io.jenetics.lattices.structure.util;
 }
