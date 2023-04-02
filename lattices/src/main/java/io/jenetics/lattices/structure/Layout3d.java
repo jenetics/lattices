@@ -39,7 +39,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout3d(Index3d start, Stride3d stride) {
+public record Layout3d(Index3d start, Stride3d stride)
+    implements OffsetMapping3d
+{
 
     public Layout3d {
         requireNonNull(start);
@@ -71,16 +73,7 @@ public record Layout3d(Index3d start, Stride3d stride) {
         this(new Range3d(extent));
     }
 
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param slice the slice index
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code slice}, {@code row}
-     *         and {@code col}
-     */
+    @Override
     public int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
@@ -88,23 +81,12 @@ public record Layout3d(Index3d start, Stride3d stride) {
             start.col() + col*stride.col();
     }
 
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     *
-     * @param index the dimensional index
-     * @return the array index
-     */
+    @Override
     public int offset(Index3d index) {
         return offset(index.slice(), index.row(), index.col());
     }
 
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     */
+    @Override
     public Index3d index(int offset) {
         int start = offset -
             this.start.slice() -

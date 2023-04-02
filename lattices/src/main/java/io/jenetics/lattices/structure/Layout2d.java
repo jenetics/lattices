@@ -39,7 +39,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout2d(Index2d start, Stride2d stride) {
+public record Layout2d(Index2d start, Stride2d stride)
+    implements OffsetMapping2d
+{
 
     public Layout2d {
         requireNonNull(start);
@@ -64,37 +66,19 @@ public record Layout2d(Index2d start, Stride2d stride) {
         this(new Range2d(extent));
     }
 
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
-     */
+    @Override
     public int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
     }
 
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     *
-     * @param index the dimensional index
-     * @return the array index
-     */
+    @Override
     public int offset(Index2d index) {
         return offset(index.row(), index.col());
     }
 
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index2d)} method.
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     */
+    @Override
     public Index2d index(int offset) {
         final int start = offset -
             this.start.row() -
