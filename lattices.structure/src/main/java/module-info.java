@@ -1,5 +1,5 @@
 /*
- * Java Linear Algebra Library (@__identifier__@).
+ * Java Lattice Library (@__identifier__@).
  * Copyright (c) @__year__@ Franz Wilhelmstötter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,17 +20,7 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since 3.0
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+module io.jenetics.lattices.structure {
 }
-
-rootProject.name = "lattices"
-
-include("lattices")
-include("lattices.structure")

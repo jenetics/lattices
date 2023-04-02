@@ -32,6 +32,8 @@ description = "Lattices - Library for multidimensional data structures and linea
 extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
+    api(project(":lattices.structure"))
+
     testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("org.apache.commons:commons-math3:3.6.1")
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")

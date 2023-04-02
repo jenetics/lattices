@@ -1,7 +1,4 @@
 /*
- * Java Linear Algebra Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,14 +20,23 @@
  * @since 2.0
  * @version 2.0
  */
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+plugins {
+    `java-library`
+    idea
+    `maven-publish`
+    id("me.champeau.jmh")
 }
 
-rootProject.name = "lattices"
+description = "Lattices Structure - Library for multidimensional data structures"
 
-include("lattices")
-include("lattices.structure")
+extra["moduleName"] = "io.jenetics.lattices.structure"
+
+dependencies {
+    testImplementation("org.assertj:assertj-core:3.20.2")
+    testImplementation("org.apache.commons:commons-math3:3.6.1")
+    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
+    testImplementation("org.testng:testng:7.6.1")
+    testImplementation("colt:colt:1.2.0")
+}
+
+tasks.test { dependsOn(tasks.compileJmhJava) }
