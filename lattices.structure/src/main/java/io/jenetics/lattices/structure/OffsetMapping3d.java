@@ -20,7 +20,7 @@
 package io.jenetics.lattices.structure;
 
 /**
- * This interface defines the array offset for the given 3-d index.
+ * This interface defines the array offset for a given 3-d index.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
