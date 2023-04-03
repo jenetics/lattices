@@ -35,7 +35,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("org.apache.commons:commons-math3:3.6.1")
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
-    testImplementation("org.testng:testng:7.6.1")
+    testImplementation("org.testng:testng:7.7.1")
     testImplementation("colt:colt:1.2.0")
 }
 
