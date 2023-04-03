@@ -49,7 +49,7 @@ public interface Structured3d {
      *
      * @return the defined offset mapping of {@code this} structure
      */
-    default OffsetMapping3d mapping() {
+    default OffsetMapper3d mapper() {
         return structure().layout();
     }
 

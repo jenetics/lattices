@@ -49,7 +49,7 @@ public interface Structured1d {
      *
      * @return the defined offset mapping of {@code this} structure
      */
-    default OffsetMapping1d mapping() {
+    default OffsetMapper1d mapper() {
         return structure().layout();
     }
 

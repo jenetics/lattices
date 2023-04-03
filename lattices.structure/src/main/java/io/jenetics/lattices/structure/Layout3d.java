@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record Layout3d(Index3d start, Stride3d stride)
-    implements OffsetMapping3d
+    implements OffsetMapper3d
 {
 
     public Layout3d {

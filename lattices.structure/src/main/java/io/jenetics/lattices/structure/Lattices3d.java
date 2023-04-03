@@ -40,14 +40,14 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Lattices3d {
 
-    private final OffsetMapping3d mapper;
+    private final OffsetMapper3d mapper;
 
     /**
      * Create a new object for accessing multidimensional data from an array.
      *
      * @param mapper the defining offset mapper
      */
-    public Lattices3d(OffsetMapping3d mapper) {
+    public Lattices3d(OffsetMapper3d mapper) {
         this.mapper = requireNonNull(mapper);
     }
 

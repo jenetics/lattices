@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface OffsetMapping1d {
+public interface OffsetMapper1d {
 
     /**
      * Return the position of the element with the given relative {@code rank}

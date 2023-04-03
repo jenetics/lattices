@@ -39,14 +39,14 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Lattices2d {
 
-    private final OffsetMapping2d mapper;
+    private final OffsetMapper2d mapper;
 
     /**
      * Create a new object for accessing multidimensional data from an array.
      *
      * @param mapper the defining offset mapper
      */
-    public Lattices2d(OffsetMapping2d mapper) {
+    public Lattices2d(OffsetMapper2d mapper) {
         this.mapper = requireNonNull(mapper);
     }
 

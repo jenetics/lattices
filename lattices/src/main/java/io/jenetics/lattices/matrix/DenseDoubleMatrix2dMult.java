@@ -94,9 +94,9 @@ final class DenseDoubleMatrix2dMult {
         }
 
         while (--blocks >= 0) {
-            int B_j = B.mapping().offset(0, 0);
-            int A_index = A.mapping().offset(rr, 0);
-            int C_j = C.mapping().offset(rr, 0);
+            int B_j = B.mapper().offset(0, 0);
+            int A_index = A.mapper().offset(rr, 0);
+            int C_j = C.mapper().offset(rr, 0);
             rr += m_block;
             if (blocks == 0) {
                 m_block += m - rr;

@@ -112,7 +112,7 @@ public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
      *         bounds
      */
     public int get(final int index) {
-        return array.get(mapping().offset(index));
+        return array.get(mapper().offset(index));
     }
 
     /**
@@ -125,7 +125,7 @@ public abstract class BaseIntGrid1d<G extends BaseIntGrid1d<G>>
      *         bounds
      */
     public void set(final int index, final int value) {
-        array.set(mapping().offset(index),  value);
+        array.set(mapper().offset(index),  value);
     }
 
     /**

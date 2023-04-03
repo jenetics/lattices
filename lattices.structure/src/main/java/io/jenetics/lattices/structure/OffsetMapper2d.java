@@ -20,25 +20,23 @@
 package io.jenetics.lattices.structure;
 
 /**
- * This interface defines the array offset for a given 3-d index.
+ * This interface defines the array offset for a given 2-d index.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface OffsetMapping3d {
+public interface OffsetMapper2d {
 
     /**
      * Return the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-d array.
      *
-     * @param slice the slice index
      * @param row the row index
      * @param col the column index
-     * @return the (linearized) index of the given {@code slice}, {@code row}
-     *         and {@code col}
+     * @return the (linearized) index of the given {@code row} and {@code col}
      */
-    int offset(int slice, int row, int col);
+    int offset(int row, int col);
 
     /**
      * Return the <em>array</em> index from the given <em>dimensional</em> index.
@@ -46,15 +44,15 @@ public interface OffsetMapping3d {
      * @param index the dimensional index
      * @return the array index
      */
-    int offset(Index3d index);
+    int offset(Index2d index);
 
     /**
      * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
+     * <em>inverse</em> operation of the {@link #offset(Index2d)} method.
      *
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
-    Index3d index(int offset);
+    Index2d index(int offset);
 
 }
