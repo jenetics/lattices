@@ -25,13 +25,13 @@
  */
 plugins {
 	base
-	id("me.champeau.jmh") version "0.6.6" apply false
+	id("me.champeau.jmh") version "0.7.0" apply false
 }
 
 rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "7.6"
+	version = "8.0.2"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
