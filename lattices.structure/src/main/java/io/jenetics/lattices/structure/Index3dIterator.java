@@ -33,14 +33,14 @@ final class Index3dIterator implements Iterator<Index3d> {
 
     private final Range3d range;
 
-    private int sliceCurser;
+    private int sliceCursor;
     private int rowCursor;
     private int colCursor;
 
     Index3dIterator(Range3d range) {
         this.range = requireNonNull(range);
 
-        sliceCurser = range.start().slice();
+        sliceCursor = range.start().slice();
         rowCursor = range.start().row();
         colCursor = range.start().col();
     }
@@ -48,18 +48,18 @@ final class Index3dIterator implements Iterator<Index3d> {
     @Override
     public boolean hasNext() {
         return
-            sliceCurser < range.start().slice() + range.extent().slices() &&
+            sliceCursor < range.start().slice() + range.extent().slices() &&
             rowCursor < range.start().row() + range.extent().rows() &&
             colCursor < range.start().col() + range.extent().cols();
     }
 
     @Override
     public Index3d next() {
-        final int s = sliceCurser;
+        final int s = sliceCursor;
         final int r = rowCursor;
         final int c = colCursor;
 
-        if (sliceCurser >= range.start().slice() + range.extent().slices() &&
+        if (sliceCursor >= range.start().slice() + range.extent().slices() &&
             rowCursor >= range.start().row() + range.extent().rows() &&
             colCursor >= range.start().col() + range.extent().cols())
         {
@@ -74,7 +74,7 @@ final class Index3dIterator implements Iterator<Index3d> {
             if (rowCursor >= range.start().row() + range.extent().rows()) {
                 colCursor = range.start().col();
                 rowCursor = range.start().row();
-                sliceCurser = s + 1;
+                sliceCursor = s + 1;
             }
         }
 
