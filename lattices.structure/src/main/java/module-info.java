@@ -48,6 +48,14 @@
  * assert index.col == col;
  * }</pre>
  *
+ * The helper class {@link io.jenetics.lattices.structure.Lattices2d} allows
+ * simplified access to the lattice elements.
+ * <pre>{@code
+ * final var lattice = Lattices2d.of(structure);
+ * final var value = lattice.get(values, index);
+ * assert value == Math.PI;
+ * }</pre>
+ *
  * The {@code View} and {@code Projection} functions are used for manipulating
  * the <em>structure</em> objects.
  *

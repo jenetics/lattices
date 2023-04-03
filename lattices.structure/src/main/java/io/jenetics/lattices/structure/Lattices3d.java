@@ -24,6 +24,15 @@ import static java.util.Objects.requireNonNull;
 /**
  * This class provides structural access to a one-dimensional array.
  *
+ * <pre>{@code
+ * final var values = new double[structure.extent().size()]
+ * final var lattice = Lattices3d.of(structure);
+ *
+ * lattice.set(values, index, 0.5);
+ * final var value = lattice.get(values, index);
+ * assert value == 0.5;
+ * }</pre>
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz
  * Wilhelmstötter</a>
  * @version 3.0
@@ -31,15 +40,15 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Lattices3d {
 
-    private final Structure3d structure;
+    private final OffsetMapping3d mapper;
 
     /**
      * Create a new object for accessing multidimensional data from an array.
      *
-     * @param structure the defining access structure
+     * @param mapper the defining offset mapper
      */
-    public Lattices3d(Structure3d structure) {
-        this.structure = requireNonNull(structure);
+    public Lattices3d(OffsetMapping3d mapper) {
+        this.mapper = requireNonNull(mapper);
     }
 
     /**
@@ -52,7 +61,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public <T> T get(T[] array, Index3d index) {
-        return array[structure.layout().offset(index)];
+        return array[mapper.offset(index)];
     }
 
     /**
@@ -67,7 +76,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public <T> T get(T[] array, int slice, int row, int col) {
-        return array[structure.layout().offset(slice, row, col)];
+        return array[mapper.offset(slice, row, col)];
     }
 
     /**
@@ -80,7 +89,7 @@ public final class Lattices3d {
      * @param <T> the lattice element type
      */
     public <T> void set(T[] array, Index3d index, T value) {
-        array[structure.layout().offset(index)] = value;
+        array[mapper.offset(index)] = value;
     }
 
     /**
@@ -95,7 +104,7 @@ public final class Lattices3d {
      * @param <T> the lattice element type
      */
     public <T> void set(T[] array, int slice, int row, int col, T value) {
-        array[structure.layout().offset(slice, row, col)] = value;
+        array[mapper.offset(slice, row, col)] = value;
     }
 
     /**
@@ -107,7 +116,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public int get(int[] array, Index3d index) {
-        return array[structure.layout().offset(index)];
+        return array[mapper.offset(index)];
     }
 
     /**
@@ -121,7 +130,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public int get(int[] array, int slice, int row, int col) {
-        return array[structure.layout().offset(slice, row, col)];
+        return array[mapper.offset(slice, row, col)];
     }
 
     /**
@@ -133,7 +142,7 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(int[] array, Index3d index, int value) {
-        array[structure.layout().offset(index)] = value;
+        array[mapper.offset(index)] = value;
     }
 
     /**
@@ -147,7 +156,7 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(int[] array, int slice, int row, int col, int value) {
-        array[structure.layout().offset(slice, row, col)] = value;
+        array[mapper.offset(slice, row, col)] = value;
     }
 
     /**
@@ -159,7 +168,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public long get(long[] array, Index3d index) {
-        return array[structure.layout().offset(index)];
+        return array[mapper.offset(index)];
     }
 
     /**
@@ -173,7 +182,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public long get(long[] array, int slice, int row, int col) {
-        return array[structure.layout().offset(slice, row, col)];
+        return array[mapper.offset(slice, row, col)];
     }
 
     /**
@@ -185,7 +194,7 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(long[] array, Index3d index, long value) {
-        array[structure.layout().offset(index)] = value;
+        array[mapper.offset(index)] = value;
     }
 
     /**
@@ -199,7 +208,7 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(long[] array, int slice, int row, int col, long value) {
-        array[structure.layout().offset(slice, row, col)] = value;
+        array[mapper.offset(slice, row, col)] = value;
     }
 
     /**
@@ -211,7 +220,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public double get(double[] array, Index3d index) {
-        return array[structure.layout().offset(index)];
+        return array[mapper.offset(index)];
     }
 
     /**
@@ -225,7 +234,7 @@ public final class Lattices3d {
      * @return the element at the given {@code index}
      */
     public double get(double[] array, int slice, int row, int col) {
-        return array[structure.layout().offset(slice, row, col)];
+        return array[mapper.offset(slice, row, col)];
     }
 
     /**
@@ -237,7 +246,7 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(double[] array, Index3d index, double value) {
-        array[structure.layout().offset(index)] = value;
+        array[mapper.offset(index)] = value;
     }
 
     /**
@@ -251,7 +260,17 @@ public final class Lattices3d {
      * @param value the new lattice value at the given {@code index}
      */
     public void set(double[] array, int slice, int row, int col, double value) {
-        array[structure.layout().offset(slice, row, col)] = value;
+        array[mapper.offset(slice, row, col)] = value;
+    }
+
+    /**
+     * Return a new lattice access class from the given {@code structure}.
+     *
+     * @param structure the lattice structure
+     * @return a new lattice access class from the given {@code structure}
+     */
+    public static Lattices3d of(Structure3d structure) {
+        return new Lattices3d(structure.layout());
     }
 
 }
