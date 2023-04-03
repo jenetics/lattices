@@ -17,10 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfuxtures;
+package io.jenetics.lattices.testfixtures;
 
-import static io.jenetics.lattices.testfuxtures.Colts.toColt;
-import static io.jenetics.lattices.testfuxtures.Colts.toLinealgebra;
+import static io.jenetics.lattices.testfixtures.Colts.toColt;
+import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 
 import cern.colt.matrix.linalg.SeqBlas;
 
@@ -42,8 +42,8 @@ public class ColtBlas implements Blas {
 
         COLT.dcopy(x_colt, y_colt);
 
-        x.assign(toLinealgebra(x_colt));
-        y.assign(toLinealgebra(y_colt));
+        x.assign(Colts.toLinealgebra(x_colt));
+        y.assign(Colts.toLinealgebra(y_colt));
     }
 
     @Override
@@ -58,8 +58,8 @@ public class ColtBlas implements Blas {
 
         COLT.drot(x_colt, y_colt, c, s);
 
-        x.assign(toLinealgebra(x_colt));
-        y.assign(toLinealgebra(y_colt));
+        x.assign(Colts.toLinealgebra(x_colt));
+        y.assign(Colts.toLinealgebra(y_colt));
     }
 
     @Override

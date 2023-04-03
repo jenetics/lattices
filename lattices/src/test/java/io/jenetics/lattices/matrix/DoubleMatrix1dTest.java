@@ -20,7 +20,7 @@
 package io.jenetics.lattices.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

@@ -22,6 +22,7 @@
  */
 plugins {
     `java-library`
+    `java-test-fixtures`
     idea
     `maven-publish`
     id("me.champeau.jmh")
@@ -40,6 +41,10 @@ dependencies {
     testImplementation("org.testng:testng:7.7.1")
     testImplementation("colt:colt:1.2.0")
     testImplementation(testFixtures(project(":lattices.structure")))
+
+    testFixturesImplementation(project(":lattices"))
+    testFixturesImplementation("colt:colt:1.2.0")
+    testFixturesImplementation("org.assertj:assertj-core:3.20.2")
 }
 
 tasks.test { dependsOn(tasks.compileJmhJava) }

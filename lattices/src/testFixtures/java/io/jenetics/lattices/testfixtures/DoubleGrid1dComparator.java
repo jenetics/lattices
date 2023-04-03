@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfuxtures;
+package io.jenetics.lattices.testfixtures;
 
 import static java.lang.String.format;
 
@@ -25,21 +25,21 @@ import java.util.Comparator;
 
 import org.assertj.core.util.DoubleComparator;
 
-import io.jenetics.lattices.matrix.DoubleMatrix1d;
+import io.jenetics.lattices.grid.DoubleGrid1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class DoubleMatrix1dComparator implements Comparator<DoubleMatrix1d> {
+public class DoubleGrid1dComparator implements Comparator<DoubleGrid1d> {
 
     private final DoubleComparator comparator;
 
-    public DoubleMatrix1dComparator(final double precision) {
+    public DoubleGrid1dComparator(final double precision) {
         this.comparator = new DoubleComparator(precision);
     }
 
     @Override
-    public int compare(final DoubleMatrix1d o1, final DoubleMatrix1d o2) {
+    public int compare(final DoubleGrid1d o1, final DoubleGrid1d o2) {
         final var equals = o1.extent().equals(o2.extent()) &&
             o1.allMatch(i -> comparator.compare(o1.get(i), o2.get(i)) == 0);
 
@@ -48,7 +48,7 @@ public class DoubleMatrix1dComparator implements Comparator<DoubleMatrix1d> {
 
     @Override
     public String toString() {
-        return format("DoubleMatrix1dComparator[precision=%s]", comparator.getEpsilon());
+        return String.format("DoubleGrid1dComparator[precision=%s]", comparator.getEpsilon());
     }
 
 }

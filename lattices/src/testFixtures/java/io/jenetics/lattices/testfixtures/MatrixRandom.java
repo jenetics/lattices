@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfuxtures;
+package io.jenetics.lattices.testfixtures;
 
 import java.util.random.RandomGenerator;
 

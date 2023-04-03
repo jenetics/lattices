@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.testfuxtures.LinealgebraAsserts;
+import io.jenetics.lattices.testfixtures.LinealgebraAsserts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

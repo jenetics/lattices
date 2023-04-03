@@ -20,7 +20,7 @@
 package io.jenetics.lattices.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -36,7 +36,7 @@ import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
-import io.jenetics.lattices.testfuxtures.Colts;
+import io.jenetics.lattices.testfixtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

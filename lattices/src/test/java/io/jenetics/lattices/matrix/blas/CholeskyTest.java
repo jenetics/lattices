@@ -20,17 +20,17 @@
 package io.jenetics.lattices.matrix.blas;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfuxtures.Colts.toColt;
-import static io.jenetics.lattices.testfuxtures.Colts.toLinealgebra;
-import static io.jenetics.lattices.testfuxtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.Colts.toColt;
+import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
+import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.CholeskyDecomposition;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.testfuxtures.Colts;
+import io.jenetics.lattices.testfixtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices;
 
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -37,7 +37,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.blas.Algebra;
-import io.jenetics.lattices.testfuxtures.Colts;
+import io.jenetics.lattices.testfixtures.Colts;
 
 @Warmup(iterations = 2)
 @Measurement(iterations = 4)
