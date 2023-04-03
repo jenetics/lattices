@@ -17,39 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfuxtures;
+package io.jenetics.lattices.structure.testfixtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Index2d;
-import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Range1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Index2dRandom {
+public class Index1dRandom {
 
     private final RandomGenerator random;
 
-    public Index2dRandom(RandomGenerator random) {
+    public Index1dRandom(RandomGenerator random) {
         this.random = random;
     }
 
-    public Index2d next(Range2d range) {
-        final Index2d start = range.start();
-        final Extent2d extent = range.extent();
-
-        final int row = random.nextInt(
-            start.row(),
-            start.row() + extent.rows()
-        );
-        final int col = random.nextInt(
-            start.col(),
-            start.col() + extent.cols()
-        );
-
-        return new Index2d(row, col);
+    public Index1d next(Range1d range) {
+        final int start = range.start().value();
+        final int bound = range.extent().value();
+        return new Index1d(random.nextInt(start, bound));
     }
 
 }

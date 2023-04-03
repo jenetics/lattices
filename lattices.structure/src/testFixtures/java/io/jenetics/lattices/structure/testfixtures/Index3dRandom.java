@@ -17,28 +17,43 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfuxtures;
+package io.jenetics.lattices.structure.testfixtures;
 
 import java.util.random.RandomGenerator;
 
-import io.jenetics.lattices.structure.Index1d;
-import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Index3d;
+import io.jenetics.lattices.structure.Range3d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Index1dRandom {
+public class Index3dRandom {
 
     private final RandomGenerator random;
 
-    public Index1dRandom(RandomGenerator random) {
+    public Index3dRandom(RandomGenerator random) {
         this.random = random;
     }
 
-    public Index1d next(Range1d range) {
-        final int start = range.start().value();
-        final int bound = range.extent().value();
-        return new Index1d(random.nextInt(start, bound));
+    public Index3d next(Range3d range) {
+        final Index3d start = range.start();
+        final Extent3d bound = range.extent();
+
+        final int slice = random.nextInt(
+            start.slice(),
+            start.slice() + bound.slices()
+        );
+        final int row = random.nextInt(
+            start.row(),
+            start.row() + bound.rows()
+        );
+        final int col = random.nextInt(
+            start.col(),
+            start.col() + bound.cols()
+        );
+
+        return new Index3d(slice, row, col);
     }
 
 }

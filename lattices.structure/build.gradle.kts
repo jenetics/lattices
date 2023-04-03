@@ -22,8 +22,9 @@
  */
 plugins {
     `java-library`
-    idea
+    `java-test-fixtures`
     `maven-publish`
+    idea
     id("me.champeau.jmh")
 }
 

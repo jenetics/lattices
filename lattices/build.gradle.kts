@@ -39,6 +39,7 @@ dependencies {
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
     testImplementation("org.testng:testng:7.7.1")
     testImplementation("colt:colt:1.2.0")
+    testImplementation(testFixtures(project(":lattices.structure")))
 }
 
 tasks.test { dependsOn(tasks.compileJmhJava) }
