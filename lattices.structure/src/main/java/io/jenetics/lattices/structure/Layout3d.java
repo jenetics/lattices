@@ -48,30 +48,30 @@ public record Layout3d(Index3d start, Stride3d stride)
         requireNonNull(stride);
     }
 
-    /**
-     * Create a new order for the given range.
-     *
-     * @param range the range of the order
-     */
-    public Layout3d(Range3d range) {
-        this(
-            range.start(),
-            new Stride3d(
-                range.extent().rows()*range.extent().cols(),
-                range.extent().cols(),
-                1
-            )
-        );
-    }
-
-    /**
-     * Create a new stride-order object,
-     *
-     * @param extent the structure extent
-     */
-    public Layout3d(Extent3d extent) {
-        this(new Range3d(extent));
-    }
+//    /**
+//     * Create a new order for the given range.
+//     *
+//     * @param range the range of the order
+//     */
+//    public Layout3d(Range3d range) {
+//        this(
+//            range.start(),
+//            new Stride3d(
+//                range.extent().rows()*range.extent().cols(),
+//                range.extent().cols(),
+//                1
+//            )
+//        );
+//    }
+//
+//    /**
+//     * Create a new stride-order object,
+//     *
+//     * @param extent the structure extent
+//     */
+//    public Layout3d(Extent3d extent) {
+//        this(new Range3d(extent));
+//    }
 
     @Override
     public int offset(int slice, int row, int col) {

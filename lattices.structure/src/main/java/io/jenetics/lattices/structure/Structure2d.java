@@ -55,7 +55,10 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
      * @return a new structure object with the given extent
      */
     public static Structure2d of(Extent2d extent) {
-        return new Structure2d(extent, new Layout2d(extent));
+        return new Structure2d(
+            extent,
+            new Layout2d(Index2d.ZERO, new Stride2d(extent.cols(), 1))
+        );
     }
 
     /**

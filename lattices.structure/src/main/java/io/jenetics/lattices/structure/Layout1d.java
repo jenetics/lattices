@@ -46,15 +46,11 @@ public record Layout1d(Index1d start, Stride1d stride)
     /**
      * The default order.
      */
-    public static final Layout1d DEFAULT = new Layout1d(0, 1);
+    public static final Layout1d DEFAULT = new Layout1d(Index1d.ZERO, Stride1d.ONE);
 
     public Layout1d {
         requireNonNull(start);
         requireNonNull(stride);
-    }
-
-    public Layout1d(int start, int stride) {
-        this(new Index1d(start), new Stride1d(stride));
     }
 
     @Override

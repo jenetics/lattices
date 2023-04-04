@@ -37,8 +37,9 @@ public class Layout2dTest {
 
     @Test
     public void indexOffset() {
-        final var range = new Range2d(new Extent2d(100,1000));
-        final var layout = new Layout2d(range);
+        final var structure = Structure2d.of(new Extent2d(100,1000));
+        final var range = new Range2d(structure.extent());
+        final var layout = structure.layout();
 
         for (int i = 0; i < 1000; ++i) {
             final Index2d index = random.next(range);

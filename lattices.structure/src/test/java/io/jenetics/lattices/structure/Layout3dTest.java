@@ -37,8 +37,9 @@ public class Layout3dTest {
 
     @Test
     public void indexOffset() {
-        final var range = new Range3d(new Extent3d(50, 100,1000));
-        final var layout = new Layout3d(range);
+        final var structure = Structure3d.of(new Extent3d(50, 100,1000));
+        final var range = new Range3d(structure.extent());
+        final var layout = structure.layout();
 
         for (int i = 0; i < 1000; ++i) {
             final Index3d index = random.next(range);

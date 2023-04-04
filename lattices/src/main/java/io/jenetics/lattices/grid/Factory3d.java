@@ -51,7 +51,7 @@ public interface Factory3d<T> {
      * @return a new structure with the given {@code extent}
      */
     default T create(final Extent3d extent) {
-        return create(new Structure3d(extent, new Layout3d(extent)));
+        return create(Structure3d.of(extent));
     }
 
     /**

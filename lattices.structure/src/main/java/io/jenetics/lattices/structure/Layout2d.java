@@ -48,24 +48,6 @@ public record Layout2d(Index2d start, Stride2d stride)
         requireNonNull(stride);
     }
 
-    /**
-     * Create a new (row-major) order for the given range.
-     *
-     * @param range the range of the order
-     */
-    public Layout2d(Range2d range) {
-        this(range.start(), new Stride2d(range.extent().cols(), 1));
-    }
-
-    /**
-     * Create a new row-major order object for the given dimension.
-     *
-     * @param extent the structure extent
-     */
-    public Layout2d(Extent2d extent) {
-        this(new Range2d(extent));
-    }
-
     @Override
     public int offset(int row, int col) {
         return

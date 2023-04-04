@@ -47,9 +47,11 @@ public interface View1d {
         return structure -> new Structure1d(
             range.extent(),
             new Layout1d(
-                structure.layout().start().value() +
-                    structure.layout().stride().value()*range.start().value(),
-                structure.layout().stride().value()
+                new Index1d(
+                    structure.layout().start().value() +
+                    structure.layout().stride().value()*range.start().value()
+                ),
+                new Stride1d(structure.layout().stride().value())
             )
         );
     }
@@ -89,8 +91,8 @@ public interface View1d {
                     : 0
             ),
             new Layout1d(
-                structure.layout().start().value(),
-                structure.layout().stride().value()*stride.value()
+                new Index1d(structure.layout().start().value()),
+                new Stride1d(structure.layout().stride().value()*stride.value())
             )
         );
     }

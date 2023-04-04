@@ -51,7 +51,7 @@ public interface Factory2d<T> {
      * @return a new structure with the given {@code extent}
      */
     default T create(final Extent2d extent) {
-        return create(new Structure2d(extent, new Layout2d(extent)));
+        return create(Structure2d.of(extent));
     }
 
     /**

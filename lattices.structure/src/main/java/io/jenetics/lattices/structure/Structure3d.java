@@ -55,7 +55,17 @@ public record Structure3d(Extent3d extent, Layout3d layout) {
      * @return a new structure object with the given extent
      */
     public static Structure3d of(Extent3d extent) {
-        return new Structure3d(extent, new Layout3d(extent));
+        return new Structure3d(
+            extent,
+            new Layout3d(
+                Index3d.ZERO,
+                new Stride3d(
+                    extent.rows()*extent.cols(),
+                    extent.cols(),
+                    1
+                )
+            )
+        );
     }
 
     /**
