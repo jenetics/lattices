@@ -19,10 +19,18 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 
 /**
  * This interface defines a projection from 3-d to 2-d.
+ *
+ * @see Projection2d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface Projection3d {
@@ -35,6 +43,29 @@ public interface Projection3d {
      */
     Structure2d apply(Structure3d structure);
 
+    /**
+     * Returns a new projection function, which first applies the given view
+     * transformation and then {@code this} projection.
+     *
+     * @param view the view to apply first to a given 3-d structure
+     * @return a new projection, which applies first the given view
+     */
+    default Projection3d compose(View3d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Returns a new projection function, which applies the given view
+     * transformation after {@code this} projection.
+     *
+     * @param view the view transformation to be applied after the projection
+     * @return a new projection
+     */
+    default Projection3d andThen(View2d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Create a <em>slice</em>-projection for the slice with the given

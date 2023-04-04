@@ -23,6 +23,13 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Functional interface for doing view transformation.
+ *
+ * @see View1d
+ * @see View3d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface View2d {
@@ -54,6 +61,30 @@ public interface View2d {
      * @return a new <em>view</em>-structure
      */
     Structure2d apply(Structure2d structure);
+
+    /**
+     * Return a new view, which apply first the given {@code view} and then
+     * {@code this} view.
+     *
+     * @param view the view to be applied first
+     * @return a new <em>composed</em> view
+     */
+    default View2d compose(View2d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Return a new view, which applies the given {@code view} after {@code this}
+     * view.
+     *
+     * @param view the view to be applied after {@code this} view
+     * @return a new view
+     */
+    default View2d andThen(View2d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Return a transformation which creates a view of the given {@code range}.

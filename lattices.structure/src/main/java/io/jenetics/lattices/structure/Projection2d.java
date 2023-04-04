@@ -19,10 +19,18 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 
 /**
  * This interface performs a projection from 2-d to 1-d.
+ *
+ * @see Projection3d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface Projection2d {
@@ -35,6 +43,29 @@ public interface Projection2d {
      */
     Structure1d apply(Structure2d structure);
 
+    /**
+     * Returns a new projection function, which first applies the given view
+     * transformation and then {@code this} projection.
+     *
+     * @param view the view to apply first to a given 2-d structure
+     * @return a new projection, which applies first the given view
+     */
+    default Projection2d compose(View2d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Returns a new projection function, which applies the given view
+     * transformation after {@code this} projection.
+     *
+     * @param view the view transformation to be applied after the projection
+     * @return a new projection
+     */
+    default Projection2d andThen(View1d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Create a <em>row</em>-projection for the row with the given {@code index}.
