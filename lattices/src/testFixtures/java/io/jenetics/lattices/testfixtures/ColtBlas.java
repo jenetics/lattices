@@ -20,7 +20,6 @@
 package io.jenetics.lattices.testfixtures;
 
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
-import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 
 import cern.colt.matrix.linalg.SeqBlas;
 

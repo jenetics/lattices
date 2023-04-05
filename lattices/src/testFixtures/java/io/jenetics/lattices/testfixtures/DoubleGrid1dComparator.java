@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.testfixtures;
 
-import static java.lang.String.format;
-
 import java.util.Comparator;
 
 import org.assertj.core.util.DoubleComparator;

@@ -20,7 +20,6 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Layout2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
