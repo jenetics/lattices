@@ -58,18 +58,19 @@ allprojects {
 /**
  * Project configuration *after* the projects has been evaluated.
  */
-gradle.projectsEvaluated {
+afterEvaluate {
 	subprojects {
 		val project = this
 
+        tasks.withType<Test> {
+            useTestNG()
+        }
+
 		plugins.withType<JavaPlugin> {
 			configure<JavaPluginExtension> {
+                modularity.inferModulePath.set(true)
 				sourceCompatibility = JavaVersion.VERSION_17
 				targetCompatibility = JavaVersion.VERSION_17
-			}
-
-			configure<JavaPluginExtension> {
-				modularity.inferModulePath.set(true)
 			}
 
 			setupJava(project)

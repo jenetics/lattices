@@ -17,8 +17,8 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since 3.0
+ * @version 3.0
  */
 plugins {
     `java-library`
@@ -28,7 +28,7 @@ plugins {
     id("me.champeau.jmh")
 }
 
-description = "Lattices - Library for multidimensional data structures and linear algebra"
+description = "Lattices - Library for multidimensional grids and linear algebra"
 
 extra["moduleName"] = "io.jenetics.lattices"
 

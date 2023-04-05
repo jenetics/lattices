@@ -1,7 +1,4 @@
 /*
- * Java Colt Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,10 +24,6 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
 }
-
-description = "Lattices - Java library for multidimensional data structures"
-
-extra["moduleName"] = "io.jenetics.lattices"
 
 repositories {
     mavenLocal()
