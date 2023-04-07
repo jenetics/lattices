@@ -39,29 +39,24 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout2d(Index2d start, Stride2d stride)
-    implements OffsetMapper2d
-{
+public record Layout2d(Index2d start, Stride2d stride) {
 
     public Layout2d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
-    @Override
-    public int offset(int row, int col) {
+    int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
     }
 
-    @Override
-    public int offset(Index2d index) {
+    int offset(Index2d index) {
         return offset(index.row(), index.col());
     }
 
-    @Override
-    public Index2d index(int offset) {
+    Index2d index(int offset) {
         final int start = offset -
             this.start.row() -
             this.start.col();

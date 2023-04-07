@@ -39,11 +39,28 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout) {
+public record Structure3d(Extent3d extent, Layout3d layout)
+    implements OffsetMapper3d
+{
 
     public Structure3d {
         requireNonNull(extent);
         requireNonNull(layout);
+    }
+
+    @Override
+    public int offset(int slice, int row, int col) {
+        return layout.offset(slice, row, col);
+    }
+
+    @Override
+    public int offset(Index3d index) {
+        return layout.offset(index);
+    }
+
+    @Override
+    public Index3d index(int offset) {
+        return layout.index(offset);
     }
 
     /**

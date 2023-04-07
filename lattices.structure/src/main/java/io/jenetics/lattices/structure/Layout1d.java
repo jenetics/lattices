@@ -39,9 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout1d(Index1d start, Stride1d stride)
-    implements OffsetMapper1d
-{
+public record Layout1d(Index1d start, Stride1d stride) {
 
     /**
      * The default order.
@@ -53,18 +51,15 @@ public record Layout1d(Index1d start, Stride1d stride)
         requireNonNull(stride);
     }
 
-    @Override
-    public int offset(int index) {
+    int offset(int index) {
         return start.value() + index*stride.value();
     }
 
-    @Override
-    public int offset(Index1d index) {
+    int offset(Index1d index) {
         return offset(index.value());
     }
 
-    @Override
-    public Index1d index(int offset) {
+    Index1d index(int offset) {
         final int start = offset - this.start.value();
         final int index = start/stride.value();
         return new Index1d(index);

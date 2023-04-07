@@ -45,15 +45,6 @@ public interface Structured1d {
     }
 
     /**
-     * Return the defined offset mapping of {@code this} structure.
-     *
-     * @return the defined offset mapping of {@code this} structure
-     */
-    default OffsetMapper1d mapper() {
-        return structure().layout();
-    }
-
-    /**
      * Return the number of cells of this {@code this} structure.
      *
      * @return the number of cells of this {@code this} structure

@@ -254,14 +254,4 @@ public final class Lattices2d {
         array[mapper.offset(row, col)] = value;
     }
 
-    /**
-     * Return a new lattice access class from the given {@code structure}.
-     *
-     * @param structure the lattice structure
-     * @return a new lattice access class from the given {@code structure}
-     */
-    public static Lattices2d of(Structure2d structure) {
-        return new Lattices2d(structure.layout());
-    }
-
 }

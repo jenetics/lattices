@@ -26,9 +26,6 @@
  * // Define the structure + extent of your lattices.
  * final Structure2d structure = Structure2d.of(new Extent2d(10, 34));
  *
- * // The layout of your structure lets you calculate the array offset.
- * final Layout2d layout = structure.layout();
- *
  * // Create the `double[]` array, which stores the data.
  * final double[] values = new double[structure.extent().size()];
  *
@@ -37,13 +34,13 @@
  * final int col = 5;
  *
  * // The array offset which stores the value at (5, 3).
- * final int offset = layout.offset(row, col);
+ * final int offset = structure.offset(row, col);
  *
  * // Write the value to the given coordinate.
  * values[offset] = Math.PI;
  *
  * // Get the index back from a given array offset.
- * final Index2d index = layout.index(offset);
+ * final Index2d index = structure.index(offset);
  * assert index.row == row;
  * assert index.col == col;
  * }</pre>

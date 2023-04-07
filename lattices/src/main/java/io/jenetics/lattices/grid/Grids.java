@@ -50,7 +50,7 @@ public final class Grids {
             return;
         }
 
-        final var maxIndex = structure.layout().offset(
+        final var maxIndex = structure.offset(
             structure.extent().value() - 1
         );
 
@@ -75,7 +75,7 @@ public final class Grids {
             return;
         }
 
-        final var maxIndex = structure.layout().offset(
+        final var maxIndex = structure.offset(
             structure.extent().rows() - 1,
             structure.extent().cols() - 1
         );
@@ -101,7 +101,7 @@ public final class Grids {
             return;
         }
 
-        final var maxIndex = structure.layout().offset(
+        final var maxIndex = structure.offset(
             structure.extent().slices() - 1,
             structure.extent().rows() - 1,
             structure.extent().cols() - 1

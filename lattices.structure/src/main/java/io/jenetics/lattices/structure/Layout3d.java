@@ -39,55 +39,25 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout3d(Index3d start, Stride3d stride)
-    implements OffsetMapper3d
-{
+public record Layout3d(Index3d start, Stride3d stride) {
 
     public Layout3d {
         requireNonNull(start);
         requireNonNull(stride);
     }
 
-//    /**
-//     * Create a new order for the given range.
-//     *
-//     * @param range the range of the order
-//     */
-//    public Layout3d(Range3d range) {
-//        this(
-//            range.start(),
-//            new Stride3d(
-//                range.extent().rows()*range.extent().cols(),
-//                range.extent().cols(),
-//                1
-//            )
-//        );
-//    }
-//
-//    /**
-//     * Create a new stride-order object,
-//     *
-//     * @param extent the structure extent
-//     */
-//    public Layout3d(Extent3d extent) {
-//        this(new Range3d(extent));
-//    }
-
-    @Override
-    public int offset(int slice, int row, int col) {
+    int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col();
     }
 
-    @Override
-    public int offset(Index3d index) {
+    int offset(Index3d index) {
         return offset(index.slice(), index.row(), index.col());
     }
 
-    @Override
-    public Index3d index(int offset) {
+    Index3d index(int offset) {
         int start = offset -
             this.start.slice() -
             this.start.row() -

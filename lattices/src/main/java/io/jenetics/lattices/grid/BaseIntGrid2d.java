@@ -117,7 +117,7 @@ public abstract class BaseIntGrid2d<G extends BaseIntGrid2d<G>>
      *         bounds
      */
     public int get(final int row, final int col) {
-        return array.get(mapper().offset(row, col));
+        return array.get(structure().offset(row, col));
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class BaseIntGrid2d<G extends BaseIntGrid2d<G>>
      *         bounds
      */
     public void set(final int row, final int col, final int value) {
-        array.set(mapper().offset(row, col),  value);
+        array.set(structure().offset(row, col),  value);
     }
 
     /**

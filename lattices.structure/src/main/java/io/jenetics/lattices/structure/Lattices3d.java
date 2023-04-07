@@ -263,14 +263,4 @@ public final class Lattices3d {
         array[mapper.offset(slice, row, col)] = value;
     }
 
-    /**
-     * Return a new lattice access class from the given {@code structure}.
-     *
-     * @param structure the lattice structure
-     * @return a new lattice access class from the given {@code structure}
-     */
-    public static Lattices3d of(Structure3d structure) {
-        return new Lattices3d(structure.layout());
-    }
-
 }

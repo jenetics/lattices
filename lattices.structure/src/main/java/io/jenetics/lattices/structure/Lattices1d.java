@@ -246,14 +246,4 @@ public final class Lattices1d {
         array[mapper.offset(index)] = value;
     }
 
-    /**
-     * Return a new lattice access class from the given {@code structure}.
-     *
-     * @param structure the lattice structure
-     * @return a new lattice access class from the given {@code structure}
-     */
-    public static Lattices1d of(Structure1d structure) {
-        return new Lattices1d(structure.layout());
-    }
-
 }

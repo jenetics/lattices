@@ -118,7 +118,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * bounds
      */
     public double get(final int slice, final int row, final int col) {
-        return array.get(mapper().offset(slice, row, col));
+        return array.get(structure().offset(slice, row, col));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class BaseDoubleGrid3d<G extends BaseDoubleGrid3d<G>>
      * bounds
      */
     public void set(final int slice, final int row, final int col, final double value) {
-        array.set(mapper().offset(slice, row, col), value);
+        array.set(structure().offset(slice, row, col), value);
     }
 
     /**

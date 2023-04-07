@@ -117,7 +117,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * bounds
      */
     public int get(final int slice, final int row, final int col) {
-        return array.get(mapper().offset(slice, row, col));
+        return array.get(structure().offset(slice, row, col));
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * bounds
      */
     public void set(final int slice, final int row, final int col, final int value) {
-        array.set(mapper().offset(slice, row, col), value);
+        array.set(structure().offset(slice, row, col), value);
     }
 
     /**

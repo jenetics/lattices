@@ -39,11 +39,28 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout) {
+public record Structure2d(Extent2d extent, Layout2d layout)
+    implements OffsetMapper2d
+{
 
     public Structure2d {
         requireNonNull(extent);
         requireNonNull(layout);
+    }
+
+    @Override
+    public int offset(int row, int col) {
+        return layout.offset(row, col);
+    }
+
+    @Override
+    public int offset(Index2d index) {
+        return layout.offset(index);
+    }
+
+    @Override
+    public Index2d index(int offset) {
+        return layout.index(offset);
     }
 
     /**

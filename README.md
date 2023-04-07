@@ -43,14 +43,11 @@ final var extent = new Extent2d(100, 400);
 // Creating the 2-d structure.
 final var structure = Structure2d.of(extent);
 
-// Getting the mapper function from the created structure.
-final OffsetMapper2d mapper = structure.layout();
-
 // Creating the array, which holds the values to be stored.
 final var values = new double[extent.size()];
 
 // Set the value 'Math.PI' at the point [20, 30];
-values[mapper.offset(20, 30)] = Math.PI;
+values[structure.offset(20, 30)] = Math.PI;
 ```
 
 Beside this basic functionality, the _View_ and _Projection_ functions are able to do some basic transformations of the _n_-d data, without copying actual data.
@@ -73,7 +70,7 @@ final var structure2 = view.apply(structure);
 // The value Math.PI is now located at position [15, 25], 
 // since we we created a view from the original structure, 
 // which started at point [5, 5].    
-assert values[structure2.layout().offset(15, 25)] == Math.PI;
+assert values[structure2.offset(15, 25)] == Math.PI;
 ```
 
 The _view_ functions doesn't change the dimensionality of the structure, in contrast to the _projection_ functions, which reduces the dimensionality by one.
@@ -86,7 +83,7 @@ final var projection = Projection2d.row(20);
 final Structure1d structure3 = projection.apply(structure);
 
 // At index 25, we can access our stored value.
-assert values[structure3.layout().offset(30)] == Math.PI;
+assert values[structure3.offset(30)] == Math.PI;
 ```
 
 It is off course possible to create a _projection_ from a structure _view_.
@@ -99,7 +96,7 @@ final var projection = Projection2d.row(15);
 final Structure1d structure4 = projection.apply(structure2);
 
 // At index 25, we can access our stored value.
-assert values[structure4.layout().offset(25)] == Math.PI;
+assert values[structure4.offset(25)] == Math.PI;
 ```
 
 Or you can compose _projection_ and _view_ functions.
@@ -113,7 +110,7 @@ final var projection = Projection2d.row(15)
 final Structure1d structure5 = projection.apply(structure);
 
 // At index 25, we can access our stored value.
-assert values[structure5.layout().offset(25)] == Math.PI;
+assert values[structure5.offset(25)] == Math.PI;
 ```
 
 
