@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.base;
+package io.jenetics.lattices.lattice;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;

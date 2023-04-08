@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.base;
+package io.jenetics.lattices.lattice;
 
 import io.jenetics.lattices.grid.Loop3d;
 import io.jenetics.lattices.grid.Loopable3d;

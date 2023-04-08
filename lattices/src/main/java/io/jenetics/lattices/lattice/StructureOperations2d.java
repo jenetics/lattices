@@ -17,30 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.base;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.grid.Loop2d;
+import io.jenetics.lattices.grid.Loopable2d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Structured2d;
 
 /**
- * A lattice is defined via an <em>array</em> and a 2-d structure.
+ * This interface implements operations for 2-d structures.
  *
- * @param <A> the array type
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public interface Lattice2d<A extends Array<A>> {
+public interface StructureOperations2d extends Structured2d, Loopable2d {
 
     /**
-     * Return the lattice structure.
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
      *
-     * @return the lattice structure
+     * @return the looping strategy of this structural
      */
-    Structure2d structure();
-
-    /**
-     * Return the array storing the lattice elements.
-     *
-     * @return the array storing the lattice elements
-     */
-    A array();
+    @Override
+    default Loop2d loop() {
+        return Loop2d.of(new Range2d(extent()));
+    }
 
 }

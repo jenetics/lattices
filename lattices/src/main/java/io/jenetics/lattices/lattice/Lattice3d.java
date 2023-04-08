@@ -17,31 +17,30 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.base;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.grid.Loop1d;
-import io.jenetics.lattices.grid.Loopable1d;
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Structured1d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * This interface implements operations for 1-d structures.
+ * A lattice is defined via an <em>array</em> and a 3-d structure.
  *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
+ * @param <A> the array type
  */
-public interface StructureOperations1d extends Structured1d, Loopable1d {
+public interface Lattice3d<A extends Array<A>> {
 
     /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
+     * Return the lattice structure.
      *
-     * @return the looping strategy of this structural
+     * @return the lattice structure
      */
-    @Override
-    default Loop1d loop() {
-        return Loop1d.of(new Range1d(extent()));
-    }
+    Structure3d structure();
+
+    /**
+     * Return the array storing the lattice elements.
+     *
+     * @return the array storing the lattice elements
+     */
+    A array();
 
 }
