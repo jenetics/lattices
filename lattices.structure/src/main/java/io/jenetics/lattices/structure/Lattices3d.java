@@ -26,10 +26,10 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * final var values = new double[structure.extent().size()]
- * final var lattice = Lattices3d.of(structure);
+ * final var lattices = Lattices3d.of(structure);
  *
  * lattice.set(values, index, 0.5);
- * final var value = lattice.get(values, index);
+ * final var value = lattices.get(values, index);
  * assert value == 0.5;
  * }</pre>
  *
