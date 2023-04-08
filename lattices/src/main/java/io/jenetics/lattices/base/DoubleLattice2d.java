@@ -35,14 +35,9 @@ import io.jenetics.lattices.array.DoubleArray;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice2d extends StructureOperations2d {
-
-    /**
-     * Return the array storing the lattice elements.
-     *
-     * @return the array storing the lattice elements
-     */
-    DoubleArray array();
+public interface DoubleLattice2d
+    extends Lattice2d<DoubleArray>, StructureOperations2d
+{
 
     /**
      * Returns the grid cell value at coordinate {@code [row, col]}.
