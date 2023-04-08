@@ -29,13 +29,13 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.lattices.array.DoubleArray;
 
 /**
- * This interface <em>structures</em> the elements into a 2-dimensional lattice.
+ * This interface <em>structures</em> the elements into a 3-dimensional lattice.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice2d extends StructureOperations2d {
+public interface DoubleLattice3d extends StructureOperations3d {
 
     /**
      * Return the array storing the lattice elements.
@@ -45,120 +45,116 @@ public interface DoubleLattice2d extends StructureOperations2d {
     DoubleArray array();
 
     /**
-     * Returns the grid cell value at coordinate {@code [row, col]}.
+     * Returns the matrix cell value at coordinate {@code [row, col]}.
      *
+     * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
      * @param col the index of the column-coordinate
      * @return the value of the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
+     * bounds
      */
-    default double get(int row, int col) {
-        return array().get(structure().offset(row, col));
+    default double get(int slice, int row, int col) {
+        return array().get(structure().offset(slice, row, col));
     }
 
     /**
-     * Sets the grid cell at coordinate {@code [row, col]} to the specified
+     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
      * {@code value}.
      *
+     * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
      * @param col the index of the column-coordinate
-     * @param value  the value to be filled into the specified cell
+     * @param value the value to be filled into the specified cell
      * @throws IndexOutOfBoundsException if the given coordinates are out of
-     *         bounds
+     * bounds
      */
-    default void set(int row, int col, double value) {
-        array().set(structure().offset(row, col), value);
+    default void set(int slice, int row, int col, double value) {
+        array().set(structure().offset(slice, row, col), value);
     }
 
     /**
-     * Replaces all cell values of the receiver with the values of another
-     * matrix. Both matrices must have the same number of rows and columns.
-     *
-     * @param source the source lattice to copy from (maybe identical to the
-     *        receiver).
-     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
-     */
-    default void assign(DoubleLattice2d source) {
-        requireNonNull(source);
-        if (source == this) {
-            return;
-        }
-        checkSameExtent(extent(), source.extent());
-        forEach((r, c) -> set(r, c, source.get(r, c)));
-    }
-
-    /**
-     * Sets all cells to the state specified by given {@code source}. The
-     * {@code values} are required to have the form {@code source[row][column]}
+     * Sets all cells to the state specified by given {@code values}. The
+     * {@code values} are required to have the form {@code values[row][column]}
      * and have exactly the same number of rows and columns as the receiver.
      *
-     * @implNote
-     * The {@code source} are copied and subsequent chances to the {@code source}
-     * are not reflected in the matrix, and vice-versa
+     * @param values the values to be filled into the cells.
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
      *
-     * @param source the values to be filled into the cells.
-     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
+     * @implNote
+     * The {@code values} are copied and subsequent chances to the {@code values}
+     * are not reflected in the matrix, and vice-versa
      */
-    default void assign(double[][] source) {
-        if (source.length != rows()) {
+    default void assign(double[][][] values) {
+        if (values.length != slices()) {
             throw new IllegalArgumentException(
-                "Values must have the same number of rows: " +
-                    source.length + " != " + rows()
+                "Values must have the same number of slices: " +
+                    values.length + " != " + slices()
             );
         }
 
-        for (int r = rows(); --r >= 0;) {
-            final var row = source[r];
-
-            if (row.length != cols()) {
+        for (int s = slices(); --s >= 0;) {
+            final var slice = values[s];
+            if (slice.length != rows()) {
                 throw new IllegalArgumentException(
-                    "Values must have the same number of columns: " +
-                        row.length + " != " + cols()
+                    "Values must have the same number of rows: " +
+                        slice.length + " != " + rows()
                 );
             }
 
-            for (int c = cols(); --c >= 0;) {
-                set(r, c, row[c]);
+            for (int r = rows(); --r >= 0;) {
+                final var row = slice[r];
+                if (row.length != cols()) {
+                    throw new IllegalArgumentException(
+                        "Values must have the same number of columns: " +
+                            row.length + " != " + cols()
+                    );
+                }
+
+                for (int c = cols(); --c >= 0;) {
+                    set(s, r, c, row[c]);
+                }
             }
         }
     }
 
     /**
-     * Sets all cells to the state specified by the {@code source}.
+     * Sets all cells to the state specified by {@code values}.
      *
-     * @param source the value to be filled into the cells
+     * @param value the value to be filled into the cells
      */
-    default void assign(double source) {
-        forEach((r, c) -> set(r, c, source));
-    }
-
-    /**
-     * Assigns the result of a function to each cell {@code x[row, col] =
-     * f(x[row, col], y[row, col])}.
-     *
-     * @param y the secondary matrix to operate on.
-     * @param f a function object taking as first argument the current cell's
-     *          value of {@code this}, and as second argument the current cell's
-     *          value of {@code y}
-     * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
-     */
-    default void assign(DoubleLattice2d y, DoubleBinaryOperator f) {
-        requireNonNull(f);
-        checkSameExtent(extent(), y.extent());
-
-        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
+    default void assign(double value) {
+        forEach((s, r, c) -> set(s, r, c, value));
     }
 
     /**
      * Assigns the result of a function to each cell
-     * {@code x[row, col] = f(x[row, col])}.
+     * {@code x[slice, row, col] = f(x[slice, row, col], y[slice, row, col])}.
+     *
+     * @param y the secondary matrix to operate on.
+     * @param f a function object taking as first argument the current cell's
+     * value of {@code this}, and as second argument the current cell's value of
+     * {@code y}
+     * @throws IllegalArgumentException if {@code extent() != y.extent()}
+     */
+    default void assign(DoubleLattice3d y, DoubleBinaryOperator f) {
+        requireNonNull(f);
+        checkSameExtent(extent(), y.extent());
+
+        forEach((s, r, c) ->
+            set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c)))
+        );
+    }
+
+    /**
+     * Assigns the result of a function to each cell
+     * {@code x[slice, row, col] = f(x[slice, row, col])}.
      *
      * @param f a function object taking as argument the current cell's value.
      */
     default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c))));
     }
 
     /**
@@ -166,34 +162,35 @@ public interface DoubleLattice2d extends StructureOperations2d {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(DoubleLattice2d other) {
+    default void swap(DoubleLattice3d other) {
         checkSameExtent(extent(), other.extent());
 
-        forEach((r, c) -> {
-            final var tmp = get(r, c);
-            set(r, c, other.get(r, c));
-            other.set(r, c, tmp);
+        forEach((s, r, c) -> {
+            final var tmp = get(s, r, c);
+            set(s, r, c, other.get(s, r, c));
+            other.set(s, r, c, tmp);
         });
     }
 
     /**
      * Applies a function to each cell and aggregates the results. Returns a
      * value <em>v</em> such that <em>v==a(size())</em> where
-     * <em>a(i) == reduce(a(i - 1), f(get(row, col)))</em> and terminators are
-     * <em>a(1) == f(get(0,0))</em>.
+     * <em>a(i) == reduce(a(i - 1), f(get(slice, row, col)))</em> and
+     * terminators are
+     * <em>a(1) == f(get(0, 0, 0))</em>.
      * <p><b>Example:</b></p>
      * <pre>
      * 2 x 2 matrix
      * 0 1
      * 2 3
      *
-     * // Sum(x[row, col]*x[row, col])
+     * // Sum(x[slice, row, col]*x[slice, row, col])
      * matrix.aggregate(Double::sum, a -> a*a) --> 14
      * </pre>
      *
      * @param reducer an aggregation function taking as first argument the
-     *        current aggregation and as second argument the transformed current
-     *        cell value
+     * current aggregation and as second argument the transformed current cell
+     * value
      * @param f a function transforming the current cell value
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
@@ -207,13 +204,15 @@ public interface DoubleLattice2d extends StructureOperations2d {
             return OptionalDouble.empty();
         }
 
-        double a = f.applyAsDouble(get(rows() - 1, cols() - 1));
+        double a = f.applyAsDouble(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
-        for (int r = rows(); --r >= 0;) {
-            for (int c = cols() - d; --c >= 0;) {
-                a = reducer.applyAsDouble(a, f.applyAsDouble(get(r, c)));
+        for (int s = slices(); --s >= 0;) {
+            for (int r = rows(); --r >= 0;) {
+                for (int c = cols() - d; --c >= 0;) {
+                    a = reducer.applyAsDouble(a, f.applyAsDouble(get(s, r, c)));
+                }
+                d = 0;
             }
-            d = 0;
         }
         return OptionalDouble.of(a);
     }
@@ -224,11 +223,11 @@ public interface DoubleLattice2d extends StructureOperations2d {
      *
      * @param other the second matrix to compare
      * @return {@code true} if the two given matrices are equal, {@code false}
-     *         otherwise
+     * otherwise
      */
-    default boolean equals(DoubleLattice2d other) {
+    default boolean equals(DoubleLattice3d other) {
         return extent().equals(other.extent()) &&
-            allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
+            allMatch((s, r, c) -> Double.compare(get(s, r, c), other.get(s, r, c)) == 0);
     }
 
 }

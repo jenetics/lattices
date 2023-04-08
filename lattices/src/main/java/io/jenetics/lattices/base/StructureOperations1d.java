@@ -19,19 +19,19 @@
  */
 package io.jenetics.lattices.base;
 
-import io.jenetics.lattices.grid.Loop2d;
-import io.jenetics.lattices.grid.Loopable2d;
-import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structured2d;
+import io.jenetics.lattices.grid.Loop1d;
+import io.jenetics.lattices.grid.Loopable1d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Structured1d;
 
 /**
- * This interface implements operations for 2-d structures.
+ * This interface implements operations for 1-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface StructureOperations2d extends Structured2d, Loopable2d {
+public interface StructureOperations1d extends Structured1d, Loopable1d {
 
     /**
      * Return the default looping strategy of this structural, which can be
@@ -40,8 +40,8 @@ public interface StructureOperations2d extends Structured2d, Loopable2d {
      * @return the looping strategy of this structural
      */
     @Override
-    default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
+    default Loop1d loop() {
+        return Loop1d.of(new Range1d(extent()));
     }
 
 }
