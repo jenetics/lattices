@@ -17,20 +17,29 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid;
+
+import io.jenetics.lattices.array.LongArray;
+import io.jenetics.lattices.lattice.LongLattice1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
+ * Generic class for 1-d grids holding {@code long} elements. The
+ * {@code LongGrid1d} is <em>just</em> a 1-d view onto a 1-d Java
+ * {@code long[]} array. The following example shows how to create such a grid
+ * view from a given {@code long[]} array.
+ *
+ * <pre>{@code
+ * final var extent = new Extent1d(100);
+ * final var values = new long[extent.size()];
+ * final var grid = new LongGrid1d(Structure1d.of(extent), new DenseLongArray(values));
+ * }</pre>
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
+ * @version 3.0
  */
-module io.jenetics.lattices {
-    requires transitive io.jenetics.lattices.structure;
-
-    exports io.jenetics.lattices;
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.lattice;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.blas;
-    exports io.jenetics.lattices.serialize;
+public record LongGrid1d(Structure1d structure, LongArray array)
+    implements LongLattice1d
+{
 }
