@@ -20,8 +20,8 @@
 package io.jenetics.lattices.matrix.blas;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.grid.Grids.checkRectangular;
-import static io.jenetics.lattices.grid.Grids.checkSquare;
+import static io.jenetics.lattices.structure.Grids.checkRectangular;
+import static io.jenetics.lattices.structure.Grids.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;

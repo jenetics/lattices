@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
-import static io.jenetics.lattices.grid.Grids.checkSquare;
+import static io.jenetics.lattices.structure.Grids.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSymmetric;
 
 import io.jenetics.lattices.NumericalContext;
