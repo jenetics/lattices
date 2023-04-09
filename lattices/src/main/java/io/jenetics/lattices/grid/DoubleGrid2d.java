@@ -48,6 +48,15 @@ public record DoubleGrid2d(Structure2d structure, DoubleArray array)
     implements DoubleLattice2d, Grid2d<DoubleArray, DoubleGrid2d>
 {
 
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid2d.Factory<DoubleGrid2d> DENSE =
+        extent -> new DoubleGrid2d(
+            Structure2d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
+        );
+
     @Override
     public DoubleGrid2d create(Structure2d structure, DoubleArray array) {
         return new DoubleGrid2d(structure, array);

@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.array.LongArray;
 import io.jenetics.lattices.lattice.LongLattice1d;
@@ -47,6 +48,15 @@ import io.jenetics.lattices.structure.Structure1d;
 public record LongGrid1d(Structure1d structure, LongArray array)
     implements LongLattice1d, Grid1d<LongArray, LongGrid1d>
 {
+
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid1d.Factory<LongGrid1d> DENSE =
+        extent -> new LongGrid1d(
+            Structure1d.of(extent),
+            new DenseLongArray(new long[extent.size()])
+        );
 
     @Override
     public LongGrid1d create(Structure1d structure, LongArray array) {

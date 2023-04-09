@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.lattice.IntLattice3d;
@@ -47,6 +48,15 @@ import io.jenetics.lattices.structure.Structure3d;
 public record IntGrid3d(Structure3d structure, IntArray array)
     implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
 {
+
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid3d.Factory<IntGrid3d> DENSE =
+        extent -> new IntGrid3d(
+            Structure3d.of(extent),
+            DenseIntArray.ofSize(extent.size())
+        );
 
     @Override
     public IntGrid3d create(Structure3d structure, IntArray array) {

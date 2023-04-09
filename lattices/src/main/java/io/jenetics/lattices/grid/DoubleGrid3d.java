@@ -24,6 +24,7 @@ import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.lattice.DoubleLattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
+import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -47,6 +48,15 @@ import io.jenetics.lattices.structure.Structure3d;
 public record DoubleGrid3d(Structure3d structure, DoubleArray array)
     implements DoubleLattice3d, Grid3d<DoubleArray, DoubleGrid3d>
 {
+
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid3d.Factory<DoubleGrid3d> DENSE =
+        extent -> new DoubleGrid3d(
+            Structure3d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
+        );
 
     @Override
     public DoubleGrid3d create(Structure3d structure, DoubleArray array) {

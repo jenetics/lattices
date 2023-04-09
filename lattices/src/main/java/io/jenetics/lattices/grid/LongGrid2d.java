@@ -49,6 +49,15 @@ public record LongGrid2d(Structure2d structure, LongArray array)
     implements LongLattice2d, Grid2d<LongArray, LongGrid2d>
 {
 
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid2d.Factory<LongGrid2d> DENSE =
+        extent -> new LongGrid2d(
+            Structure2d.of(extent),
+            DenseLongArray.ofSize(extent.size())
+        );
+
     @Override
     public LongGrid2d create(Structure2d structure, LongArray array) {
         return new LongGrid2d(structure, array);

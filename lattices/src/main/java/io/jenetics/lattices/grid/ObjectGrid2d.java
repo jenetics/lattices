@@ -98,10 +98,10 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Factory2d<ObjectGrid2d<T>> dense(T... __) {
-        return structure -> new ObjectGrid2d<T>(
-            structure,
-            DenseObjectArray.ofSize(structure.extent().size(), __)
+    public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
+        return extent -> new ObjectGrid2d<T>(
+            Structure2d.of(extent),
+            DenseObjectArray.ofSize(extent.size(), __)
         );
     }
 

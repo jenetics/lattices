@@ -47,6 +47,15 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
     implements DoubleLattice1d, Grid1d<DoubleArray, DoubleGrid1d>
 {
 
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid1d.Factory<DoubleGrid1d> DENSE =
+        extent -> new DoubleGrid1d(
+            Structure1d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
+        );
+
     @Override
     public DoubleGrid1d create(Structure1d structure, DoubleArray array) {
         return new DoubleGrid1d(structure, array);

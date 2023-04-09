@@ -27,7 +27,6 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.Factory2d;
 import io.jenetics.lattices.grid.Grid2d;
 import io.jenetics.lattices.lattice.DoubleLattice2d;
 import io.jenetics.lattices.structure.Extent1d;
@@ -57,10 +56,10 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Factory2d<DoubleMatrix2d> DENSE = structure ->
-        new DoubleMatrix2d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
+        extent -> new DoubleMatrix2d(
+            Structure2d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
         );
 
     @Override

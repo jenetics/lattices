@@ -24,7 +24,6 @@ import java.util.stream.IntStream;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.Factory1d;
 import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.lattice.DoubleLattice1d;
 import io.jenetics.lattices.structure.Extent1d;
@@ -50,10 +49,10 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory1d<DoubleMatrix1d> DENSE = structure ->
-        new DoubleMatrix1d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().value())
+    public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
+        extent -> new DoubleMatrix1d(
+            Structure1d.of(extent),
+            DenseDoubleArray.ofSize(extent.value())
         );
 
     @Override

@@ -48,6 +48,15 @@ public record IntGrid2d(Structure2d structure, IntArray array)
     implements IntLattice2d, Grid2d<IntArray, IntGrid2d>
 {
 
+    /**
+     * Factory for creating <em>dense</em> grid instances.
+     */
+    public static final Grid2d.Factory<IntGrid2d> DENSE =
+        extent -> new IntGrid2d(
+            Structure2d.of(extent),
+            DenseIntArray.ofSize(extent.size())
+        );
+
     @Override
     public IntGrid2d create(Structure2d structure, IntArray array) {
         return new IntGrid2d(structure, array);
