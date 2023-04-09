@@ -19,8 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.array.LongArray;
 import io.jenetics.lattices.lattice.LongLattice3d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -42,6 +45,7 @@ import io.jenetics.lattices.structure.Structure3d;
 public record LongGrid3d(Structure3d structure, LongArray array)
     implements LongLattice3d, Grid3d<LongArray, LongGrid3d>
 {
+
     @Override
     public LongGrid3d create(Structure3d structure, LongArray array) {
         return new LongGrid3d(structure, array);
@@ -51,4 +55,23 @@ public record LongGrid3d(Structure3d structure, LongArray array)
     public void assign(LongGrid3d other) {
         LongLattice3d.super.assign(other);
     }
+
+    /**
+     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 2-d projection from this 1-d grid
+     */
+    public LongGrid2d project(final Projection3d projection) {
+        return new LongGrid2d(projection.apply(structure()), array());
+    }
+
+    public static LongGrid3d of(Extent3d extent, final long... values) {
+        return new LongGrid3d(
+            Structure3d.of(extent),
+            new DenseLongArray(values)
+        );
+    }
+
 }

@@ -19,8 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.lattice.DoubleLattice1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -53,6 +55,23 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
     @Override
     public void assign(DoubleGrid1d other) {
         DoubleLattice1d.super.assign(other);
+    }
+
+    /**
+     * Return a 1-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned grid
+     * @return a grid view of the given input data
+     */
+    public static DoubleGrid1d of(final double... values) {
+        return new DoubleGrid1d(
+            Structure1d.of(new Extent1d(values.length)),
+            new DenseDoubleArray(values)
+        );
     }
 
 }

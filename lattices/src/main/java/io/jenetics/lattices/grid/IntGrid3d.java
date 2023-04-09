@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.lattice.IntLattice3d;
+import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -47,7 +48,6 @@ public record IntGrid3d(Structure3d structure, IntArray array)
     implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
 {
 
-
     @Override
     public IntGrid3d create(Structure3d structure, IntArray array) {
         return new IntGrid3d(structure, array);
@@ -56,6 +56,24 @@ public record IntGrid3d(Structure3d structure, IntArray array)
     @Override
     public void assign(IntGrid3d other) {
         IntLattice3d.super.assign(other);
+    }
+
+    /**
+     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 2-d projection from this 1-d grid
+     */
+    public IntGrid2d project(final Projection3d projection) {
+        return new IntGrid2d(projection.apply(structure()), array());
+    }
+
+    public static IntGrid3d of(Extent3d extent, final int... values) {
+        return new IntGrid3d(
+            Structure3d.of(extent),
+            new DenseIntArray(values)
+        );
     }
 
 }

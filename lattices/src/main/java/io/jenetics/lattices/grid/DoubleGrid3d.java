@@ -19,8 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.lattice.DoubleLattice3d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -53,6 +56,24 @@ public record DoubleGrid3d(Structure3d structure, DoubleArray array)
     @Override
     public void assign(DoubleGrid3d other) {
         DoubleLattice3d.super.assign(other);
+    }
+
+    /**
+     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 2-d projection from this 3-d grid
+     */
+    public DoubleGrid2d project(final Projection3d projection) {
+        return new DoubleGrid2d(projection.apply(structure()), array());
+    }
+
+    public static DoubleGrid3d of(Extent3d extent, final double... values) {
+        return new DoubleGrid3d(
+            Structure3d.of(extent),
+            new DenseDoubleArray(values)
+        );
     }
 
 }

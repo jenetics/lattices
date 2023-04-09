@@ -19,10 +19,12 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.array.LongArray;
 import io.jenetics.lattices.lattice.LongLattice2d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.structure.View2d;
 
 /**
  * Generic class for 2-d grids holding {@code long} elements. The
@@ -55,13 +57,45 @@ public record LongGrid2d(Structure2d structure, LongArray array)
     }
 
     /**
-     * Create a new grid by applying the given {@code view} transformation.
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+     * a view onto this grid {@link #array()}.
      *
-     * @param view the grid view transformation to apply
-     * @return a new grid view
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
      */
-    public LongGrid2d view(View2d view) {
-        return new LongGrid2d(view.apply(structure), array);
+    public LongGrid1d project(final Projection2d projection) {
+        return new LongGrid1d(projection.apply(structure()), array());
+    }
+
+
+    /**
+     * Return a 2-d grid view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 grid.
+     * <pre>{@code
+     * final var grid = DoubleGrid2d.of(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @return a grid view of the given input data
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public static LongGrid2d of(Extent2d extent, final long... values) {
+        return new LongGrid2d(
+            Structure2d.of(extent),
+            new DenseLongArray(values)
+        );
     }
 
 

@@ -19,8 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.array.LongArray;
 import io.jenetics.lattices.lattice.LongLattice1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -51,6 +53,23 @@ public record LongGrid1d(Structure1d structure, LongArray array)
     @Override
     public void assign(LongGrid1d other) {
         LongLattice1d.super.assign(other);
+    }
+
+    /**
+     * Return a 1-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned grid
+     * @return a grid view of the given input data
+     */
+    public static LongGrid1d of(final long... values) {
+        return new LongGrid1d(
+            Structure1d.of(new Extent1d(values.length)),
+            new DenseLongArray(values)
+        );
     }
 
 }
