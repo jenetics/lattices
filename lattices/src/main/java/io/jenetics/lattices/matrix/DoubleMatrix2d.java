@@ -25,10 +25,12 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
+import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.BaseDoubleGrid2d;
 import io.jenetics.lattices.grid.Factory2d;
+import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.lattice.DoubleLattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -49,7 +51,9 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
+public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
+    implements DoubleLattice2d, Grid2d<DoubleArray, DoubleMatrix2d>
+{
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
@@ -60,20 +64,23 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
             DenseDoubleArray.ofSize(structure.extent().size())
         );
 
-    /**
-     * Create a new 2-d matrix with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     */
-    public DoubleMatrix2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array, DoubleMatrix2d::new);
+    @Override
+    public DoubleMatrix2d create(Structure2d structure, DoubleArray array) {
+        return new DoubleMatrix2d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleMatrix2d other) {
+        DoubleLattice2d.super.assign(other);
     }
 
     /* *************************************************************************
      * Matrix view methods.
      * ************************************************************************/
+
+    public DoubleMatrix2d view(View2d view) {
+        return new DoubleMatrix2d(view.apply(structure), array);
+    }
 
     /**
      * Return a <em>transposed</em> view of this matrix.
@@ -312,6 +319,21 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
     public double sum() {
         return reduce(Double::sum, DoubleUnaryOperator.identity())
             .orElse(0);
+    }
+
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param other the second matrix to compare
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public boolean equals(final DoubleMatrix2d other) {
+        final var context = NumericalContext.get();
+
+        return extent().equals(other.extent()) &&
+            allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
     @Override

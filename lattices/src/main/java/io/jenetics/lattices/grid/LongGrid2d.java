@@ -41,8 +41,18 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public record LongGrid2d(Structure2d structure, LongArray array)
-    implements LongLattice2d
+    implements LongLattice2d, Grid2d<LongArray, LongGrid2d>
 {
+
+    @Override
+    public LongGrid2d create(Structure2d structure, LongArray array) {
+        return new LongGrid2d(structure, array);
+    }
+
+    @Override
+    public void assign(LongGrid2d other) {
+        LongLattice2d.super.assign(other);
+    }
 
     /**
      * Create a new grid by applying the given {@code view} transformation.

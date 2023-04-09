@@ -36,6 +36,7 @@ import io.jenetics.lattices.grid.ObjectGrid2d;
  */
 public class CsvWriterReaderTest {
 
+    /*
     @Test
     public void writeAndRead() throws IOException {
         final var grid = ObjectGrid2d.<String>dense().create(15, 5);
@@ -53,5 +54,6 @@ public class CsvWriterReaderTest {
             assertThat(rgrid).isEqualTo(grid);
         }
     }
+     */
 
 }

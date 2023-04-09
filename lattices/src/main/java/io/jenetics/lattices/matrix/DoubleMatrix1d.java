@@ -25,8 +25,9 @@ import java.util.stream.IntStream;
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.BaseDoubleGrid1d;
 import io.jenetics.lattices.grid.Factory1d;
+import io.jenetics.lattices.grid.Grid1d;
+import io.jenetics.lattices.lattice.DoubleLattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -43,7 +44,9 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
+public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
+    implements DoubleLattice1d, Grid1d<DoubleArray, DoubleMatrix1d>
+{
 
     /**
      * Factory for creating dense 1-d double matrices.
@@ -54,15 +57,14 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
             DenseDoubleArray.ofSize(structure.extent().value())
         );
 
-    /**
-     * Create a new 1-d matrix with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     */
-    public DoubleMatrix1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array, DoubleMatrix1d::new);
+    @Override
+    public DoubleMatrix1d create(Structure1d structure, DoubleArray array) {
+        return new DoubleMatrix1d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleMatrix1d other) {
+        DoubleLattice1d.super.assign(other);
     }
 
     /* *************************************************************************
@@ -152,6 +154,21 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
         }
 
         return indices.build().toArray();
+    }
+
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param other the second matrix to compare
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public boolean equals(DoubleMatrix1d other) {
+        final var context = NumericalContext.get();
+
+        return extent().equals(other.extent()) &&
+            allMatch(i -> context.equals(get(i), other.get(i)));
     }
 
     @Override

@@ -42,6 +42,17 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public record DoubleGrid2d(Structure2d structure, DoubleArray array)
-    implements DoubleLattice2d
+    implements DoubleLattice2d, Grid2d<DoubleArray, DoubleGrid2d>
 {
+
+    @Override
+    public DoubleGrid2d create(Structure2d structure, DoubleArray array) {
+        return new DoubleGrid2d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleGrid2d other) {
+        DoubleLattice2d.super.assign(other);
+    }
+
 }

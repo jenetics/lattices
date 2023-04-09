@@ -67,6 +67,23 @@ public interface IntLattice1d
     }
 
     /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
+     */
+    default void assign(IntLattice1d other) {
+        if (other == this) {
+            return;
+        }
+        checkSameExtent(extent(), other.extent());
+
+        forEach(i -> set(i, other.get(i)));
+    }
+
+    /**
      * Sets all cells to the state specified by {@code values}.
      *
      * @param values the values to be filled into the cells

@@ -25,12 +25,6 @@ import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-
-import io.jenetics.lattices.grid.BaseDoubleGrid2d;
-import io.jenetics.lattices.grid.BaseIntGrid2d;
-import io.jenetics.lattices.grid.ObjectGrid2d;
-import io.jenetics.lattices.structure.Projection2d;
 
 /**
  * A CSV writer class for serializing 2-d grids/matrices in CSV format.
@@ -46,41 +40,41 @@ public final class CsvWriter implements Closeable, Flushable {
         this.writer = requireNonNull(writer);
     }
 
-    public void write(final ObjectGrid2d<?> grid) throws IOException {
-        @SuppressWarnings("unchecked")
-        final var ogrid = (ObjectGrid2d<Object>)grid;
-
-        for (int i = 0; i < ogrid.rows(); ++i) {
-            final var row = ogrid.project(Projection2d.row(i));
-            final var line = CsvSupport.join(row::iterator);
-            writer.write(line);
-            writer.write(CsvSupport.EOL);
-        }
-    }
-
-    public void write(final BaseIntGrid2d<?> grid) throws IOException {
-        for (int i = 0; i < grid.rows(); ++i) {
-            final var row = new ArrayList<Integer>(grid.cols());
-            for (int j = 0; j < grid.cols(); ++j) {
-                row.add(grid.get(i, j));
-            }
-            final var line = CsvSupport.join(row);
-            writer.write(line);
-            writer.write(CsvSupport.EOL);
-        }
-    }
-
-    public void write(final BaseDoubleGrid2d<?> grid) throws IOException {
-        for (int i = 0; i < grid.rows(); ++i) {
-            final var row = new ArrayList<Double>(grid.cols());
-            for (int j = 0; j < grid.cols(); ++j) {
-                row.add(grid.get(i, j));
-            }
-            final var line = CsvSupport.join(row);
-            writer.write(line);
-            writer.write(CsvSupport.EOL);
-        }
-    }
+//    public void write(final ObjectGrid2d<?> grid) throws IOException {
+//        @SuppressWarnings("unchecked")
+//        final var ogrid = (ObjectGrid2d<Object>)grid;
+//
+//        for (int i = 0; i < ogrid.rows(); ++i) {
+//            final var row = ogrid.project(Projection2d.row(i));
+//            final var line = CsvSupport.join(row::iterator);
+//            writer.write(line);
+//            writer.write(CsvSupport.EOL);
+//        }
+//    }
+//
+//    public void write(final BaseIntGrid2d<?> grid) throws IOException {
+//        for (int i = 0; i < grid.rows(); ++i) {
+//            final var row = new ArrayList<Integer>(grid.cols());
+//            for (int j = 0; j < grid.cols(); ++j) {
+//                row.add(grid.get(i, j));
+//            }
+//            final var line = CsvSupport.join(row);
+//            writer.write(line);
+//            writer.write(CsvSupport.EOL);
+//        }
+//    }
+//
+//    public void write(final BaseDoubleGrid2d<?> grid) throws IOException {
+//        for (int i = 0; i < grid.rows(); ++i) {
+//            final var row = new ArrayList<Double>(grid.cols());
+//            for (int j = 0; j < grid.cols(); ++j) {
+//                row.add(grid.get(i, j));
+//            }
+//            final var line = CsvSupport.join(row);
+//            writer.write(line);
+//            writer.write(CsvSupport.EOL);
+//        }
+//    }
 
     @Override
     public void flush() throws IOException {

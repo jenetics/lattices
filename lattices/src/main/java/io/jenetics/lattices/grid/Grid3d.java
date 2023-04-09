@@ -19,11 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Range3d;
 import io.jenetics.lattices.structure.Structure3d;
-import io.jenetics.lattices.structure.Structured3d;
 import io.jenetics.lattices.structure.View3d;
 
 /**
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.View3d;
  * @version 3.0
  */
 public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
-    extends Structured3d, Loopable3d, Grid<A, G>
+    extends Lattice3d<A>, Self<G>
 {
 
     /**
@@ -77,10 +77,9 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
     default G copy() {
         final var copy = like();
         copy.assign(self());
@@ -95,17 +94,6 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      */
     default G view(final View3d view) {
         return create(view.apply(structure()), array());
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    default Loop3d loop() {
-        return Loop3d.of(new Range3d(extent()));
     }
 
 }

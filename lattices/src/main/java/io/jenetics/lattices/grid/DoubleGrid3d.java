@@ -42,6 +42,17 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record DoubleGrid3d(Structure3d structure, DoubleArray array)
-    implements DoubleLattice3d
+    implements DoubleLattice3d, Grid3d<DoubleArray, DoubleGrid3d>
 {
+
+    @Override
+    public DoubleGrid3d create(Structure3d structure, DoubleArray array) {
+        return new DoubleGrid3d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleGrid3d other) {
+        DoubleLattice3d.super.assign(other);
+    }
+
 }

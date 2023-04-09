@@ -19,11 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.structure.Structured2d;
 import io.jenetics.lattices.structure.View2d;
 
 /**
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structured2d, Loopable2d, Grid<A, G>
+    extends Lattice2d<A>, Self<G>
 {
 
     /**
@@ -77,10 +77,9 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
     default G copy() {
         final var copy = like();
         copy.assign(self());
@@ -95,17 +94,6 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      */
     default G view(final View2d view) {
         return create(view.apply(structure()), array());
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
     }
 
 }

@@ -41,7 +41,7 @@ public interface IntLattice3d
 {
 
     /**
-     * Returns the matrix cell value at coordinate {@code [row, col]}.
+     * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
      *
      * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
@@ -55,7 +55,7 @@ public interface IntLattice3d
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
+     * Sets the matrix cell at coordinate {@code [slice, row, col]} to the specified
      * {@code value}.
      *
      * @param slice the index of the slice-coordinate
@@ -67,6 +67,23 @@ public interface IntLattice3d
      */
     default void set(int slice, int row, int col, int value) {
         array().set(structure().offset(slice, row, col), value);
+    }
+
+    /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if
+     *         {@code !extent().equals(other.extent())}
+     */
+    default void assign(IntLattice3d other) {
+        if (other == this) {
+            return;
+        }
+        checkSameExtent(extent(), other.extent());
+        forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
     }
 
     /**

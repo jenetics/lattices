@@ -17,97 +17,33 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.grid.Grids.checkArraySize;
 import static io.jenetics.lattices.grid.Grids.checkSameExtent;
 
-import java.util.OptionalInt;
-import java.util.function.BiFunction;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntUnaryOperator;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.array.IntArray;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.array.ObjectArray;
 
 /**
- * Abstract double grid implementation.
+ * This interface <em>structures</em> the elements into a 3-dimensional lattice.
  *
- * @param <G> the grid type
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
-    implements Grid3d<IntArray, G>
+public interface ObjectLattice3d<T>
+    extends Lattice3d<ObjectArray<T>>, StructureOperations3d
 {
 
     /**
-     * The structure, which defines the <em>extent</em> of the grid and the
-     * <em>order</em> which determines the index mapping {@code N^2 -> N}.
-     */
-    private final Structure3d structure;
-
-    /**
-     * The underlying {@code int[]} array.
-     */
-    private final IntArray array;
-
-    private final BiFunction<Structure3d, IntArray, G> constructor;
-
-    /**
-     * Create a new 3-d grid with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @param constructor the constructor of the actual grid type
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     * is not able to hold the required number of elements. It is still possible
-     * that an {@link IndexOutOfBoundsException} is thrown when the defined
-     * order of the grid tries to access an array index, which is not within the
-     * bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    protected BaseIntGrid3d(
-        final Structure3d structure,
-        final IntArray array,
-        final BiFunction<? super Structure3d, ? super IntArray, ? extends G> constructor
-    ) {
-        checkArraySize(structure, array.length());
-
-        this.structure = structure;
-        this.array = array;
-
-        @SuppressWarnings("unchecked") final var ctr = (BiFunction<Structure3d, IntArray, G>) constructor;
-        this.constructor = requireNonNull(ctr);
-    }
-
-    /**
-     * Return the structure for grid.
-     *
-     * @return the structure for grid
-     */
-    @Override
-    public Structure3d structure() {
-        return structure;
-    }
-
-    /**
-     * Return the underlying element array.
-     *
-     * @return the underlying element array
-     */
-    @Override
-    public IntArray array() {
-        return array;
-    }
-
-    @Override
-    public G create(final Structure3d structure, final IntArray array) {
-        return constructor.apply(structure, array);
-    }
-
-    /**
-     * Returns the matrix cell value at coordinate {@code [row, col]}.
+     * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
      *
      * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
@@ -116,12 +52,12 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    public int get(final int slice, final int row, final int col) {
-        return array.get(structure().offset(slice, row, col));
+    default T get(int slice, int row, int col) {
+        return array().get(structure().offset(slice, row, col));
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
+     * Sets the matrix cell at coordinate {@code [slice, row, col]} to the specified
      * {@code value}.
      *
      * @param slice the index of the slice-coordinate
@@ -131,8 +67,8 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    public void set(final int slice, final int row, final int col, final int value) {
-        array.set(structure().offset(slice, row, col), value);
+    default void set(int slice, int row, int col, T value) {
+        array().set(structure().offset(slice, row, col), value);
     }
 
     /**
@@ -144,8 +80,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    @Override
-    public void assign(final G other) {
+    default void assign(ObjectLattice3d<? extends T> other) {
         if (other == this) {
             return;
         }
@@ -165,11 +100,11 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    public void assign(final int[][][] values) {
-        if (values.length != structure.extent().slices()) {
+    default void assign(T[][][] values) {
+        if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
-                    values.length + " != " + structure.extent().slices()
+                    values.length + " != " + slices()
             );
         }
 
@@ -178,7 +113,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
             if (slice.length != rows()) {
                 throw new IllegalArgumentException(
                     "Values must have the same number of rows: " +
-                        slice.length + " != " + extent().rows()
+                        slice.length + " != " + rows()
                 );
             }
 
@@ -187,7 +122,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
                 if (row.length != cols()) {
                     throw new IllegalArgumentException(
                         "Values must have the same number of columns: " +
-                            row.length + " != " + extent().cols()
+                            row.length + " != " + cols()
                     );
                 }
 
@@ -203,7 +138,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      *
      * @param value the value to be filled into the cells
      */
-    public void assign(final int value) {
+    default void assign(T value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -215,16 +150,46 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @param f a function object taking as first argument the current cell's
      * value of {@code this}, and as second argument the current cell's value of
      * {@code y}
-     * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
+     * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    public void assign(
-        final BaseIntGrid3d<?> y,
-        final IntBinaryOperator f
-    ) {
+    default void assign(ObjectLattice3d<T> y, BinaryOperator<T> f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
-        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c), y.get(s, r, c))));
+        forEach((s, r, c) ->
+            set(s, r, c, f.apply(get(s, r, c), y.get(s, r, c)))
+        );
+    }
+
+    /**
+     * Updates this grid with the values of {@code a} which are transformed by
+     * the given function {@code f}.
+     * <pre>{@code
+     * this[i, j, k] = f(a[i, j, k])
+     * }</pre>
+     * <pre>{@code
+     * final ObjectGrid3d<Integer> ints = ObjectGrid3d
+     *     .<Integer>dense()
+     *     .create(10, 15, 40);
+     *
+     * final ObjectGrid3d<String> strings = ObjectGrid3d
+     *     .<String>dense()
+     *     .create(10, 15, 40);
+     *
+     * ints.forEach((s, r, c) -> ints.set(s, r, c, s*r*c));
+     * strings.assign(ints, Object::toString);
+     * }</pre>
+     *
+     * @param a the grid used for the update
+     * @param f the mapping function
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
+     */
+    default  <A> void assign(
+        ObjectLattice3d<? extends A> a,
+        Function<? super A, ? extends T> f
+    ) {
+        checkSameExtent(extent(), a.extent());
+        forEach((s, r, c) -> set(s, r, c, f.apply(a.get(s, r, c))));
     }
 
     /**
@@ -233,9 +198,9 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    public void assign(final IntUnaryOperator f) {
+    default void assign(UnaryOperator<T> f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.apply(get(s, r, c))));
     }
 
     /**
@@ -243,7 +208,7 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    public void swap(final BaseIntGrid3d<?> other) {
+    default void swap(ObjectLattice3d<T> other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -254,7 +219,11 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
     }
 
     /**
-     * Applies a function to each cell and aggregates the results.
+     * Applies a function to each cell and aggregates the results. Returns a
+     * value <em>v</em> such that <em>v==a(size())</em> where
+     * <em>a(i) == reduce(a(i - 1), f(get(slice, row, col)))</em> and
+     * terminators are
+     * <em>a(1) == f(get(0, 0, 0))</em>.
      * <p><b>Example:</b></p>
      * <pre>
      * 2 x 2 matrix
@@ -269,29 +238,28 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * current aggregation and as second argument the transformed current cell
      * value
      * @param f a function transforming the current cell value
-     * @return the aggregated measure or {@link OptionalInt#empty()} if
+     * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    public OptionalInt
-    reduce(final IntBinaryOperator reducer, final IntUnaryOperator f) {
+    default Optional<T> reduce(BinaryOperator<T> reducer, UnaryOperator<T> f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalInt.empty();
+            return Optional.empty();
         }
 
-        var a = f.applyAsInt(get(slices() - 1, rows() - 1, cols() - 1));
+        T a = f.apply(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.applyAsInt(a, f.applyAsInt(get(s, r, c)));
+                    a = reducer.apply(a, f.apply(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return OptionalInt.of(a);
+        return Optional.ofNullable(a);
     }
 
     /**
@@ -302,23 +270,9 @@ public abstract class BaseIntGrid3d<G extends BaseIntGrid3d<G>>
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    public boolean equals(final BaseIntGrid3d<?> other) {
+    default boolean equals(ObjectLattice3d<T> other) {
         return extent().equals(other.extent()) &&
-            allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
-    }
-
-    @Override
-    public int hashCode() {
-        final int[] hash = new int[]{37};
-        forEach((i, j, k) -> hash[0] += Integer.hashCode(get(i, j, k)) * 17);
-        return hash[0];
-    }
-
-    @Override
-    public boolean equals(final Object object) {
-        return object == this ||
-            object instanceof  BaseIntGrid3d<?> grid &&
-                equals(grid);
+            allMatch((s, r, c) -> Objects.equals(get(s, r, c), other.get(s, r, c)));
     }
 
 }

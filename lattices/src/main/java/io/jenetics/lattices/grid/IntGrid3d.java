@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.lattice.IntLattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -42,43 +43,19 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class IntGrid3d extends BaseIntGrid3d<IntGrid3d> {
+public record IntGrid3d(Structure3d structure, IntArray array)
+    implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
+{
 
-    /**
-     * Factory for creating dense 3-d double grids.
-     */
-    public static final Factory3d<IntGrid3d> DENSE = structure ->
-        new IntGrid3d(
-            structure,
-            DenseIntArray.ofSize(structure.extent().size())
-        );
 
-    /**
-     * Create a new 3-d matrix with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    public IntGrid3d(final Structure3d structure, final IntArray array) {
-        super(structure, array, IntGrid3d::new);
+    @Override
+    public IntGrid3d create(Structure3d structure, IntArray array) {
+        return new IntGrid3d(structure, array);
     }
 
-    /**
-     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 2-d projection from this 1-d grid
-     */
-    public IntGrid2d project(final Projection3d projection) {
-        return new IntGrid2d(projection.apply(structure()), array());
+    @Override
+    public void assign(IntGrid3d other) {
+        IntLattice3d.super.assign(other);
     }
 
 }

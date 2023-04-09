@@ -40,6 +40,17 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record LongGrid1d(Structure1d structure, LongArray array)
-    implements LongLattice1d
+    implements LongLattice1d, Grid1d<LongArray, LongGrid1d>
 {
+
+    @Override
+    public LongGrid1d create(Structure1d structure, LongArray array) {
+        return new LongGrid1d(structure, array);
+    }
+
+    @Override
+    public void assign(LongGrid1d other) {
+        LongLattice1d.super.assign(other);
+    }
+
 }

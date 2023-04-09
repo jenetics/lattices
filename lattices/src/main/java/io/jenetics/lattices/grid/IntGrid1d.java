@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
-import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.lattice.IntLattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -42,49 +41,18 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class IntGrid1d extends BaseIntGrid1d<IntGrid1d> {
+public record IntGrid1d(Structure1d structure, IntArray array)
+    implements IntLattice1d, Grid1d<IntArray, IntGrid1d>
+{
 
-    /**
-     * Factory for creating dense 1-d int grids.
-     */
-    public static final Factory1d<IntGrid1d> DENSE = structure ->
-        new IntGrid1d(
-            structure,
-            DenseIntArray.ofSize(structure.extent().value())
-        );
-
-    /**
-     * Create a new 1-d grid with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    public IntGrid1d(final Structure1d structure, final IntArray array) {
-        super(structure, array, IntGrid1d::new);
+    @Override
+    public IntGrid1d create(Structure1d structure, IntArray array) {
+        return new IntGrid1d(structure, array);
     }
 
-    /**
-     * Return a 1-d grid view of the given input {@code values}.
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <em>view</em> onto the given input data.
-     *
-     * @param values the returned grid
-     * @return a grid view of the given input data
-     */
-    public static IntGrid1d of(final int... values) {
-        return new IntGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
-            new DenseIntArray(values)
-        );
+    @Override
+    public void assign(IntGrid1d other) {
+        IntLattice1d.super.assign(other);
     }
 
 }

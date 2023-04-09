@@ -42,6 +42,17 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record DoubleGrid1d(Structure1d structure, DoubleArray array)
-    implements DoubleLattice1d
+    implements DoubleLattice1d, Grid1d<DoubleArray, DoubleGrid1d>
 {
+
+    @Override
+    public DoubleGrid1d create(Structure1d structure, DoubleArray array) {
+        return new DoubleGrid1d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleGrid1d other) {
+        DoubleLattice1d.super.assign(other);
+    }
+
 }

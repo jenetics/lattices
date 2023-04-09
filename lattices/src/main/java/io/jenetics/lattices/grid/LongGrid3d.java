@@ -40,6 +40,15 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record LongGrid3d(Structure3d structure, LongArray array)
-    implements LongLattice3d
+    implements LongLattice3d, Grid3d<LongArray, LongGrid3d>
 {
+    @Override
+    public LongGrid3d create(Structure3d structure, LongArray array) {
+        return new LongGrid3d(structure, array);
+    }
+
+    @Override
+    public void assign(LongGrid3d other) {
+        LongLattice3d.super.assign(other);
+    }
 }

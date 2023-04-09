@@ -69,6 +69,23 @@ public interface DoubleLattice3d
     }
 
     /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param other the source matrix to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if
+     *         {@code !extent().equals(other.extent())}
+     */
+    default void assign(DoubleLattice3d other) {
+        if (other == this) {
+            return;
+        }
+        checkSameExtent(extent(), other.extent());
+        forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
+    }
+
+    /**
      * Sets all cells to the state specified by given {@code values}. The
      * {@code values} are required to have the form {@code values[row][column]}
      * and have exactly the same number of rows and columns as the receiver.

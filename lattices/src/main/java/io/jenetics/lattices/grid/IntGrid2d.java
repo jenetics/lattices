@@ -19,10 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.lattice.IntLattice2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -43,74 +41,19 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public final class IntGrid2d extends BaseIntGrid2d<IntGrid2d> {
+public record IntGrid2d(Structure2d structure, IntArray array)
+    implements IntLattice2d, Grid2d<IntArray, IntGrid2d>
+{
 
-    /**
-     * Factory for creating dense 2-d int grids.
-     */
-    public static final Factory2d<IntGrid2d> DENSE = structure ->
-        new IntGrid2d(
-            structure,
-            DenseIntArray.ofSize(structure.extent().size())
-        );
 
-    /**
-     * Create a new 2-d matrix with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    public IntGrid2d(final Structure2d structure, final IntArray array) {
-        super(structure, array, IntGrid2d::new);
+    @Override
+    public IntGrid2d create(Structure2d structure, IntArray array) {
+        return new IntGrid2d(structure, array);
     }
 
-    /**
-     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 1-d projection from this 2-d grid
-     */
-    public IntGrid1d project(final Projection2d projection) {
-        return new IntGrid1d(projection.apply(structure()), array());
-    }
-
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
-     * that the values are given in row-major order. The following example shows
-     * how to create a <em>dense</em> 3x4 grid.
-     * <pre>{@code
-     * final var grid = DoubleGrid2d.of(
-     *     new Extent2d(3, 4),
-     *     1, 2,  3,  4,
-     *     5, 6,  7,  8,
-     *     9, 10, 11, 12
-     * );
-     * }</pre>
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <b>view</b> onto the given input data.
-     *
-     * @param extent the extent of the given values
-     * @param values the returned grid values
-     * @return a grid view of the given input data
-     * @throws IllegalArgumentException if the desired extent of the grid
-     *         requires fewer elements than given
-     */
-    public static IntGrid2d of(final Extent2d extent, final int... values) {
-        return new IntGrid2d(
-            Structure2d.of(extent),
-            new DenseIntArray(values)
-        );
+    @Override
+    public void assign(IntGrid2d other) {
+        IntLattice2d.super.assign(other);
     }
 
 }

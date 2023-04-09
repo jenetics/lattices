@@ -85,22 +85,26 @@ public final class CsvReader implements Closeable {
 
     public DoubleGrid2d readDoubleGrid() throws IOException {
         final var data = readStringGrid();
+        /*
         final var values = new double[data.size()];
         for (int i = 0; i < values.length; ++i) {
             values[i] = Double.parseDouble(data.array().get(i));
         }
+         */
 
-        return new DoubleGrid2d(data.structure(), new DenseDoubleArray(values));
+        return new DoubleGrid2d(data.structure(), new DenseDoubleArray(null));
     }
 
     public IntGrid2d readIntGrid() throws IOException {
         final var data = readStringGrid();
+        /*
         final var values = new int[data.size()];
         for (int i = 0; i < values.length; ++i) {
             values[i] = Integer.parseInt(data.array().get(i));
         }
+         */
 
-        return new IntGrid2d(data.structure(), new DenseIntArray(values));
+        return new IntGrid2d(data.structure(), new DenseIntArray(null));
     }
 
     @Override
