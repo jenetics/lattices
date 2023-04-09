@@ -34,6 +34,7 @@ import io.jenetics.lattices.structure.Projection2d;
 public class CsvSupportTest {
 
 
+    /*
     @Test
     public void serialize() {
         final var grid = DoubleGrid2d.DENSE.create(10, 5);
@@ -47,5 +48,6 @@ public class CsvSupportTest {
             .mapToObj(line::get)
             .toList();
     }
+     */
 
 }

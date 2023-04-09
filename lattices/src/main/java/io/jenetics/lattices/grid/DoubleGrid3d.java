@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Projection3d;
+import io.jenetics.lattices.lattice.DoubleLattice3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -42,43 +41,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
-
-    /**
-     * Factory for creating dense 3-d double grids.
-     */
-    public static final Factory3d<DoubleGrid3d> DENSE = structure ->
-        new DoubleGrid3d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
-        );
-
-    /**
-     * Create a new 3-d matrix with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    public DoubleGrid3d(final Structure3d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid3d::new);
-    }
-
-    /**
-     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 2-d projection from this 3-d grid
-     */
-    public DoubleGrid2d project(final Projection3d projection) {
-        return new DoubleGrid2d(projection.apply(structure()), array());
-    }
-
+public record DoubleGrid3d(Structure3d structure, DoubleArray array)
+    implements DoubleLattice3d
+{
 }

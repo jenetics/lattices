@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.lattice.DoubleLattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -42,49 +41,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
-
-    /**
-     * Factory for creating dense 1-d double grids.
-     */
-    public static final Factory1d<DoubleGrid1d> DENSE = structure ->
-        new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().value())
-        );
-
-    /**
-     * Create a new 1-d grid with the given {@code structure} and element
-     * {@code array}.
-     *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
-     */
-    public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid1d::new);
-    }
-
-    /**
-     * Return a 1-d grid view of the given input {@code values}.
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <em>view</em> onto the given input data.
-     *
-     * @param values the returned grid
-     * @return a grid view of the given input data
-     */
-    public static DoubleGrid1d of(final double... values) {
-        return new DoubleGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
-            new DenseDoubleArray(values)
-        );
-    }
-
+public record DoubleGrid1d(Structure1d structure, DoubleArray array)
+    implements DoubleLattice1d
+{
 }

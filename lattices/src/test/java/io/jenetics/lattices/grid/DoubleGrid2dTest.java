@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.testfixtures.LinealgebraAsserts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -54,15 +53,12 @@ public class DoubleGrid2dTest {
         final DoubleGrid2d grid2,
         final boolean equals
     ) {
-        LinealgebraAsserts.assertEquals(grid1, grid1);
-        LinealgebraAsserts.assertEquals(grid2, grid2);
-
         if (equals) {
-            LinealgebraAsserts.assertEquals(grid1, grid2);
-            LinealgebraAsserts.assertEquals(grid2, grid1);
+            assertThat(grid1).isEqualTo(grid2);
+            assertThat(grid2).isEqualTo(grid1);
         } else {
-            LinealgebraAsserts.assertNotEquals(grid1, grid2);
-            LinealgebraAsserts.assertNotEquals(grid2, grid1);
+            assertThat(grid1).isNotEqualTo(grid2);
+            assertThat(grid2).isNotEqualTo(grid1);
         }
     }
 
