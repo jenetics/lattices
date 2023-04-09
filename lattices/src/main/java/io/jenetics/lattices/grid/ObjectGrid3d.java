@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.lattice.ObjectLattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -42,6 +43,15 @@ import io.jenetics.lattices.structure.Structure3d;
 public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     implements ObjectLattice3d<T>, Grid3d<ObjectArray<T>, ObjectGrid3d<T>>
 {
+
+    /**
+     * Create a new grid view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public ObjectGrid3d(Lattice3d<? extends ObjectArray<T>> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public ObjectGrid3d<T> create(Structure3d structure, ObjectArray<T> array) {

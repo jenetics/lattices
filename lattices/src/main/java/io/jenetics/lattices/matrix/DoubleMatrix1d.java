@@ -26,6 +26,7 @@ import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.lattice.DoubleLattice1d;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -54,6 +55,15 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
             Structure1d.of(extent),
             DenseDoubleArray.ofSize(extent.value())
         );
+
+    /**
+     * Create a new matrix view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public DoubleMatrix1d(Lattice1d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public DoubleMatrix1d create(Structure1d structure, DoubleArray array) {

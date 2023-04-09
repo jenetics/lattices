@@ -84,6 +84,17 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
     G create(Structure2d structure, A array);
 
     /**
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
+     *
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
+     */
+    default G create(Lattice2d<A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
+
+    /**
      * Assigns the elements of the {@code other} grid to this grid.
      *
      * @param other the source of the grid elements

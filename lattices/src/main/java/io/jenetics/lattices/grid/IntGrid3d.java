@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.lattice.IntLattice3d;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -57,6 +57,15 @@ public record IntGrid3d(Structure3d structure, IntArray array)
             Structure3d.of(extent),
             DenseIntArray.ofSize(extent.size())
         );
+
+    /**
+     * Create a new grid view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public IntGrid3d(Lattice3d<? extends IntArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public IntGrid3d create(Structure3d structure, IntArray array) {

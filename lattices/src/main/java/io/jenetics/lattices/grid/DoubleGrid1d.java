@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.lattice.DoubleLattice1d;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -55,6 +56,15 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
             Structure1d.of(extent),
             DenseDoubleArray.ofSize(extent.size())
         );
+
+    /**
+     * Create a new grid view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public DoubleGrid1d(Lattice1d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public DoubleGrid1d create(Structure1d structure, DoubleArray array) {

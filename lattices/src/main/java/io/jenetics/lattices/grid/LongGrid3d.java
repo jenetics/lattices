@@ -19,9 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseIntArray;
 import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.array.LongArray;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.lattice.LongLattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
@@ -58,6 +58,15 @@ public record LongGrid3d(Structure3d structure, LongArray array)
             Structure3d.of(extent),
             DenseLongArray.ofSize(extent.size())
         );
+
+    /**
+     * Create a new grid view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public LongGrid3d(Lattice3d<? extends LongArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public LongGrid3d create(Structure3d structure, LongArray array) {

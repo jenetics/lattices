@@ -83,6 +83,17 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
     G create(Structure1d structure, A array);
 
     /**
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
+     *
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
+     */
+    default G create(Lattice1d<A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
+
+    /**
      * Assigns the elements of the {@code other} grid to this grid.
      *
      * @param other the source of the grid elements

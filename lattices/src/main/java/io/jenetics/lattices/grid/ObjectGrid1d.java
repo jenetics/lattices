@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.lattice.ObjectLattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -39,6 +40,15 @@ import io.jenetics.lattices.structure.Structure1d;
 public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     implements ObjectLattice1d<T>, Grid1d<ObjectArray<T>, ObjectGrid1d<T>>
 {
+
+    /**
+     * Create a new grid view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public ObjectGrid1d(Lattice1d<? extends ObjectArray<T>> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public ObjectGrid1d<T> create(Structure1d structure, ObjectArray<T> array) {

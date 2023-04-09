@@ -29,6 +29,7 @@ import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.Grid2d;
 import io.jenetics.lattices.lattice.DoubleLattice2d;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -61,6 +62,15 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
             Structure2d.of(extent),
             DenseDoubleArray.ofSize(extent.size())
         );
+
+    /**
+     * Create a new matrix view from the given lattice.
+     *
+     * @param lattice the underlying lattice data
+     */
+    public DoubleMatrix2d(Lattice2d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
 
     @Override
     public DoubleMatrix2d create(Structure2d structure, DoubleArray array) {
