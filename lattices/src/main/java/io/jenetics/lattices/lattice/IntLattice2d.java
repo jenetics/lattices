@@ -37,7 +37,7 @@ import io.jenetics.lattices.array.IntArray;
  * @version 3.0
  */
 public interface IntLattice2d
-    extends Lattice2d<IntArray>, StructureOperations2d
+    extends Lattice2d<IntArray>, Structure2dOperations
 {
 
     /**

@@ -37,7 +37,7 @@ import io.jenetics.lattices.array.LongArray;
  * @version 3.0
  */
 public interface LongLattice3d
-    extends Lattice3d<LongArray>, StructureOperations3d
+    extends Lattice3d<LongArray>, Structure3dOperations
 {
 
     /**

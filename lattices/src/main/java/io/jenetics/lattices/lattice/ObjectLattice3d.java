@@ -39,7 +39,7 @@ import io.jenetics.lattices.array.ObjectArray;
  * @version 3.0
  */
 public interface ObjectLattice3d<T>
-    extends Lattice3d<ObjectArray<T>>, StructureOperations3d
+    extends Lattice3d<ObjectArray<T>>, Structure3dOperations
 {
 
     /**

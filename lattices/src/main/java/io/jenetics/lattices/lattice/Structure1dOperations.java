@@ -31,7 +31,7 @@ import io.jenetics.lattices.structure.Structured1d;
  * @since 3.0
  * @version 3.0
  */
-public interface StructureOperations1d extends Structured1d, Loopable1d {
+public interface Structure1dOperations extends Structured1d, Loopable1d {
 
     /**
      * Return the default looping strategy of this structural, which can be

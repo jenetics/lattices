@@ -31,7 +31,7 @@ import io.jenetics.lattices.structure.Structured3d;
  * @since 3.0
  * @version 3.0
  */
-public interface StructureOperations3d extends Structured3d, Loopable3d {
+public interface Structure3dOperations extends Structured3d, Loopable3d {
 
     /**
      * Return the default looping strategy of this structural, which can be

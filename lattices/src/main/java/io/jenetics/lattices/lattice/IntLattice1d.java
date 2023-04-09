@@ -38,7 +38,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @version 3.0
  */
 public interface IntLattice1d
-    extends Lattice1d<IntArray>, StructureOperations1d
+    extends Lattice1d<IntArray>, Structure1dOperations
 {
 
     /**

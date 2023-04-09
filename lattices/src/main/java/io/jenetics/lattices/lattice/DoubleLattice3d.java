@@ -36,7 +36,7 @@ import io.jenetics.lattices.array.DoubleArray;
  * @version 3.0
  */
 public interface DoubleLattice3d
-    extends Lattice3d<DoubleArray>, StructureOperations3d
+    extends Lattice3d<DoubleArray>, Structure3dOperations
 {
 
     /**
