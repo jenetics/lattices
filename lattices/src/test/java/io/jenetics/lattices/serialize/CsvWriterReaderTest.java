@@ -19,18 +19,6 @@
  */
 package io.jenetics.lattices.serialize;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
-import org.testng.annotations.Test;
-
-import io.jenetics.lattices.grid.ObjectGrid2d;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */

@@ -23,7 +23,6 @@ import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.array.ObjectArray;
 import io.jenetics.lattices.lattice.ObjectLattice2d;
 import io.jenetics.lattices.structure.Projection2d;
-import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**

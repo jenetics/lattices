@@ -20,9 +20,9 @@
 package io.jenetics.lattices.matrix.blas;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.matrix.Matrices.isSingular;
 import static io.jenetics.lattices.structure.Structures.checkRectangular;
 import static io.jenetics.lattices.structure.Structures.checkSquare;
-import static io.jenetics.lattices.matrix.Matrices.isSingular;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;

@@ -19,15 +19,6 @@
  */
 package io.jenetics.lattices.serialize;
 
-import java.util.List;
-import java.util.stream.IntStream;
-
-import org.testng.annotations.Test;
-
-import io.jenetics.lattices.grid.DoubleGrid1d;
-import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.structure.Projection2d;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
