@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
-import static io.jenetics.lattices.structure.Grids.checkSquare;
-import static io.jenetics.lattices.structure.Grids.isSquare;
+import static io.jenetics.lattices.structure.Structures.checkSquare;
+import static io.jenetics.lattices.structure.Structures.isSquare;
 import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 
 import io.jenetics.lattices.NumericalContext;

@@ -19,13 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Structure1d;
-import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.structure.Structure3d;
-
 /**
  * Some helper methods for checking pre-conditions.
  *
@@ -33,8 +26,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class Grids {
-    private Grids() {
+public final class Structures {
+    private Structures() {
     }
 
     /**

@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.matrix.blas;
 
-import static io.jenetics.lattices.structure.Grids.checkSameExtent;
-import static io.jenetics.lattices.structure.Grids.checkSquare;
+import static io.jenetics.lattices.structure.Structures.checkSameExtent;
+import static io.jenetics.lattices.structure.Structures.checkSquare;
 
 import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
