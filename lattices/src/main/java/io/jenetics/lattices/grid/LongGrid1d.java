@@ -34,7 +34,10 @@ import io.jenetics.lattices.structure.Structure1d;
  * <pre>{@code
  * final var extent = new Extent1d(100);
  * final var values = new long[extent.size()];
- * final var grid = new LongGrid1d(Structure1d.of(extent), new DenseLongArray(values));
+ * final var grid = new LongGrid1d(
+ *     Structure1d.of(extent),
+ *     new DenseLongArray(values)
+ * );
  * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

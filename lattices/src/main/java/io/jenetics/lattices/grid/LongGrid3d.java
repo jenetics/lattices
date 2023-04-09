@@ -35,7 +35,10 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var extent = new Extent3d(30, 50, 100);
  * final var values = new long[extent.size()];
- * final var grid = new LongGrid3d(Structure3d.of(extent), new DenseLongArray(values));
+ * final var grid = new LongGrid3d(
+ *     Structure3d.of(extent),
+ *     new DenseLongArray(values)
+ * );
  * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

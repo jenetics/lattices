@@ -31,7 +31,7 @@ import java.util.random.RandomGeneratorFactory;
  * The default value can be changed with defining a Java <em>property</em> on
  * the command line.
  * <pre>
- * $ java -Dio.jenetics.lattices.precision=12 ...
+ * $ java -Dio.jenetics.lattices.matrix.precision=12 ...
  * </pre>
  * The example above will change the epsilon of the default context object to
  * 10<sup>-12</sup>. It is also possible to change the numerical context only
@@ -269,7 +269,7 @@ public class NumericalContext {
             java.security.AccessController.doPrivileged(
                 (java.security.PrivilegedAction<Integer>)() ->
                     Integer.getInteger(
-                        "io.jenetics.lattices.precision",
+                        "io.jenetics.lattices.matrix.precision",
                         DEFAULT_PRECISSION
                     )
             );

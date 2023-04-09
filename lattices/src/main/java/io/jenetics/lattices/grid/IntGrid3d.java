@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new int[3*50*100];
  * final var grid = new IntGrid3d(
- *     new Structure3d(new Extent3d(3, 50, 100)),
+ *     Structure3d.of(new Extent3d(3, 50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>

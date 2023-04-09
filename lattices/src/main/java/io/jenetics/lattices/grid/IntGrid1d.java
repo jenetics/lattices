@@ -34,7 +34,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * <pre>{@code
  * final var values = new int[100];
  * final var grid = new IntGrid1d(
- *     new Structure1d(new Extent1d(100)),
+ *     Structure1d.of(new Extent1d(100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>

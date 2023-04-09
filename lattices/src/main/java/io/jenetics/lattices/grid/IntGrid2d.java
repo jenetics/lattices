@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * <pre>{@code
  * final var values = new int[50*100];
  * final var grid = new IntGrid2d(
- *     new Structure2d(new Extent2d(50, 100)),
+ *     Structure2d.of(new Extent2d(50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
