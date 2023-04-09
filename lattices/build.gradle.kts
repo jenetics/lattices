@@ -52,3 +52,11 @@ tasks.test { dependsOn(tasks.compileJmhJava) }
 jmh {
     includes.add(".*DenseDoubleMatrix2dPerf.*")
 }
+
+tasks.javadoc {
+    val doclet = options as StandardJavadocDocletOptions
+    doclet.linksOffline(
+        "https://www.javadoc.io/doc/io.jenetics/lattices.structure",
+        "${project.rootDir}/buildSrc/resources/javadoc/io.jenetics.lattices.lattice"
+    )
+}

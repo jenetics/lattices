@@ -114,6 +114,11 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
         return like(structure().extent());
     }
 
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
         copy.assign(self());

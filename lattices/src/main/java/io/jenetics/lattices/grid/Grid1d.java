@@ -112,6 +112,11 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
         return like(structure().extent());
     }
 
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
         copy.assign(self());
