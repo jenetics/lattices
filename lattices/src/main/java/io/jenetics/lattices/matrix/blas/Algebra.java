@@ -23,9 +23,9 @@ import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 import static io.jenetics.lattices.structure.Structures.checkSquare;
 import static io.jenetics.lattices.structure.Structures.isSquare;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.matrix.NumericalContext;
 import io.jenetics.lattices.structure.Extent2d;
 
 /**

@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices;
+package io.jenetics.lattices.matrix;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;

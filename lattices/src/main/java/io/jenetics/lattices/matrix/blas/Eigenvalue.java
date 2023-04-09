@@ -22,9 +22,9 @@ package io.jenetics.lattices.matrix.blas;
 import static io.jenetics.lattices.matrix.Matrices.isSymmetric;
 import static io.jenetics.lattices.structure.Structures.checkSquare;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.matrix.NumericalContext;
 
 /**
  * Store the result of an <em>Eigenvalue</em>-decomposition.

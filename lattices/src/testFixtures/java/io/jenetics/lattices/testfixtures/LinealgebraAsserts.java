@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.data.Percentage;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.matrix.NumericalContext;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

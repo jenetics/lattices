@@ -22,9 +22,9 @@ package io.jenetics.lattices.matrix.blas;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 import static io.jenetics.lattices.structure.Structures.checkSquare;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.matrix.NumericalContext;
 
 /**
  * Subset of the <a href="https://math.nist.gov/javanumerics/blas.html">BLAS</a>

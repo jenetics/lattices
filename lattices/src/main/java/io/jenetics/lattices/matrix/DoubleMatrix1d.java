@@ -22,7 +22,6 @@ package io.jenetics.lattices.matrix;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.Factory1d;

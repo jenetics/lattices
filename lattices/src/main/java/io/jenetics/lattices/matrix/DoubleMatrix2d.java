@@ -25,7 +25,6 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.NumericalContext;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.Factory2d;
