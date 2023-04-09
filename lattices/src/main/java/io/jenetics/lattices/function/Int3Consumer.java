@@ -37,6 +37,6 @@ public interface Int3Consumer {
      * @param j second value
      * @param k third value
      */
-    void accept(final int i, final int j, final int k);
+    void accept(int i, int j, int k);
 
 }
