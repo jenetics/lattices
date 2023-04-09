@@ -29,6 +29,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
@@ -325,16 +326,21 @@ public class DoubleMatrix2dTest {
             })
         );
 
-        System.out.println(matrix);
-
         final var foo = DoubleMatrix2d.of(
             new Extent2d(3, 4),
             1, 2,  3,  4,
             5, 6,  7,  8,
             9, 10, 11, 12
         );
+    }
 
-        System.out.println(foo);
+    @Test
+    public void constructor() {
+        final var grid = DoubleGrid2d.DENSE.create(10, 10);
+        grid.assign(29.2);
+
+        final var matrix = new DoubleMatrix2d(grid);
+        assertThat(grid.equals(matrix)).isTrue();
     }
 
 }
