@@ -65,7 +65,7 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public IntGrid1d project(final Projection2d projection) {
+    public IntGrid1d project(Projection2d projection) {
         return new IntGrid1d(projection.apply(structure()), array());
     }
 
@@ -93,7 +93,7 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static IntGrid2d of(Extent2d extent, final int... values) {
+    public static IntGrid2d of(Extent2d extent, int... values) {
         return new IntGrid2d(
             Structure2d.of(extent),
             new DenseIntArray(values)

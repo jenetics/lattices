@@ -47,7 +47,7 @@ public final class Algebra {
      * @param x the vector for which to calculate the one-norm
      * @return the one-norm of {@code x}
      */
-    public static double norm1(final DoubleMatrix1d x) {
+    public static double norm1(DoubleMatrix1d x) {
         return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
@@ -58,7 +58,7 @@ public final class Algebra {
      * @param A the matrix for which to calculate the one-norm
      * @return the one-norm of {@code A}
      */
-    public static double norm1(final DoubleMatrix2d A) {
+    public static double norm1(DoubleMatrix2d A) {
         double max = 0;
         for (int c = A.cols(); --c >= 0;) {
             max = Math.max(max, norm1(A.colAt(c)));
@@ -73,7 +73,7 @@ public final class Algebra {
      * @param x the vector for which to calculate the two-norm
      * @return the two-norm of the given vector {@code x}
      */
-    public static double norm2(final DoubleMatrix1d x) {
+    public static double norm2( DoubleMatrix1d x) {
         return x.dotProduct(x);
     }
 
@@ -84,7 +84,7 @@ public final class Algebra {
      * @param A the matrix from which to calculate the two-norm
      * @return the two-norm of the given matrix {@code A}
      */
-    public static double norm2(final DoubleMatrix2d A) {
+    public static double norm2(DoubleMatrix2d A) {
         return SingularValue.decompose(A).norm2();
     }
 
@@ -95,7 +95,7 @@ public final class Algebra {
      * @param x the vector for calculating the infinity-norm
      * @return the infinity-norm of the given vector
      */
-    public static double normInf(final DoubleMatrix1d x) {
+    public static double normInf(DoubleMatrix1d x) {
         return x.reduce(Math::max, Math::abs).orElse(0);
     }
 
@@ -106,7 +106,7 @@ public final class Algebra {
      * @param A the matrix from which to calculate the infinity-norm
      * @return the infinity-norm of the given matrix
      */
-    public static double normInf(final DoubleMatrix2d A) {
+    public static double normInf(DoubleMatrix2d A) {
         double max = 0;
         for (int row = A.rows(); --row >= 0;) {
             max = Math.max(max, norm1(A.rowAt(row)));
@@ -121,7 +121,7 @@ public final class Algebra {
      * @param A the matrix for which to calculate the trace
      * @return the trace of the matrix
      */
-    public static double trace(final DoubleMatrix2d A) {
+    public static double trace(DoubleMatrix2d A) {
         double sum = 0;
         for (int i = Math.min(A.rows(), A.cols()); --i >= 0;) {
             sum += A.get(i, i);
@@ -136,7 +136,7 @@ public final class Algebra {
      * @return the determinant.
      * @throws IllegalArgumentException if the matrix {@code A} is not square
      */
-    public static double det(final DoubleMatrix2d A) {
+    public static double det(DoubleMatrix2d A) {
         return LU.decompose(A).det();
     }
 
@@ -147,7 +147,7 @@ public final class Algebra {
      * @param A the matrix for which to calculate the one-norm
      * @return the condition for the given matrix
      */
-    public static double cond(final DoubleMatrix2d A) {
+    public static double cond(DoubleMatrix2d A) {
         return SingularValue.decompose(A).cond();
     }
 
@@ -158,7 +158,7 @@ public final class Algebra {
      * @param A the matrix for which to calculate the rank
      * @return the rank for the given matrix
      */
-    public int rank(final DoubleMatrix2d A) {
+    public int rank(DoubleMatrix2d A) {
         return SingularValue.decompose(A).rank();
     }
 
@@ -170,10 +170,7 @@ public final class Algebra {
      * @return {@code X}, new independent matrix of the solution if {@code A} is
      *         square, least squares solution otherwise.
      */
-    public static DoubleMatrix2d solve(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B
-    ) {
+    public static DoubleMatrix2d solve(DoubleMatrix2d A, DoubleMatrix2d B) {
         final var solver = A.rows() == A.cols() ? LU.decompose(A) : QR.decompose(A);
         return solver.solve(B);
     }
@@ -186,7 +183,7 @@ public final class Algebra {
      *         square, pseudo-inverse otherwise.
      * @throws IllegalArgumentException if the given matrix is singular
      */
-    public static DoubleMatrix2d inverse(final DoubleMatrix2d A) {
+    public static DoubleMatrix2d inverse(DoubleMatrix2d A) {
         if (isSquare(A.extent()) && isDiagonal(A)) {
             final var inv = A.copy();
             if (!diagonalInverse(inv)) {
@@ -204,7 +201,7 @@ public final class Algebra {
         }
     }
 
-    private static boolean diagonalInverse(final DoubleMatrix2d A) {
+    private static boolean diagonalInverse(DoubleMatrix2d A) {
         checkSquare(A.extent());
 
         final NumericalContext context = NumericalContext.get();

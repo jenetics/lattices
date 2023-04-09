@@ -17,45 +17,12 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
-
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
 
 /**
- * Defines the looping strategy of a 1-d grid.
+ * This package contains basic <em>lattice</em> interfaces/implementations.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loopable1d extends Loop1d {
-
-    /**
-     * Return the default looping strategy.
-     *
-     * @return the default looping strategy
-     */
-    Loop1d loop();
-
-    @Override
-    default void forEach(IntConsumer action) {
-        loop().forEach(action);
-    }
-
-    @Override
-    default boolean anyMatch(IntPredicate predicate) {
-        return loop().anyMatch(predicate);
-    }
-
-    @Override
-    default boolean allMatch(IntPredicate predicate) {
-        return loop().allMatch(predicate);
-    }
-
-    @Override
-    default boolean nonMatch(IntPredicate predicate) {
-        return loop().nonMatch(predicate);
-    }
-
-}
+package io.jenetics.lattices.lattice;

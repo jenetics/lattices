@@ -33,12 +33,12 @@ final class Context<T> {
     private final AtomicReference<Entry<T>> _entry;
     private final ThreadLocal<Entry<T>> _threadLocalEntry = new ThreadLocal<>();
 
-    Context(final T defaultValue) {
+    Context(T defaultValue) {
         _default = defaultValue;
         _entry = new AtomicReference<>(new Entry<>(defaultValue));
     }
 
-    void set(final T value) {
+    void set(T value) {
         final Entry<T> e = _threadLocalEntry.get();
 
         if (e != null) e.value = value;
@@ -54,7 +54,7 @@ final class Context<T> {
         set(_default);
     }
 
-    <S extends T, R> R with(final S value, final Function<S, R> f) {
+    <S extends T, R> R with(S value, Function<S, R> f) {
         final Entry<T> e = _threadLocalEntry.get();
         if (e != null) {
             _threadLocalEntry.set(e.inner(value));
@@ -79,21 +79,21 @@ final class Context<T> {
         final Entry<T> parent;
         T value;
 
-        Entry(final T value, final Entry<T> parent, final Thread thread) {
+        Entry(T value, Entry<T> parent, Thread thread) {
             this.value = value;
             this.parent = parent;
             this.thread = thread;
         }
 
-        Entry(final T value, final Thread thread) {
+        Entry(T value, Thread thread) {
             this(value, null, thread);
         }
 
-        Entry(final T value) {
+        Entry(T value) {
             this(value, null, null);
         }
 
-        Entry<T> inner(final T value) {
+        Entry<T> inner(T value) {
             assert thread == Thread.currentThread();
             return new Entry<>(value, this, thread);
         }

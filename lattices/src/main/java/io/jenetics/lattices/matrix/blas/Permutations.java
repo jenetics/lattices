@@ -41,7 +41,7 @@ final class Permutations {
      * @param indexes the permutation {@code indexes}
      * @throws IllegalArgumentException if {@code matrix.rows() != indexes.length}
      */
-    static void permuteRows(final DoubleMatrix2d matrix, final int[] indexes) {
+    static void permuteRows(DoubleMatrix2d matrix, int[] indexes) {
         if (matrix.rows() != indexes.length) {
             throw new IllegalArgumentException(
                 "Invalid permutation: %d != %d."
@@ -58,7 +58,7 @@ final class Permutations {
      * @param swapper the swapper function
      *  @param indexes the permutation {@code indexes}
      */
-    static void permute(final Int2Consumer swapper, final int[] indexes) {
+    static void permute(Int2Consumer swapper, int[] indexes) {
         final int[] tracks = new int[indexes.length];
         for (int i = 0; i < indexes.length; ++i) {
             tracks[i] = i;

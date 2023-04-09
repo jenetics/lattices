@@ -40,7 +40,7 @@ public interface Loop2d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final Int2Consumer action);
+    void forEach(Int2Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -52,7 +52,7 @@ public interface Loop2d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final Int2Predicate predicate);
+    boolean anyMatch(Int2Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -67,7 +67,7 @@ public interface Loop2d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final Int2Predicate predicate);
+    boolean allMatch(Int2Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -80,7 +80,7 @@ public interface Loop2d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final Int2Predicate predicate);
+    boolean nonMatch(Int2Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.
@@ -88,7 +88,7 @@ public interface Loop2d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop2d of(final Range2d range) {
+    static Loop2d of(Range2d range) {
         requireNonNull(range);
         return new Loop2dRowFirst(range);
     }
@@ -99,7 +99,7 @@ public interface Loop2d {
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop2d of(final Extent2d extent) {
+    static Loop2d of(Extent2d extent) {
         return of(new Range2d(extent));
     }
 

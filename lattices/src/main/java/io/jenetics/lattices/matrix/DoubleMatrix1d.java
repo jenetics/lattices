@@ -81,11 +81,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @param length the number of cells to be considered
      * @return the sum of products, start if {@code from < 0 || length < 0}
      */
-    public double dotProduct(
-        final DoubleMatrix1d y,
-        final int from,
-        final int length
-    ) {
+    public double dotProduct(DoubleMatrix1d y, int from, int length) {
         if (from < 0 || length <= 0) {
             return 0;
         }
@@ -107,7 +103,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @param y the second vector
      * @return the sum of products
      */
-    public double dotProduct(final DoubleMatrix1d y) {
+    public double dotProduct(DoubleMatrix1d y) {
         return dotProduct(y, 0, size());
     }
 
@@ -172,7 +168,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
             equals(matrix);
@@ -188,7 +184,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @param values the returned matrix
      * @return a matrix view of the given input data
      */
-    public static DoubleMatrix1d of(final double... values) {
+    public static DoubleMatrix1d of(double... values) {
         return new DoubleMatrix1d(
             Structure1d.of(new Extent1d(values.length)),
             new DenseDoubleArray(values)

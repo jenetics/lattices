@@ -20,7 +20,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
      *
      * @param extent the extent which defines the boundaries of the loop
      */
-    Loop1dForward(final Extent1d extent) {
+    Loop1dForward(Extent1d extent) {
         this(new Range1d(extent));
     }
 
@@ -36,7 +36,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
     }
 
     @Override
-    public boolean anyMatch(final IntPredicate predicate) {
+    public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),
@@ -50,7 +50,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
     }
 
     @Override
-    public boolean allMatch(final IntPredicate predicate) {
+    public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),
@@ -64,7 +64,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
     }
 
     @Override
-    public boolean nonMatch(final IntPredicate predicate) {
+    public boolean nonMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),

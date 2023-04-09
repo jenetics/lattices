@@ -48,7 +48,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure2d structure, final A array);
+    G create(Structure2d structure, A array);
 
     /**
      * Assigns the elements of the {@code other} grid to this grid.
@@ -64,7 +64,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent2d extent) {
+    default G like(Extent2d extent) {
         return create(
             Structure2d.of(extent),
             array().like(extent.size())
@@ -92,7 +92,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View2d view) {
+    default G view(View2d view) {
         return create(view.apply(structure()), array());
     }
 

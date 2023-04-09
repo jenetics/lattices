@@ -39,6 +39,6 @@ public interface Solver {
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code !isSymmetricPositiveDefinite()}
      */
-    DoubleMatrix2d solve(final DoubleMatrix2d B);
+    DoubleMatrix2d solve(DoubleMatrix2d B);
 
 }

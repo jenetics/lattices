@@ -39,22 +39,22 @@ public interface Loopable2d extends Loop2d {
     Loop2d loop();
 
     @Override
-    default void forEach(final Int2Consumer action) {
+    default void forEach(Int2Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(final Int2Predicate predicate) {
+    default boolean anyMatch(Int2Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(final Int2Predicate predicate) {
+    default boolean allMatch(Int2Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(final Int2Predicate predicate) {
+    default boolean nonMatch(Int2Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 

@@ -65,7 +65,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof ObjectGrid3d<?> grid &&
                 equals(grid);
@@ -80,7 +80,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Factory3d<ObjectGrid3d<T>> dense(final T... __) {
+    public static <T> Factory3d<ObjectGrid3d<T>> dense(T... __) {
         return structure -> new ObjectGrid3d<T>(
             structure,
             DenseObjectArray.ofSize(structure.extent().size(), __)

@@ -34,9 +34,9 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static boolean isDense(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C
     ) {
         return
             A.array() instanceof DenseDoubleArray &&
@@ -45,11 +45,11 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static void denseMult(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C,
-        final double alpha,
-        final double beta
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C,
+        double alpha,
+        double beta
     ) {
         final int m = A.rows();
         final int n = A.cols();

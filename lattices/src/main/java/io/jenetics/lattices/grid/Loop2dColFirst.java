@@ -19,7 +19,7 @@ record Loop2dColFirst(Range2d range) implements Loop2d {
      *
      * @param extent the extent which defines the boundaries of the loop
      */
-    Loop2dColFirst(final Extent2d extent) {
+    Loop2dColFirst(Extent2d extent) {
         this(new Range2d(extent));
     }
 
@@ -41,7 +41,7 @@ record Loop2dColFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean anyMatch(final Int2Predicate predicate) {
+    public boolean anyMatch(Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int c = range.start().col(),
@@ -62,7 +62,7 @@ record Loop2dColFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean allMatch(final Int2Predicate predicate) {
+    public boolean allMatch(Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int c = range.start().col(),
@@ -83,7 +83,7 @@ record Loop2dColFirst(Range2d range) implements Loop2d {
     }
 
     @Override
-    public boolean nonMatch(final Int2Predicate predicate) {
+    public boolean nonMatch(Int2Predicate predicate) {
         requireNonNull(predicate);
 
         for (int c = range.start().col(),

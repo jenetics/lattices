@@ -58,7 +58,7 @@ public final class Eigenvalue {
     private Eigenvalue() {
     }
 
-    private void init(final DoubleMatrix2d A) {
+    private void init(DoubleMatrix2d A) {
         checkSquare(A.extent());
 
         n = A.cols();
@@ -918,7 +918,7 @@ public final class Eigenvalue {
      * @return the <em>Eigenvalue</em>-decomposition of the given matrix {@code A}
      * @throws IllegalArgumentException if {@code A} is not square
      */
-    public static Eigenvalue decompose(final DoubleMatrix2d A) {
+    public static Eigenvalue decompose(DoubleMatrix2d A) {
         final var eigen = new Eigenvalue();
         eigen.init(A);
         return eigen;

@@ -65,11 +65,11 @@ public record DoubleGrid3d(Structure3d structure, DoubleArray array)
      * @param projection the projection to apply
      * @return a 2-d projection from this 3-d grid
      */
-    public DoubleGrid2d project(final Projection3d projection) {
+    public DoubleGrid2d project(Projection3d projection) {
         return new DoubleGrid2d(projection.apply(structure()), array());
     }
 
-    public static DoubleGrid3d of(Extent3d extent, final double... values) {
+    public static DoubleGrid3d of(Extent3d extent, double... values) {
         return new DoubleGrid3d(
             Structure3d.of(extent),
             new DenseDoubleArray(values)

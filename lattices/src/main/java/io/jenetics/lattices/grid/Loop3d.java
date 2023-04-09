@@ -40,7 +40,7 @@ public interface Loop3d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final Int3Consumer action);
+    void forEach(Int3Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -52,7 +52,7 @@ public interface Loop3d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final Int3Predicate predicate);
+    boolean anyMatch(Int3Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -67,7 +67,7 @@ public interface Loop3d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final Int3Predicate predicate);
+    boolean allMatch(Int3Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -80,7 +80,7 @@ public interface Loop3d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final Int3Predicate predicate);
+    boolean nonMatch(Int3Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.
@@ -88,7 +88,7 @@ public interface Loop3d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop3d of(final Range3d range) {
+    static Loop3d of(Range3d range) {
         requireNonNull(range);
         return new Loop3dSliceFirst(range);
     }
@@ -99,7 +99,7 @@ public interface Loop3d {
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop3d of(final Extent3d extent) {
+    static Loop3d of(Extent3d extent) {
         return of(new Range3d(extent));
     }
 

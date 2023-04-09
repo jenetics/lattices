@@ -67,7 +67,7 @@ public record LongGrid3d(Structure3d structure, LongArray array)
         return new LongGrid2d(projection.apply(structure()), array());
     }
 
-    public static LongGrid3d of(Extent3d extent, final long... values) {
+    public static LongGrid3d of(Extent3d extent, long... values) {
         return new LongGrid3d(
             Structure3d.of(extent),
             new DenseLongArray(values)

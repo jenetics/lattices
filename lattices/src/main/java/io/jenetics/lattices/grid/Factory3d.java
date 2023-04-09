@@ -40,7 +40,7 @@ public interface Factory3d<T> {
      * @param structure the structure of the new structure
      * @return a new structure with the given {@code structure}
      */
-    T create(final Structure3d structure);
+    T create(Structure3d structure);
 
     /**
      * Create a new structure with the given {@code extent} and default
@@ -49,7 +49,7 @@ public interface Factory3d<T> {
      * @param extent the extent of the created structure
      * @return a new structure with the given {@code extent}
      */
-    default T create(final Extent3d extent) {
+    default T create(Extent3d extent) {
         return create(Structure3d.of(extent));
     }
 
@@ -61,7 +61,7 @@ public interface Factory3d<T> {
      * @param cols the number of columns of the created structure
      * @return a new matrix with the given size
      */
-    default T create(final int slices, final int rows, final int cols) {
+    default T create(int slices, int rows, int cols) {
         return create(new Extent3d(slices, rows, cols));
     }
 

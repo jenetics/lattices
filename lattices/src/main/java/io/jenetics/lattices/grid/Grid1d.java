@@ -45,14 +45,14 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure1d structure, final A array);
+    G create(Structure1d structure, A array);
 
     /**
      * Assigns the elements of the {@code other} grid to this grid.
      *
      * @param other the source of the grid elements
      */
-    void assign(final G other);
+    void assign(G other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -61,7 +61,7 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent1d extent) {
+    default G like(Extent1d extent) {
         return create(
             Structure1d.of(extent),
             array().like(extent.value())
@@ -89,7 +89,7 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View1d view) {
+    default G view(View1d view) {
         return create(view.apply(structure()), array());
     }
 

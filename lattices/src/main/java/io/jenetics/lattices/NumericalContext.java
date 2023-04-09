@@ -87,7 +87,7 @@ public class NumericalContext {
      *
      * @param epsilon the {@code epsilon} of this context
      */
-    public NumericalContext(final double epsilon) {
+    public NumericalContext(double epsilon) {
         this.epsilon = abs(epsilon);
     }
 
@@ -109,7 +109,7 @@ public class NumericalContext {
      * @return {@code true} if the given values are equal, modulo the given
      *         {@link #epsilon()}, {@code false} otherwise
      */
-    public boolean equals(final double a, final double b) {
+    public boolean equals(double a, double b) {
         return Double.compare(a, b) == 0 || abs(a - b) <= epsilon();
     }
 
@@ -120,7 +120,7 @@ public class NumericalContext {
      * @return {@code true} if the given value is greater than zero, {@code false}
      *         otherwise
      */
-    public boolean isGreaterZero(final double a) {
+    public boolean isGreaterZero(double a) {
         return abs(a) > epsilon() && Double.compare(a, 0.0) > 0;
     }
 
@@ -131,7 +131,7 @@ public class NumericalContext {
      * @return {@code true} if the given value is smaller than zero, {@code false}
      *         otherwise
      */
-    public boolean isSmallerZero(final double a) {
+    public boolean isSmallerZero(double a) {
         return abs(a) > epsilon() && Double.compare(a, 0.0) < 0;
     }
 
@@ -143,7 +143,7 @@ public class NumericalContext {
      * @return {@code true} if the given value is (near) zero, {@code false}
      *         otherwise
      */
-    public boolean isZero(final double a) {
+    public boolean isZero(double a) {
         return equals(a, 0);
     }
 
@@ -155,7 +155,7 @@ public class NumericalContext {
      * @return {@code true} if the given value is not (near) zero, {@code false}
      *         otherwise
      */
-    public boolean isNotZero(final double a) {
+    public boolean isNotZero(double a) {
         return !isZero(a);
     }
 
@@ -167,7 +167,7 @@ public class NumericalContext {
      * @return {@code true} if the given value is (near) one, {@code false}
      *         otherwise
      */
-    public boolean isOne(final double a) {
+    public boolean isOne(double a) {
         return equals(a, 1);
     }
 
@@ -197,7 +197,7 @@ public class NumericalContext {
      *        scope
      * @throws NullPointerException if the {@code context} object is {@code null}
      */
-    public static void set(final NumericalContext context) {
+    public static void set(NumericalContext context) {
         requireNonNull(context);
         CONTEXT.set(context);
     }
@@ -233,7 +233,7 @@ public class NumericalContext {
      *        the given numerical context
      * @throws NullPointerException if one of the arguments is {@code null}
      */
-    public static void using(final NumericalContext context, final Runnable task) {
+    public static void using(NumericalContext context, Runnable task) {
         requireNonNull(context);
         requireNonNull(task);
 
@@ -252,8 +252,8 @@ public class NumericalContext {
      * @param <T> the type of the supplier result
      */
     public static <C extends NumericalContext, T> T with(
-        final C context,
-        final Supplier<? extends T> supplier
+        C context,
+        Supplier<? extends T> supplier
     ) {
         requireNonNull(context);
         requireNonNull(supplier);

@@ -67,7 +67,7 @@ public record IntGrid1d(Structure1d structure, IntArray array)
      * @param values the returned grid
      * @return a grid view of the given input data
      */
-    public static IntGrid1d of(final int... values) {
+    public static IntGrid1d of(int... values) {
         return new IntGrid1d(
             Structure1d.of(new Extent1d(values.length)),
             new DenseIntArray(values)

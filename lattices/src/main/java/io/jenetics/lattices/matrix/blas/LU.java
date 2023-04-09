@@ -52,10 +52,10 @@ public final class LU implements Solver {
     private final NumericalContext context;
 
     private LU(
-        final DoubleMatrix2d LU,
-        final int[] pivot,
-        final int pivsign,
-        final NumericalContext context
+        DoubleMatrix2d LU,
+        int[] pivot,
+        int pivsign,
+        NumericalContext context
     ) {
         this.LU = requireNonNull(LU);
         this.pivot = requireNonNull(pivot);
@@ -134,7 +134,7 @@ public final class LU implements Solver {
      *         {@code isSingular(lU)} or {@code A.rows() < A.cols()}
      */
     @Override
-    public DoubleMatrix2d solve(final DoubleMatrix2d B) {
+    public DoubleMatrix2d solve(DoubleMatrix2d B) {
         checkRectangular(LU.extent());
 
         final var X = B.copy();
@@ -200,7 +200,7 @@ public final class LU implements Solver {
      * @param A the matrix to be decomposed
      * @return the <em>LU</em>-decomposition of the given matrix {@code A}
      */
-    public static LU decompose(final DoubleMatrix2d A) {
+    public static LU decompose(DoubleMatrix2d A) {
         final var context = NumericalContext.get();
         final var lu = A.copy();
 
@@ -271,7 +271,7 @@ public final class LU implements Solver {
         return new LU(lu, piv, pivsign, context);
     }
 
-    private static void lowerTriangular(final DoubleMatrix2d A) {
+    private static void lowerTriangular(DoubleMatrix2d A) {
         final int min = Math.min(A.rows(), A.cols());
 
         for (int r = min; --r >= 0;) {
@@ -292,7 +292,7 @@ public final class LU implements Solver {
         }
     }
 
-    private static void upperTriangular(final DoubleMatrix2d A) {
+    private static void upperTriangular(DoubleMatrix2d A) {
         final int min = Math.min(A.rows(), A.cols());
 
         for (int r = min; --r >= 0;) {

@@ -59,7 +59,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Factory1d<ObjectGrid1d<T>> dense(final T... __) {
+    public static <T> Factory1d<ObjectGrid1d<T>> dense(T... __) {
         return structure -> new ObjectGrid1d<T>(
             structure,
             DenseObjectArray.ofSize(structure.extent().value(), __)

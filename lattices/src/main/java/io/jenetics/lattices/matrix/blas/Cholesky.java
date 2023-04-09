@@ -42,9 +42,9 @@ public final class Cholesky implements Solver {
     private final NumericalContext context;
 
     private Cholesky(
-        final DoubleMatrix2d L,
-        final boolean symmetricPositiveDefinite,
-        final NumericalContext context
+        DoubleMatrix2d L,
+        boolean symmetricPositiveDefinite,
+        NumericalContext context
     ) {
         this.L = requireNonNull(L);
         this.symmetricPositiveDefinite = symmetricPositiveDefinite;
@@ -81,7 +81,7 @@ public final class Cholesky implements Solver {
      *         {@code !isSymmetricPositiveDefinite()}
      */
     @Override
-    public DoubleMatrix2d solve(final DoubleMatrix2d B) {
+    public DoubleMatrix2d solve(DoubleMatrix2d B) {
         final var X = B.copy();
 
         for (int c = 0; c < B.cols(); ++c) {
@@ -116,7 +116,7 @@ public final class Cholesky implements Solver {
      *         {@code isSymmetricPositiveDefinite} flag
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
-    public static Cholesky decompose(final DoubleMatrix2d A) {
+    public static Cholesky decompose(DoubleMatrix2d A) {
         checkRectangular(A.extent());
 
         final var context = NumericalContext.get();

@@ -65,11 +65,11 @@ public record IntGrid3d(Structure3d structure, IntArray array)
      * @param projection the projection to apply
      * @return a 2-d projection from this 1-d grid
      */
-    public IntGrid2d project(final Projection3d projection) {
+    public IntGrid2d project(Projection3d projection) {
         return new IntGrid2d(projection.apply(structure()), array());
     }
 
-    public static IntGrid3d of(Extent3d extent, final int... values) {
+    public static IntGrid3d of(Extent3d extent, int... values) {
         return new IntGrid3d(
             Structure3d.of(extent),
             new DenseIntArray(values)

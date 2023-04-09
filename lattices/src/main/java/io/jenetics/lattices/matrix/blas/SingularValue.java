@@ -48,7 +48,7 @@ public final class SingularValue {
     private SingularValue() {
     }
 
-    private void init(final DoubleMatrix2d Arg) {
+    private void init(DoubleMatrix2d Arg) {
         checkRectangular(Arg.extent());
 
         // Derived from LINPACK code.
@@ -528,7 +528,7 @@ public final class SingularValue {
      * @return the <em>Eigenvalue</em>-decomposition of the given matrix {@code A}
      * @throws IllegalArgumentException if {@code A} is not square
      */
-    public static SingularValue decompose(final DoubleMatrix2d A) {
+    public static SingularValue decompose(DoubleMatrix2d A) {
         final var singular = new SingularValue();
         singular.init(A);
         return singular;

@@ -58,7 +58,7 @@ public interface Blas {
      * @param y the destination vector
      * @throws IllegalArgumentException if {@code x.size() != y.size()}.
      */
-    default void dcopy(final DoubleMatrix1d x, final DoubleMatrix1d y) {
+    default void dcopy(DoubleMatrix1d x, DoubleMatrix1d y) {
         y.assign(x);
     }
 
@@ -134,12 +134,7 @@ public interface Blas {
      * @param c the cosine of the angle of rotation.
      * @param s the sine of the angle of rotation.
      */
-    default void drot(
-        final DoubleMatrix1d x,
-        final DoubleMatrix1d y,
-        final double c,
-        final double s
-    ) {
+    default void drot(DoubleMatrix1d x, DoubleMatrix1d y, double c, double s) {
         checkSameExtent(x.extent(), y.extent());
 
         final var tmp = x.copy();
@@ -160,7 +155,7 @@ public interface Blas {
      * @param alpha a scale factor
      * @param x the first vector
      */
-    default void dscal(final double alpha, final DoubleMatrix1d x) {
+    default void dscal(double alpha, DoubleMatrix1d x) {
         x.assign(a -> a*alpha);
     }
 
@@ -171,7 +166,7 @@ public interface Blas {
      * @param y the second vector
      * @throws IllegalArgumentException {@code x.size() != y.size()}.
      */
-    default void dswap(final DoubleMatrix1d x, final DoubleMatrix1d y) {
+    default void dswap(DoubleMatrix1d x, DoubleMatrix1d y) {
         y.swap(x);
     }
 
@@ -187,7 +182,7 @@ public interface Blas {
      *        are stored
      * @throws IllegalArgumentException if {@code x.size() != y.size()}
      */
-    default void daxpy(final double alpha, final DoubleMatrix1d x, final DoubleMatrix1d y) {
+    default void daxpy(double alpha, DoubleMatrix1d x, DoubleMatrix1d y) {
         y.assign(x, (a, b) -> Math.fma(b, alpha, a));
     }
 
@@ -214,7 +209,7 @@ public interface Blas {
      *
      * @param x the vector.
      */
-    default double dnrm2(final DoubleMatrix1d x) {
+    default double dnrm2(DoubleMatrix1d x) {
         return Math.sqrt(x.dotProduct(x));
     }
 
@@ -226,7 +221,7 @@ public interface Blas {
      *
      * @param x the input vector
      */
-    default double dasum(final DoubleMatrix1d x) {
+    default double dasum(DoubleMatrix1d x) {
         return x.reduce(Double::sum, Math::abs).orElse(0);
     }
 
@@ -239,7 +234,7 @@ public interface Blas {
      * @param x the vector to search through.
      * @return the index of the largest absolute value (-1 if x is empty).
      */
-    default int idamax(final DoubleMatrix1d x) {
+    default int idamax(DoubleMatrix1d x) {
         int index = -1;
         if (x.size() > 0) {
             double max = Math.abs(x.get(0));
@@ -279,12 +274,12 @@ public interface Blas {
      *         {@code A.columns() != x.size() || A.rows() != y.size())}
      */
     default void dgemv(
-        final boolean transposeA,
-        final double alpha,
-        final DoubleMatrix2d A,
-        final DoubleMatrix1d x,
-        final double beta,
-        final DoubleMatrix1d y
+        boolean transposeA,
+        double alpha,
+        DoubleMatrix2d A,
+        DoubleMatrix1d x,
+        double beta,
+        DoubleMatrix1d y
     ) {
         A.mult(x, y, alpha, beta, transposeA);
     }
@@ -306,10 +301,10 @@ public interface Blas {
      * @param A an m by n matrix
      */
     default void dger(
-        final double alpha,
-        final DoubleMatrix1d x,
-        final DoubleMatrix1d y,
-        final DoubleMatrix2d A
+        double alpha,
+        DoubleMatrix1d x,
+        DoubleMatrix1d y,
+        DoubleMatrix2d A
     ) {
         for (int i = 0; i < A.rows(); ++i) {
             final var multiplier = alpha*x.get(i);
@@ -335,12 +330,12 @@ public interface Blas {
      * @param y the second vector holding source and destination
      */
     default void dsymv(
-        final boolean isUpperTriangular,
-        final double alpha,
+        boolean isUpperTriangular,
+        double alpha,
         DoubleMatrix2d A,
-        final DoubleMatrix1d x,
-        final double beta,
-        final DoubleMatrix1d y
+        DoubleMatrix1d x,
+        double beta,
+        DoubleMatrix1d y
     ) {
         checkSquare(A.extent());
 
@@ -443,7 +438,7 @@ public interface Blas {
      * @throws IllegalArgumentException if {@code A.columns() != B.columns() ||
      *         A.rows() != B.rows()}
      */
-    default void dcopy(final DoubleMatrix2d A, final DoubleMatrix2d B) {
+    default void dcopy(DoubleMatrix2d A, DoubleMatrix2d B) {
         B.assign(A);
     }
 
@@ -456,7 +451,7 @@ public interface Blas {
      * @param alpha a scale factor
      * @param A the matrix
      */
-    default void dscal(final double alpha, final DoubleMatrix2d A) {
+    default void dscal(double alpha, DoubleMatrix2d A) {
         A.assign(a -> a*alpha);
     }
 
@@ -481,13 +476,13 @@ public interface Blas {
      *         {@code A == C || B == C}
      */
     default void dgemm(
-        final boolean transposeA,
-        final boolean transposeB,
-        final double alpha,
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final double beta,
-        final DoubleMatrix2d C
+        boolean transposeA,
+        boolean transposeB,
+        double alpha,
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        double beta,
+        DoubleMatrix2d C
     ) {
         A.mult(B, C, alpha, beta, transposeA, transposeB);
     }
@@ -505,7 +500,7 @@ public interface Blas {
      * @throws IllegalArgumentException if {@code A.columns() != B.cols() ||
      *         A.rows() != B.rows()}
      */
-    default void daxpy(final double alpha, final DoubleMatrix2d A, final DoubleMatrix2d B) {
+    default void daxpy(double alpha, DoubleMatrix2d A, DoubleMatrix2d B) {
         B.assign(A, (a, b) -> Math.fma(alpha, b, a));
     }
 

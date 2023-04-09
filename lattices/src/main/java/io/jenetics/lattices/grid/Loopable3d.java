@@ -39,22 +39,22 @@ public interface Loopable3d extends Loop3d {
     Loop3d loop();
 
     @Override
-    default void forEach(final Int3Consumer action) {
+    default void forEach(Int3Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(final Int3Predicate predicate) {
+    default boolean anyMatch(Int3Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(final Int3Predicate predicate) {
+    default boolean allMatch(Int3Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(final Int3Predicate predicate) {
+    default boolean nonMatch(Int3Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 

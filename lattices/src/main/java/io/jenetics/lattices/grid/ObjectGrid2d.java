@@ -56,7 +56,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof ObjectGrid2d<?> grid &&
                 equals(grid);
@@ -98,7 +98,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Factory2d<ObjectGrid2d<T>> dense(final T... __) {
+    public static <T> Factory2d<ObjectGrid2d<T>> dense(T... __) {
         return structure -> new ObjectGrid2d<T>(
             structure,
             DenseObjectArray.ofSize(structure.extent().size(), __)

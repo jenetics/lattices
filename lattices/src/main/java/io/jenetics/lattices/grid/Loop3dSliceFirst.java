@@ -33,12 +33,12 @@ import io.jenetics.lattices.structure.Range3d;
  */
 record Loop3dSliceFirst(Range3d range) implements Loop3d {
 
-    public Loop3dSliceFirst(final Extent3d extent) {
+    public Loop3dSliceFirst(Extent3d extent) {
         this(new Range3d(extent));
     }
 
     @Override
-    public void forEach(final Int3Consumer action) {
+    public void forEach(Int3Consumer action) {
         requireNonNull(action);
 
         for (int s = range.start().slice(),
@@ -60,7 +60,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean anyMatch(final Int3Predicate predicate) {
+    public boolean anyMatch(Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
@@ -86,7 +86,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean allMatch(final Int3Predicate predicate) {
+    public boolean allMatch(Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
@@ -112,7 +112,7 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
     }
 
     @Override
-    public boolean nonMatch(final Int3Predicate predicate) {
+    public boolean nonMatch(Int3Predicate predicate) {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),

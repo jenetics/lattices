@@ -67,7 +67,7 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      * @param values the returned grid
      * @return a grid view of the given input data
      */
-    public static DoubleGrid1d of(final double... values) {
+    public static DoubleGrid1d of(double... values) {
         return new DoubleGrid1d(
             Structure1d.of(new Extent1d(values.length)),
             new DenseDoubleArray(values)

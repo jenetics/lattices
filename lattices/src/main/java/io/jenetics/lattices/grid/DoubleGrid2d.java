@@ -65,7 +65,7 @@ public record DoubleGrid2d(Structure2d structure, DoubleArray array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public DoubleGrid1d project(final Projection2d projection) {
+    public DoubleGrid1d project(Projection2d projection) {
         return new DoubleGrid1d(projection.apply(structure()), array());
     }
 
@@ -92,7 +92,7 @@ public record DoubleGrid2d(Structure2d structure, DoubleArray array)
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static DoubleGrid2d of(final Extent2d extent, final double... values) {
+    public static DoubleGrid2d of(Extent2d extent, double... values) {
         return new DoubleGrid2d(
             Structure2d.of(extent),
             new DenseDoubleArray(values)

@@ -65,7 +65,7 @@ public record LongGrid1d(Structure1d structure, LongArray array)
      * @param values the returned grid
      * @return a grid view of the given input data
      */
-    public static LongGrid1d of(final long... values) {
+    public static LongGrid1d of(long... values) {
         return new LongGrid1d(
             Structure1d.of(new Extent1d(values.length)),
             new DenseLongArray(values)

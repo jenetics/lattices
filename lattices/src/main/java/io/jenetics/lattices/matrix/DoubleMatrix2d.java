@@ -98,7 +98,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
-    public DoubleMatrix1d project(final Projection2d projection) {
+    public DoubleMatrix1d project(Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
 
@@ -113,7 +113,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      */
-    public DoubleMatrix1d colAt(final int index) {
+    public DoubleMatrix1d colAt(int index) {
         return project(Projection2d.col(index));
     }
 
@@ -128,7 +128,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      */
-    public DoubleMatrix1d rowAt(final int index) {
+    public DoubleMatrix1d rowAt(int index) {
         return project(Projection2d.row(index));
     }
 
@@ -159,11 +159,11 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *         A.rows() > z.size())}.
      */
     public DoubleMatrix1d mult(
-        final DoubleMatrix1d y,
-        final DoubleMatrix1d z,
-        final double alpha,
-        final double beta,
-        final boolean transposeA
+        DoubleMatrix1d y,
+        DoubleMatrix1d z,
+        double alpha,
+        double beta,
+        boolean transposeA
     ) {
         if (transposeA) {
             return transpose().mult(y, z, alpha, beta, false);
@@ -203,7 +203,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *          constructed.
      * @return z, or a newly created result matrix
      */
-    public DoubleMatrix1d mult(final DoubleMatrix1d y, final DoubleMatrix1d z) {
+    public DoubleMatrix1d mult(DoubleMatrix1d y, DoubleMatrix1d z) {
         return mult(y, z, 1, (z == null ? 1 : 0), false);
     }
 
@@ -232,12 +232,12 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *         {@code A == C || B == C}
      */
     public DoubleMatrix2d mult(
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C,
-        final double alpha,
-        final double beta,
-        final boolean transposeA,
-        final boolean transposeB
+        DoubleMatrix2d B,
+        DoubleMatrix2d C,
+        double alpha,
+        double beta,
+        boolean transposeA,
+        boolean transposeB
     ) {
         requireNonNull(B);
 
@@ -307,7 +307,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */
-    public DoubleMatrix2d mult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
+    public DoubleMatrix2d mult(DoubleMatrix2d B, DoubleMatrix2d C) {
         return mult(B, C, 1, (C == null ? 1 : 0), false, false);
     }
 
@@ -329,7 +329,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    public boolean equals(final DoubleMatrix2d other) {
+    public boolean equals(DoubleMatrix2d other) {
         final var context = NumericalContext.get();
 
         return extent().equals(other.extent()) &&
@@ -337,7 +337,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
             equals(matrix);
@@ -366,7 +366,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      * @throws IllegalArgumentException if the desired extent of the matrix
      *         requires fewer elements than given
      */
-    public static DoubleMatrix2d of(final Extent2d extent, final double... values) {
+    public static DoubleMatrix2d of(Extent2d extent, double... values) {
         return new DoubleMatrix2d(
             Structure2d.of(extent),
             new DenseDoubleArray(values)

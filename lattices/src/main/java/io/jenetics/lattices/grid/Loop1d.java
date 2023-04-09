@@ -41,7 +41,7 @@ public interface Loop1d {
      *
      * @param action an action to perform on the positions
      */
-    void forEach(final IntConsumer action);
+    void forEach(IntConsumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -53,7 +53,7 @@ public interface Loop1d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(final IntPredicate predicate);
+    boolean anyMatch(IntPredicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -68,7 +68,7 @@ public interface Loop1d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(final IntPredicate predicate);
+    boolean allMatch(IntPredicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -81,7 +81,7 @@ public interface Loop1d {
      *         provided predicate or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(final IntPredicate predicate);
+    boolean nonMatch(IntPredicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.
@@ -89,7 +89,7 @@ public interface Loop1d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop1d of(final Range1d range) {
+    static Loop1d of(Range1d range) {
         requireNonNull(range);
         return new Loop1dForward(range);
     }
@@ -100,7 +100,7 @@ public interface Loop1d {
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop1d of(final Extent1d extent) {
+    static Loop1d of(Extent1d extent) {
         return of(new Range1d(extent));
     }
 

@@ -63,7 +63,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public LongGrid1d project(final Projection2d projection) {
+    public LongGrid1d project(Projection2d projection) {
         return new LongGrid1d(projection.apply(structure()), array());
     }
 
@@ -91,7 +91,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static LongGrid2d of(Extent2d extent, final long... values) {
+    public static LongGrid2d of(Extent2d extent, long... values) {
         return new LongGrid2d(
             Structure2d.of(extent),
             new DenseLongArray(values)

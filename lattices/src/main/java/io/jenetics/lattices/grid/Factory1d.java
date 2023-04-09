@@ -40,7 +40,7 @@ public interface Factory1d<T> {
      * @param structure the structure of the new object
      * @return a new matrix with the given {@code structure}
      */
-    T create(final Structure1d structure);
+    T create(Structure1d structure);
 
     /**
      * Create a new matrix with the given {@code dimension} and default
@@ -49,7 +49,7 @@ public interface Factory1d<T> {
      * @param extent the extent of the created object
      * @return a new object with the given {@code extent}
      */
-    default T create(final Extent1d extent) {
+    default T create(Extent1d extent) {
         return create(Structure1d.of(extent));
     }
 
@@ -59,7 +59,7 @@ public interface Factory1d<T> {
      * @param size the number of element
      * @return a new structure with the given size
      */
-    default T create(final int size) {
+    default T create(int size) {
         return create(new Extent1d(size));
     }
 }

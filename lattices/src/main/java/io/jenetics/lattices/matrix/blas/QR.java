@@ -47,9 +47,9 @@ public final class QR implements Solver {
     private final NumericalContext context;
 
     private QR(
-        final DoubleMatrix2d QR,
-        final DoubleMatrix1d rdiag,
-        final NumericalContext context
+        DoubleMatrix2d QR,
+        DoubleMatrix1d rdiag,
+        NumericalContext context
     ) {
         this.QR = requireNonNull(QR);
         this.rdiag = requireNonNull(rdiag);
@@ -140,7 +140,7 @@ public final class QR implements Solver {
      *         {@code !hasFullRank()} ({@code A} is rank deficient)
      */
     @Override
-    public DoubleMatrix2d solve(final DoubleMatrix2d B) {
+    public DoubleMatrix2d solve(DoubleMatrix2d B) {
         if (B.rows() != QR.rows()) {
             throw new IllegalArgumentException(
                 "Matrix row dimensions must agree: %s != %s."
@@ -210,7 +210,7 @@ public final class QR implements Solver {
      * @return the <em>QR</em>-decomposition of the given matrix {@code A}
      * @throws IllegalArgumentException if {@code A.rows() < A.cols()}
      */
-    public static QR decompose(final DoubleMatrix2d A) {
+    public static QR decompose(DoubleMatrix2d A) {
         checkRectangular(A.extent());
 
         final var qr = A.copy();
