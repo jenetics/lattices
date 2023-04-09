@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.array;
 
-import java.util.function.Function;
-
 /**
  * Definition of an array with {@code Object} values.
  *
@@ -36,7 +34,7 @@ public interface ObjectArray<T> extends Array<ObjectArray<T>> {
      * @param index the array index of the returned element
      * @return the element at the given {@code index}
      */
-    T get(final int index);
+    T get(int index);
 
     /**
      * Set the given {@code value} at the given {@code index}.
@@ -44,32 +42,6 @@ public interface ObjectArray<T> extends Array<ObjectArray<T>> {
      * @param index the array index of the new value
      * @param value the value to be set at the given index
      */
-    void set(final int index, final T value);
-
-
-    default <A> ObjectArray<A> map(final Function<? super T, ? extends A> f) {
-        return new ObjectArray<A>() {
-            @Override
-            public A get(int index) {
-                return null;
-            }
-            @Override
-            public void set(int index, A value) {
-
-            }
-            @Override
-            public int length() {
-                return 0;
-            }
-            @Override
-            public ObjectArray<A> copy(int start, int length) {
-                return null;
-            }
-            @Override
-            public ObjectArray<A> like(int length) {
-                return null;
-            }
-        };
-    }
+    void set(int index, T value);
 
 }

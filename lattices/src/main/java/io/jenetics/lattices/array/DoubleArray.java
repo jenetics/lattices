@@ -34,7 +34,7 @@ public interface DoubleArray extends Array<DoubleArray> {
      * @param index the array index of the returned element
      * @return the element at the given {@code index}
      */
-    double get(final int index);
+    double get(int index);
 
     /**
      * Set the given {@code value} at the given {@code index}.
@@ -42,6 +42,6 @@ public interface DoubleArray extends Array<DoubleArray> {
      * @param index the array index of the new value
      * @param value the value to be set at the given index
      */
-    void set(final int index, final double value);
+    void set(int index, double value);
 
 }

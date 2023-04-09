@@ -63,7 +63,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseObjectArray(final T[] elements, int from) {
+    public DenseObjectArray(T[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
@@ -72,7 +72,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      */
-    public DenseObjectArray(final T[] elements) {
+    public DenseObjectArray(T[] elements) {
         this(elements, 0, elements.length);
     }
 
@@ -82,7 +82,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public void set(final int index, final T value) {
+    public void set(int index, final T value) {
         elements[index + from] = value;
     }
 
@@ -98,7 +98,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public DenseObjectArray<T> copy(final int start, final int length) {
+    public DenseObjectArray<T> copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
@@ -107,7 +107,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public DenseObjectArray<T> like(final int length) {
+    public DenseObjectArray<T> like(int length) {
         return ofSize(length);
     }
 
@@ -136,7 +136,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs
-    public static <T> DenseObjectArray<T> ofSize(final int length, final T... __) {
+    public static <T> DenseObjectArray<T> ofSize(int length, T... __) {
         @SuppressWarnings("unchecked")
         final T[] elements = (T[])Array
             .newInstance(__.getClass().getComponentType(), length);

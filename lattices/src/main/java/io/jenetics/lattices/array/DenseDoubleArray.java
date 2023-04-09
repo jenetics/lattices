@@ -64,7 +64,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseDoubleArray(final double[] elements, int from) {
+    public DenseDoubleArray(double[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
@@ -73,17 +73,17 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      */
-    public DenseDoubleArray(final double[] elements) {
+    public DenseDoubleArray(double[] elements) {
         this(elements, 0, elements.length);
     }
 
     @Override
-    public double get(final int index) {
+    public double get(int index) {
         return elements[index + from];
     }
 
     @Override
-    public void set(final int index, final double value) {
+    public void set(int index, double value) {
         elements[index + from] = value;
     }
 
@@ -99,7 +99,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DoubleArray copy(final int start, final int length) {
+    public DoubleArray copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
@@ -135,7 +135,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      * @param length the length of the created array
      * @return a new dense {@code double} array with the given {@code length}
      */
-    public static DenseDoubleArray ofSize(final int length) {
+    public static DenseDoubleArray ofSize(int length) {
         return new DenseDoubleArray(new double[length]);
     }
 

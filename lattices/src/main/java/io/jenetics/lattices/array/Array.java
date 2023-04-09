@@ -55,7 +55,7 @@ public interface Array<A extends Array<A>> extends Self<A> {
      * @param length the size the range to be copied
      * @return a new array of the given range
      */
-    A copy(final int start, final int length);
+    A copy(int start, int length);
 
     /**
      * Return a new array of the same type with the given {@code length}.
@@ -63,7 +63,7 @@ public interface Array<A extends Array<A>> extends Self<A> {
      * @param length the size of the new array
      * @return a new array of the same type with the given {@code length}
      */
-    A like(final int length);
+    A like(int length);
 
     /**
      * Return a new array of the same type and {@link #length()} as this one.

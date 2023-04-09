@@ -63,7 +63,7 @@ public record DenseIntArray(int[] elements, int from, int length)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseIntArray(final int[] elements, int from) {
+    public DenseIntArray(int[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
@@ -72,17 +72,17 @@ public record DenseIntArray(int[] elements, int from, int length)
      *
      * @param elements the underlying {@code int} element values
      */
-    public DenseIntArray(final int[] elements) {
+    public DenseIntArray(int[] elements) {
         this(elements, 0, elements.length);
     }
 
     @Override
-    public int get(final int index) {
+    public int get(int index) {
         return elements[index + from];
     }
 
     @Override
-    public void set(final int index, final int value) {
+    public void set(int index, int value) {
         elements[index + from] = value;
     }
 
@@ -98,7 +98,7 @@ public record DenseIntArray(int[] elements, int from, int length)
     }
 
     @Override
-    public DenseIntArray copy(final int start, final int length) {
+    public DenseIntArray copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
@@ -107,7 +107,7 @@ public record DenseIntArray(int[] elements, int from, int length)
     }
 
     @Override
-    public DenseIntArray like(final int length) {
+    public DenseIntArray like(int length) {
         return ofSize(length);
     }
 
@@ -134,7 +134,7 @@ public record DenseIntArray(int[] elements, int from, int length)
      * @param length the length of the created array
      * @return a new dense {@code int} array with the given {@code length}
      */
-    public static DenseIntArray ofSize(final int length) {
+    public static DenseIntArray ofSize(int length) {
         return new DenseIntArray(new int[length]);
     }
 
