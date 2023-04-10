@@ -35,9 +35,7 @@ import io.jenetics.lattices.array.DoubleArray;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice3d
-    extends Lattice3d<DoubleArray>, Structure3dOperations
-{
+public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code [row, col]}.

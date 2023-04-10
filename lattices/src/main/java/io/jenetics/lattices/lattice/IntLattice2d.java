@@ -36,9 +36,7 @@ import io.jenetics.lattices.array.IntArray;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice2d
-    extends Lattice2d<IntArray>, Structure2dOperations
-{
+public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
 
     /**
      * Returns the grid cell value at coordinate {@code [row, col]}.

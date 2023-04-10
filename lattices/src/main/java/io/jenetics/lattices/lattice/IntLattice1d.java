@@ -37,9 +37,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice1d
-    extends Lattice1d<IntArray>, Structure1dOperations
-{
+public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.

@@ -36,9 +36,7 @@ import io.jenetics.lattices.array.IntArray;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice3d
-    extends Lattice3d<IntArray>, Structure3dOperations
-{
+public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
