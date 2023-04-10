@@ -124,6 +124,10 @@ public final class LU implements Solver {
         return det;
     }
 
+    public boolean isNonSingular() {
+        return !singular;
+    }
+
     /**
      * Solves {@code A*X = B}.
      *
@@ -163,7 +167,7 @@ public final class LU implements Solver {
             B_rows[k] = X.rowAt(k);
         }
 
-        final var B_row_k = X.colAt(0).like();
+        final var B_row_k = X.rowAt(0).like();
 
         // Solve L*Y = B(piv,:)
         for (int k = 0; k < n; ++k) {
