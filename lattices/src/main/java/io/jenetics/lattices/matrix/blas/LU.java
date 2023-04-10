@@ -263,7 +263,9 @@ public final class LU implements Solver {
             if (j < m && context.isNotZero(jj)) {
                 final var multiplier = 1.0/jj;
                 lu.colAt(j)
-                    .view(View1d.of(new Range1d(new Index1d(j + 1), new Extent1d(m - (j + 1)))))
+                    .view(View1d.of(new Range1d(
+                        new Index1d(j + 1),
+                        new Extent1d(m - (j + 1)))))
                     .assign(v -> v*multiplier);
             }
         }
