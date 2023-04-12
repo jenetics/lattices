@@ -272,8 +272,8 @@ public final class Eigenvalue {
                         c3 = c2;
                         c2 = c;
                         s2 = s;
-                        g = c * e[i];
-                        h = c * p;
+                        g = c*e[i];
+                        h = c*p;
                         r = Math.hypot(p, e[i]);
                         e[i + 1] = s*r;
                         s = e[i]/r;
@@ -284,7 +284,7 @@ public final class Eigenvalue {
                         // Accumulate transformation.
                         for (int k = 0; k < n; ++k) {
                             h = V.get(k, i + 1);
-                            V.set(k, i + 1, s* V.get(k, i) + c*h);
+                            V.set(k, i + 1, s*V.get(k, i) + c*h);
                             V.set(k, i, c*V.get(k, i) - s*h);
                         }
                     }
@@ -432,7 +432,7 @@ public final class Eigenvalue {
                 e[i] = 0.0;
             }
             for (int j = Math.max(i - 1, 0); j < nn; ++j) {
-                norm = norm + Math.abs(H[i][j]);
+                norm += Math.abs(H[i][j]);
             }
         }
 
@@ -510,8 +510,8 @@ public final class Eigenvalue {
 
                     for (int i = 0; i <= n; ++i) {
                         z = H[i][n - 1];
-                        H[i][n - 1] = q * z + p * H[i][n];
-                        H[i][n] = q * H[i][n] - p * z;
+                        H[i][n - 1] = q*z + p*H[i][n];
+                        H[i][n] = q*H[i][n] - p*z;
                     }
 
                     // Accumulate transformations
@@ -553,15 +553,15 @@ public final class Eigenvalue {
                         H[i][i] -= x;
                     }
                     s = Math.abs(H[n][n - 1]) + Math.abs(H[n - 1][n - 2]);
-                    x = y = 0.75 * s;
-                    w = -0.4375 * s * s;
+                    x = y = 0.75*s;
+                    w = -0.4375*s*s;
                 }
 
                 // MATLAB's new ad hoc shift
 
                 if (iter == 30) {
                     s = (y - x) / 2.0;
-                    s = s * s + w;
+                    s = s*s + w;
                     if (s > 0) {
                         s = Math.sqrt(s);
                         if (y < x) {
@@ -585,7 +585,7 @@ public final class Eigenvalue {
                     z = H[m][m];
                     r = x - z;
                     s = y - z;
-                    p = (r * s - w) / H[m + 1][m] + H[m][m + 1];
+                    p = (r*s - w) / H[m + 1][m] + H[m][m + 1];
                     q = H[m + 1][m + 1] - z - r - s;
                     r = H[m + 2][m + 1];
                     s = Math.abs(p) + Math.abs(q) + Math.abs(r);
@@ -629,7 +629,7 @@ public final class Eigenvalue {
                     if (x == 0.0) {
                         break;
                     }
-                    s = Math.sqrt(p * p + q * q + r * r);
+                    s = Math.sqrt(p*p + q*q + r*r);
                     if (p < 0) {
                         s = -s;
                     }
@@ -847,15 +847,19 @@ public final class Eigenvalue {
     private void cdiv(double xr, double xi, double yr, double yi) {
         double r, d;
         if (Math.abs(yr) > Math.abs(yi)) {
-            r = yi / yr;
+            r = yi/yr;
             d = Math.fma(r, yi, yr);
-            cdivr = (xr + r * xi) / d;
-            cdivi = (xi - r * xr) / d;
+            //cdivr = (xr + r * xi) / d;
+            cdivr = Math.fma(r, xi, xr)/d;
+            //cdivi = (xi - r * xr) / d;
+            cdivi = -Math.fma(r, xr, -xi)/d;
         } else {
-            r = yr / yi;
+            r = yr/yi;
             d = Math.fma(r, yr, yi);
-            cdivr = (r * xr + xi) / d;
-            cdivi = (r * xi - xr) / d;
+            //cdivr = (r * xr + xi) / d;
+            cdivr = Math.fma(r, xr, xi)/d;
+            //cdivi = (r * xi - xr) / d;
+            cdivi = Math.fma(r, xi, -xr)/d;
         }
     }
 

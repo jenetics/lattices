@@ -132,7 +132,7 @@ public final class Algebra {
     /**
      * Returns the determinant of matrix {@code A}.
      *
-     * @param A the matrix for which to calculate the determinante
+     * @param A the matrix for which to calculate the determinant
      * @return the determinant.
      * @throws IllegalArgumentException if the matrix {@code A} is not square
      */
