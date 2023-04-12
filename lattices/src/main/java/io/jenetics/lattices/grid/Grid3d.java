@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.Self;
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Self;
 import io.jenetics.lattices.structure.Structure3d;
 import io.jenetics.lattices.structure.View3d;
 

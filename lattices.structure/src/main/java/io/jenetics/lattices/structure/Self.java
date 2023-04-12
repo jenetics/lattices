@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices;
+package io.jenetics.lattices.structure;
 
 /**
  * This interface defines a <em>recursive</em> generic type {@code S}, which
