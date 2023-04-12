@@ -40,6 +40,7 @@ dependencies {
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
     testImplementation("org.testng:testng:7.7.1")
     testImplementation("colt:colt:1.2.0")
+    testImplementation("org.jblas:jblas:1.2.5")
     testImplementation(testFixtures(project(":lattices.structure")))
 
     testFixturesImplementation(project(":lattices"))

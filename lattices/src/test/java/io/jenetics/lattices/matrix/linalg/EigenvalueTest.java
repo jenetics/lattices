@@ -17,16 +17,15 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.SingularValueDecomposition;
+import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
 import org.testng.annotations.Test;
 
@@ -36,28 +35,46 @@ import io.jenetics.lattices.structure.Extent2d;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class SingularValueTest {
+public class EigenvalueTest {
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 5, successPercentage = 50)
     public void decompose() {
-        final var A = next(new Extent2d(50, 50));
+        final var A = next(new Extent2d(3, 3));
         assertThat(Matrices.isSymmetric(A)).isFalse();
 
-        final var expected = new SingularValueDecomposition(toColt(A));
-        final var singular = SingularValue.decompose(A);
+        final var expected = new EigenvalueDecomposition(toColt(A));
+        final var eigen = Eigenvalue.decompose(A);
 
-        assertEquals(singular.S(), toLinealgebra(expected.getS()));
-        assertEquals(singular.U(), toLinealgebra(expected.getU()));
-        assertEquals(singular.V(), toLinealgebra(expected.getV()));
-        assertThat(singular.rank()).isEqualTo(expected.rank());
-        assertThat(singular.norm2())
-            .isCloseTo(expected.norm2(), EPSILON);
-        assertThat(singular.cond())
-            .isCloseTo(expected.cond(), EPSILON);
-
+        assertEquals(eigen.D(), toLinealgebra(expected.getD()));
+        assertEquals(eigen.V(), toLinealgebra(expected.getV()));
         assertEquals(
-            singular.values(),
-            toLinealgebra(expected.getSingularValues())
+            eigen.realEigenvalues(),
+            toLinealgebra(expected.getRealEigenvalues())
+        );
+        assertEquals(
+            eigen.imagEigenvalues(),
+            toLinealgebra(expected.getImagEigenvalues())
+        );
+    }
+
+    @Test(invocationCount = 5)
+    public void decomposeSymmetric() {
+        final var A = next(new Extent2d(50, 50));
+        A.forEach((i, j) -> A.set(i, j, A.get(j, i)));
+        Matrices.checkSymmetric(A);
+
+        final var expected = new EigenvalueDecomposition(toColt(A));
+        final var eigen = Eigenvalue.decompose(A);
+
+        assertEquals(eigen.D(), toLinealgebra(expected.getD()));
+        assertEquals(eigen.V(), toLinealgebra(expected.getV()));
+        assertEquals(
+            eigen.realEigenvalues(),
+            toLinealgebra(expected.getRealEigenvalues())
+        );
+        assertEquals(
+            eigen.imagEigenvalues(),
+            toLinealgebra(expected.getImagEigenvalues())
         );
     }
 

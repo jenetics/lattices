@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkRectangular;

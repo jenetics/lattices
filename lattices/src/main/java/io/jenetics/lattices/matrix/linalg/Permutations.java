@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;

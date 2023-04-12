@@ -17,34 +17,36 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.QRDecomposition;
+import cern.colt.matrix.linalg.CholeskyDecomposition;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class QRTest {
+public class CholeskyTest {
 
     @Test(invocationCount = 5)
     public void decompose() {
-        final var A = next(new Extent2d(50, 50));
+        final var matrix = next(new Extent2d(50, 50));
 
-        final var expected = new QRDecomposition(toColt(A));
-        final var qr = QR.decompose(A);
+        final var expected = new CholeskyDecomposition(Colts.toColt(matrix));
+        final var cholesky = Cholesky.decompose(matrix);
 
-        assertEquals(qr.Q(), toLinealgebra(expected.getQ()));
-        assertEquals(qr.R(), toLinealgebra(expected.getR()));
-        assertEquals(qr.H(), toLinealgebra(expected.getH()));
+        assertEquals(cholesky.L(), toLinealgebra(expected.getL()));
+        assertThat(cholesky.isSymmetricPositiveDefinite())
+            .isEqualTo(expected.isSymmetricPositiveDefinite());
     }
 
     @Test(invocationCount = 5)
@@ -54,8 +56,8 @@ public class QRTest {
         final var B = next(new Extent2d(extent.rows(), 100));
 
         assertEquals(
-            QR.decompose(A).solve(B),
-            toLinealgebra(new QRDecomposition(toColt(A)).solve(toColt(B)))
+            Cholesky.decompose(A).solve(B),
+            toLinealgebra(new CholeskyDecomposition(toColt(A)).solve(toColt(B)))
         );
     }
 

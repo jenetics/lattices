@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
 import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 import static io.jenetics.lattices.structure.Structures.checkSquare;

@@ -36,7 +36,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
-import io.jenetics.lattices.matrix.blas.Algebra;
+import io.jenetics.lattices.matrix.linalg.Algebra;
 import io.jenetics.lattices.testfixtures.Colts;
 
 @Warmup(iterations = 2)

@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.matrix.blas;
+package io.jenetics.lattices.matrix.linalg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
@@ -25,39 +25,40 @@ import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
-import cern.colt.matrix.linalg.CholeskyDecomposition;
+import cern.colt.matrix.linalg.LUDecomposition;
 
+import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.testfixtures.Colts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class CholeskyTest {
+public class LUTest {
 
     @Test(invocationCount = 5)
     public void decompose() {
-        final var matrix = next(new Extent2d(50, 50));
+        final var A = next(new Extent2d(50, 50));
 
-        final var expected = new CholeskyDecomposition(Colts.toColt(matrix));
-        final var cholesky = Cholesky.decompose(matrix);
+        final var expected = new LUDecomposition(toColt(A));
+        final var lu = LU.decompose(A);
 
-        assertEquals(cholesky.L(), toLinealgebra(expected.getL()));
-        assertThat(cholesky.isSymmetricPositiveDefinite())
-            .isEqualTo(expected.isSymmetricPositiveDefinite());
+        assertEquals(lu.L(), toLinealgebra(expected.getL()));
+        assertEquals(lu.U(), toLinealgebra(expected.getU()));
+        assertThat(lu.det())
+            .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
     }
 
     @Test(invocationCount = 5)
     public void solver() {
-        final var extent = new Extent2d(50, 50);
+        final var extent = new Extent2d(55, 55);
         final var A = next(extent);
-        final var B = next(new Extent2d(extent.rows(), 100));
+        final var B = next(extent);
 
         assertEquals(
-            Cholesky.decompose(A).solve(B),
-            toLinealgebra(new CholeskyDecomposition(toColt(A)).solve(toColt(B)))
+            LU.decompose(A).solve(B),
+            toLinealgebra(new LUDecomposition(toColt(A)).solve(toColt(B)))
         );
     }
 
