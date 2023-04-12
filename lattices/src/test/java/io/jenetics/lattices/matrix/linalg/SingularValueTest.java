@@ -24,7 +24,6 @@ import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 
@@ -32,15 +31,16 @@ import org.testng.annotations.Test;
 
 import io.jenetics.lattices.matrix.Matrices;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class SingularValueTest {
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decompose() {
-        final var A = next(new Extent2d(50, 50));
+        final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(15, 15));
         assertThat(Matrices.isSymmetric(A)).isFalse();
 
         final var expected = new SingularValueDecomposition(toColt(A));

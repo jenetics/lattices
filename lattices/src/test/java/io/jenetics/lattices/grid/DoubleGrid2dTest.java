@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -65,14 +66,14 @@ public class DoubleGrid2dTest {
     @DataProvider
     public Object[][] grids() {
         return new Object[][] {
-            { next(new Extent2d(0, 0)), next(new Extent2d(0, 0)), true },
-            { next(new Extent2d(0, 1)), next(new Extent2d(0, 1)), true },
-            { next(new Extent2d(1, 0)), next(new Extent2d(1, 0)), true },
-            { next(new Extent2d(0, 0)), next(new Extent2d(0, 10)), false },
-            { next(new Extent2d(5, 0)), next(new Extent2d(0, 0)), false },
-            { next(new Extent2d(5, 50)), next(new Extent2d(5, 50)), false },
-            { next(new Extent2d(50, 9)), next(new Extent2d(50, 9)), false },
-            { next(new Extent2d(50, 30)), next(new Extent2d(50, 9)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 1)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 1)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(1, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(1, 0)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 10)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 50)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 50)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 30)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), false },
             equalGrids(new Extent2d(1, 1)),
             equalGrids(new Extent2d(1, 100)),
             equalGrids(new Extent2d(100, 1)),
@@ -81,7 +82,7 @@ public class DoubleGrid2dTest {
     }
 
     private static Object[] equalGrids(final Extent2d extent) {
-        final var matrix = next(extent);
+        final var matrix = MatrixRandom.nextDoubleMatrix2d(extent);
         return new Object[] { matrix, matrix.copy(), true };
     }
 

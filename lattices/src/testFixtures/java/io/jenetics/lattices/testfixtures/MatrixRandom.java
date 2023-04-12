@@ -19,12 +19,12 @@
  */
 package io.jenetics.lattices.testfixtures;
 
-import java.util.random.RandomGenerator;
-
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
+
+import java.util.random.RandomGenerator;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -35,30 +35,30 @@ public final class MatrixRandom {
 
     public static DoubleMatrix2d next(final Extent2d extent, final RandomGenerator random) {
         final var result = DoubleMatrix2d.DENSE.create(extent);
-        result.assign(a -> random.nextInt(10_000)/10.0);
+        result.assign(a -> random.nextDouble(-1, 1));
         return result;
     }
 
-    public static DoubleMatrix2d next(final Extent2d extent) {
+    public static DoubleMatrix2d nextDoubleMatrix2d(final Extent2d extent) {
         return next(extent, RandomGenerator.getDefault());
     }
 
-    public static DoubleMatrix2d next(final int rows, final int cols) {
-        return next(new Extent2d(rows, cols));
+    public static DoubleMatrix2d nextDoubleMatrix2d(final int rows, final int cols) {
+        return nextDoubleMatrix2d(new Extent2d(rows, cols));
     }
 
     public static DoubleMatrix1d next(final Extent1d extent, final RandomGenerator random) {
         final var result = DoubleMatrix1d.DENSE.create(extent);
-        result.assign(a -> random.nextInt(10_000)/10.0);
+        result.assign(a -> random.nextDouble(-1, 1));
         return result;
     }
 
-    public static DoubleMatrix1d next(final Extent1d extent) {
+    public static DoubleMatrix1d nextDoubleMatrix1d(final Extent1d extent) {
         return next(extent, RandomGenerator.getDefault());
     }
 
-    public static DoubleMatrix1d next(final int size) {
-        return next(new Extent1d(size));
+    public static DoubleMatrix1d nextDoubleMatrix1d(final int size) {
+        return nextDoubleMatrix1d(new Extent1d(size));
     }
 
 }

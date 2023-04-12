@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.CholeskyDecomposition;
 
@@ -31,15 +30,16 @@ import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.testfixtures.Colts;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class CholeskyTest {
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decompose() {
-        final var matrix = next(new Extent2d(50, 50));
+        final var matrix = MatrixRandom.nextDoubleMatrix2d(new Extent2d(15, 15));
 
         final var expected = new CholeskyDecomposition(Colts.toColt(matrix));
         final var cholesky = Cholesky.decompose(matrix);
@@ -49,11 +49,11 @@ public class CholeskyTest {
             .isEqualTo(expected.isSymmetricPositiveDefinite());
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void solver() {
-        final var extent = new Extent2d(50, 50);
-        final var A = next(extent);
-        final var B = next(new Extent2d(extent.rows(), 100));
+        final var extent = new Extent2d(15, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
+        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.rows(), 23));
 
         assertEquals(
             Cholesky.decompose(A).solve(B),

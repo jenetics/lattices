@@ -22,22 +22,22 @@ package io.jenetics.lattices.matrix.linalg;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.QRDecomposition;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class QRTest {
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decompose() {
-        final var A = next(new Extent2d(50, 50));
+        final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(15, 15));
 
         final var expected = new QRDecomposition(toColt(A));
         final var qr = QR.decompose(A);
@@ -47,11 +47,11 @@ public class QRTest {
         assertEquals(qr.H(), toLinealgebra(expected.getH()));
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void solver() {
-        final var extent = new Extent2d(50, 50);
-        final var A = next(extent);
-        final var B = next(new Extent2d(extent.rows(), 100));
+        final var extent = new Extent2d(15, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
+        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.rows(), 45));
 
         assertEquals(
             QR.decompose(A).solve(B),

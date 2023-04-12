@@ -24,13 +24,13 @@ import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.EPSILON;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -41,96 +41,110 @@ public class AlgebraTest {
         cern.colt.matrix.linalg.Algebra.DEFAULT;
 
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void norm1Vector() {
         final var random = RandomGenerator.getDefault();
-        final var x = next(random.nextInt(123));
+        final var size = random.nextInt(10, 15);
+        final var x = MatrixRandom.nextDoubleMatrix1d(size);
 
         assertThat(Algebra.norm1(x))
             .isCloseTo(COLT.norm1(toColt(x)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void norm1Matrix() {
         final var random = RandomGenerator.getDefault();
-        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+        final var extent = new Extent2d(
+            random.nextInt(10, 15),
+            random.nextInt(10, 15)
+        );
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertThat(Algebra.norm1(A))
             .isCloseTo(COLT.norm1(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void norm2Vector() {
         final var random = RandomGenerator.getDefault();
-        final var x = next(random.nextInt(123));
+        final var size = random.nextInt(10, 15);
+        final var x = MatrixRandom.nextDoubleMatrix1d(size);
 
         assertThat(Algebra.norm2(x))
             .isCloseTo(COLT.norm2(toColt(x)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void norm2Matrix() {
         final var random = RandomGenerator.getDefault();
-        final var size = random.nextInt(10, 100);
-        final var A = next(size, size);
+        final var size = random.nextInt(10, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(size, size);
 
         assertThat(Algebra.norm2(A))
             .isCloseTo(COLT.norm2(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void normInfVector() {
         final var random = RandomGenerator.getDefault();
-        final var x = next(random.nextInt(123));
+        final var size = random.nextInt(10, 15);
+        final var x = MatrixRandom.nextDoubleMatrix1d(size);
 
         assertThat(Algebra.normInf(x))
             .isCloseTo(COLT.normInfinity(toColt(x)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void normInfMatrix() {
         final var random = RandomGenerator.getDefault();
-        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+        final var extent = new Extent2d(
+            random.nextInt(10, 15),
+            random.nextInt(10, 15)
+        );
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertThat(Algebra.normInf(A))
             .isCloseTo(COLT.normInfinity(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void trace() {
         final var random = RandomGenerator.getDefault();
-        final var A = next(random.nextInt(10, 100), random.nextInt(10, 100));
+        final var extent = new Extent2d(
+            random.nextInt(10, 15),
+            random.nextInt(10, 15)
+        );
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertThat(Algebra.trace(A))
             .isCloseTo(COLT.trace(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void det() {
         final var random = RandomGenerator.getDefault();
-        final var size = random.nextInt(10, 100);
-        final var A = next(size, size);
+        final var size = random.nextInt(10, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(size, size);
 
         assertThat(Algebra.det(A))
             .isCloseTo(COLT.det(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 15)
     public void cond() {
         final var random = RandomGenerator.getDefault();
-        final var size = random.nextInt(10, 100);
-        final var A = next(size, size);
+        final var size = random.nextInt(10, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(size, size);
 
         assertThat(Algebra.cond(A))
             .isCloseTo(COLT.cond(toColt(A)), EPSILON);
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void solve() {
-        //final var extent = new Extent2d(1000, 1000);
-        final var extent = new Extent2d(55, 55);
-        final var A = next(extent);
-        final var B = next(extent);
+        final var extent = new Extent2d(15, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
+        final var B = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertEquals(
             Algebra.solve(A, B),
@@ -138,13 +152,13 @@ public class AlgebraTest {
         );
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void inverse() {
         final var random = RandomGenerator.getDefault();
-        final var cols = random.nextInt(45, 65);
+        final var cols = random.nextInt(10, 15);
         final var rows = random.nextInt(cols, 100);
         final var extent = new Extent2d(rows, cols);
-        final var A = next(extent);
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertEquals(Algebra.inverse(A), toLinealgebra(COLT.inverse(toColt(A))));
     }

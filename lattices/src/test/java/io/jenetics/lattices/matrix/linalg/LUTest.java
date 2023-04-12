@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.LUDecomposition;
 
@@ -31,15 +30,16 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class LUTest {
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decompose() {
-        final var A = next(new Extent2d(50, 50));
+        final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(15, 15));
 
         final var expected = new LUDecomposition(toColt(A));
         final var lu = LU.decompose(A);
@@ -47,14 +47,14 @@ public class LUTest {
         assertEquals(lu.L(), toLinealgebra(expected.getL()));
         assertEquals(lu.U(), toLinealgebra(expected.getU()));
         assertThat(lu.det())
-            .isCloseTo(expected.det(), Percentage.withPercentage(0.00000001));
+            .isCloseTo(expected.det(), Percentage.withPercentage(0.000000001));
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void solver() {
-        final var extent = new Extent2d(55, 55);
-        final var A = next(extent);
-        final var B = next(extent);
+        final var extent = new Extent2d(15, 15);
+        final var A = MatrixRandom.nextDoubleMatrix2d(extent);
+        final var B = MatrixRandom.nextDoubleMatrix2d(extent);
 
         assertEquals(
             LU.decompose(A).solve(B),

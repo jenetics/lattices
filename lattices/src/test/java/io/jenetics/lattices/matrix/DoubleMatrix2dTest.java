@@ -24,6 +24,7 @@ import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -64,43 +65,43 @@ public class DoubleMatrix2dTest {
     @DataProvider
     public Object[][] matricesRanges() {
         return new Object[][] {
-            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(10, 10)) },
-            { next(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(5, 5)) },
-            { next(new Extent2d(10, 10)), new Range2d(new Index2d(5, 5), new Extent2d(5, 5)) },
-            { next(new Extent2d(10, 10)), new Range2d(new Index2d(2, 3), new Extent2d(7, 4)) },
-            { next(new Extent2d(50, 10)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
-            { next(new Extent2d(77, 59)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(10, 10)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(10, 10)), new Range2d(new Index2d(0, 0), new Extent2d(5, 5)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(10, 10)), new Range2d(new Index2d(5, 5), new Extent2d(5, 5)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(10, 10)), new Range2d(new Index2d(2, 3), new Extent2d(7, 4)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 10)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59)), new Range2d(new Index2d(23, 3), new Extent2d(16, 7)) },
 
             // Test also matrix views.
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(3, 7), new Extent2d(20, 30))))
                     .transpose(),
                 new Range2d(new Index2d(12, 3), new Extent2d(5, 7)),
             },
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(1, 3), new Extent2d(11, 7))
             },
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(0, 0), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(11, 7))
             },
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
                     .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(10, 20)))),
                 new Range2d(new Index2d(0, 0), new Extent2d(5, 7))
             },
             {
-                next(new Extent2d(77, 59))
+                MatrixRandom.nextDoubleMatrix2d(new Extent2d(77, 59))
                     .view(View2d.of(new Range2d(new Index2d(3, 2), new Extent2d(20, 30))))
                     .view(View2d.of(new Stride2d(2, 3))),
                 new Range2d(new Index2d(1, 2), new Extent2d(5, 4))
@@ -223,7 +224,7 @@ public class DoubleMatrix2dTest {
     @Test
     public void equals() {
         final var dimension = new Extent2d(100, 34);
-        final var a = next(dimension);
+        final var a = MatrixRandom.nextDoubleMatrix2d(dimension);
         final var b = a.copy();
 
         assertThat(b).isNotSameAs(a);
@@ -283,8 +284,8 @@ public class DoubleMatrix2dTest {
     public void mult() {
         final var dimension = new Extent2d(10, 10);
 
-        final var A = next(dimension);
-        final var B = next(dimension);
+        final var A = MatrixRandom.nextDoubleMatrix2d(dimension);
+        final var B = MatrixRandom.nextDoubleMatrix2d(dimension);
         final var C = A.mult(B, null, 2, 3, false, false);
 
         final var coltA = Colts.toColt(A);

@@ -33,7 +33,7 @@ import io.jenetics.lattices.matrix.NumericalContext;
 public final class LinealgebraAsserts {
 
     public static final Percentage EPSILON = Percentage
-        .withPercentage(Math.pow(10, -4));
+        .withPercentage(Math.pow(10, -6));
 
     private static final NumericalContext CONTEXT = new NumericalContext(Math.pow(10, -4));
 

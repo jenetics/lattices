@@ -22,7 +22,6 @@ package io.jenetics.lattices.matrix.linalg;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertNotEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -45,6 +44,7 @@ import io.jenetics.lattices.testfixtures.DoubleGrid1dComparator;
 import io.jenetics.lattices.testfixtures.DoubleGrid2dComparator;
 import io.jenetics.lattices.testfixtures.DoubleMatrix1dComparator;
 import io.jenetics.lattices.testfixtures.DoubleMatrix2dComparator;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -53,7 +53,7 @@ public class BlasTest {
 
     @Test
     public void dcopy() {
-        final var x = next(new Extent1d(50));
+        final var x = MatrixRandom.nextDoubleMatrix1d(new Extent1d(15));
         final var y = x.like();
         assertNotEquals(x, y);
 
@@ -69,7 +69,7 @@ public class BlasTest {
             "drotg",
             random.nextDouble(12, 20),
             random.nextDouble(1, 32),
-            ((DenseDoubleArray)next(4).array()).elements()
+            ((DenseDoubleArray) MatrixRandom.nextDoubleMatrix1d(4).array()).elements()
         );
     }
 
@@ -79,8 +79,8 @@ public class BlasTest {
 
         check(
             "drot",
-            next(43),
-            next(43),
+            MatrixRandom.nextDoubleMatrix1d(15),
+            MatrixRandom.nextDoubleMatrix1d(15),
             random.nextDouble(12, 20),
             random.nextDouble(1, 32)
         );
@@ -93,13 +93,17 @@ public class BlasTest {
         check(
             "dscal",
             random.nextDouble(32, 321),
-            next(34)
+            MatrixRandom.nextDoubleMatrix1d(15)
         );
     }
 
     @Test
     public void dswap() {
-        check("dswap", next(121), next(121));
+        check(
+            "dswap",
+            MatrixRandom.nextDoubleMatrix1d(15),
+            MatrixRandom.nextDoubleMatrix1d(15)
+        );
     }
 
     @Test
@@ -109,30 +113,42 @@ public class BlasTest {
         check(
             "daxpy",
             random.nextDouble(32, 1233),
-            next(311),
-            next(311)
+            MatrixRandom.nextDoubleMatrix1d(15),
+            MatrixRandom.nextDoubleMatrix1d(15)
         );
     }
 
     @Test
     public void ddot() {
-        check("ddot", next(12), next(3)
+        check(
+            "ddot",
+            MatrixRandom.nextDoubleMatrix1d(12),
+            MatrixRandom.nextDoubleMatrix1d(3)
         );
     }
 
     @Test
     public void dnrm2() {
-        check("dnrm2", next(30));
+        check(
+            "dnrm2",
+            MatrixRandom.nextDoubleMatrix1d(30)
+        );
     }
 
     @Test
     public void dasum() {
-        check("dasum", next(23));
+        check(
+            "dasum",
+            MatrixRandom.nextDoubleMatrix1d(23)
+        );
     }
 
     @Test
     public void idamax() {
-        check("idamax", next(43));
+        check(
+            "idamax",
+            MatrixRandom.nextDoubleMatrix1d(43)
+        );
     }
 
     @Test(invocationCount = 5)
@@ -143,10 +159,10 @@ public class BlasTest {
             "dgemv",
             random.nextBoolean(),
             random.nextDouble(3, 12),
-            next(5, 5),
-            next(5),
+            MatrixRandom.nextDoubleMatrix2d(5, 5),
+            MatrixRandom.nextDoubleMatrix1d(5),
             random.nextDouble(2, 4),
-            next(5)
+            MatrixRandom.nextDoubleMatrix1d(5)
         );
     }
 
@@ -157,9 +173,9 @@ public class BlasTest {
         check(
             "dger",
             random.nextDouble(3, 31),
-            next(7),
-            next(7),
-            next(7, 7)
+            MatrixRandom.nextDoubleMatrix1d(7),
+            MatrixRandom.nextDoubleMatrix1d(7),
+            MatrixRandom.nextDoubleMatrix2d(7, 7)
         );
     }
 
@@ -171,10 +187,10 @@ public class BlasTest {
             "dsymv",
             random.nextBoolean(),
             random.nextDouble(6, 34),
-            next(10, 10),
-            next(10),
+            MatrixRandom.nextDoubleMatrix2d(10, 10),
+            MatrixRandom.nextDoubleMatrix1d(10),
             random.nextDouble(8, 89),
-            next(10)
+            MatrixRandom.nextDoubleMatrix1d(10)
         );
     }
 
@@ -187,21 +203,29 @@ public class BlasTest {
             random.nextBoolean(),
             random.nextBoolean(),
             random.nextBoolean(),
-            next(10, 10),
-            next(10)
+            MatrixRandom.nextDoubleMatrix2d(10, 10),
+            MatrixRandom.nextDoubleMatrix1d(10)
         );
     }
 
     @Test
     public void dcopy_l3() {
-        check("dcopy", next(20, 20), next(20, 20));
+        check(
+            "dcopy",
+            MatrixRandom.nextDoubleMatrix2d(15, 15),
+            MatrixRandom.nextDoubleMatrix2d(15, 15)
+        );
     }
 
     @Test
     public void dscal_l3() {
         final var random = RandomGenerator.getDefault();
 
-        check("dscal", random.nextDouble(9, 87), next(34, 34));
+        check(
+            "dscal",
+            random.nextDouble(9, 87),
+            MatrixRandom.nextDoubleMatrix2d(34, 34)
+        );
     }
 
     @Test(invocationCount = 5)
@@ -213,10 +237,10 @@ public class BlasTest {
             random.nextBoolean(),
             random.nextBoolean(),
             random.nextDouble(2, 5),
-            next(3, 3),
-            next(3, 3),
+            MatrixRandom.nextDoubleMatrix2d(3, 3),
+            MatrixRandom.nextDoubleMatrix2d(3, 3),
             random.nextDouble(2, 6),
-            next(3, 3)
+            MatrixRandom.nextDoubleMatrix2d(3, 3)
         );
     }
 
@@ -227,14 +251,18 @@ public class BlasTest {
         check(
             "daxpy",
             random.nextDouble(23, 244),
-            next(30, 30),
-            next(30, 30)
+            MatrixRandom.nextDoubleMatrix2d(15, 15),
+            MatrixRandom.nextDoubleMatrix2d(15, 15)
         );
     }
 
     @Test
     public void dswap_l3() {
-        check("dswap", next(34, 23), next(34, 23));
+        check(
+            "dswap",
+            MatrixRandom.nextDoubleMatrix2d(34, 23),
+            MatrixRandom.nextDoubleMatrix2d(34, 23)
+        );
     }
 
     /* *************************************************************************

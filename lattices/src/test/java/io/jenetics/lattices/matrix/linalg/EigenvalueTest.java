@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.testfixtures.Colts.toColt;
 import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
 import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 
@@ -31,15 +30,16 @@ import org.testng.annotations.Test;
 
 import io.jenetics.lattices.matrix.Matrices;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
 public class EigenvalueTest {
 
-    @Test(invocationCount = 5, successPercentage = 50)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decompose() {
-        final var A = next(new Extent2d(3, 3));
+        final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(3, 3));
         assertThat(Matrices.isSymmetric(A)).isFalse();
 
         final var expected = new EigenvalueDecomposition(toColt(A));
@@ -57,9 +57,9 @@ public class EigenvalueTest {
         );
     }
 
-    @Test(invocationCount = 5)
+    @Test(invocationCount = 20, successPercentage = 80)
     public void decomposeSymmetric() {
-        final var A = next(new Extent2d(50, 50));
+        final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 5));
         A.forEach((i, j) -> A.set(i, j, A.get(j, i)));
         Matrices.checkSymmetric(A);
 

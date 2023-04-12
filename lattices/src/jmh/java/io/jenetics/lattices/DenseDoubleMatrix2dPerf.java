@@ -25,6 +25,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 
 import java.util.concurrent.TimeUnit;
 
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -51,8 +52,8 @@ public class DenseDoubleMatrix2dPerf {
 
     @State(Scope.Benchmark)
     public static class Matrices {
-        DoubleMatrix2d latticesA = next(size, size);
-        DoubleMatrix2d latticesB = next(size, size);
+        DoubleMatrix2d latticesA = MatrixRandom.nextDoubleMatrix2d(size, size);
+        DoubleMatrix2d latticesB = MatrixRandom.nextDoubleMatrix2d(size, size);
         DoubleMatrix2D coltA = Colts.toColt(latticesA);
         DoubleMatrix2D coltB = Colts.toColt(latticesB);
     }
