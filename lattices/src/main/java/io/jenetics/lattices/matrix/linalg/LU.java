@@ -118,7 +118,7 @@ public final class LU implements Solver {
         }
 
         double det = pivsign;
-        for (int j = 0; j < LU.cols(); j++) {
+        for (int j = 0; j < LU.cols(); ++j) {
             det *= LU.get(j, j);
         }
         return det;

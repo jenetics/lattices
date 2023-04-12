@@ -122,7 +122,6 @@ public final class Eigenvalue {
                 // Generate Householder vector.
                 for (int k = 0; k < i; ++k) {
                     d[k] /= scale;
-                    //h += d[k]*d[k];
                     h = Math.fma(d[k], d[k], h);
                 }
                 double f = d[i - 1];
@@ -131,7 +130,6 @@ public final class Eigenvalue {
                     g = -g;
                 }
                 e[i] = scale*g;
-                //h = h - f * g;
                 h = -Math.fma(f, g, -h);
                 d[i - 1] = f - g;
                 for (int j = 0; j < i; ++j) {
@@ -142,12 +140,9 @@ public final class Eigenvalue {
                 for (int j = 0; j < i; ++j) {
                     f = d[j];
                     V.set(j, i, f);
-                    //g = e[j] + V.get(j, j)*f;
                     g = Math.fma(V.get(j, j), f, e[j]);
                     for (int k = j + 1; k <= i - 1; ++k) {
-                        //g += V.get(k, j)*d[k];
                         g = Math.fma(V.get(k, j), d[k], g);
-                        //e[k] += V.get(k, j)*f;
                         e[k] = Math.fma(V.get(k, j), f, e[k]);
                     }
                     e[j] = g;
@@ -155,7 +150,6 @@ public final class Eigenvalue {
                 f = 0.0;
                 for (int j = 0; j < i; ++j) {
                     e[j] /= h;
-                    //f += e[j] * d[j];
                     f = Math.fma(e[j], d[j], f);
                 }
                 double hh = f / (h + h);
@@ -166,7 +160,7 @@ public final class Eigenvalue {
                     f = d[j];
                     g = e[j];
                     for (int k = j; k <= i - 1; ++k) {
-                        V.set(k, j, V.get(k, j) - (f*e[k] + g*d[k]));
+                        V.set(k, j, V.get(k, j) - Math.fma(f, e[k], g*d[k]));
                     }
                     d[j] = V.get(i - 1, j);
                     V.set(i, j, 0);
@@ -187,11 +181,9 @@ public final class Eigenvalue {
                 for (int j = 0; j <= i; ++j) {
                     double g = 0.0;
                     for (int k = 0; k <= i; ++k) {
-                        //g += V.get(k, i + 1)*V.get(k, j);
                         g = Math.fma(V.get(k, i + 1), V.get(k, j), g);
                     }
                     for (int k = 0; k <= i; k++) {
-                        //V.set(k, j, V.get(k, j) - g*d[k]);
                         V.set(k, j, -Math.fma(g, d[k], -V.get(k, j)));
                     }
                 }
@@ -279,7 +271,7 @@ public final class Eigenvalue {
                         s = e[i]/r;
                         c = p/r;
                         p = c*d[i] - s*g;
-                        d[i + 1] = h + s*(c*g + s*d[i]);
+                        d[i + 1] = Math.fma(s, (Math.fma(c, g,  s*d[i])), h);
 
                         // Accumulate transformation.
                         for (int k = 0; k < n; ++k) {
@@ -469,7 +461,7 @@ public final class Eigenvalue {
             } else if (l == n - 1) {
                 w = H[n][n - 1]*H[n - 1][n];
                 p = (H[n - 1][n - 1] - H[n][n])/2.0;
-                q = Math.fma(p, p,w);
+                q = Math.fma(p, p, w);
                 z = Math.sqrt(Math.abs(q));
                 H[n][n] = H[n][n] + exshift;
                 H[n - 1][n - 1] = H[n - 1][n - 1] + exshift;
@@ -502,24 +494,24 @@ public final class Eigenvalue {
 
                     for (int j = n - 1; j < nn; ++j) {
                         z = H[n - 1][j];
-                        H[n - 1][j] = q*z + p*H[n][j];
-                        H[n][j] = q*H[n][j] - p*z;
+                        H[n - 1][j] = Math.fma(q, z, p*H[n][j]);
+                        H[n][j] = Math.fma(q, H[n][j], -p*z);
                     }
 
                     // Column modification
 
                     for (int i = 0; i <= n; ++i) {
                         z = H[i][n - 1];
-                        H[i][n - 1] = q*z + p*H[i][n];
-                        H[i][n] = q*H[i][n] - p*z;
+                        H[i][n - 1] = Math.fma(q, z, p*H[i][n]);
+                        H[i][n] = Math.fma(q, H[i][n], -p*z);
                     }
 
                     // Accumulate transformations
 
                     for (int i = low; i <= high; ++i) {
                         z = V.get(i, n - 1);
-                        V.set(i, n - 1, q*z + p*V.get(i, n));
-                        V.set(i, n, q*V.get(i, n) - p*z);
+                        V.set(i, n - 1, Math.fma(q, z, p*V.get(i, n)));
+                        V.set(i, n, Math.fma(q, V.get(i, n), -p*z));
                     }
 
                     // Complex pair
@@ -542,7 +534,7 @@ public final class Eigenvalue {
                 w = 0.0;
                 if (l < n) {
                     y = H[n - 1][n - 1];
-                    w = H[n][n - 1] * H[n - 1][n];
+                    w = H[n][n - 1]*H[n - 1][n];
                 }
 
                 // Wilkinson's original ad hoc shift
@@ -635,7 +627,7 @@ public final class Eigenvalue {
                     }
                     if (s != 0) {
                         if (k != m) {
-                            H[k][k - 1] = -s * x;
+                            H[k][k - 1] = -s*x;
                         } else if (l != m) {
                             H[k][k - 1] = -H[k][k - 1];
                         }
@@ -649,7 +641,7 @@ public final class Eigenvalue {
                         // Row modification
 
                         for (int j = k; j < nn; j++) {
-                            p = H[k][j] + q * H[k + 1][j];
+                            p =  Math.fma(q, H[k + 1][j], H[k][j]);
                             if (notlast) {
                                 p = p + r * H[k + 2][j];
                                 H[k + 2][j] = H[k + 2][j] - p * z;
@@ -673,9 +665,9 @@ public final class Eigenvalue {
                         // Accumulate transformations
 
                         for (int i = low; i <= high; i++) {
-                            p = x*V.get(i, k) + y*V.get(i, k + 1);
+                            p = Math.fma(x, V.get(i, k), y*V.get(i, k + 1));
                             if (notlast) {
-                                p = p + z*V.get(i, k + 2);
+                                p = Math.fma(z, V.get(i, k + 2), p);
                                 V.set(i, k + 2, V.get(i, k + 2) - p*r);
                             }
                             V.set(i, k, V.get(i, k) - p);
@@ -849,16 +841,12 @@ public final class Eigenvalue {
         if (Math.abs(yr) > Math.abs(yi)) {
             r = yi/yr;
             d = Math.fma(r, yi, yr);
-            //cdivr = (xr + r * xi) / d;
             cdivr = Math.fma(r, xi, xr)/d;
-            //cdivi = (xi - r * xr) / d;
             cdivi = -Math.fma(r, xr, -xi)/d;
         } else {
             r = yr/yi;
             d = Math.fma(r, yr, yi);
-            //cdivr = (r * xr + xi) / d;
             cdivr = Math.fma(r, xr, xi)/d;
-            //cdivi = (r * xi - xr) / d;
             cdivi = Math.fma(r, xi, -xr)/d;
         }
     }

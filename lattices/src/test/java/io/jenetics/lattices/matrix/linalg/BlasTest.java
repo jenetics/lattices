@@ -51,7 +51,7 @@ import io.jenetics.lattices.testfixtures.MatrixRandom;
  */
 public class BlasTest {
 
-    @Test
+    @Test(invocationCount = 20, successPercentage = 80)
     public void dcopy() {
         final var x = MatrixRandom.nextDoubleMatrix1d(new Extent1d(15));
         final var y = x.like();
@@ -61,7 +61,7 @@ public class BlasTest {
         assertEquals(x, y);
     }
 
-    @Test
+    @Test(invocationCount = 20, successPercentage = 80)
     public void drotg() {
         final var random = RandomGenerator.getDefault();
 
@@ -73,7 +73,7 @@ public class BlasTest {
         );
     }
 
-    @Test
+    @Test(invocationCount = 20, successPercentage = 80)
     public void drot() {
         final var random = RandomGenerator.getDefault();
 

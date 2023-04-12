@@ -91,14 +91,22 @@ public final class QR implements Solver {
     public DoubleMatrix2d Q() {
         final DoubleMatrix2d Q = QR.like();
         for (int k = QR.cols() - 1; k >= 0; k--) {
-            final DoubleMatrix1d QRcolk = QR.colAt(k)
-                .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k))));
+            var range = new Range1d(
+                new Index1d(k),
+                new Extent1d(QR.rows() - k)
+            );
+
+            final DoubleMatrix1d QRcolk = QR.colAt(k).view(View1d.of(range));
 
             Q.set(k, k, 1);
             for (int j = k; j < QR.cols(); ++j) {
                 if (context.isNotZero(QR.get(k, k))) {
-                    final var Qcolj = Q.colAt(j)
-                        .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(QR.rows() - k))));
+                    range = new Range1d(
+                        new Index1d(k),
+                        new Extent1d(QR.rows() - k)
+                    );
+
+                    final var Qcolj = Q.colAt(j).view(View1d.of(range));
 
                     double s = -QRcolk.dotProduct(Qcolj)/QR.get(k, k);
                     Qcolj.assign(QRcolk, (a, b) -> Math.fma(b, s, a));
@@ -221,8 +229,12 @@ public final class QR implements Solver {
 
         final var QRcolumnsPart = new DoubleMatrix1d[n];
         for (int k = 0; k < n; ++k) {
-            QRcolumnsPart[k] = qr.colAt(k)
-                .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(m - k))));
+            final var range = new Range1d(
+                new Index1d(k),
+                new Extent1d(m - k)
+            );
+
+            QRcolumnsPart[k] = qr.colAt(k).view(View1d.of(range));
         }
 
         // Main loop.
@@ -244,8 +256,12 @@ public final class QR implements Solver {
 
                 // Apply transformation to remaining columns.
                 for (int j = k + 1; j < n; ++j) {
-                    final DoubleMatrix1d QRcolj = qr.colAt(j)
-                        .view(View1d.of(new Range1d(new Index1d(k), new Extent1d(m - k))));
+                    final var range = new Range1d(
+                        new Index1d(k),
+                        new Extent1d(m - k)
+                    );
+
+                    final DoubleMatrix1d QRcolj = qr.colAt(j).view(View1d.of(range));
 
                     double s = QRcolumnsPart[k].dotProduct(QRcolj);
                     s = -s/qr.get(k, k);
