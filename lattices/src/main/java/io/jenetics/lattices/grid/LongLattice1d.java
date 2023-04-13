@@ -17,17 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntUnaryOperator;
+import java.util.OptionalLong;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongUnaryOperator;
 
-import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.array.LongArray;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
+public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.
@@ -47,7 +47,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default int get(int index) {
+    default long get(int index) {
         return array().get(structure().offset(index));
     }
 
@@ -60,7 +60,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int index, int value) {
+    default void set(int index, long value) {
         array().set(structure().offset(index), value);
     }
 
@@ -72,7 +72,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
-    default void assign(IntLattice1d other) {
+    default void assign(LongLattice1d other) {
         if (other == this) {
             return;
         }
@@ -86,7 +86,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *
      * @param values the values to be filled into the cells
      */
-    default void assign(int[] values) {
+    default void assign(long[] values) {
         checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
@@ -96,7 +96,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(int value) {
+    default void assign(long value) {
         forEach(i -> set(i, value));
     }
 
@@ -108,9 +108,9 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(IntUnaryOperator f) {
+    default void assign(LongUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsInt(get(i))));
+        forEach(i -> set(i, f.applyAsLong(get(i))));
     }
 
     /**
@@ -123,9 +123,9 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    default void assign(IntLattice1d a, IntBinaryOperator f) {
+    default void assign(LongLattice1d a, LongBinaryOperator f) {
         checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.applyAsInt(get(i), a.get(i))));
+        forEach(i -> set(i, f.applyAsLong(get(i), a.get(i))));
     }
 
     /**
@@ -133,7 +133,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    default void swap(final IntLattice1d other) {
+    default void swap(final LongLattice1d other) {
         checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
@@ -155,20 +155,20 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalInt reduce(IntBinaryOperator reducer, IntUnaryOperator f) {
+    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return OptionalInt.empty();
+            return OptionalLong.empty();
         }
 
-        int a = f.applyAsInt(get(size() - 1));
+        long a = f.applyAsLong(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsInt(a, f.applyAsInt(get(i)));
+            a = reducer.applyAsLong(a, f.applyAsLong(get(i)));
         }
 
-        return OptionalInt.of(a);
+        return OptionalLong.of(a);
     }
 
     /**
@@ -179,10 +179,9 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(IntLattice1d other) {
+    default boolean equals(LongLattice1d other) {
         return extent().equals(other.extent()) &&
             allMatch(i -> get(i) == other.get(i));
     }
 
 }
-

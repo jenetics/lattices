@@ -17,16 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
+import java.util.OptionalInt;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
 
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.array.IntArray;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**
@@ -36,7 +37,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps {
+public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.
@@ -46,7 +47,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default double get(int index) {
+    default int get(int index) {
         return array().get(structure().offset(index));
     }
 
@@ -59,7 +60,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int index, double value) {
+    default void set(int index, int value) {
         array().set(structure().offset(index), value);
     }
 
@@ -67,17 +68,17 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * Replaces all cell values of the receiver with the values of another
      * matrix. Both matrices must have the same number of rows and columns.
      *
-     * @param source the source lattice to copy from (maybe identical to the
+     * @param other the source matrix to copy from (maybe identical to the
      *        receiver).
-     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
+     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
      */
-    default void assign(DoubleLattice1d source) {
-        requireNonNull(source);
-        if (source == this) {
+    default void assign(IntLattice1d other) {
+        if (other == this) {
             return;
         }
-        checkSameExtent(extent(), source.extent());
-        forEach(i -> set(i, source.get(i)));
+        checkSameExtent(extent(), other.extent());
+
+        forEach(i -> set(i, other.get(i)));
     }
 
     /**
@@ -85,7 +86,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *
      * @param values the values to be filled into the cells
      */
-    default void assign(double[] values) {
+    default void assign(int[] values) {
         checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
@@ -95,7 +96,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(double value) {
+    default void assign(int value) {
         forEach(i -> set(i, value));
     }
 
@@ -107,9 +108,9 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(DoubleUnaryOperator f) {
+    default void assign(IntUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsDouble(get(i))));
+        forEach(i -> set(i, f.applyAsInt(get(i))));
     }
 
     /**
@@ -122,9 +123,9 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    default void assign(DoubleLattice1d a, DoubleBinaryOperator f) {
+    default void assign(IntLattice1d a, IntBinaryOperator f) {
         checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
+        forEach(i -> set(i, f.applyAsInt(get(i), a.get(i))));
     }
 
     /**
@@ -132,7 +133,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    default void swap(final DoubleLattice1d other) {
+    default void swap(final IntLattice1d other) {
         checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
@@ -154,21 +155,20 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalDouble
-    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
+    default OptionalInt reduce(IntBinaryOperator reducer, IntUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return OptionalDouble.empty();
+            return OptionalInt.empty();
         }
 
-        double a = f.applyAsDouble(get(size() - 1));
+        int a = f.applyAsInt(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
+            a = reducer.applyAsInt(a, f.applyAsInt(get(i)));
         }
 
-        return OptionalDouble.of(a);
+        return OptionalInt.of(a);
     }
 
     /**
@@ -179,9 +179,10 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(DoubleLattice1d other) {
+    default boolean equals(IntLattice1d other) {
         return extent().equals(other.extent()) &&
-            allMatch(i -> Double.compare(get(i), other.get(i)) == 0);
+            allMatch(i -> get(i) == other.get(i));
     }
 
 }
+

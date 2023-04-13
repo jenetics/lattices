@@ -17,19 +17,16 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.array.DoubleArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -38,12 +35,10 @@ import io.jenetics.lattices.array.ObjectArray;
  * @since 3.0
  * @version 3.0
  */
-public interface ObjectLattice3d<T>
-    extends Lattice3d<ObjectArray<T>>, Structure3dOps
-{
+public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps {
 
     /**
-     * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
+     * Returns the matrix cell value at coordinate {@code [row, col]}.
      *
      * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
@@ -52,12 +47,12 @@ public interface ObjectLattice3d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default T get(int slice, int row, int col) {
+    default double get(int slice, int row, int col) {
         return array().get(structure().offset(slice, row, col));
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [slice, row, col]} to the specified
+     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
      * {@code value}.
      *
      * @param slice the index of the slice-coordinate
@@ -67,7 +62,7 @@ public interface ObjectLattice3d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default void set(int slice, int row, int col, T value) {
+    default void set(int slice, int row, int col, double value) {
         array().set(structure().offset(slice, row, col), value);
     }
 
@@ -80,7 +75,7 @@ public interface ObjectLattice3d<T>
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    default void assign(ObjectLattice3d<? extends T> other) {
+    default void assign(DoubleLattice3d other) {
         if (other == this) {
             return;
         }
@@ -100,7 +95,7 @@ public interface ObjectLattice3d<T>
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    default void assign(T[][][] values) {
+    default void assign(double[][][] values) {
         if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -138,7 +133,7 @@ public interface ObjectLattice3d<T>
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(T value) {
+    default void assign(double value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -152,44 +147,13 @@ public interface ObjectLattice3d<T>
      * {@code y}
      * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    default void assign(ObjectLattice3d<T> y, BinaryOperator<T> f) {
+    default void assign(DoubleLattice3d y, DoubleBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) ->
-            set(s, r, c, f.apply(get(s, r, c), y.get(s, r, c)))
+            set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c)))
         );
-    }
-
-    /**
-     * Updates this grid with the values of {@code a} which are transformed by
-     * the given function {@code f}.
-     * <pre>{@code
-     * this[i, j, k] = f(a[i, j, k])
-     * }</pre>
-     * <pre>{@code
-     * final ObjectGrid3d<Integer> ints = ObjectGrid3d
-     *     .<Integer>dense()
-     *     .create(10, 15, 40);
-     *
-     * final ObjectGrid3d<String> strings = ObjectGrid3d
-     *     .<String>dense()
-     *     .create(10, 15, 40);
-     *
-     * ints.forEach((s, r, c) -> ints.set(s, r, c, s*r*c));
-     * strings.assign(ints, Object::toString);
-     * }</pre>
-     *
-     * @param a the grid used for the update
-     * @param f the mapping function
-     * @throws IllegalArgumentException if {@code extent() != other.extent()}
-     */
-    default  <A> void assign(
-        ObjectLattice3d<? extends A> a,
-        Function<? super A, ? extends T> f
-    ) {
-        checkSameExtent(extent(), a.extent());
-        forEach((s, r, c) -> set(s, r, c, f.apply(a.get(s, r, c))));
     }
 
     /**
@@ -198,9 +162,9 @@ public interface ObjectLattice3d<T>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(UnaryOperator<T> f) {
+    default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.apply(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c))));
     }
 
     /**
@@ -208,7 +172,7 @@ public interface ObjectLattice3d<T>
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(ObjectLattice3d<T> other) {
+    default void swap(DoubleLattice3d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -241,25 +205,26 @@ public interface ObjectLattice3d<T>
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default Optional<T> reduce(BinaryOperator<T> reducer, UnaryOperator<T> f) {
+    default OptionalDouble
+    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return Optional.empty();
+            return OptionalDouble.empty();
         }
 
-        T a = f.apply(get(slices() - 1, rows() - 1, cols() - 1));
+        double a = f.applyAsDouble(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.apply(a, f.apply(get(s, r, c)));
+                    a = reducer.applyAsDouble(a, f.applyAsDouble(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return Optional.ofNullable(a);
+        return OptionalDouble.of(a);
     }
 
     /**
@@ -270,9 +235,9 @@ public interface ObjectLattice3d<T>
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    default boolean equals(ObjectLattice3d<T> other) {
+    default boolean equals(DoubleLattice3d other) {
         return extent().equals(other.extent()) &&
-            allMatch((s, r, c) -> Objects.equals(get(s, r, c), other.get(s, r, c)));
+            allMatch((s, r, c) -> Double.compare(get(s, r, c), other.get(s, r, c)) == 0);
     }
 
 }

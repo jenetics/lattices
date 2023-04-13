@@ -17,24 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
- * A lattice is defined via an <em>array</em> and a 3-d structure.
+ * A lattice is defined via an <em>array</em> and a 1-d structure.
  *
  * @param <A> the array type
  */
-public interface Lattice3d<A extends Array<A>> {
+public interface Lattice1d<A extends Array<A>> {
 
     /**
      * Return the lattice structure.
      *
      * @return the lattice structure
      */
-    Structure3d structure();
+    Structure1d structure();
 
     /**
      * Return the array storing the lattice elements.

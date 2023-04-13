@@ -17,19 +17,16 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**
@@ -39,9 +36,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @since 3.0
  * @version 3.0
  */
-public interface ObjectLattice1d<T>
-    extends Lattice1d<ObjectArray<T>>, Structure1dOps
-{
+public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.
@@ -51,7 +46,7 @@ public interface ObjectLattice1d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default T get(int index) {
+    default double get(int index) {
         return array().get(structure().offset(index));
     }
 
@@ -64,7 +59,7 @@ public interface ObjectLattice1d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int index, T value) {
+    default void set(int index, double value) {
         array().set(structure().offset(index), value);
     }
 
@@ -76,7 +71,7 @@ public interface ObjectLattice1d<T>
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(ObjectLattice1d<? extends T> source) {
+    default void assign(DoubleLattice1d source) {
         requireNonNull(source);
         if (source == this) {
             return;
@@ -90,7 +85,7 @@ public interface ObjectLattice1d<T>
      *
      * @param values the values to be filled into the cells
      */
-    default void assign(T[] values) {
+    default void assign(double[] values) {
         checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
@@ -100,7 +95,7 @@ public interface ObjectLattice1d<T>
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(T value) {
+    default void assign(double value) {
         forEach(i -> set(i, value));
     }
 
@@ -112,9 +107,9 @@ public interface ObjectLattice1d<T>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(UnaryOperator<T> f) {
+    default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.apply(get(i))));
+        forEach(i -> set(i, f.applyAsDouble(get(i))));
     }
 
     /**
@@ -127,40 +122,9 @@ public interface ObjectLattice1d<T>
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    default void assign(ObjectLattice1d<T> a, BinaryOperator<T> f) {
+    default void assign(DoubleLattice1d a, DoubleBinaryOperator f) {
         checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.apply(get(i), a.get(i))));
-    }
-
-    /**
-     * Updates this grid with the values of {@code a} which are transformed by
-     * the given function {@code f}.
-     * <pre>{@code
-     * this[i] = f(a[i])
-     * }</pre>
-     * <pre>{@code
-     * final ObjectGrid1d<Integer> ints = ObjectGrid1d
-     *     .<Integer>dense()
-     *     .create(40);
-     *
-     * final ObjectGrid1d<String> strings = ObjectGrid1d
-     *     .<String>dense()
-     *     .create(40);
-     *
-     * ints.forEach((i) -> ints.set(i, i));
-     * strings.assign(ints, Object::toString);
-     * }</pre>
-     *
-     * @param a the grid used for the update
-     * @param f the mapping function
-     * @throws IllegalArgumentException if {@code extent() != other.extent()}
-     */
-    default  <A> void assign(
-        ObjectLattice1d<? extends A> a,
-        Function<? super A, ? extends T> f
-    ) {
-        checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.apply(a.get(i))));
+        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
     /**
@@ -168,7 +132,7 @@ public interface ObjectLattice1d<T>
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    default void swap(final ObjectLattice1d<T> other) {
+    default void swap(final DoubleLattice1d other) {
         checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
@@ -190,20 +154,21 @@ public interface ObjectLattice1d<T>
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default Optional<T> reduce(BinaryOperator<T> reducer, UnaryOperator<T> f) {
+    default OptionalDouble
+    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return Optional.empty();
+            return OptionalDouble.empty();
         }
 
-        T a = f.apply(get(size() - 1));
+        double a = f.applyAsDouble(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.apply(a, f.apply(get(i)));
+            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
         }
 
-        return Optional.ofNullable(a);
+        return OptionalDouble.of(a);
     }
 
     /**
@@ -214,9 +179,9 @@ public interface ObjectLattice1d<T>
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(ObjectLattice1d<?> other) {
+    default boolean equals(DoubleLattice1d other) {
         return extent().equals(other.extent()) &&
-            allMatch(i -> Objects.equals(get(i), other.get(i)));
+            allMatch(i -> Double.compare(get(i), other.get(i)) == 0);
     }
 
 }

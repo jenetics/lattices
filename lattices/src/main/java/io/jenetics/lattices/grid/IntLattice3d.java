@@ -17,17 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.OptionalLong;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongUnaryOperator;
+import java.util.OptionalInt;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
 
-import io.jenetics.lattices.array.LongArray;
+import io.jenetics.lattices.array.IntArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -36,7 +36,7 @@ import io.jenetics.lattices.array.LongArray;
  * @since 3.0
  * @version 3.0
  */
-public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
+public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
@@ -48,7 +48,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default long get(int slice, int row, int col) {
+    default int get(int slice, int row, int col) {
         return array().get(structure().offset(slice, row, col));
     }
 
@@ -63,7 +63,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default void set(int slice, int row, int col, long value) {
+    default void set(int slice, int row, int col, int value) {
         array().set(structure().offset(slice, row, col), value);
     }
 
@@ -76,7 +76,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    default void assign(LongLattice3d other) {
+    default void assign(IntLattice3d other) {
         if (other == this) {
             return;
         }
@@ -96,7 +96,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    default void assign(long[][][] values) {
+    default void assign(int[][][] values) {
         if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -134,7 +134,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(long value) {
+    default void assign(int value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -148,12 +148,12 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * {@code y}
      * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    default void assign(LongLattice3d y, LongBinaryOperator f) {
+    default void assign(IntLattice3d y, IntBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) ->
-            set(s, r, c, f.applyAsLong(get(s, r, c), y.get(s, r, c)))
+            set(s, r, c, f.applyAsInt(get(s, r, c), y.get(s, r, c)))
         );
     }
 
@@ -163,9 +163,9 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(LongUnaryOperator f) {
+    default void assign(IntUnaryOperator f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsLong(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c))));
     }
 
     /**
@@ -173,7 +173,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(LongLattice3d other) {
+    default void swap(IntLattice3d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -206,25 +206,25 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
+    default OptionalInt reduce(IntBinaryOperator reducer, IntUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalLong.empty();
+            return OptionalInt.empty();
         }
 
-        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
+        int a = f.applyAsInt(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
+                    a = reducer.applyAsInt(a, f.applyAsInt(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return OptionalLong.of(a);
+        return OptionalInt.of(a);
     }
 
     /**
@@ -235,7 +235,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    default boolean equals(LongLattice3d other) {
+    default boolean equals(IntLattice3d other) {
         return extent().equals(other.extent()) &&
             allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
     }

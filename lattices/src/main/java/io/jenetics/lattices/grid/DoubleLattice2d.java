@@ -17,19 +17,16 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.array.DoubleArray;
 
 /**
  * This interface <em>structures</em> the elements into a 2-dimensional lattice.
@@ -38,9 +35,7 @@ import io.jenetics.lattices.array.ObjectArray;
  * @since 3.0
  * @version 3.0
  */
-public interface ObjectLattice2d<T>
-    extends Lattice2d<ObjectArray<T>>, Structure2dOps
-{
+public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps {
 
     /**
      * Returns the grid cell value at coordinate {@code [row, col]}.
@@ -51,7 +46,7 @@ public interface ObjectLattice2d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default T get(int row, int col) {
+    default double get(int row, int col) {
         return array().get(structure().offset(row, col));
     }
 
@@ -65,7 +60,7 @@ public interface ObjectLattice2d<T>
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int row, int col, T value) {
+    default void set(int row, int col, double value) {
         array().set(structure().offset(row, col), value);
     }
 
@@ -77,7 +72,7 @@ public interface ObjectLattice2d<T>
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(ObjectLattice2d<? extends T> source) {
+    default void assign(DoubleLattice2d source) {
         requireNonNull(source);
         if (source == this) {
             return;
@@ -98,7 +93,7 @@ public interface ObjectLattice2d<T>
      * @param source the values to be filled into the cells.
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(T[][] source) {
+    default void assign(double[][] source) {
         if (source.length != rows()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of rows: " +
@@ -127,7 +122,7 @@ public interface ObjectLattice2d<T>
      *
      * @param source the value to be filled into the cells
      */
-    default void assign(T source) {
+    default void assign(double source) {
         forEach((r, c) -> set(r, c, source));
     }
 
@@ -141,42 +136,11 @@ public interface ObjectLattice2d<T>
      *          value of {@code y}
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
-    default void assign(ObjectLattice2d<T> y, BinaryOperator<T> f) {
+    default void assign(DoubleLattice2d y, DoubleBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
-        forEach((r, c) -> set(r, c, f.apply(get(r, c), y.get(r, c))));
-    }
-
-    /**
-     * Updates this grid with the values of {@code a} which are transformed by
-     * the given function {@code f}.
-     * <pre>{@code
-     * this[i, j] = f(a[i, j])
-     * }</pre>
-     * <pre>{@code
-     * final ObjectGrid2d<Integer> ints = ObjectGrid2d
-     *     .<Integer>dense()
-     *     .create(15, 40);
-     *
-     * final ObjectGrid2d<String> strings = ObjectGrid2d
-     *     .<String>dense()
-     *     .create(15, 40);
-     *
-     * ints.forEach((r, c) -> ints.set(r, c, r*c));
-     * strings.assign(ints, Object::toString);
-     * }</pre>
-     *
-     * @param a the grid used for the update
-     * @param f the mapping function
-     * @throws IllegalArgumentException if {@code extent() != other.extent()}
-     */
-    default  <A> void assign(
-        ObjectLattice2d<? extends A> a,
-        Function<? super A, ? extends T> f
-    ) {
-        checkSameExtent(extent(), a.extent());
-        forEach((r, c) -> set(r, c, f.apply(a.get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
 
     /**
@@ -185,9 +149,9 @@ public interface ObjectLattice2d<T>
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(UnaryOperator<T> f) {
+    default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach((r, c) -> set(r, c, f.apply(get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
     }
 
     /**
@@ -195,7 +159,7 @@ public interface ObjectLattice2d<T>
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(ObjectLattice2d<T> other) {
+    default void swap(DoubleLattice2d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((r, c) -> {
@@ -227,23 +191,24 @@ public interface ObjectLattice2d<T>
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default Optional<T> reduce(BinaryOperator<T> reducer, UnaryOperator<T> f) {
+    default OptionalDouble
+    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return Optional.empty();
+            return OptionalDouble.empty();
         }
 
-        T a = f.apply(get(rows() - 1, cols() - 1));
+        double a = f.applyAsDouble(get(rows() - 1, cols() - 1));
         int d = 1;
         for (int r = rows(); --r >= 0;) {
             for (int c = cols() - d; --c >= 0;) {
-                a = reducer.apply(a, f.apply(get(r, c)));
+                a = reducer.applyAsDouble(a, f.applyAsDouble(get(r, c)));
             }
             d = 0;
         }
-        return Optional.ofNullable(a);
+        return OptionalDouble.of(a);
     }
 
     /**
@@ -254,9 +219,9 @@ public interface ObjectLattice2d<T>
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(ObjectLattice2d<?> other) {
+    default boolean equals(DoubleLattice2d other) {
         return extent().equals(other.extent()) &&
-            allMatch((r, c) -> Objects.equals(get(r, c), other.get(r, c)));
+            allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
     }
 
 }

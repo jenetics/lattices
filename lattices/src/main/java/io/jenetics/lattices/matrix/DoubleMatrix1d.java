@@ -25,8 +25,8 @@ import java.util.stream.IntStream;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.array.DoubleArray;
 import io.jenetics.lattices.grid.Grid1d;
-import io.jenetics.lattices.lattice.DoubleLattice1d;
-import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.grid.DoubleLattice1d;
+import io.jenetics.lattices.grid.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 

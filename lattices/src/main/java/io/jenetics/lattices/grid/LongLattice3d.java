@@ -17,16 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
+import java.util.OptionalLong;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongUnaryOperator;
 
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.array.LongArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -35,10 +36,10 @@ import io.jenetics.lattices.array.DoubleArray;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps {
+public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
 
     /**
-     * Returns the matrix cell value at coordinate {@code [row, col]}.
+     * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
      *
      * @param slice the index of the slice-coordinate
      * @param row the index of the row-coordinate
@@ -47,12 +48,12 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default double get(int slice, int row, int col) {
+    default long get(int slice, int row, int col) {
         return array().get(structure().offset(slice, row, col));
     }
 
     /**
-     * Sets the matrix cell at coordinate {@code [row, col]} to the specified
+     * Sets the matrix cell at coordinate {@code [slice, row, col]} to the specified
      * {@code value}.
      *
      * @param slice the index of the slice-coordinate
@@ -62,7 +63,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default void set(int slice, int row, int col, double value) {
+    default void set(int slice, int row, int col, long value) {
         array().set(structure().offset(slice, row, col), value);
     }
 
@@ -75,7 +76,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    default void assign(DoubleLattice3d other) {
+    default void assign(LongLattice3d other) {
         if (other == this) {
             return;
         }
@@ -95,7 +96,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    default void assign(double[][][] values) {
+    default void assign(long[][][] values) {
         if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -133,7 +134,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(double value) {
+    default void assign(long value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -147,12 +148,12 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * {@code y}
      * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    default void assign(DoubleLattice3d y, DoubleBinaryOperator f) {
+    default void assign(LongLattice3d y, LongBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) ->
-            set(s, r, c, f.applyAsDouble(get(s, r, c), y.get(s, r, c)))
+            set(s, r, c, f.applyAsLong(get(s, r, c), y.get(s, r, c)))
         );
     }
 
@@ -162,9 +163,9 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(DoubleUnaryOperator f) {
+    default void assign(LongUnaryOperator f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsDouble(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsLong(get(s, r, c))));
     }
 
     /**
@@ -172,7 +173,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(DoubleLattice3d other) {
+    default void swap(LongLattice3d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -205,26 +206,25 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalDouble
-    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
+    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalDouble.empty();
+            return OptionalLong.empty();
         }
 
-        double a = f.applyAsDouble(get(slices() - 1, rows() - 1, cols() - 1));
+        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.applyAsDouble(a, f.applyAsDouble(get(s, r, c)));
+                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return OptionalDouble.of(a);
+        return OptionalLong.of(a);
     }
 
     /**
@@ -235,9 +235,9 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    default boolean equals(DoubleLattice3d other) {
+    default boolean equals(LongLattice3d other) {
         return extent().equals(other.extent()) &&
-            allMatch((s, r, c) -> Double.compare(get(s, r, c), other.get(s, r, c)) == 0);
+            allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
     }
 
 }
