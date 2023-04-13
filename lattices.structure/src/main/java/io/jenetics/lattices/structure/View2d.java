@@ -50,8 +50,10 @@ public interface View2d {
             new Stride2d(
                 structure.layout().stride().col(),
                 structure.layout().stride().row()
-            )
-        )
+            ),
+            structure.layout().channels()
+        ),
+        structure.channel()
     );
 
     /**
@@ -104,8 +106,10 @@ public interface View2d {
                     structure.layout().start().col() +
                         structure.layout().stride().col()*range.start().col()
                 ),
-                structure.layout().stride()
-            )
+                structure.layout().stride(),
+                structure.layout().channels()
+            ),
+            structure.channel()
         );
     }
 
@@ -129,6 +133,38 @@ public interface View2d {
                 )
             )
             .apply(structure);
+    }
+
+    /**
+     * Return a transformation which creates a view onto the given
+     * {@code channel}.
+     *
+     * @param channel the channel number of the returned view
+     * @return a transformation which creates a view onto the given
+     *        {@code channel}
+     */
+    static View2d of(Channel channel) {
+        requireNonNull(channel);
+
+        return structure -> {
+            if (channel.value() >= structure.layout().channels().value()) {
+                throw new IllegalArgumentException(
+                    "Channel out of bounds [0, %d): %d".formatted(
+                        structure.layout().channels().value(),
+                        channel.value()
+                    )
+                );
+            }
+            if (structure.channel().equals(channel)) {
+                return structure;
+            }
+
+            return new Structure2d(
+                structure.extent(),
+                structure.layout(),
+                channel
+            );
+        };
     }
 
     /**
@@ -168,8 +204,10 @@ public interface View2d {
                     new Stride2d(
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
-                    )
-                )
+                    ),
+                    structure.layout().channels()
+                ),
+                structure.channel()
             );
         };
     }

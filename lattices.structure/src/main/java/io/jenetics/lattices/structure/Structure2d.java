@@ -34,12 +34,13 @@ import static java.util.Objects.requireNonNull;
  *
  * @param extent the extent of the structure
  * @param layout the element order
+ * @param channel the channel number of the structure
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout)
+public record Structure2d(Extent2d extent, Layout2d layout, Channel channel)
     implements OffsetMapper2d
 {
 
@@ -50,17 +51,17 @@ public record Structure2d(Extent2d extent, Layout2d layout)
 
     @Override
     public int offset(int row, int col) {
-        return layout.offset(row, col);
+        return layout.offset(row, col) + channel.value();
     }
 
     @Override
     public int offset(Index2d index) {
-        return layout.offset(index);
+        return layout.offset(index) + channel.value();
     }
 
     @Override
     public Index2d index(int offset) {
-        return layout.index(offset);
+        return layout.index(offset - channel.value());
     }
 
     /**
@@ -72,9 +73,26 @@ public record Structure2d(Extent2d extent, Layout2d layout)
      * @return a new structure object with the given extent
      */
     public static Structure2d of(Extent2d extent) {
+        return of(extent, Channels.ONE);
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure2d of(Extent2d extent, Channels channels) {
         return new Structure2d(
             extent,
-            new Layout2d(Index2d.ZERO, new Stride2d(extent.cols(), 1))
+            new Layout2d(
+                Index2d.ZERO,
+                new Stride2d(extent.cols()*channels.value(), channels.value()),
+                channels
+            ),
+            Channel.ZERO
         );
     }
 
