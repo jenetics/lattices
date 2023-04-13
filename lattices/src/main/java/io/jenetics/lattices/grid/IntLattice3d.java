@@ -27,7 +27,7 @@ import java.util.OptionalInt;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntUnaryOperator;
 
-import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.grid.array.IntArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.

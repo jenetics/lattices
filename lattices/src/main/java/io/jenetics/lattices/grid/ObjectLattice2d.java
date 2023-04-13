@@ -29,7 +29,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.grid.array.ObjectArray;
 
 /**
  * This interface <em>structures</em> the elements into a 2-dimensional lattice.

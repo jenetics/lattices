@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.function.Int2Consumer;
-import io.jenetics.lattices.function.Int2Predicate;
+import io.jenetics.lattices.grid.function.Int2Consumer;
+import io.jenetics.lattices.grid.function.Int2Predicate;
 
 /**
  * Defines the looping strategy of a 2-d grid.

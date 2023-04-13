@@ -17,16 +17,16 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.grid.array;
 
 /**
- * Definition of an array with {@code Object} values.
+ * Definition of an array with {@code double} values.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface ObjectArray<T> extends Array<ObjectArray<T>> {
+public interface DoubleArray extends Array<DoubleArray> {
 
     /**
      * Return the array value at the given {@code index}.
@@ -34,7 +34,7 @@ public interface ObjectArray<T> extends Array<ObjectArray<T>> {
      * @param index the array index of the returned element
      * @return the element at the given {@code index}
      */
-    T get(int index);
+    double get(int index);
 
     /**
      * Set the given {@code value} at the given {@code index}.
@@ -42,6 +42,6 @@ public interface ObjectArray<T> extends Array<ObjectArray<T>> {
      * @param index the array index of the new value
      * @param value the value to be set at the given index
      */
-    void set(int index, T value);
+    void set(int index, double value);
 
 }

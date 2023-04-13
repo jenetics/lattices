@@ -37,7 +37,7 @@ import io.jenetics.lattices.testfixtures.MatrixRandom;
  */
 public class EigenvalueTest {
 
-    @Test(invocationCount = 20, successPercentage = 80)
+    @Test(invocationCount = 30, successPercentage = 80)
     public void decompose() {
         final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(3, 3));
         assertThat(Matrices.isSymmetric(A)).isFalse();
@@ -57,7 +57,7 @@ public class EigenvalueTest {
         );
     }
 
-    @Test(invocationCount = 20, successPercentage = 80)
+    @Test(invocationCount = 30, successPercentage = 80)
     public void decomposeSymmetric() {
         final var A = MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 5));
         A.forEach((i, j) -> A.set(i, j, A.get(j, i)));

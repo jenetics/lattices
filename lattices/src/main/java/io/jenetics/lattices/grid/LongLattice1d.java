@@ -27,7 +27,7 @@ import java.util.OptionalLong;
 import java.util.function.LongBinaryOperator;
 import java.util.function.LongUnaryOperator;
 
-import io.jenetics.lattices.array.LongArray;
+import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**

@@ -17,13 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.grid.array;
 
 /**
- * This package contains some additional functional interfaces, needed by the
- * implemented algorithms.
+ * Definition of an array with {@code long} values.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-package io.jenetics.lattices.function;
+public interface LongArray extends Array<LongArray> {
+
+    /**
+     * Return the array value at the given {@code index}.
+     *
+     * @param index the array index of the returned element
+     * @return the element at the given {@code index}
+     */
+    long get(int index);
+
+    /**
+     * Set the given {@code value} at the given {@code index}.
+     *
+     * @param index the array index of the new value
+     * @param value the value to be set at the given index
+     */
+    void set(int index, long value);
+
+}

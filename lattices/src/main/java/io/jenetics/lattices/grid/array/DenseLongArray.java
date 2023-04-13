@@ -1,4 +1,4 @@
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.grid.array;
 
 import static java.util.Objects.checkFromIndexSize;
 import static java.util.Objects.requireNonNull;

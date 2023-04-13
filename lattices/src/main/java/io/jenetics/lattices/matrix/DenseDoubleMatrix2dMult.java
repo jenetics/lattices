@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

@@ -17,20 +17,19 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.grid.array;
 
 import static java.util.Objects.checkFromIndexSize;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code int} values.
  *
- * @param elements the underlying {@code double} element values
+ * @param elements the underlying {@code int} element values
  * @param from the index of the first array element (inclusively)
  * @param length the length of the sub-array
  *
@@ -38,52 +37,52 @@ import java.util.stream.IntStream;
  * @since 3.0
  * @version 3.0
  */
-public record DenseDoubleArray(double[] elements, int from, int length)
-    implements DoubleArray
+public record DenseIntArray(int[] elements, int from, int length)
+    implements IntArray
 {
 
     /**
-     * Create a new <em>dense</em> double array with the given values
+     * Create a new <em>dense</em> int array with the given values
      *
-     * @param elements the underlying {@code double} element values
+     * @param elements the underlying {@code int} element values
      * @param from the index of the first array element (inclusively)
      * @param length the length of the sub-array
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
-    public DenseDoubleArray {
+    public DenseIntArray {
         requireNonNull(elements);
         checkFromIndexSize(from, length, elements.length);
     }
 
     /**
-     * Create a new <em>dense</em> double array with the given values
+     * Create a new <em>dense</em> int array with the given values
      *
-     * @param elements the underlying {@code double} element values
+     * @param elements the underlying {@code int} element values
      * @param from the index of the first array element (inclusively)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseDoubleArray(double[] elements, int from) {
+    public DenseIntArray(int[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
     /**
-     * Create a new <em>dense</em> array of {@code double} values.
+     * Create a new <em>dense</em> array of {@code int} values.
      *
-     * @param elements the underlying {@code double} element values
+     * @param elements the underlying {@code int} element values
      */
-    public DenseDoubleArray(double[] elements) {
+    public DenseIntArray(int[] elements) {
         this(elements, 0, elements.length);
     }
 
     @Override
-    public double get(int index) {
+    public int get(int index) {
         return elements[index + from];
     }
 
     @Override
-    public void set(int index, double value) {
+    public void set(int index, int value) {
         elements[index + from] = value;
     }
 
@@ -93,50 +92,50 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DenseDoubleArray copy() {
+    public DenseIntArray copy() {
         final var elems = Arrays.copyOfRange(elements, from, from + length);
-        return new DenseDoubleArray(elems);
+        return new DenseIntArray(elems);
     }
 
     @Override
-    public DoubleArray copy(int start, int length) {
+    public DenseIntArray copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
         );
-        return new DenseDoubleArray(array);
+        return new DenseIntArray(array);
     }
 
     @Override
-    public DoubleArray like(final int length) {
+    public DenseIntArray like(int length) {
         return ofSize(length);
     }
 
     /**
-     * Return a double stream from the given array.
+     * Return an int stream from the given array.
      *
-     * @return a double stream from the given array
+     * @return an int stream from the given array
      */
-    public DoubleStream stream() {
+    public IntStream stream() {
         return IntStream.range(0, length())
-            .mapToDouble(this::get);
+            .map(this::get);
     }
 
     @Override
     public String toString() {
         return stream()
-            .mapToObj(Double::toString)
+            .mapToObj(Integer::toString)
             .collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**
-     * Create a new dense {@code double} array with the given {@code length}.
+     * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
-     * @return a new dense {@code double} array with the given {@code length}
+     * @return a new dense {@code int} array with the given {@code length}
      */
-    public static DenseDoubleArray ofSize(int length) {
-        return new DenseDoubleArray(new double[length]);
+    public static DenseIntArray ofSize(int length) {
+        return new DenseIntArray(new int[length]);
     }
 
 }

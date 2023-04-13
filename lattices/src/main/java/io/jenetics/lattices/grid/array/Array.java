@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.grid.array;
 
 import io.jenetics.lattices.structure.Self;
 

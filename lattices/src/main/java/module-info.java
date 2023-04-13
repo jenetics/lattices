@@ -25,8 +25,8 @@
 module io.jenetics.lattices {
     requires transitive io.jenetics.lattices.structure;
 
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
+    exports io.jenetics.lattices.grid.array;
+    exports io.jenetics.lattices.grid.function;
     exports io.jenetics.lattices.grid;
     exports io.jenetics.lattices.matrix;
     exports io.jenetics.lattices.matrix.linalg;

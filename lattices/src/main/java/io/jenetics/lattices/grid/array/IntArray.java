@@ -17,24 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.function;
+package io.jenetics.lattices.grid.array;
 
 /**
- * Represents an operation that accepts an (int, int)-valued argument and
- * returns no result.
+ * Definition of an array with {@code int} values.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-@FunctionalInterface
-public interface Int2Consumer {
+public interface IntArray extends Array<IntArray> {
 
     /**
-     * Performs this operation on the given arguments.
+     * Return the array value at the given {@code index}.
      *
-     * @param i first value
-     * @param j second value
+     * @param index the array index of the returned element
+     * @return the element at the given {@code index}
      */
-    void accept(int i, int j);
+    int get(int index);
+
+    /**
+     * Set the given {@code value} at the given {@code index}.
+     *
+     * @param index the array index of the new value
+     * @param value the value to be set at the given index
+     */
+    void set(int index, int value);
+
 }

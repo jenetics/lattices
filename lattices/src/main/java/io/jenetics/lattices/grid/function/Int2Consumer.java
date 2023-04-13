@@ -17,26 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.function;
+package io.jenetics.lattices.grid.function;
 
 /**
- * Represents a predicate (boolean-valued function) of an (int, int)-valued
- * argument.
+ * Represents an operation that accepts an (int, int)-valued argument and
+ * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 @FunctionalInterface
-public interface Int2Predicate {
+public interface Int2Consumer {
 
     /**
-     * Tests whether the two arguments are treated equals.
+     * Performs this operation on the given arguments.
      *
-     * @param i the first value
-     * @param j the second value
-     * @return {@code true} if the values are treated as equal, {@code false}
-     *         otherwise
+     * @param i first value
+     * @param j second value
      */
-    boolean test(int i, int j);
+    void accept(int i, int j);
 }

@@ -17,31 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.grid.function;
 
 /**
- * Definition of an array with {@code int} values.
+ * Represents a predicate (boolean-valued function) of an (int, int, int)-valued
+ * argument.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface IntArray extends Array<IntArray> {
+@FunctionalInterface
+public interface Int3Predicate {
 
     /**
-     * Return the array value at the given {@code index}.
+     * Tests whether the two arguments are treated equals.
      *
-     * @param index the array index of the returned element
-     * @return the element at the given {@code index}
+     * @param i the first value
+     * @param j the second value
+     * @param k the third value
+     * @return {@code true} if the values are treated as equal, {@code false}
+     *         otherwise
      */
-    int get(int index);
-
-    /**
-     * Set the given {@code value} at the given {@code index}.
-     *
-     * @param index the array index of the new value
-     * @param value the value to be set at the given index
-     */
-    void set(int index, int value);
+    boolean test(int i, int j, int k);
 
 }

@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseObjectArray;
-import io.jenetics.lattices.array.ObjectArray;
+import io.jenetics.lattices.grid.array.DenseObjectArray;
+import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**

@@ -22,8 +22,8 @@ package io.jenetics.lattices.matrix;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DoubleArray;
 import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.grid.DoubleLattice1d;
 import io.jenetics.lattices.grid.Lattice1d;

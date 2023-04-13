@@ -26,7 +26,7 @@ import java.util.OptionalDouble;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.grid.array.DoubleArray;
 
 /**
  * This interface <em>structures</em> the elements into a 2-dimensional lattice.
