@@ -17,44 +17,44 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
+import io.jenetics.lattices.grid.function.Int3Consumer;
+import io.jenetics.lattices.grid.function.Int3Predicate;
 
 /**
- * Defines the looping strategy of a 1-d grid.
+ * Defines the looping strategy of a 3-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loopable1d extends Loop1d {
+public interface Loopable3d extends Loop3d {
 
     /**
-     * Return the default looping strategy.
+     * Return the looping strategy.
      *
-     * @return the default looping strategy
+     * @return the looping strategy
      */
-    Loop1d loop();
+    Loop3d loop();
 
     @Override
-    default void forEach(IntConsumer action) {
+    default void forEach(Int3Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(IntPredicate predicate) {
+    default boolean anyMatch(Int3Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(IntPredicate predicate) {
+    default boolean allMatch(Int3Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(IntPredicate predicate) {
+    default boolean nonMatch(Int3Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 

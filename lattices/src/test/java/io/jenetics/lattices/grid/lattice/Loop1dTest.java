@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,6 +27,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.grid.lattice.Loop1d;
+import io.jenetics.lattices.grid.lattice.Loop1dBackward;
+import io.jenetics.lattices.grid.lattice.Loop1dForward;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;

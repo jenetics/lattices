@@ -1,4 +1,4 @@
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 

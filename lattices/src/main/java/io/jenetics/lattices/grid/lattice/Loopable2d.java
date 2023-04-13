@@ -17,44 +17,44 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.grid.function.Int3Consumer;
-import io.jenetics.lattices.grid.function.Int3Predicate;
+import io.jenetics.lattices.grid.function.Int2Consumer;
+import io.jenetics.lattices.grid.function.Int2Predicate;
 
 /**
- * Defines the looping strategy of a 3-d grid.
+ * Defines the looping strategy of a 2-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loopable3d extends Loop3d {
+public interface Loopable2d extends Loop2d {
 
     /**
      * Return the looping strategy.
      *
      * @return the looping strategy
      */
-    Loop3d loop();
+    Loop2d loop();
 
     @Override
-    default void forEach(Int3Consumer action) {
+    default void forEach(Int2Consumer action) {
         loop().forEach(action);
     }
 
     @Override
-    default boolean anyMatch(Int3Predicate predicate) {
+    default boolean anyMatch(Int2Predicate predicate) {
         return loop().anyMatch(predicate);
     }
 
     @Override
-    default boolean allMatch(Int3Predicate predicate) {
+    default boolean allMatch(Int2Predicate predicate) {
         return loop().allMatch(predicate);
     }
 
     @Override
-    default boolean nonMatch(Int3Predicate predicate) {
+    default boolean nonMatch(Int2Predicate predicate) {
         return loop().nonMatch(predicate);
     }
 

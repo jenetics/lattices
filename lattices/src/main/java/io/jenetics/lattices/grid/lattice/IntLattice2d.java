@@ -27,7 +27,6 @@ import java.util.OptionalInt;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntUnaryOperator;
 
-import io.jenetics.lattices.grid.Structure2dOps;
 import io.jenetics.lattices.grid.array.IntArray;
 
 /**

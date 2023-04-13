@@ -17,29 +17,45 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Structured1d;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 /**
- * This interface implements operations for 1-d structures.
+ * Defines the looping strategy of a 1-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Structure1dOps extends Structured1d, Loopable1d {
+public interface Loopable1d extends Loop1d {
 
     /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
+     * Return the default looping strategy.
      *
-     * @return the looping strategy of this structural
+     * @return the default looping strategy
      */
+    Loop1d loop();
+
     @Override
-    default Loop1d loop() {
-        return Loop1d.of(new Range1d(extent()));
+    default void forEach(IntConsumer action) {
+        loop().forEach(action);
+    }
+
+    @Override
+    default boolean anyMatch(IntPredicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean allMatch(IntPredicate predicate) {
+        return loop().allMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(IntPredicate predicate) {
+        return loop().nonMatch(predicate);
     }
 
 }

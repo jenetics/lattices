@@ -17,45 +17,29 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.grid.function.Int2Consumer;
-import io.jenetics.lattices.grid.function.Int2Predicate;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Structured1d;
 
 /**
- * Defines the looping strategy of a 2-d grid.
+ * This interface implements operations for 1-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loopable2d extends Loop2d {
+public interface Structure1dOps extends Structured1d, Loopable1d {
 
     /**
-     * Return the looping strategy.
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
      *
-     * @return the looping strategy
+     * @return the looping strategy of this structural
      */
-    Loop2d loop();
-
     @Override
-    default void forEach(Int2Consumer action) {
-        loop().forEach(action);
-    }
-
-    @Override
-    default boolean anyMatch(Int2Predicate predicate) {
-        return loop().anyMatch(predicate);
-    }
-
-    @Override
-    default boolean allMatch(Int2Predicate predicate) {
-        return loop().allMatch(predicate);
-    }
-
-    @Override
-    default boolean nonMatch(Int2Predicate predicate) {
-        return loop().nonMatch(predicate);
+    default Loop1d loop() {
+        return Loop1d.of(new Range1d(extent()));
     }
 
 }

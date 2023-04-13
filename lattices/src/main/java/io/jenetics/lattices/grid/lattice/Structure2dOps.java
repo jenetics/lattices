@@ -17,19 +17,19 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.structure.Range3d;
-import io.jenetics.lattices.structure.Structured3d;
+import io.jenetics.lattices.structure.Range2d;
+import io.jenetics.lattices.structure.Structured2d;
 
 /**
- * This interface implements operations for 3-d structures.
+ * This interface implements operations for 2-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Structure3dOps extends Structured3d, Loopable3d {
+public interface Structure2dOps extends Structured2d, Loopable2d {
 
     /**
      * Return the default looping strategy of this structural, which can be
@@ -38,8 +38,8 @@ public interface Structure3dOps extends Structured3d, Loopable3d {
      * @return the looping strategy of this structural
      */
     @Override
-    default Loop3d loop() {
-        return Loop3d.of(new Range3d(extent()));
+    default Loop2d loop() {
+        return Loop2d.of(new Range2d(extent()));
     }
 
 }

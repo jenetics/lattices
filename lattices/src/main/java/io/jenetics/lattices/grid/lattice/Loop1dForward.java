@@ -1,4 +1,4 @@
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 
@@ -9,27 +9,27 @@ import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Range1d;
 
 /**
- * Implements a backward loop iteration.
+ * Implements a forward loop iteration.
  *
  * @param range the range which defines the boundaries of the loop
  */
-record Loop1dBackward(Range1d range) implements Loop1d {
+record Loop1dForward(Range1d range) implements Loop1d {
 
     /**
-     * Implements a backward loop iteration.
+     * Implements a forward loop iteration.
      *
      * @param extent the extent which defines the boundaries of the loop
      */
-    Loop1dBackward(Extent1d extent) {
+    Loop1dForward(Extent1d extent) {
         this(new Range1d(extent));
     }
 
     @Override
-    public void forEach(IntConsumer action) {
+    public void forEach(final IntConsumer action) {
         requireNonNull(action);
 
-        for (int i = range.start().value() + range.extent().value(),
-             s = range.start().value(); --i >= s;)
+        for (int i = range.start().value(),
+             n = range.start().value() + range.extent().value(); i < n; ++i)
         {
             action.accept(i);
         }
@@ -39,8 +39,8 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
-             s = range.start().value(); --i >= s;)
+        for (int i = range.start().value(),
+             n = range.start().value() + range.extent().value(); i < n; ++i)
         {
             if (predicate.test(i)) {
                 return true;
@@ -53,8 +53,8 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
-             s = range.start().value(); --i >= s;)
+        for (int i = range.start().value(),
+             n = range.start().value() + range.extent().value(); i < n; ++i)
         {
             if (!predicate.test(i)) {
                 return false;
@@ -67,8 +67,8 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean nonMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
-             s = range.start().value(); --i >= s;)
+        for (int i = range.start().value(),
+             n = range.start().value() + range.extent().value(); i < n; ++i)
         {
             if (predicate.test(i)) {
                 return false;

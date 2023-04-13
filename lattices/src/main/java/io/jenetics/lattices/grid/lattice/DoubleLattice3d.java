@@ -26,7 +26,6 @@ import java.util.OptionalDouble;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.grid.Structure3dOps;
 import io.jenetics.lattices.grid.array.DoubleArray;
 
 /**

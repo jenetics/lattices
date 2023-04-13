@@ -29,7 +29,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.grid.Structure3dOps;
 import io.jenetics.lattices.grid.array.ObjectArray;
 
 /**
