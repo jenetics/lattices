@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.Loop3d;
-import io.jenetics.lattices.grid.Loopable3d;
 import io.jenetics.lattices.structure.Range3d;
 import io.jenetics.lattices.structure.Structured3d;
 
