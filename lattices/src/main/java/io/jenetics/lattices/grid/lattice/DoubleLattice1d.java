@@ -17,17 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.OptionalLong;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongUnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.grid.array.LongArray;
+import io.jenetics.lattices.grid.Structure1dOps;
+import io.jenetics.lattices.grid.array.DoubleArray;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @since 3.0
  * @version 3.0
  */
-public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
+public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code index}.
@@ -47,7 +47,7 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default long get(int index) {
+    default double get(int index) {
         return array().get(structure().offset(index));
     }
 
@@ -60,7 +60,7 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int index, long value) {
+    default void set(int index, double value) {
         array().set(structure().offset(index), value);
     }
 
@@ -68,17 +68,17 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * Replaces all cell values of the receiver with the values of another
      * matrix. Both matrices must have the same number of rows and columns.
      *
-     * @param other the source matrix to copy from (maybe identical to the
+     * @param source the source lattice to copy from (maybe identical to the
      *        receiver).
-     * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
+     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(LongLattice1d other) {
-        if (other == this) {
+    default void assign(DoubleLattice1d source) {
+        requireNonNull(source);
+        if (source == this) {
             return;
         }
-        checkSameExtent(extent(), other.extent());
-
-        forEach(i -> set(i, other.get(i)));
+        checkSameExtent(extent(), source.extent());
+        forEach(i -> set(i, source.get(i)));
     }
 
     /**
@@ -86,7 +86,7 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      *
      * @param values the values to be filled into the cells
      */
-    default void assign(long[] values) {
+    default void assign(double[] values) {
         checkSameExtent(extent(), new Extent1d(values.length));
         forEach(i -> set(i, values[i]));
     }
@@ -96,7 +96,7 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(long value) {
+    default void assign(double value) {
         forEach(i -> set(i, value));
     }
 
@@ -108,9 +108,9 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(LongUnaryOperator f) {
+    default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach(i -> set(i, f.applyAsLong(get(i))));
+        forEach(i -> set(i, f.applyAsDouble(get(i))));
     }
 
     /**
@@ -123,9 +123,9 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * @param a the grid used for the update
      * @param f the combiner function
      */
-    default void assign(LongLattice1d a, LongBinaryOperator f) {
+    default void assign(DoubleLattice1d a, DoubleBinaryOperator f) {
         checkSameExtent(extent(), a.extent());
-        forEach(i -> set(i, f.applyAsLong(get(i), a.get(i))));
+        forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
     }
 
     /**
@@ -133,7 +133,7 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      *
      * @throws IllegalArgumentException if {@code size() != other.size()}.
      */
-    default void swap(final LongLattice1d other) {
+    default void swap(final DoubleLattice1d other) {
         checkSameExtent(extent(), other.extent());
         forEach(i -> {
             final var tmp = get(i);
@@ -155,20 +155,21 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
+    default OptionalDouble
+    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (size() == 0) {
-            return OptionalLong.empty();
+            return OptionalDouble.empty();
         }
 
-        long a = f.applyAsLong(get(size() - 1));
+        double a = f.applyAsDouble(get(size() - 1));
         for (int i = size() - 1; --i >= 0;) {
-            a = reducer.applyAsLong(a, f.applyAsLong(get(i)));
+            a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
         }
 
-        return OptionalLong.of(a);
+        return OptionalDouble.of(a);
     }
 
     /**
@@ -179,9 +180,9 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(LongLattice1d other) {
+    default boolean equals(DoubleLattice1d other) {
         return extent().equals(other.extent()) &&
-            allMatch(i -> get(i) == other.get(i));
+            allMatch(i -> Double.compare(get(i), other.get(i)) == 0);
     }
 
 }

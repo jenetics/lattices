@@ -17,17 +17,20 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalLong;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongUnaryOperator;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.grid.array.LongArray;
+import io.jenetics.lattices.grid.Structure3dOps;
+import io.jenetics.lattices.grid.array.ObjectArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -36,7 +39,9 @@ import io.jenetics.lattices.grid.array.LongArray;
  * @since 3.0
  * @version 3.0
  */
-public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
+public interface ObjectLattice3d<T>
+    extends Lattice3d<ObjectArray<T>>, Structure3dOps
+{
 
     /**
      * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
@@ -48,7 +53,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default long get(int slice, int row, int col) {
+    default T get(int slice, int row, int col) {
         return array().get(structure().offset(slice, row, col));
     }
 
@@ -63,7 +68,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default void set(int slice, int row, int col, long value) {
+    default void set(int slice, int row, int col, T value) {
         array().set(structure().offset(slice, row, col), value);
     }
 
@@ -76,7 +81,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    default void assign(LongLattice3d other) {
+    default void assign(ObjectLattice3d<? extends T> other) {
         if (other == this) {
             return;
         }
@@ -96,7 +101,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    default void assign(long[][][] values) {
+    default void assign(T[][][] values) {
         if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -134,7 +139,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(long value) {
+    default void assign(T value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -148,13 +153,44 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * {@code y}
      * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    default void assign(LongLattice3d y, LongBinaryOperator f) {
+    default void assign(ObjectLattice3d<T> y, BinaryOperator<T> f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) ->
-            set(s, r, c, f.applyAsLong(get(s, r, c), y.get(s, r, c)))
+            set(s, r, c, f.apply(get(s, r, c), y.get(s, r, c)))
         );
+    }
+
+    /**
+     * Updates this grid with the values of {@code a} which are transformed by
+     * the given function {@code f}.
+     * <pre>{@code
+     * this[i, j, k] = f(a[i, j, k])
+     * }</pre>
+     * <pre>{@code
+     * final ObjectGrid3d<Integer> ints = ObjectGrid3d
+     *     .<Integer>dense()
+     *     .create(10, 15, 40);
+     *
+     * final ObjectGrid3d<String> strings = ObjectGrid3d
+     *     .<String>dense()
+     *     .create(10, 15, 40);
+     *
+     * ints.forEach((s, r, c) -> ints.set(s, r, c, s*r*c));
+     * strings.assign(ints, Object::toString);
+     * }</pre>
+     *
+     * @param a the grid used for the update
+     * @param f the mapping function
+     * @throws IllegalArgumentException if {@code extent() != other.extent()}
+     */
+    default  <A> void assign(
+        ObjectLattice3d<? extends A> a,
+        Function<? super A, ? extends T> f
+    ) {
+        checkSameExtent(extent(), a.extent());
+        forEach((s, r, c) -> set(s, r, c, f.apply(a.get(s, r, c))));
     }
 
     /**
@@ -163,9 +199,9 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(LongUnaryOperator f) {
+    default void assign(UnaryOperator<T> f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsLong(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.apply(get(s, r, c))));
     }
 
     /**
@@ -173,7 +209,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(LongLattice3d other) {
+    default void swap(ObjectLattice3d<T> other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -206,25 +242,25 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
+    default Optional<T> reduce(BinaryOperator<T> reducer, UnaryOperator<T> f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalLong.empty();
+            return Optional.empty();
         }
 
-        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
+        T a = f.apply(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
+                    a = reducer.apply(a, f.apply(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return OptionalLong.of(a);
+        return Optional.ofNullable(a);
     }
 
     /**
@@ -235,9 +271,9 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    default boolean equals(LongLattice3d other) {
+    default boolean equals(ObjectLattice3d<T> other) {
         return extent().equals(other.extent()) &&
-            allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
+            allMatch((s, r, c) -> Objects.equals(get(s, r, c), other.get(s, r, c)));
     }
 
 }

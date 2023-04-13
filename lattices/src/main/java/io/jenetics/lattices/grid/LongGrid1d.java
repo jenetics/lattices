@@ -21,6 +21,8 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.grid.array.DenseLongArray;
 import io.jenetics.lattices.grid.array.LongArray;
+import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.grid.lattice.LongLattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 

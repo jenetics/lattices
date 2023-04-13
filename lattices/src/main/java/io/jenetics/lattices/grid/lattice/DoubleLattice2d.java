@@ -17,17 +17,17 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntUnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.grid.array.IntArray;
+import io.jenetics.lattices.grid.Structure2dOps;
+import io.jenetics.lattices.grid.array.DoubleArray;
 
 /**
  * This interface <em>structures</em> the elements into a 2-dimensional lattice.
@@ -36,7 +36,7 @@ import io.jenetics.lattices.grid.array.IntArray;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
+public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps {
 
     /**
      * Returns the grid cell value at coordinate {@code [row, col]}.
@@ -47,7 +47,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default int get(int row, int col) {
+    default double get(int row, int col) {
         return array().get(structure().offset(row, col));
     }
 
@@ -61,7 +61,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      *         bounds
      */
-    default void set(int row, int col, int value) {
+    default void set(int row, int col, double value) {
         array().set(structure().offset(row, col), value);
     }
 
@@ -73,7 +73,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(IntLattice2d source) {
+    default void assign(DoubleLattice2d source) {
         requireNonNull(source);
         if (source == this) {
             return;
@@ -94,7 +94,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      * @param source the values to be filled into the cells.
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(int[][] source) {
+    default void assign(double[][] source) {
         if (source.length != rows()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of rows: " +
@@ -123,7 +123,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      *
      * @param source the value to be filled into the cells
      */
-    default void assign(int source) {
+    default void assign(double source) {
         forEach((r, c) -> set(r, c, source));
     }
 
@@ -137,11 +137,11 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      *          value of {@code y}
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
-    default void assign(IntLattice2d y, IntBinaryOperator f) {
+    default void assign(DoubleLattice2d y, DoubleBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
-        forEach((r, c) -> set(r, c, f.applyAsInt(get(r, c), y.get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
     }
 
     /**
@@ -150,9 +150,9 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(IntUnaryOperator f) {
+    default void assign(DoubleUnaryOperator f) {
         requireNonNull(f);
-        forEach((r, c) -> set(r, c, f.applyAsInt(get(r, c))));
+        forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
     }
 
     /**
@@ -160,7 +160,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(IntLattice2d other) {
+    default void swap(DoubleLattice2d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((r, c) -> {
@@ -192,23 +192,24 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalInt reduce(IntBinaryOperator reducer, IntUnaryOperator f) {
+    default OptionalDouble
+    reduce(DoubleBinaryOperator reducer, DoubleUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalInt.empty();
+            return OptionalDouble.empty();
         }
 
-        int a = f.applyAsInt(get(rows() - 1, cols() - 1));
+        double a = f.applyAsDouble(get(rows() - 1, cols() - 1));
         int d = 1;
         for (int r = rows(); --r >= 0;) {
             for (int c = cols() - d; --c >= 0;) {
-                a = reducer.applyAsInt(a, f.applyAsInt(get(r, c)));
+                a = reducer.applyAsDouble(a, f.applyAsDouble(get(r, c)));
             }
             d = 0;
         }
-        return OptionalInt.of(a);
+        return OptionalDouble.of(a);
     }
 
     /**
@@ -219,9 +220,9 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(IntLattice2d other) {
+    default boolean equals(DoubleLattice2d other) {
         return extent().equals(other.extent()) &&
-            allMatch((r, c) -> get(r, c) == other.get(r, c));
+            allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
     }
 
 }

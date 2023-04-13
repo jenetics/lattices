@@ -17,17 +17,18 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 import static io.jenetics.lattices.structure.Structures.checkSameExtent;
 
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntUnaryOperator;
+import java.util.OptionalLong;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongUnaryOperator;
 
-import io.jenetics.lattices.grid.array.IntArray;
+import io.jenetics.lattices.grid.Structure3dOps;
+import io.jenetics.lattices.grid.array.LongArray;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -36,7 +37,7 @@ import io.jenetics.lattices.grid.array.IntArray;
  * @since 3.0
  * @version 3.0
  */
-public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
+public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
 
     /**
      * Returns the matrix cell value at coordinate {@code [slice, row, col]}.
@@ -48,7 +49,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default int get(int slice, int row, int col) {
+    default long get(int slice, int row, int col) {
         return array().get(structure().offset(slice, row, col));
     }
 
@@ -63,7 +64,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * @throws IndexOutOfBoundsException if the given coordinates are out of
      * bounds
      */
-    default void set(int slice, int row, int col, int value) {
+    default void set(int slice, int row, int col, long value) {
         array().set(structure().offset(slice, row, col), value);
     }
 
@@ -76,7 +77,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * @throws IllegalArgumentException if
      *         {@code !extent().equals(other.extent())}
      */
-    default void assign(IntLattice3d other) {
+    default void assign(LongLattice3d other) {
         if (other == this) {
             return;
         }
@@ -96,7 +97,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * The {@code values} are copied and subsequent chances to the {@code values}
      * are not reflected in the matrix, and vice-versa
      */
-    default void assign(int[][][] values) {
+    default void assign(long[][][] values) {
         if (values.length != slices()) {
             throw new IllegalArgumentException(
                 "Values must have the same number of slices: " +
@@ -134,7 +135,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      *
      * @param value the value to be filled into the cells
      */
-    default void assign(int value) {
+    default void assign(long value) {
         forEach((s, r, c) -> set(s, r, c, value));
     }
 
@@ -148,12 +149,12 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * {@code y}
      * @throws IllegalArgumentException if {@code extent() != y.extent()}
      */
-    default void assign(IntLattice3d y, IntBinaryOperator f) {
+    default void assign(LongLattice3d y, LongBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
         forEach((s, r, c) ->
-            set(s, r, c, f.applyAsInt(get(s, r, c), y.get(s, r, c)))
+            set(s, r, c, f.applyAsLong(get(s, r, c), y.get(s, r, c)))
         );
     }
 
@@ -163,9 +164,9 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      *
      * @param f a function object taking as argument the current cell's value.
      */
-    default void assign(IntUnaryOperator f) {
+    default void assign(LongUnaryOperator f) {
         requireNonNull(f);
-        forEach((s, r, c) -> set(s, r, c, f.applyAsInt(get(s, r, c))));
+        forEach((s, r, c) -> set(s, r, c, f.applyAsLong(get(s, r, c))));
     }
 
     /**
@@ -173,7 +174,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(IntLattice3d other) {
+    default void swap(LongLattice3d other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((s, r, c) -> {
@@ -206,25 +207,25 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * @return the aggregated measure or {@link OptionalDouble#empty()} if
      *         {@code size() == 0}
      */
-    default OptionalInt reduce(IntBinaryOperator reducer, IntUnaryOperator f) {
+    default OptionalLong reduce(LongBinaryOperator reducer, LongUnaryOperator f) {
         requireNonNull(reducer);
         requireNonNull(f);
 
         if (extent().size() == 0) {
-            return OptionalInt.empty();
+            return OptionalLong.empty();
         }
 
-        int a = f.applyAsInt(get(slices() - 1, rows() - 1, cols() - 1));
+        long a = f.applyAsLong(get(slices() - 1, rows() - 1, cols() - 1));
         int d = 1;
         for (int s = slices(); --s >= 0;) {
             for (int r = rows(); --r >= 0;) {
                 for (int c = cols() - d; --c >= 0;) {
-                    a = reducer.applyAsInt(a, f.applyAsInt(get(s, r, c)));
+                    a = reducer.applyAsLong(a, f.applyAsLong(get(s, r, c)));
                 }
                 d = 0;
             }
         }
-        return OptionalInt.of(a);
+        return OptionalLong.of(a);
     }
 
     /**
@@ -235,7 +236,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * @return {@code true} if the two given matrices are equal, {@code false}
      * otherwise
      */
-    default boolean equals(IntLattice3d other) {
+    default boolean equals(LongLattice3d other) {
         return extent().equals(other.extent()) &&
             allMatch((s, r, c) -> get(s, r, c) == other.get(s, r, c));
     }
