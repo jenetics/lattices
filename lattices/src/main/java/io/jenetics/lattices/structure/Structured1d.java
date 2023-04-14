@@ -44,13 +44,4 @@ public interface Structured1d {
         return structure().extent();
     }
 
-    /**
-     * Return the number of cells of this {@code this} structure.
-     *
-     * @return the number of cells of this {@code this} structure
-     */
-    default int size() {
-        return extent().value();
-    }
-
 }

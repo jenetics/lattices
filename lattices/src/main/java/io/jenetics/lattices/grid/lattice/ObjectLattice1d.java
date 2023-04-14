@@ -194,12 +194,12 @@ public interface ObjectLattice1d<T>
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (size() == 0) {
+        if (extent().size() == 0) {
             return Optional.empty();
         }
 
-        T a = f.apply(get(size() - 1));
-        for (int i = size() - 1; --i >= 0;) {
+        T a = f.apply(get(extent().size() - 1));
+        for (int i = extent().size() - 1; --i >= 0;) {
             a = reducer.apply(a, f.apply(get(i)));
         }
 

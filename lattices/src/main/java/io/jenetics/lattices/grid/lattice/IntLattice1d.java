@@ -159,12 +159,12 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (size() == 0) {
+        if (extent().size() == 0) {
             return OptionalInt.empty();
         }
 
-        int a = f.applyAsInt(get(size() - 1));
-        for (int i = size() - 1; --i >= 0;) {
+        int a = f.applyAsInt(get(extent().size() - 1));
+        for (int i = extent().size() - 1; --i >= 0;) {
             a = reducer.applyAsInt(a, f.applyAsInt(get(i)));
         }
 

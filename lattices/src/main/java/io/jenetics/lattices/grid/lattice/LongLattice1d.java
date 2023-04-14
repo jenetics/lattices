@@ -159,12 +159,12 @@ public interface LongLattice1d extends Lattice1d<LongArray>, Structure1dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (size() == 0) {
+        if (extent().size() == 0) {
             return OptionalLong.empty();
         }
 
-        long a = f.applyAsLong(get(size() - 1));
-        for (int i = size() - 1; --i >= 0;) {
+        long a = f.applyAsLong(get(extent().size() - 1));
+        for (int i = extent().size() - 1; --i >= 0;) {
             a = reducer.applyAsLong(a, f.applyAsLong(get(i)));
         }
 

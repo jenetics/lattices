@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.matrix;
 
+import static java.lang.Math.min;
+
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
@@ -94,7 +96,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
             return 0;
         }
 
-        final int to = Math.min(Math.min(size(), y.size()), from + length);
+        final int to = min(min(extent().size(), y.extent().size()), from + length);
 
         double sum = 0;
         for (int i = from; i < to; ++i) {
@@ -112,7 +114,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @return the sum of products
      */
     public double dotProduct(DoubleMatrix1d y) {
-        return dotProduct(y, 0, size());
+        return dotProduct(y, 0, extent().size());
     }
 
     /**
@@ -134,7 +136,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         int cardinality = 0;
-        for (int i = 0; i < size(); ++i) {
+        for (int i = 0; i < extent().size(); ++i) {
             if (context.isZero(get(i))) {
                 ++cardinality;
             }
@@ -151,7 +153,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         final var indices = IntStream.builder();
-        for (int i = 0; i < size(); ++i) {
+        for (int i = 0; i < extent().size(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);
             }

@@ -43,7 +43,7 @@ public class DoubleMatrix1dTest {
         matrix.forEach(i -> matrix.set(i, 2*i));
         final var like = matrix.like();
 
-        assertThat(like.size()).isEqualTo(matrix.size());
+        assertThat(like.extent().size()).isEqualTo(matrix.extent().size());
         like.forEach(i -> assertThat(like.get(i)).isEqualTo(0.0));
     }
 

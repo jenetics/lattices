@@ -45,7 +45,7 @@ public final class Colts {
     }
 
     public static DenseDoubleMatrix1D toColt(final DoubleMatrix1d matrix) {
-        final var colt = new DenseDoubleMatrix1D(matrix.size());
+        final var colt = new DenseDoubleMatrix1D(matrix.extent().size());
         matrix.forEach(i -> colt.setQuick(i, matrix.get(i)));
         return colt;
     }

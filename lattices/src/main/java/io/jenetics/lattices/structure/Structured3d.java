@@ -45,15 +45,6 @@ public interface Structured3d {
     }
 
     /**
-     * Return the number of cells of this {@code this} structure.
-     *
-     * @return the number of cells of this {@code this} structure
-     */
-    default int size() {
-        return extent().size();
-    }
-
-    /**
      * Return the number of slices of {@code this} structure.
      *
      * @return the number of slices of {@code this} structure

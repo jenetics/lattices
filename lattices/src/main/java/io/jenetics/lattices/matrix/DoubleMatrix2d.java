@@ -182,7 +182,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
-        if (cols() != y.size() || rows() > z.size()) {
+        if (cols() != y.extent().size() || rows() > z.extent().size()) {
             throw new IllegalArgumentException(
                 "Incompatible args: " + extent() + ", " + y.extent() + ", " + z.extent()
             );
