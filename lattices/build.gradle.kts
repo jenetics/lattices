@@ -33,15 +33,12 @@ description = "Lattices - Library for multidimensional grids and linear algebra"
 extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
-    api(project(":lattices.structure"))
-
     testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("org.apache.commons:commons-math3:3.6.1")
     testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
     testImplementation("org.testng:testng:7.7.1")
     testImplementation("colt:colt:1.2.0")
     testImplementation("org.jblas:jblas:1.2.5")
-    testImplementation(testFixtures(project(":lattices.structure")))
 
     testFixturesImplementation(project(":lattices"))
     testFixturesImplementation("colt:colt:1.2.0")
@@ -52,12 +49,4 @@ tasks.test { dependsOn(tasks.compileJmhJava) }
 
 jmh {
     includes.add(".*DenseDoubleMatrix2dPerf.*")
-}
-
-tasks.javadoc {
-    val doclet = options as StandardJavadocDocletOptions
-    doclet.linksOffline(
-        "https://www.javadoc.io/doc/io.jenetics/lattices.structure",
-        "${project.rootDir}/buildSrc/resources/javadoc/io.jenetics.lattices.lattice"
-    )
 }

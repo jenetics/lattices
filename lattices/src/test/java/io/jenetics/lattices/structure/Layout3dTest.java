@@ -23,42 +23,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.random.RandomGenerator;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.structure.testfixtures.Index1dRandom;
+import io.jenetics.lattices.testfixtures.Index3dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Layout1dTest {
+public class Layout3dTest {
 
-    private final Index1dRandom random =
-        new Index1dRandom(RandomGenerator.getDefault());
+    private final Index3dRandom random =
+        new Index3dRandom(RandomGenerator.getDefault());
 
-    @Test(dataProvider = "layouts")
-    public void indexOffset(Layout1d layout) {
-        final var range = new Range1d(0, 1_000_000);
-        for (int i = 0; i < 100; ++i) {
-            final Index1d index = random.next(range);
+    @Test
+    public void indexOffset() {
+        final var structure = Structure3d.of(new Extent3d(50, 100,1000));
+        final var range = new Range3d(structure.extent());
+        final var layout = structure.layout();
+
+        for (int i = 0; i < 1000; ++i) {
+            final Index3d index = random.next(range);
+            //System.out.println(index);
 
             final int offset = layout.offset(index);
             assertThat(offset).isGreaterThan(0);
-            assertThat(layout.index(offset)).isEqualTo(index);
+            assertThat(layout.index(offset))
+                .withFailMessage("Got %s != expect %s: %s %s"
+                    .formatted(layout.index(offset), index, layout.start(), layout.stride()))
+                .isEqualTo(index);
         }
-    }
-
-    @DataProvider
-    public Object[][] layouts() {
-        return new Object[][] {
-            { new Layout1d(new Index1d(0), new Stride1d(1)) },
-            { new Layout1d(new Index1d(0), new Stride1d(2)) },
-            { new Layout1d(new Index1d(0), new Stride1d(3)) },
-            { new Layout1d(new Index1d(0), new Stride1d(5)) },
-            { new Layout1d(new Index1d(0), new Stride1d(11)) },
-            { new Layout1d(new Index1d(7), new Stride1d(1)) },
-            { new Layout1d(new Index1d(11), new Stride1d(17)) }
-        };
     }
 
 }

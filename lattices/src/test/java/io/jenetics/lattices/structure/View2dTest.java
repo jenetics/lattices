@@ -37,7 +37,7 @@ public class View2dTest {
 
     private static final String[] ARRAY = new String[EXTENT.size()*CHANNELS.value()];
     static {
-        for (int i = 0; i < ARRAY.length; ++i) {
+        for (int i = 0; i < EXTENT.size(); ++i) {
             final var offset = i*CHANNELS.value();
             final var index = STRUCTURE.index(offset);
             final var value = "v_" + index.row() + "_" + index.col();

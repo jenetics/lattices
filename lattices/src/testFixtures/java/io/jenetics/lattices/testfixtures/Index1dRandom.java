@@ -1,4 +1,7 @@
 /*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,30 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.testfixtures;
+
+import java.util.random.RandomGenerator;
+
+import io.jenetics.lattices.structure.Index1d;
+import io.jenetics.lattices.structure.Range1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
  */
-plugins {
-    `java-library`
-    `java-test-fixtures`
-    `maven-publish`
-    idea
-    id("me.champeau.jmh")
+public class Index1dRandom {
+
+    private final RandomGenerator random;
+
+    public Index1dRandom(RandomGenerator random) {
+        this.random = random;
+    }
+
+    public Index1d next(Range1d range) {
+        final int start = range.start().value();
+        final int bound = range.extent().value();
+        return new Index1d(random.nextInt(start, bound));
+    }
+
 }
-
-description = "Lattices Structure - Library for multidimensional data structures"
-
-extra["moduleName"] = "io.jenetics.lattices.structure"
-
-dependencies {
-    testImplementation("org.assertj:assertj-core:3.20.2")
-    testImplementation("org.apache.commons:commons-math3:3.6.1")
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
-    testImplementation("org.testng:testng:7.7.1")
-    testImplementation("colt:colt:1.2.0")
-}
-
-tasks.test { dependsOn(tasks.compileJmhJava) }

@@ -23,13 +23,12 @@
  * @since 3.0
  */
 module io.jenetics.lattices {
-    requires transitive io.jenetics.lattices.structure;
-
     exports io.jenetics.lattices.grid.array;
     exports io.jenetics.lattices.grid.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.linalg;
-    exports io.jenetics.lattices.serialize;
     exports io.jenetics.lattices.grid.lattice;
+    exports io.jenetics.lattices.grid;
+    exports io.jenetics.lattices.matrix.linalg;
+    exports io.jenetics.lattices.matrix;
+    exports io.jenetics.lattices.serialize;
+    exports io.jenetics.lattices.structure;
 }

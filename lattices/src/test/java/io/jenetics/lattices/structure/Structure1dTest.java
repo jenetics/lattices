@@ -25,28 +25,28 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.structure.testfixtures.Index3dRandom;
+import io.jenetics.lattices.testfixtures.Index1dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Layout3dTest {
+public class Structure1dTest {
 
-    private final Index3dRandom random =
-        new Index3dRandom(RandomGenerator.getDefault());
+    private final Index1dRandom random =
+        new Index1dRandom(RandomGenerator.getDefault());
 
     @Test
     public void indexOffset() {
-        final var structure = Structure3d.of(new Extent3d(50, 100,1000));
-        final var range = new Range3d(structure.extent());
+        final var structure = Structure1d.of(new Extent1d(400));
         final var layout = structure.layout();
+        final var range = new Range1d(structure.extent());
 
         for (int i = 0; i < 1000; ++i) {
-            final Index3d index = random.next(range);
-            //System.out.println(index);
+            final Index1d index = random.next(range);
 
             final int offset = layout.offset(index);
-            assertThat(offset).isGreaterThan(0);
+            assertThat(offset).isGreaterThanOrEqualTo(0);
+
             assertThat(layout.index(offset))
                 .withFailMessage("Got %s != expect %s: %s %s"
                     .formatted(layout.index(offset), index, layout.start(), layout.stride()))
