@@ -82,6 +82,7 @@ public record Structure2d(Extent2d extent, Layout2d layout, Channel channel)
      * objects.
      *
      * @param extent the extent of the structure
+     * @param channels the number of channels of the created structure
      * @return a new structure object with the given extent
      */
     public static Structure2d of(Extent2d extent, Channels channels) {
@@ -89,8 +90,10 @@ public record Structure2d(Extent2d extent, Layout2d layout, Channel channel)
             extent,
             new Layout2d(
                 Index2d.ZERO,
-                new Stride2d(extent.cols()*channels.value(), channels.value()),
-                channels
+                new Stride2d(
+                    extent.cols()*channels.value(),
+                    channels.value()
+                )
             ),
             Channel.ZERO
         );

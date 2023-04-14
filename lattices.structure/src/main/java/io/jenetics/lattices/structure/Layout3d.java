@@ -67,7 +67,9 @@ public record Layout3d(Index3d start, Stride3d stride) {
         start = start - slice*stride.slice();
 
         final int row = start/stride.row();
-        final int col = start - row*stride.row();
+        start = start - row*stride.row();
+
+        final int col = start/stride.col();
 
         return new Index3d(slice, row, col);
     }

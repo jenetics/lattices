@@ -37,7 +37,7 @@ public class View2dTest {
 
     private static final String[] ARRAY = new String[EXTENT.size()*CHANNELS.value()];
     static {
-        for (int i = 0; i < EXTENT.size(); ++i) {
+        for (int i = 0; i < ARRAY.length; ++i) {
             final var offset = i*CHANNELS.value();
             final var index = STRUCTURE.index(offset);
             final var value = "v_" + index.row() + "_" + index.col();
@@ -60,7 +60,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.layout().offset(r, c);
+                final int offset = structure.offset(r, c);
 
                 final var expected = "v_" + c + "_" + r;
 
@@ -87,7 +87,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.layout().offset(r, c);
+                final int offset = structure.offset(r, c);
 
                 final var expected = "v_" +
                     (r + range.start().row()) + "_" +
@@ -164,7 +164,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.layout().offset(r, c);
+                final int offset = structure.offset(r, c);
 
                 final var expected = "v_" +
                     (r*stride.row()) + "_" +

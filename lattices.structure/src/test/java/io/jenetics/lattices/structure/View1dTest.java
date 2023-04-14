@@ -21,8 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.stream.IntStream;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -33,27 +31,45 @@ public class View1dTest {
 
     private static final Extent1d EXTENT = new Extent1d(10_000);
 
-    private static final Structure1d STRUCTURE = Structure1d.of(EXTENT);
+    private static final Channels CHANNELS = Channels.THREE;
 
-    private static final String[] ARRAY = IntStream.range(0, EXTENT.value())
-        .mapToObj(i -> {
-            final var index = STRUCTURE.layout().index(i);
-            return "v_" + index.value();
-        })
-        .toArray(String[]::new);
+    private static final Structure1d STRUCTURE = Structure1d.of(EXTENT, CHANNELS);
+
+    private static final String[] ARRAY = new String[EXTENT.size()*CHANNELS.value()];
+    static {
+        for (int i = 0; i < EXTENT.size(); ++i) {
+            final var offset = i*CHANNELS.value();
+            final var index = STRUCTURE.index(offset);
+            final var value = "v_" + index.value();
+
+            ARRAY[offset] = value;
+            ARRAY[offset + 1] = value + "_c2";
+            ARRAY[offset + 2] = value + "_c3";
+        }
+    }
 
     @Test(dataProvider = "ranges")
     public void ofRange(Range1d range) {
         final var view = View1d.of(range);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().value())
-            .isEqualTo(range.extent().value());
+        assertThat(structure.extent().value()).isEqualTo(range.extent().value());
+
+        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View1d.of(Channel.ONE).apply(structure);
+        final var structure2 = View1d.of(Channel.TWO).apply(structure);
 
         for (int i = 0; i < structure.extent().value(); ++i) {
-            final int offset = structure.layout().offset(i);
+            final var offset = structure.offset(i);
 
-            assertThat(ARRAY[offset])
-                .isEqualTo("v_" + (i + range.start().value()));
+            final var expected = "v_" + (i + range.start().value());
+
+            assertThat(ARRAY[offset]).isEqualTo(expected);
+            assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 
@@ -74,11 +90,22 @@ public class View1dTest {
         assertThat(structure.extent().value())
             .isEqualTo(STRUCTURE.extent().value() - start.value());
 
+        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View1d.of(Channel.ONE).apply(structure);
+        final var structure2 = View1d.of(Channel.TWO).apply(structure);
+
         for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
-            assertThat(ARRAY[offset])
-                .isEqualTo("v_" + (i + start.value()));
+            final var expected = "v_" + (i + start.value());
+
+            assertThat(ARRAY[offset]).isEqualTo(expected);
+            assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 
@@ -95,11 +122,22 @@ public class View1dTest {
         final var view = View1d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
+        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View1d.of(Channel.ONE).apply(structure);
+        final var structure2 = View1d.of(Channel.TWO).apply(structure);
+
         for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
 
-            assertThat(ARRAY[offset])
-                .isEqualTo("v_" + i*stride.value());
+            final var expected = "v_" + i*stride.value();
+
+            assertThat(ARRAY[offset]).isEqualTo(expected);
+            assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 

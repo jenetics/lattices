@@ -87,7 +87,8 @@ public interface View3d {
                         structure.layout().stride().col()*range.start().col()
                 ),
                 structure.layout().stride()
-            )
+            ),
+            structure.channel()
         );
     }
 
@@ -156,7 +157,32 @@ public interface View3d {
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
                     )
-                )
+                ),
+                structure.channel()
+            );
+        };
+    }
+
+    /**
+     * Return a transformation which creates a view onto the given
+     * {@code channel}.
+     *
+     * @param channel the channel number of the returned view
+     * @return a transformation which creates a view onto the given
+     *        {@code channel}
+     */
+    static View3d of(Channel channel) {
+        requireNonNull(channel);
+
+        return structure -> {
+            if (structure.channel().equals(channel)) {
+                return structure;
+            }
+
+            return new Structure3d(
+                structure.extent(),
+                structure.layout(),
+                channel
             );
         };
     }

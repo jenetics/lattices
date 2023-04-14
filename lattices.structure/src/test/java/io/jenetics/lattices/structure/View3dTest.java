@@ -33,14 +33,24 @@ public class View3dTest {
 
     private static final Extent3d EXTENT = new Extent3d(100, 100, 100);
 
-    private static final Structure3d STRUCTURE = Structure3d.of(EXTENT);
+    private static final Channels CHANNELS = Channels.THREE;
 
-    private static final String[] ARRAY = IntStream.range(0, EXTENT.size())
-        .mapToObj(i -> {
-            final var index = STRUCTURE.layout().index(i);
-            return "v_" + index.slice() + "_" + index.row() + "_" + index.col();
-        })
-        .toArray(String[]::new);
+    private static final Structure3d STRUCTURE = Structure3d.of(EXTENT, CHANNELS);
+
+    private static final String[] ARRAY = new String[EXTENT.size()*CHANNELS.value()];
+    static {
+        for (int i = 0; i < ARRAY.length; ++i) {
+            final var offset = i*CHANNELS.value();
+            final var index = STRUCTURE.index(offset);
+            final var value ="v_" + index.slice() +
+                "_" + index.row() +
+                "_" + index.col();
+
+            ARRAY[offset] = value;
+            ARRAY[offset + 1] = value + "_c2";
+            ARRAY[offset + 2] = value + "_c3";
+        }
+    }
 
     @Test(dataProvider = "ranges")
     public void ofRange(Range3d range) {
@@ -52,7 +62,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.layout().offset(s, r, c);
+                    final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +
                         (s + range.start().slice()) + "_" +
@@ -87,7 +97,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.layout().offset(s, r, c);
+                    final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +
                         (s + start.slice()) + "_" +
@@ -121,7 +131,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.layout().offset(s, r, c);
+                    final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +
                         (s*stride.slice()) + "_" +

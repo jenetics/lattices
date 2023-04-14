@@ -94,8 +94,7 @@ public interface Projection3d {
                     new Stride2d(
                         structure.layout().stride().row(),
                         structure.layout().stride().col()
-                    ),
-                    Channels.ONE
+                    )
                 ),
                 Channel.ZERO
             );
@@ -128,8 +127,7 @@ public interface Projection3d {
                     new Stride2d(
                         structure.layout().stride().slice(),
                         structure.layout().stride().col()
-                    ),
-                    Channels.ONE
+                    )
                 ),
                 Channel.ZERO
             );
@@ -163,8 +161,7 @@ public interface Projection3d {
                     new Stride2d(
                         structure.layout().stride().slice(),
                         structure.layout().stride().row()
-                    ),
-                    Channels.ONE
+                    )
                 ),
                 Channel.ZERO
             );

@@ -41,11 +41,6 @@ import static java.util.Objects.requireNonNull;
  */
 public record Layout1d(Index1d start, Stride1d stride) {
 
-    /**
-     * The default order.
-     */
-    public static final Layout1d DEFAULT = new Layout1d(Index1d.ZERO, Stride1d.ONE);
-
     public Layout1d {
         requireNonNull(start);
         requireNonNull(stride);

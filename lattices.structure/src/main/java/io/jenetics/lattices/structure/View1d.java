@@ -82,8 +82,9 @@ public interface View1d {
                     structure.layout().start().value() +
                     structure.layout().stride().value()*range.start().value()
                 ),
-                new Stride1d(structure.layout().stride().value())
-            )
+                structure.layout().stride()
+            ),
+            structure.channel()
         );
     }
 
@@ -124,8 +125,33 @@ public interface View1d {
             new Layout1d(
                 new Index1d(structure.layout().start().value()),
                 new Stride1d(structure.layout().stride().value()*stride.value())
-            )
+            ),
+            structure.channel()
         );
+    }
+
+    /**
+     * Return a transformation which creates a view onto the given
+     * {@code channel}.
+     *
+     * @param channel the channel number of the returned view
+     * @return a transformation which creates a view onto the given
+     *        {@code channel}
+     */
+    static View1d of(Channel channel) {
+        requireNonNull(channel);
+
+        return structure -> {
+            if (structure.channel().equals(channel)) {
+                return structure;
+            }
+
+            return new Structure1d(
+                structure.extent(),
+                structure.layout(),
+                channel
+            );
+        };
     }
 
 }

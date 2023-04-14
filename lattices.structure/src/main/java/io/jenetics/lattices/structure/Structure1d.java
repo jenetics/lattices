@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Layout1d layout)
+public record Structure1d(Extent1d extent, Layout1d layout, Channel channel)
     implements OffsetMapper1d
 {
 
@@ -50,17 +50,37 @@ public record Structure1d(Extent1d extent, Layout1d layout)
 
     @Override
     public int offset(int index) {
-        return layout.offset(index);
+        return layout.offset(index) + channel.value();
     }
 
     @Override
     public int offset(Index1d index) {
-        return layout.offset(index);
+        return layout.offset(index) + channel.value();
     }
 
     @Override
     public Index1d index(int offset) {
-        return layout.index(offset);
+        return layout.index(offset - channel.value());
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     * @param channels the number of channels of the created structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure1d of(Extent1d extent, Channels channels) {
+        return new Structure1d(
+            extent,
+            new Layout1d(
+                Index1d.ZERO,
+                new Stride1d(channels.value())
+            ),
+            Channel.ZERO
+        );
     }
 
     /**
@@ -72,7 +92,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
      * @return a new structure object with the given extent
      */
     public static Structure1d of(Extent1d extent) {
-        return new Structure1d(extent, Layout1d.DEFAULT);
+        return of(extent, Channels.ONE);
     }
 
     /**
@@ -84,7 +104,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
      * @return a new structure object with the given extent
      */
     public static Structure1d of(int extent) {
-        return of(new Extent1d(extent));
+        return of(new Extent1d(extent), Channels.ONE);
     }
 
 }

@@ -34,13 +34,12 @@ import static java.util.Objects.requireNonNull;
  *
  * @param start the start index of the first element
  * @param stride the element strides
- * @param channels the number of channel this layout contains
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout2d(Index2d start, Stride2d stride, Channels channels) {
+public record Layout2d(Index2d start, Stride2d stride) {
 
     public Layout2d {
         requireNonNull(start);
@@ -58,12 +57,14 @@ public record Layout2d(Index2d start, Stride2d stride, Channels channels) {
     }
 
     Index2d index(int offset) {
-        final int start = offset -
+        int start = offset -
             this.start.row() -
             this.start.col();
 
         final int row = start/stride.row();
-        final int col = (start - row*stride.row())/channels.value();
+        start = start - row*stride.row();
+
+        final int col = start/stride.col();
 
         return new Index2d(row, col);
     }

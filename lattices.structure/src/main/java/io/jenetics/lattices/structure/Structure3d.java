@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout)
+public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
     implements OffsetMapper3d
 {
 
@@ -50,17 +50,41 @@ public record Structure3d(Extent3d extent, Layout3d layout)
 
     @Override
     public int offset(int slice, int row, int col) {
-        return layout.offset(slice, row, col);
+        return layout.offset(slice, row, col) + channel.value();
     }
 
     @Override
     public int offset(Index3d index) {
-        return layout.offset(index);
+        return layout.offset(index) + channel.value();
     }
 
     @Override
     public Index3d index(int offset) {
-        return layout.index(offset);
+        return layout.index(offset - channel.value());
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     * @param channels the number of channels of the created structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure3d of(Extent3d extent, Channels channels) {
+        return new Structure3d(
+            extent,
+            new Layout3d(
+                Index3d.ZERO,
+                new Stride3d(
+                    extent.rows()*extent.cols()*channels.value(),
+                    extent.cols()*channels.value(),
+                    channels.value()
+                )
+            ),
+            Channel.ONE
+        );
     }
 
     /**
@@ -72,17 +96,7 @@ public record Structure3d(Extent3d extent, Layout3d layout)
      * @return a new structure object with the given extent
      */
     public static Structure3d of(Extent3d extent) {
-        return new Structure3d(
-            extent,
-            new Layout3d(
-                Index3d.ZERO,
-                new Stride3d(
-                    extent.rows()*extent.cols(),
-                    extent.cols(),
-                    1
-                )
-            )
-        );
+        return of(extent, Channels.ONE);
     }
 
     /**
