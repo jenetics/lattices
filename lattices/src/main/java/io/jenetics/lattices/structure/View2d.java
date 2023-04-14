@@ -134,30 +134,6 @@ public interface View2d {
     }
 
     /**
-     * Return a transformation which creates a view onto the given
-     * {@code channel}.
-     *
-     * @param channel the channel number of the returned view
-     * @return a transformation which creates a view onto the given
-     *        {@code channel}
-     */
-    static View2d of(Channel channel) {
-        requireNonNull(channel);
-
-        return structure -> {
-            if (structure.channel().equals(channel)) {
-                return structure;
-            }
-
-            return new Structure2d(
-                structure.extent(),
-                structure.layout(),
-                channel
-            );
-        };
-    }
-
-    /**
      * Return a transformation which creates a view of the given {@code extent}.
      *
      * @param extent the extent of the view
@@ -197,6 +173,30 @@ public interface View2d {
                     )
                 ),
                 structure.channel()
+            );
+        };
+    }
+
+    /**
+     * Return a transformation which creates a view onto the given
+     * {@code channel}.
+     *
+     * @param channel the channel number of the returned view
+     * @return a transformation which creates a view onto the given
+     *        {@code channel}
+     */
+    static View2d of(Channel channel) {
+        requireNonNull(channel);
+
+        return structure -> {
+            if (structure.channel().equals(channel)) {
+                return structure;
+            }
+
+            return new Structure2d(
+                structure.extent(),
+                structure.layout(),
+                channel
             );
         };
     }

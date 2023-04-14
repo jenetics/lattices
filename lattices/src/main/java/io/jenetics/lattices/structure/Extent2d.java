@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import static io.jenetics.lattices.structure.Structures.multNotSave;
+
 import java.util.Iterator;
 
 /**
@@ -38,20 +40,15 @@ public record Extent2d(int rows, int cols) implements Iterable<Index2d> {
      *
      * @param rows the number of rows
      * @param cols the number of cols
-     * @throws IndexOutOfBoundsException if one of the arguments is smaller than
+     * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code rows*cols > Integer.MAX_VALUE}
      */
     public Extent2d {
         if (rows < 0 || cols < 0 || multNotSave(rows, cols)) {
-            throw new IndexOutOfBoundsException(
+            throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d].".formatted(rows, cols)
             );
         }
-    }
-
-    private static boolean multNotSave(int x, int y) {
-        long r = (long)x*(long)y;
-        return (int)r != r;
     }
 
     /**

@@ -108,6 +108,16 @@ public interface View1d {
     }
 
     /**
+     * Return a transformation which creates a view of the given {@code extent}.
+     *
+     * @param extent the extent of the view
+     * @return a transformation which creates a view of the given {@code extent}
+     */
+    static View1d of(Extent1d extent) {
+        return of(new Range1d(extent));
+    }
+
+    /**
      * Return a new stride view transformation.
      *
      * @param stride the stride of the created view transformation

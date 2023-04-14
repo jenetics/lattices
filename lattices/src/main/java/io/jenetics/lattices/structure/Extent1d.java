@@ -38,11 +38,11 @@ public record Extent1d(int value)
      * Create a new 1-d extent with the given size.
      *
      * @param value the size of the extent
-     * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
+     * @throws IllegalArgumentException if the {@code size} is smaller than zero
      */
     public Extent1d {
         if (value < 0) {
-            throw new IndexOutOfBoundsException(
+            throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d].".formatted(value)
             );
         }

@@ -194,4 +194,36 @@ public final class Structures {
             );
         }
     }
+
+
+    static boolean multNotSave(int a, int b) {
+        long r = (long)a*(long)b;
+        return (int)r != r;
+    }
+
+    static boolean multNotSave(int a, int b, int c) {
+        final long r1 = (long)a*(long)b;
+        if ((int)r1 == r1) {
+            final long r2 = r1*(long)c;
+            return (int)r2 != r2;
+        } else {
+            return true;
+        }
+    }
+
+    static boolean multNotSave(int a, int b, int c, int d) {
+        final long r1 = (long)a*(long)b;
+        if ((int)r1 == r1) {
+            final long r2 = r1*(long)c;
+            if ((int)r2 != r2) {
+                final long r3 = r2*(long)d;
+                return (int)r3 != r3;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
 }

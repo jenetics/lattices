@@ -20,6 +20,7 @@
 package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.structure.Structures.multNotSave;
 
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
@@ -34,6 +35,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @param extent the extent of the structure
  * @param layout the element order
+ * @param channel the channel number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -46,6 +48,7 @@ public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
     public Structure3d {
         requireNonNull(extent);
         requireNonNull(layout);
+        requireNonNull(channel);
     }
 
     @Override
@@ -71,8 +74,17 @@ public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
      * @param extent the extent of the structure
      * @param channels the number of channels of the created structure
      * @return a new structure object with the given extent
+     * @throws IllegalArgumentException if
+     *         {@code extent.size()*channels.value() > Integer.MAX_VALUE}
      */
     public static Structure3d of(Extent3d extent, Channels channels) {
+        if (multNotSave(extent.size(), channels.value())) {
+            throw new IllegalArgumentException(
+                "Can't create array larger than Integer.MAX_VALUE: " +
+                    ((long)extent.size()*(long)channels.value())
+            );
+        }
+
         return new Structure3d(
             extent,
             new Layout3d(
