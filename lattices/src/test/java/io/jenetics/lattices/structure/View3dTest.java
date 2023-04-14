@@ -21,8 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.stream.IntStream;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -59,6 +57,10 @@ public class View3dTest {
         assertThat(structure.extent().size())
             .isEqualTo(range.extent().size());
 
+        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View3d.of(Channel.ONE).apply(structure);
+        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -70,6 +72,12 @@ public class View3dTest {
                         (c + range.start().col());
 
                     assertThat(ARRAY[offset]).isEqualTo(expected);
+                    assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }
@@ -94,6 +102,10 @@ public class View3dTest {
         final var view = View3d.of(start);
         final var structure = view.apply(STRUCTURE);
 
+        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View3d.of(Channel.ONE).apply(structure);
+        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -105,6 +117,12 @@ public class View3dTest {
                         (c + start.col());
 
                     assertThat(ARRAY[offset]).isEqualTo(expected);
+                    assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }
@@ -128,6 +146,10 @@ public class View3dTest {
         final var view = View3d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
+        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
+        final var structure1 = View3d.of(Channel.ONE).apply(structure);
+        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -139,6 +161,12 @@ public class View3dTest {
                         (c*stride.col());
 
                     assertThat(ARRAY[offset]).isEqualTo(expected);
+                    assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
+
+                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }

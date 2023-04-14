@@ -83,7 +83,7 @@ public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
                     channels.value()
                 )
             ),
-            Channel.ONE
+            Channel.ZERO
         );
     }
 
