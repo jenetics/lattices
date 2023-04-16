@@ -20,7 +20,6 @@
 package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.structure.Structures.multNotSave;
 
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
@@ -35,68 +34,33 @@ import static io.jenetics.lattices.structure.Structures.multNotSave;
  *
  * @param extent the extent of the structure
  * @param layout the element order
- * @param channel the channel number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
+public record Structure3d(Extent3d extent, Layout3d layout)
     implements OffsetMapper3d
 {
 
     public Structure3d {
         requireNonNull(extent);
         requireNonNull(layout);
-        requireNonNull(channel);
     }
 
     @Override
     public int offset(int slice, int row, int col) {
-        return layout.offset(slice, row, col) + channel.value();
+        return layout.offset(slice, row, col);
     }
 
     @Override
     public int offset(Index3d index) {
-        return layout.offset(index) + channel.value();
+        return layout.offset(index);
     }
 
     @Override
     public Index3d index(int offset) {
-        return layout.index(offset - channel.value());
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @param channels the number of channels of the created structure
-     * @return a new structure object with the given extent
-     * @throws IllegalArgumentException if
-     *         {@code extent.size()*channels.value() > Integer.MAX_VALUE}
-     */
-    public static Structure3d of(Extent3d extent, Channels channels) {
-        if (multNotSave(extent.size(), channels.value())) {
-            throw new IllegalArgumentException(
-                "Can't create array larger than Integer.MAX_VALUE: " +
-                    ((long)extent.size()*(long)channels.value())
-            );
-        }
-
-        return new Structure3d(
-            extent,
-            new Layout3d(
-                Index3d.ZERO,
-                new Stride3d(
-                    extent.rows()*extent.cols()*channels.value(),
-                    extent.cols()*channels.value(),
-                    channels.value()
-                )
-            ),
-            Channel.ZERO
-        );
+        return layout.index(offset);
     }
 
     /**
@@ -108,7 +72,17 @@ public record Structure3d(Extent3d extent, Layout3d layout, Channel channel)
      * @return a new structure object with the given extent
      */
     public static Structure3d of(Extent3d extent) {
-        return of(extent, Channels.ONE);
+        return new Structure3d(
+            extent,
+            new Layout3d(
+                Index3d.ZERO,
+                new Stride3d(
+                    extent.rows()*extent.cols()*extent.channels(),
+                    extent.cols()*extent.channels(),
+                    extent.channels()
+                )
+            )
+        );
     }
 
     /**

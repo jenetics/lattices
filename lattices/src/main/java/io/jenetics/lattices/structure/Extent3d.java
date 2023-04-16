@@ -29,12 +29,13 @@ import java.util.Iterator;
  * @param slices the number of slices, must be greater or equal zero
  * @param rows the number of rows, must be greater or equal zero
  * @param cols the number of columns, must be greater or equal zero
+ * @param channels the number of channels
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @version 3.0
  * @since 3.0
  */
-public record Extent3d(int slices, int rows, int cols)
+public record Extent3d(int slices, int rows, int cols, int channels)
     implements Iterable<Index3d>
 {
 
@@ -45,13 +46,29 @@ public record Extent3d(int slices, int rows, int cols)
      * @param rows the number of rows, must be greater or equal zero
      * @param cols the number of columns, must be greater or equal zero
      * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code rows*cols > Integer.MAX_VALUE}
+     *         zero or {@code slices*rows*cols > Integer.MAX_VALUE}
+     */
+    public Extent3d(int slices, int rows, int cols) {
+        this(slices, rows, cols, 1);
+    }
+
+    /**
+     * Create a new 3-d extent.
+     *
+     * @param slices the number of slices, must be greater or equal zero
+     * @param rows the number of rows, must be greater or equal zero
+     * @param cols the number of columns, must be greater or equal zero
+     * @param channels the number of channels
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code slices*rows*cols*channels > Integer.MAX_VALUE}
      */
     public Extent3d {
-        if (slices < 0 || rows < 0 || cols < 0 || multNotSave(slices, rows, cols)) {
+        if (slices < 0 || rows < 0 || cols < 0 || channels < 1 ||
+            multNotSave(slices, rows, cols, channels))
+        {
             throw new IllegalArgumentException(
-                "Extent is out of bounds: [%d, %d, %d]."
-                    .formatted(slices, rows, cols)
+                "Extent is out of bounds: [%d, %d, %d, channels=%d]."
+                    .formatted(slices, rows, cols, channels)
             );
         }
     }
@@ -63,6 +80,16 @@ public record Extent3d(int slices, int rows, int cols)
      */
     public int size() {
         return slices*rows*cols;
+    }
+
+    /**
+     * Return the length of the array, needed for storing all cells:
+     * {@code size()*channels}.
+     *
+     * @return the array length needed for storing all cells
+     */
+    public int length() {
+        return size()*channels;
     }
 
     @Override

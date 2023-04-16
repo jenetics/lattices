@@ -215,7 +215,7 @@ public final class Structures {
         final long r1 = (long)a*(long)b;
         if ((int)r1 == r1) {
             final long r2 = r1*(long)c;
-            if ((int)r2 != r2) {
+            if ((int)r2 == r2) {
                 final long r3 = r2*(long)d;
                 return (int)r3 != r3;
             } else {

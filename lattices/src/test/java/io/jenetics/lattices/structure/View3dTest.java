@@ -29,16 +29,16 @@ import org.testng.annotations.Test;
  */
 public class View3dTest {
 
-    private static final Extent3d EXTENT = new Extent3d(100, 100, 100);
+    private static final int CHANNELS = 3;
+    private static final Extent3d EXTENT = new Extent3d(100, 100, 100, CHANNELS);
 
-    private static final Channels CHANNELS = Channels.THREE;
 
-    private static final Structure3d STRUCTURE = Structure3d.of(EXTENT, CHANNELS);
+    private static final Structure3d STRUCTURE = Structure3d.of(EXTENT);
 
-    private static final String[] ARRAY = new String[EXTENT.size()*CHANNELS.value()];
+    private static final String[] ARRAY = new String[EXTENT.length()];
     static {
         for (int i = 0; i < EXTENT.size(); ++i) {
-            final var offset = i*CHANNELS.value();
+            final var offset = i*CHANNELS;
             final var index = STRUCTURE.index(offset);
             final var value ="v_" + index.slice() +
                 "_" + index.row() +

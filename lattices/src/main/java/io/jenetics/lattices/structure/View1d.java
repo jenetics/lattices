@@ -83,8 +83,7 @@ public interface View1d {
                     structure.layout().stride().value()*range.start().value()
                 ),
                 structure.layout().stride()
-            ),
-            structure.channel()
+            )
         );
     }
 
@@ -135,8 +134,7 @@ public interface View1d {
             new Layout1d(
                 new Index1d(structure.layout().start().value()),
                 new Stride1d(structure.layout().stride().value()*stride.value())
-            ),
-            structure.channel()
+            )
         );
     }
 
@@ -152,14 +150,13 @@ public interface View1d {
         requireNonNull(channel);
 
         return structure -> {
-            if (structure.channel().equals(channel)) {
-                return structure;
-            }
-
             return new Structure1d(
                 structure.extent(),
-                structure.layout(),
-                channel
+                new Layout1d(
+                    structure.layout().start(),
+                    structure.layout().stride(),
+                    channel
+                )
             );
         };
     }

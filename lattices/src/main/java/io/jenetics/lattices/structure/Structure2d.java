@@ -20,7 +20,6 @@
 package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.structure.Structures.multNotSave;
 
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
@@ -35,67 +34,33 @@ import static io.jenetics.lattices.structure.Structures.multNotSave;
  *
  * @param extent the extent of the structure
  * @param layout the element order
- * @param channel the channel number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout, Channel channel)
+public record Structure2d(Extent2d extent, Layout2d layout)
     implements OffsetMapper2d
 {
 
     public Structure2d {
         requireNonNull(extent);
         requireNonNull(layout);
-        requireNonNull(channel);
     }
 
     @Override
     public int offset(int row, int col) {
-        return layout.offset(row, col) + channel.value();
+        return layout.offset(row, col);
     }
 
     @Override
     public int offset(Index2d index) {
-        return layout.offset(index) + channel.value();
+        return layout.offset(index);
     }
 
     @Override
     public Index2d index(int offset) {
-        return layout.index(offset - channel.value());
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @param channels the number of channels of the created structure
-     * @return a new structure object with the given extent
-     * @throws IllegalArgumentException if
-     *         {@code extent.size()*channels.value() > Integer.MAX_VALUE}
-     */
-    public static Structure2d of(Extent2d extent, Channels channels) {
-        if (multNotSave(extent.size(), channels.value())) {
-            throw new IllegalArgumentException(
-                "Can't create array larger than Integer.MAX_VALUE: " +
-                    ((long)extent.size()*(long)channels.value())
-            );
-        }
-
-        return new Structure2d(
-            extent,
-            new Layout2d(
-                Index2d.ZERO,
-                new Stride2d(
-                    extent.cols()*channels.value(),
-                    channels.value()
-                )
-            ),
-            Channel.ZERO
-        );
+        return layout.index(offset);
     }
 
     /**
@@ -107,7 +72,16 @@ public record Structure2d(Extent2d extent, Layout2d layout, Channel channel)
      * @return a new structure object with the given extent
      */
     public static Structure2d of(Extent2d extent) {
-        return of(extent, Channels.ONE);
+        return new Structure2d(
+            extent,
+            new Layout2d(
+                Index2d.ZERO,
+                new Stride2d(
+                    extent.cols()*extent.channels(),
+                    extent.channels()
+                )
+            )
+        );
     }
 
     /**

@@ -27,7 +27,7 @@
  * final Structure2d structure = Structure2d.of(new Extent2d(10, 34));
  *
  * // Create the `double[]` array, which stores the data.
- * final double[] values = new double[structure.extent().size()];
+ * final double[] values = new double[structure.extent().length()];
  *
  * // The 2-d coordinates you want to access.
  * final int row = 3;

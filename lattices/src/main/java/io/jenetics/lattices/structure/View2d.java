@@ -51,8 +51,7 @@ public interface View2d {
                 structure.layout().stride().col(),
                 structure.layout().stride().row()
             )
-        ),
-        structure.channel()
+        )
     );
 
     /**
@@ -106,8 +105,7 @@ public interface View2d {
                         structure.layout().stride().col()*range.start().col()
                 ),
                 structure.layout().stride()
-            ),
-            structure.channel()
+            )
         );
     }
 
@@ -171,8 +169,7 @@ public interface View2d {
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
                     )
-                ),
-                structure.channel()
+                )
             );
         };
     }
@@ -188,17 +185,14 @@ public interface View2d {
     static View2d of(Channel channel) {
         requireNonNull(channel);
 
-        return structure -> {
-            if (structure.channel().equals(channel)) {
-                return structure;
-            }
-
-            return new Structure2d(
-                structure.extent(),
-                structure.layout(),
+        return structure -> new Structure2d(
+            structure.extent(),
+            new Layout2d(
+                structure.layout().start(),
+                structure.layout().stride(),
                 channel
-            );
-        };
+            )
+        );
     }
 
 }

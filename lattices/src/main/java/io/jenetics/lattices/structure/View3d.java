@@ -86,9 +86,9 @@ public interface View3d {
                     structure.layout().start().col() +
                         structure.layout().stride().col()*range.start().col()
                 ),
-                structure.layout().stride()
-            ),
-            structure.channel()
+                structure.layout().stride(),
+                structure.layout().channel()
+            )
         );
     }
 
@@ -136,7 +136,7 @@ public interface View3d {
 
         return structure -> {
             final var extent = structure.extent();
-            final var order = structure.layout();
+            final var layout = structure.layout();
 
             return new Structure3d(
                 new Extent3d(
@@ -151,14 +151,14 @@ public interface View3d {
                         : 0
                 ),
                 new Layout3d(
-                    order.start(),
+                    layout.start(),
                     new Stride3d(
-                        order.stride().slice()*stride.slice(),
-                        order.stride().row()*stride.row(),
-                        order.stride().col()*stride.col()
-                    )
-                ),
-                structure.channel()
+                        layout.stride().slice()*stride.slice(),
+                        layout.stride().row()*stride.row(),
+                        layout.stride().col()*stride.col()
+                    ),
+                    layout.channel()
+                )
             );
         };
     }
@@ -174,17 +174,14 @@ public interface View3d {
     static View3d of(Channel channel) {
         requireNonNull(channel);
 
-        return structure -> {
-            if (structure.channel().equals(channel)) {
-                return structure;
-            }
-
-            return new Structure3d(
-                structure.extent(),
-                structure.layout(),
+        return structure -> new Structure3d(
+            structure.extent(),
+            new Layout3d(
+                structure.layout().start(),
+                structure.layout().stride(),
                 channel
-            );
-        };
+            )
+        );
     }
 
 }

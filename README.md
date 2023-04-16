@@ -44,7 +44,7 @@ final var extent = new Extent2d(100, 400);
 final var structure = Structure2d.of(extent);
 
 // Creating the array, which holds the values to be stored.
-final var values = new double[extent.size()];
+final var values = new double[extent.length()];
 
 // Set the value 'Math.PI' at the point [20, 30];
 values[structure.offset(20, 30)] = Math.PI;

@@ -95,8 +95,7 @@ public interface Projection3d {
                         structure.layout().stride().row(),
                         structure.layout().stride().col()
                     )
-                ),
-                Channel.ZERO
+                )
             );
         };
     }
@@ -128,8 +127,7 @@ public interface Projection3d {
                         structure.layout().stride().slice(),
                         structure.layout().stride().col()
                     )
-                ),
-                Channel.ZERO
+                )
             );
         };
     }
@@ -162,8 +160,7 @@ public interface Projection3d {
                         structure.layout().stride().slice(),
                         structure.layout().stride().row()
                     )
-                ),
-                Channel.ZERO
+                )
             );
         };
     }

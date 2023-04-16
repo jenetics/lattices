@@ -34,24 +34,30 @@ import static java.util.Objects.requireNonNull;
  *
  * @param start the index of the first element
  * @param stride the number of indexes between any two elements
+ * @param channel the channel number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout1d(Index1d start, Stride1d stride) {
+public record Layout1d(Index1d start, Stride1d stride, Channel channel) {
+
+    public Layout1d(Index1d start, Stride1d stride) {
+        this(start, stride, Channel.ZERO);
+    }
 
     public Layout1d {
         requireNonNull(start);
         requireNonNull(stride);
+        requireNonNull(channel);
     }
 
     int offset(int index) {
-        return start.value() + index*stride.value();
+        return start.value() + index*stride.value() + channel.value();
     }
 
     int offset(Index1d index) {
-        return offset(index.value());
+        return offset(index.value() - channel.value());
     }
 
     Index1d index(int offset) {

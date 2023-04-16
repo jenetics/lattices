@@ -20,7 +20,6 @@
 package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.structure.Structures.multNotSave;
 
 /**
  * Defines the structure of a 1-d matrix, which is defined by the dimension of
@@ -35,64 +34,33 @@ import static io.jenetics.lattices.structure.Structures.multNotSave;
  *
  * @param extent the extent of the structure
  * @param layout the element layout
- * @param channel the channel number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Layout1d layout, Channel channel)
+public record Structure1d(Extent1d extent, Layout1d layout)
     implements OffsetMapper1d
 {
 
     public Structure1d {
         requireNonNull(extent);
         requireNonNull(layout);
-        requireNonNull(channel);
     }
 
     @Override
     public int offset(int index) {
-        return layout.offset(index) + channel.value();
+        return layout.offset(index);
     }
 
     @Override
     public int offset(Index1d index) {
-        return layout.offset(index) + channel.value();
+        return layout.offset(index);
     }
 
     @Override
     public Index1d index(int offset) {
-        return layout.index(offset - channel.value());
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @param channels the number of channels of the created structure
-     * @return a new structure object with the given extent
-     * @throws IllegalArgumentException if
-     *         {@code extent.size()*channels.value() > Integer.MAX_VALUE}
-     */
-    public static Structure1d of(Extent1d extent, Channels channels) {
-        if (multNotSave(extent.size(), channels.value())) {
-            throw new IllegalArgumentException(
-                "Can't create array larger than Integer.MAX_VALUE: " +
-                    ((long)extent.size()*(long)channels.value())
-                );
-        }
-
-        return new Structure1d(
-            extent,
-            new Layout1d(
-                Index1d.ZERO,
-                new Stride1d(channels.value())
-            ),
-            Channel.ZERO
-        );
+        return layout.index(offset);
     }
 
     /**
@@ -104,7 +72,13 @@ public record Structure1d(Extent1d extent, Layout1d layout, Channel channel)
      * @return a new structure object with the given extent
      */
     public static Structure1d of(Extent1d extent) {
-        return of(extent, Channels.ONE);
+        return new Structure1d(
+            extent,
+            new Layout1d(
+                Index1d.ZERO,
+                new Stride1d(extent.channels())
+            )
+        );
     }
 
     /**
@@ -116,7 +90,7 @@ public record Structure1d(Extent1d extent, Layout1d layout, Channel channel)
      * @return a new structure object with the given extent
      */
     public static Structure1d of(int extent) {
-        return of(new Extent1d(extent), Channels.ONE);
+        return of(new Extent1d(extent));
     }
 
 }

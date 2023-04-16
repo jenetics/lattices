@@ -19,18 +19,21 @@
  */
 package io.jenetics.lattices.structure;
 
+import static io.jenetics.lattices.structure.Structures.multNotSave;
+
 import java.util.Iterator;
 
 /**
  * The extent of 1-d structures.
  *
  * @param value the number of elements, must be greater or equal zero
+ * @param channels the number of channels
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int value)
+public record Extent1d(int value, int channels)
     implements Comparable<Extent1d>, Iterable<Index1d>
 {
 
@@ -38,12 +41,26 @@ public record Extent1d(int value)
      * Create a new 1-d extent with the given size.
      *
      * @param value the size of the extent
+     *
+     * @throws IllegalArgumentException if the {@code size} is smaller than zero
+     */
+    public Extent1d(int value) {
+        this(value, 1);
+    }
+
+    /**
+     * Create a new 1-d extent with the given size.
+     *
+     * @param value the size of the extent
+     * @param channels the number of channels
+     *
      * @throws IllegalArgumentException if the {@code size} is smaller than zero
      */
     public Extent1d {
-        if (value < 0) {
+        if (value < 0 || channels < 1 || multNotSave(value, channels)) {
             throw new IllegalArgumentException(
-                "Extent is out of bounds: [%d].".formatted(value)
+                "Extent is out of bounds: [%d, channels=%d]."
+                    .formatted(value, channels)
             );
         }
     }
@@ -57,6 +74,16 @@ public record Extent1d(int value)
         return value;
     }
 
+    /**
+     * Return the length of the array, needed for storing all cells:
+     * {@code size()*channels}.
+     *
+     * @return the array length needed for storing all cells
+     */
+    public int length() {
+        return size()*channels;
+    }
+
     @Override
     public int compareTo(Extent1d other) {
         return Integer.compare(value, other.value);
@@ -64,7 +91,7 @@ public record Extent1d(int value)
 
     @Override
     public String toString() {
-        return "[%d]".formatted(value());
+        return "[%d, channels=%d]".formatted(value, channels);
     }
 
     @Override
