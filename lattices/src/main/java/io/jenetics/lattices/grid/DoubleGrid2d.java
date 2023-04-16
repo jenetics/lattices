@@ -19,8 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DoubleArray;
+import io.jenetics.lattices.grid.lattice.DoubleLattice2d;
+import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -34,7 +36,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * <pre>{@code
  * final var values = new double[50*100];
  * final var grid = new DoubleGrid2d(
- *     new Structure2d(new Extent2d(50, 100)),
+ *     Structure2d.of(new Extent2d(50, 100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -43,32 +45,36 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
+public record DoubleGrid2d(Structure2d structure, DoubleArray array)
+    implements DoubleLattice2d, Grid2d<DoubleArray, DoubleGrid2d>
+{
 
     /**
-     * Factory for creating dense 2-d double grids.
+     * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Factory2d<DoubleGrid2d> DENSE = structure ->
-        new DoubleGrid2d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Grid2d.Factory<DoubleGrid2d> DENSE =
+        extent -> new DoubleGrid2d(
+            Structure2d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
         );
 
     /**
-     * Create a new 2-d matrix with the given {@code structure} and element
-     * {@code array}.
+     * Create a new grid view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
+     * @param lattice the underlying lattice data
      */
-    public DoubleGrid2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid2d::new);
+    public DoubleGrid2d(Lattice2d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    @Override
+    public DoubleGrid2d create(Structure2d structure, DoubleArray array) {
+        return new DoubleGrid2d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleGrid2d other) {
+        DoubleLattice2d.super.assign(other);
     }
 
     /**
@@ -78,7 +84,7 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    public DoubleGrid1d project(final Projection2d projection) {
+    public DoubleGrid1d project(Projection2d projection) {
         return new DoubleGrid1d(projection.apply(structure()), array());
     }
 
@@ -105,9 +111,9 @@ public final class DoubleGrid2d extends BaseDoubleGrid2d<DoubleGrid2d> {
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static DoubleGrid2d of(final Extent2d extent, final double... values) {
+    public static DoubleGrid2d of(Extent2d extent, double... values) {
         return new DoubleGrid2d(
-            new Structure2d(extent),
+            Structure2d.of(extent),
             new DenseDoubleArray(values)
         );
     }

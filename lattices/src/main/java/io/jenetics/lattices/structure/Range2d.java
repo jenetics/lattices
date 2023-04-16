@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Iterator;
+
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
@@ -31,7 +33,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Range2d(Index2d start, Extent2d extent) {
+public record Range2d(Index2d start, Extent2d extent)
+    implements Iterable<Index2d>
+{
 
     public Range2d {
         requireNonNull(start);
@@ -46,7 +50,7 @@ public record Range2d(Index2d start, Extent2d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range2d(final Index2d start, final Index2d end) {
+    public Range2d(Index2d start, Index2d end) {
         this(
             start,
             new Extent2d(
@@ -65,13 +69,9 @@ public record Range2d(Index2d start, Extent2d extent) {
         this(Index2d.ZERO, extent);
     }
 
-    /**
-     * Return the number of elements of this range.
-     *
-     * @return the number of elements of this range
-     */
-    public int size() {
-        return extent.size();
+    @Override
+    public Iterator<Index2d> iterator() {
+        return new Index2dIterator(this);
     }
 
     @Override

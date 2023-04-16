@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.array.DenseObjectArray;
+import io.jenetics.lattices.grid.array.DenseObjectArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -35,10 +35,10 @@ public class ObjectGrid1dTest {
     @Test
     public void assign() {
         final var extent = new Extent1d(100);
-        final var structure = new Structure1d(extent);
+        final var structure = Structure1d.of(extent);
         final var grid = new ObjectGrid1d<String>(
             structure,
-            DenseObjectArray.ofSize(extent.size())
+            DenseObjectArray.ofSize(extent.value())
         );
 
         grid.assign("123");

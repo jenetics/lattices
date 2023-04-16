@@ -25,13 +25,13 @@
  */
 plugins {
 	base
-	id("me.champeau.jmh") version "0.6.6" apply false
+	id("me.champeau.jmh") version "0.7.0" apply false
 }
 
 rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "7.6"
+	version = "8.0.2"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -62,18 +62,15 @@ gradle.projectsEvaluated {
 	subprojects {
 		val project = this
 
-		tasks.withType<JavaCompile> {
-			options.compilerArgs.add("-Xlint:" + xlint())
-		}
+        tasks.withType<Test> {
+            useTestNG()
+        }
 
 		plugins.withType<JavaPlugin> {
 			configure<JavaPluginExtension> {
+                modularity.inferModulePath.set(true)
 				sourceCompatibility = JavaVersion.VERSION_17
 				targetCompatibility = JavaVersion.VERSION_17
-			}
-
-			configure<JavaPluginExtension> {
-				modularity.inferModulePath.set(true)
 			}
 
 			setupJava(project)
@@ -81,8 +78,13 @@ gradle.projectsEvaluated {
 			setupJavadoc(project)
 		}
 
+        tasks.withType<JavaCompile> {
+            modularity.inferModulePath.set(true)
+            options.compilerArgs.add("-Xlint:" + xlint())
+        }
+
 		if (plugins.hasPlugin("maven-publish")) {
-			setupPublishing(project)
+            setupPublishing(project)
 		}
 	}
 
@@ -129,7 +131,7 @@ fun setupTestReporting(project: Project) {
 	project.apply(plugin = "jacoco")
 
 	project.configure<JacocoPluginExtension> {
-		toolVersion = "0.8.7"
+		toolVersion = "0.8.8"
 	}
 
 	project.tasks {
@@ -155,6 +157,8 @@ fun setupTestReporting(project: Project) {
  */
 fun setupJavadoc(project: Project) {
 	project.tasks.withType<Javadoc> {
+        modularity.inferModulePath.set(true)
+
 		val doclet = options as StandardJavadocDocletOptions
 		doclet.addBooleanOption("Xdoclint:accessibility,html,reference,syntax", true)
 

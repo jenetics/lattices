@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.grid.array.Array;
+import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structural2d;
+import io.jenetics.lattices.structure.Self;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
@@ -37,8 +37,41 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structural2d, Loopable2d, Grid<A, G>
+    extends Lattice2d<A>, Self<G>
 {
+
+    /**
+     * Factory interface for creating 2-d grids.
+     *
+     * @param <G> the type created by the factory
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    @FunctionalInterface
+    interface Factory<G extends Grid2d<?, G>> {
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param extent the extent of the created object
+         * @return a new object with the given {@code extent}
+         */
+        G create(Extent2d extent);
+
+        /**
+         * Create a new matrix with the given {@code size}.
+         *
+         * @param rows the number of rows
+         * @param cols the number of columns
+         * @return a new structure with the given size
+         */
+        default G create(int rows, int cols) {
+            return create(new Extent2d(rows, cols));
+        }
+    }
 
     /**
      * Create a new grid (view) with the given structure and the underlying
@@ -48,7 +81,18 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure2d structure, final A array);
+    G create(Structure2d structure, A array);
+
+    /**
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
+     *
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
+     */
+    default G create(Lattice2d<A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
 
     /**
      * Assigns the elements of the {@code other} grid to this grid.
@@ -64,9 +108,9 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent2d extent) {
+    default G like(Extent2d extent) {
         return create(
-            new Structure2d(extent),
+            Structure2d.of(extent),
             array().like(extent.size())
         );
     }
@@ -77,10 +121,14 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
         copy.assign(self());
@@ -93,19 +141,8 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View2d view) {
+    default G view(View2d view) {
         return create(view.apply(structure()), array());
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
     }
 
 }

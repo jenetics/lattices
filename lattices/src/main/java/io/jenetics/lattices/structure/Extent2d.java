@@ -19,37 +19,53 @@
  */
 package io.jenetics.lattices.structure;
 
+import static io.jenetics.lattices.structure.Structures.multNotSave;
+
+import java.util.Iterator;
+
 /**
  * The extent of 2-d structures.
  *
  * @param rows the number of rows, must be greater or equal zero
  * @param cols the number of columns, must be greater or equal zero
+ * @param channels the number of channels
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent2d(int rows, int cols) {
+public record Extent2d(int rows, int cols, int channels) implements Iterable<Index2d> {
 
     /**
      * Create a new 2-d extent.
      *
      * @param rows the number of rows
      * @param cols the number of cols
-     * @throws IndexOutOfBoundsException if one of the arguments is smaller than
+     * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code rows*cols > Integer.MAX_VALUE}
      */
-    public Extent2d {
-        if (rows < 0 || cols < 0 || multNotSave(rows, cols)) {
-            throw new IndexOutOfBoundsException(
-                "Extent is out of bounds: [%d, %d].".formatted(rows, cols)
-            );
-        }
+    public Extent2d(int rows, int cols) {
+        this(rows, cols, 1);
     }
 
-    private static boolean multNotSave(final int x, final int y) {
-        long r = (long)x*(long)y;
-        return (int)r != r;
+    /**
+     * Create a new 2-d extent.
+     *
+     * @param rows the number of rows
+     * @param cols the number of cols
+     * @param channels the number of channels
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
+     */
+    public Extent2d {
+        if (rows < 0 || cols < 0 || channels < 1 ||
+            multNotSave(rows, cols, channels))
+        {
+            throw new IllegalArgumentException(
+                "Extent is out of bounds: [%d, %d, channels=%d]."
+                    .formatted(rows, cols, channels)
+            );
+        }
     }
 
     /**
@@ -59,6 +75,21 @@ public record Extent2d(int rows, int cols) {
      */
     public int size() {
         return rows*cols;
+    }
+
+    /**
+     * Return the length of the array, needed for storing all cells:
+     * {@code size()*channels}.
+     *
+     * @return the array length needed for storing all cells
+     */
+    public int length() {
+        return size()*channels;
+    }
+
+    @Override
+    public Iterator<Index2d> iterator() {
+        return new Index2dIterator(new Range2d(this));
     }
 
     @Override

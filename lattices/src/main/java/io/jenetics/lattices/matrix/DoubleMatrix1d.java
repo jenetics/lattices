@@ -19,14 +19,16 @@
  */
 package io.jenetics.lattices.matrix;
 
+import static java.lang.Math.min;
+
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
-import io.jenetics.lattices.NumericalContext;
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.BaseDoubleGrid1d;
-import io.jenetics.lattices.grid.Factory1d;
+import io.jenetics.lattices.grid.Grid1d;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DoubleArray;
+import io.jenetics.lattices.grid.lattice.DoubleLattice1d;
+import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -43,26 +45,36 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
+public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
+    implements DoubleLattice1d, Grid1d<DoubleArray, DoubleMatrix1d>
+{
 
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Factory1d<DoubleMatrix1d> DENSE = structure ->
-        new DoubleMatrix1d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
+        extent -> new DoubleMatrix1d(
+            Structure1d.of(extent),
+            DenseDoubleArray.ofSize(extent.value())
         );
 
     /**
-     * Create a new 1-d matrix with the given {@code structure} and element
-     * {@code array}.
+     * Create a new matrix view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
+     * @param lattice the underlying lattice data
      */
-    public DoubleMatrix1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array, DoubleMatrix1d::new);
+    public DoubleMatrix1d(Lattice1d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    @Override
+    public DoubleMatrix1d create(Structure1d structure, DoubleArray array) {
+        return new DoubleMatrix1d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleMatrix1d other) {
+        DoubleLattice1d.super.assign(other);
     }
 
     /* *************************************************************************
@@ -79,16 +91,12 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
      * @param length the number of cells to be considered
      * @return the sum of products, start if {@code from < 0 || length < 0}
      */
-    public double dotProduct(
-        final DoubleMatrix1d y,
-        final int from,
-        final int length
-    ) {
+    public double dotProduct(DoubleMatrix1d y, int from, int length) {
         if (from < 0 || length <= 0) {
             return 0;
         }
 
-        final int to = Math.min(Math.min(size(), y.size()), from + length);
+        final int to = min(min(extent().size(), y.extent().size()), from + length);
 
         double sum = 0;
         for (int i = from; i < to; ++i) {
@@ -105,8 +113,8 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
      * @param y the second vector
      * @return the sum of products
      */
-    public double dotProduct(final DoubleMatrix1d y) {
-        return dotProduct(y, 0, size());
+    public double dotProduct(DoubleMatrix1d y) {
+        return dotProduct(y, 0, extent().size());
     }
 
     /**
@@ -128,7 +136,7 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
         final var context = NumericalContext.get();
 
         int cardinality = 0;
-        for (int i = 0; i < size(); ++i) {
+        for (int i = 0; i < extent().size(); ++i) {
             if (context.isZero(get(i))) {
                 ++cardinality;
             }
@@ -145,7 +153,7 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
         final var context = NumericalContext.get();
 
         final var indices = IntStream.builder();
-        for (int i = 0; i < size(); ++i) {
+        for (int i = 0; i < extent().size(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);
             }
@@ -154,8 +162,23 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
         return indices.build().toArray();
     }
 
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param other the second matrix to compare
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public boolean equals(DoubleMatrix1d other) {
+        final var context = NumericalContext.get();
+
+        return extent().equals(other.extent()) &&
+            allMatch(i -> context.equals(get(i), other.get(i)));
+    }
+
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
             equals(matrix);
@@ -171,9 +194,9 @@ public final class DoubleMatrix1d extends BaseDoubleGrid1d<DoubleMatrix1d> {
      * @param values the returned matrix
      * @return a matrix view of the given input data
      */
-    public static DoubleMatrix1d of(final double... values) {
+    public static DoubleMatrix1d of(double... values) {
         return new DoubleMatrix1d(
-            new Structure1d(new Extent1d(values.length)),
+            Structure1d.of(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

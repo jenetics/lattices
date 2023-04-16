@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -34,9 +34,9 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static boolean isDense(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C
     ) {
         return
             A.array() instanceof DenseDoubleArray &&
@@ -45,11 +45,11 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static void denseMult(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C,
-        final double alpha,
-        final double beta
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C,
+        double alpha,
+        double beta
     ) {
         final int m = A.rows();
         final int n = A.cols();
@@ -59,13 +59,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_col_stride = A.order().stride().col();
-        final int B_col_stride = B.order().stride().col();
-        final int C_col_stride = C.order().stride().col();
+        final int A_col_stride = A.structure().layout().stride().col();
+        final int B_col_stride = B.structure().layout().stride().col();
+        final int C_col_stride = C.structure().layout().stride().col();
 
-        final int A_row_stride = A.order().stride().row();
-        final int B_row_stride = B.order().stride().row();
-        final int C_row_stride = C.order().stride().row();
+        final int A_row_stride = A.structure().layout().stride().row();
+        final int B_row_stride = B.structure().layout().stride().row();
+        final int C_row_stride = C.structure().layout().stride().row();
 
         /*
         A is blocked to hide memory latency
@@ -94,9 +94,9 @@ final class DenseDoubleMatrix2dMult {
         }
 
         while (--blocks >= 0) {
-            int B_j = B.order().index(0, 0);
-            int A_index = A.order().index(rr, 0);
-            int C_j = C.order().index(rr, 0);
+            int B_j = B.structure().offset(0, 0);
+            int A_index = A.structure().offset(rr, 0);
+            int C_j = C.structure().offset(rr, 0);
             rr += m_block;
             if (blocks == 0) {
                 m_block += m - rr;

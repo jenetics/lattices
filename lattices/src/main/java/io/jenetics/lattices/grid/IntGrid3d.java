@@ -19,8 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseIntArray;
-import io.jenetics.lattices.array.IntArray;
+import io.jenetics.lattices.grid.array.DenseIntArray;
+import io.jenetics.lattices.grid.array.IntArray;
+import io.jenetics.lattices.grid.lattice.IntLattice3d;
+import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -33,7 +36,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new int[3*50*100];
  * final var grid = new IntGrid3d(
- *     new Structure3d(new Extent3d(3, 50, 100)),
+ *     Structure3d.of(new Extent3d(3, 50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
@@ -42,32 +45,36 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class IntGrid3d extends BaseIntGrid3d<IntGrid3d> {
+public record IntGrid3d(Structure3d structure, IntArray array)
+    implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
+{
 
     /**
-     * Factory for creating dense 3-d double grids.
+     * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Factory3d<IntGrid3d> DENSE = structure ->
-        new IntGrid3d(
-            structure,
-            DenseIntArray.ofSize(structure.extent().size())
+    public static final Grid3d.Factory<IntGrid3d> DENSE =
+        extent -> new IntGrid3d(
+            Structure3d.of(extent),
+            DenseIntArray.ofSize(extent.size())
         );
 
     /**
-     * Create a new 3-d matrix with the given {@code structure} and element
-     * {@code array}.
+     * Create a new grid view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
+     * @param lattice the underlying lattice data
      */
-    public IntGrid3d(final Structure3d structure, final IntArray array) {
-        super(structure, array, IntGrid3d::new);
+    public IntGrid3d(Lattice3d<? extends IntArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    @Override
+    public IntGrid3d create(Structure3d structure, IntArray array) {
+        return new IntGrid3d(structure, array);
+    }
+
+    @Override
+    public void assign(IntGrid3d other) {
+        IntLattice3d.super.assign(other);
     }
 
     /**
@@ -77,8 +84,15 @@ public final class IntGrid3d extends BaseIntGrid3d<IntGrid3d> {
      * @param projection the projection to apply
      * @return a 2-d projection from this 1-d grid
      */
-    public IntGrid2d project(final Projection3d projection) {
+    public IntGrid2d project(Projection3d projection) {
         return new IntGrid2d(projection.apply(structure()), array());
+    }
+
+    public static IntGrid3d of(Extent3d extent, int... values) {
+        return new IntGrid3d(
+            Structure3d.of(extent),
+            new DenseIntArray(values)
+        );
     }
 
 }

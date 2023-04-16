@@ -19,8 +19,11 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.array.DoubleArray;
+import io.jenetics.lattices.grid.lattice.DoubleLattice3d;
+import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -33,7 +36,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new double[3*50*100];
  * final var grid = new DoubleGrid3d(
- *     new Structure3d(new Extent3d(3, 50, 100)),
+ *     Structure3d.of(new Extent3d(3, 50, 100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -42,32 +45,36 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
+public record DoubleGrid3d(Structure3d structure, DoubleArray array)
+    implements DoubleLattice3d, Grid3d<DoubleArray, DoubleGrid3d>
+{
 
     /**
-     * Factory for creating dense 3-d double grids.
+     * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Factory3d<DoubleGrid3d> DENSE = structure ->
-        new DoubleGrid3d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Grid3d.Factory<DoubleGrid3d> DENSE =
+        extent -> new DoubleGrid3d(
+            Structure3d.of(extent),
+            DenseDoubleArray.ofSize(extent.size())
         );
 
     /**
-     * Create a new 3-d matrix with the given {@code structure} and element
-     * {@code array}.
+     * Create a new grid view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
+     * @param lattice the underlying lattice data
      */
-    public DoubleGrid3d(final Structure3d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid3d::new);
+    public DoubleGrid3d(Lattice3d<? extends DoubleArray> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    @Override
+    public DoubleGrid3d create(Structure3d structure, DoubleArray array) {
+        return new DoubleGrid3d(structure, array);
+    }
+
+    @Override
+    public void assign(DoubleGrid3d other) {
+        DoubleLattice3d.super.assign(other);
     }
 
     /**
@@ -77,8 +84,15 @@ public final class DoubleGrid3d extends BaseDoubleGrid3d<DoubleGrid3d> {
      * @param projection the projection to apply
      * @return a 2-d projection from this 3-d grid
      */
-    public DoubleGrid2d project(final Projection3d projection) {
+    public DoubleGrid2d project(Projection3d projection) {
         return new DoubleGrid2d(projection.apply(structure()), array());
+    }
+
+    public static DoubleGrid3d of(Extent3d extent, double... values) {
+        return new DoubleGrid3d(
+            Structure3d.of(extent),
+            new DenseDoubleArray(values)
+        );
     }
 
 }

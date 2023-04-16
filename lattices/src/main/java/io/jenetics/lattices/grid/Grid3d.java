@@ -19,10 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.grid.array.Array;
+import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Range3d;
-import io.jenetics.lattices.structure.Structural3d;
+import io.jenetics.lattices.structure.Self;
 import io.jenetics.lattices.structure.Structure3d;
 import io.jenetics.lattices.structure.View3d;
 
@@ -37,8 +37,42 @@ import io.jenetics.lattices.structure.View3d;
  * @version 3.0
  */
 public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
-    extends Structural3d, Loopable3d, Grid<A, G>
+    extends Lattice3d<A>, Self<G>
 {
+
+    /**
+     * Factory interface for creating 3-d grids.
+     *
+     * @param <G> the type created by the factory
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    @FunctionalInterface
+    interface Factory<G extends Grid3d<?, G>> {
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param extent the extent of the created object
+         * @return a new object with the given {@code extent}
+         */
+        G create(Extent3d extent);
+
+        /**
+         * Create a new matrix with the given {@code size}.
+         *
+         * @param slices the number of slices
+         * @param rows the number of rows
+         * @param cols the number of columns
+         * @return a new structure with the given size
+         */
+        default G create(int slices, int rows, int cols) {
+            return create(new Extent3d(slices, rows, cols));
+        }
+    }
 
     /**
      * Create a new grid (view) with the given structure and the underlying
@@ -48,14 +82,25 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure3d structure, final A array);
+    G create(Structure3d structure, final A array);
+
+    /**
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
+     *
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
+     */
+    default G create(Lattice3d<A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
 
     /**
      * Assigns the elements of the {@code other} grid to this grid.
      *
      * @param other the source of the grid elements
      */
-    void assign(final G other);
+    void assign(G other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -64,9 +109,9 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent3d extent) {
+    default G like(Extent3d extent) {
         return create(
-            new Structure3d(extent),
+            Structure3d.of(extent),
             array().like(extent.size())
         );
     }
@@ -77,10 +122,14 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
         copy.assign(self());
@@ -93,19 +142,8 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View3d view) {
+    default G view(View3d view) {
         return create(view.apply(structure()), array());
-    }
-
-    /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
-     *
-     * @return the looping strategy of this structural
-     */
-    @Override
-    default Loop3d loop() {
-        return Loop3d.of(new Range3d(extent()));
     }
 
 }

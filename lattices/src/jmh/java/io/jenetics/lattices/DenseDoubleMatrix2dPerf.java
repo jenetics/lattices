@@ -19,12 +19,13 @@
  */
 package io.jenetics.lattices;
 
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
+import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
 import java.util.concurrent.TimeUnit;
 
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -36,8 +37,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
-import io.jenetics.lattices.matrix.blas.Algebra;
-import io.jenetics.lattices.testfuxtures.Colts;
+import io.jenetics.lattices.matrix.linalg.Algebra;
+import io.jenetics.lattices.testfixtures.Colts;
 
 @Warmup(iterations = 2)
 @Measurement(iterations = 4)
@@ -51,8 +52,8 @@ public class DenseDoubleMatrix2dPerf {
 
     @State(Scope.Benchmark)
     public static class Matrices {
-        DoubleMatrix2d latticesA = next(size, size);
-        DoubleMatrix2d latticesB = next(size, size);
+        DoubleMatrix2d latticesA = MatrixRandom.nextDoubleMatrix2d(size, size);
+        DoubleMatrix2d latticesB = MatrixRandom.nextDoubleMatrix2d(size, size);
         DoubleMatrix2D coltA = Colts.toColt(latticesA);
         DoubleMatrix2D coltB = Colts.toColt(latticesB);
     }

@@ -19,10 +19,18 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 
 /**
  * This interface defines a projection from 3-d to 2-d.
+ *
+ * @see Projection2d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface Projection3d {
@@ -33,8 +41,31 @@ public interface Projection3d {
      * @param structure the structure to apply this projection
      * @return the projected 2-d structure
      */
-    Structure2d apply(final Structure3d structure);
+    Structure2d apply(Structure3d structure);
 
+    /**
+     * Returns a new projection function, which first applies the given view
+     * transformation and then {@code this} projection.
+     *
+     * @param view the view to apply first to a given 3-d structure
+     * @return a new projection, which applies first the given view
+     */
+    default Projection3d compose(View3d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Returns a new projection function, which applies the given view
+     * transformation after {@code this} projection.
+     *
+     * @param view the view transformation to be applied after the projection
+     * @return a new projection
+     */
+    default Projection3d andThen(View2d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Create a <em>slice</em>-projection for the slice with the given
@@ -44,7 +75,7 @@ public interface Projection3d {
      * @return a new <em>slice</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d slice(final int index) {
+    static Projection3d slice(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -55,14 +86,14 @@ public interface Projection3d {
                     structure.extent().rows(),
                     structure.extent().cols()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().row(),
-                        structure.order().index(index, 0, 0)
+                        structure.layout().start().row(),
+                        structure.layout().offset(index, 0, 0)
                     ),
                     new Stride2d(
-                        structure.order().stride().row(),
-                        structure.order().stride().col()
+                        structure.layout().stride().row(),
+                        structure.layout().stride().col()
                     )
                 )
             );
@@ -76,7 +107,7 @@ public interface Projection3d {
      * @return a new <em>row</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d row(final int index) {
+    static Projection3d row(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -87,14 +118,14 @@ public interface Projection3d {
                     structure.extent().slices(),
                     structure.extent().cols()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().slice(),
-                        structure.order().index(0, index, 0)
+                        structure.layout().start().slice(),
+                        structure.layout().offset(0, index, 0)
                     ),
                     new Stride2d(
-                        structure.order().stride().slice(),
-                        structure.order().stride().col()
+                        structure.layout().stride().slice(),
+                        structure.layout().stride().col()
                     )
                 )
             );
@@ -109,7 +140,7 @@ public interface Projection3d {
      * @return a new <em>column</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection3d col(final int index) {
+    static Projection3d col(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -120,14 +151,14 @@ public interface Projection3d {
                     structure.extent().slices(),
                     structure.extent().rows()
                 ),
-                new Order2d(
+                new Layout2d(
                     new Index2d(
-                        structure.order().start().slice(),
-                        structure.order().index(0, 0, index)
+                        structure.layout().start().slice(),
+                        structure.layout().offset(0, 0, index)
                     ),
                     new Stride2d(
-                        structure.order().stride().slice(),
-                        structure.order().stride().row()
+                        structure.layout().stride().slice(),
+                        structure.layout().stride().row()
                     )
                 )
             );

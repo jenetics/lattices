@@ -23,29 +23,80 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
- * the index oder of the underlying 1-d structure.
+ * the index oder of the underlying 1-d structure. The {@link View3d} and
+ * {@link Projection3d} functions are used for <em>manipulating</em> this
+ * structure object.
+ *
+ * <pre>{@code
+ * // Creating a new structure with the given extent.
+ * final var structure = Structure3d.of(new Extent3d(500, 1000, 50));
+ * }</pre>
  *
  * @param extent the extent of the structure
- * @param order the element order
+ * @param layout the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Order3d order) {
+public record Structure3d(Extent3d extent, Layout3d layout)
+    implements OffsetMapper3d
+{
 
     public Structure3d {
         requireNonNull(extent);
-        requireNonNull(order);
+        requireNonNull(layout);
+    }
+
+    @Override
+    public int offset(int slice, int row, int col) {
+        return layout.offset(slice, row, col);
+    }
+
+    @Override
+    public int offset(Index3d index) {
+        return layout.offset(index);
+    }
+
+    @Override
+    public Index3d index(int offset) {
+        return layout.index(offset);
     }
 
     /**
-     * Create a new structure with the given extent and the default element order.
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
      *
      * @param extent the extent of the structure
+     * @return a new structure object with the given extent
      */
-    public Structure3d(final Extent3d extent) {
-        this(extent, new Order3d(extent));
+    public static Structure3d of(Extent3d extent) {
+        return new Structure3d(
+            extent,
+            new Layout3d(
+                Index3d.ZERO,
+                new Stride3d(
+                    extent.rows()*extent.cols()*extent.channels(),
+                    extent.cols()*extent.channels(),
+                    extent.channels()
+                )
+            )
+        );
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way for creating instances of structure
+     * objects.
+     *
+     * @param slices the number of slices of the structure
+     * @param rows the number of rows of the structure
+     * @param cols the number of columns of the structure
+     * @return a new structure object with the given extent
+     */
+    public static Structure3d of(int slices, int rows, int cols) {
+        return of(new Extent3d(slices, rows, cols));
     }
 
 }

@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Iterator;
+
 /**
  * Represents a <em>grid</em> range with the given parameters.
  *
@@ -31,7 +33,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Range1d(Index1d start, Extent1d extent) {
+public record Range1d(Index1d start, Extent1d extent)
+    implements Iterable<Index1d>
+{
 
     public Range1d {
         requireNonNull(start);
@@ -46,8 +50,20 @@ public record Range1d(Index1d start, Extent1d extent) {
      * @param end the end index, exclusively
      * @throws IllegalArgumentException if {@code start >= end}
      */
-    public Range1d(final Index1d start, final Index1d end) {
+    public Range1d(Index1d start, Index1d end) {
         this(start, new Extent1d(end.value() - start.value()));
+    }
+
+    /**
+     * Create a new range object with the given {@code start} and {@code end}
+     * index.
+     *
+     * @param start the start index, inclusively
+     * @param end the end index, exclusively
+     * @throws IllegalArgumentException if {@code start >= end}
+     */
+    public Range1d(int start, int end) {
+        this(new Index1d(start), new Index1d(end));
     }
 
     /**
@@ -56,15 +72,20 @@ public record Range1d(Index1d start, Extent1d extent) {
      *
      * @param extent the extent of the new range
      */
-    public Range1d(final Extent1d extent) {
+    public Range1d(Extent1d extent) {
         this(Index1d.ZERO, extent);
+    }
+
+    @Override
+    public Iterator<Index1d> iterator() {
+        return new Index1dIterator(this, Stride1d.ONE);
     }
 
     @Override
     public String toString() {
         return "[%d..%d]".formatted(
             start.value(),
-            start.value() + extent.size()
+            start.value() + extent.value()
         );
     }
 

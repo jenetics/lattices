@@ -6,6 +6,10 @@
 
 This library offers an object-oriented abstraction for modelling multidimensional _rectangular_ lattices. It is designed to be scalable in terms of performance and memory usage. Its architecture was inspired by the [Colt](https://dst.lbl.gov/ACSSoftware/colt/) library, but the current design and its implementation has been brought into the _modern_ Java world.
 
+The library contains of two modules. The `io.jenetics.lattices.structure` module defines the mapping values of _multi_-dimensional coordinates onto one-dimensional arrays. This module also contains _view_- and _projection_ functions. The main module, `io.jenetics.lattices` contains the _multi_-dimensional data structures and matrix classes for doing linear algebra.
+
+> **Note:** The main design principle of the library is, that everything is a _view_. No data is actually copied for every transformation applied. A copy is only performed, if explicitly requested. Mutability is embraced.
+
 ## Build the library
 
 **Lattices** requires at least **Java 17** to compile and run.
@@ -16,7 +20,103 @@ Check out the master branch from GitHub.
 
 _Lattices_ uses [Gradle](http://www.gradle.org/downloads) as build system.
 
-## Functionality
+## `io.jenetics.lattices.structure`
+
+This module is used for defining the mappings from _n_-d space to the _1_-d space. It doesn't contain any concrete data structures containing _n_-dimensional points.
+
+```java
+// Interface for calculating the array offset for a given 2-d coordinate.
+public interface OffsetMapper2d {
+    // Return the (array) offset (index) of the given [row, col] point.
+    int offset(int row, int col);
+    // Return the index point for the given (array) offset.
+    Index2d index(int offset);
+}
+```
+
+The main entry point for creating mapper functions is the `Structure<N>d` class, which can be created the following way.
+
+```java
+// Defining the extent of the 2-d structure.
+final var extent = new Extent2d(100, 400);
+
+// Creating the 2-d structure.
+final var structure = Structure2d.of(extent);
+
+// Creating the array, which holds the values to be stored.
+final var values = new double[extent.length()];
+
+// Set the value 'Math.PI' at the point [20, 30];
+values[structure.offset(20, 30)] = Math.PI;
+```
+
+Beside this basic functionality, the _View_ and _Projection_ functions are able to do some basic transformations of the _n_-d data, without copying actual data.
+
+```java
+// Create the range of the view to be created.
+final var range = new Range2d(
+    // Start index of the range.
+    new Index2d(5, 5),
+    // Extent of the range.
+    new Extend2d(50, 50)
+);
+
+// Create the view function with the given range.
+final var view = View2d.of(range)
+
+// Create a new structure (view) from the previous one.
+final var structure2 = view.apply(structure);
+
+// The value Math.PI is now located at position [15, 25], 
+// since we we created a view from the original structure, 
+// which started at point [5, 5].    
+assert values[structure2.offset(15, 25)] == Math.PI;
+```
+
+The _view_ functions doesn't change the dimensionality of the structure, in contrast to the _projection_ functions, which reduces the dimensionality by one.
+
+```java
+// Create a projection for row 20.
+final var projection = Projection2d.row(20);
+
+// Create a one-dimensional structure.
+final Structure1d structure3 = projection.apply(structure);
+
+// At index 25, we can access our stored value.
+assert values[structure3.offset(30)] == Math.PI;
+```
+
+It is off course possible to create a _projection_ from a structure _view_.
+
+```java
+// Create a projection for row 20.
+final var projection = Projection2d.row(15);
+
+// Create a one-dimensional structure.
+final Structure1d structure4 = projection.apply(structure2);
+
+// At index 25, we can access our stored value.
+assert values[structure4.offset(25)] == Math.PI;
+```
+
+Or you can compose _projection_ and _view_ functions.
+
+```java
+// Create a projection for row 20.
+final var projection = Projection2d.row(15)
+    .compose(View2d.of(range));
+
+// Create a one-dimensional structure.
+final Structure1d structure5 = projection.apply(structure);
+
+// At index 25, we can access our stored value.
+assert values[structure5.offset(25)] == Math.PI;
+```
+
+
+## `io.jenetics.lattices`
+
+This module defines _multi_-dimensional data structures and matrix classes for doing linear algebra.
 
 ### Grid
 
