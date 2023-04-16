@@ -58,7 +58,7 @@ allprojects {
 /**
  * Project configuration *after* the projects has been evaluated.
  */
-afterEvaluate {
+gradle.projectsEvaluated {
 	subprojects {
 		val project = this
 
@@ -84,7 +84,7 @@ afterEvaluate {
         }
 
 		if (plugins.hasPlugin("maven-publish")) {
-			setupPublishing(project)
+            setupPublishing(project)
 		}
 	}
 
