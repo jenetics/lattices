@@ -29,15 +29,36 @@ import java.util.Iterator;
  * @param slices the number of slices, must be greater or equal zero
  * @param rows the number of rows, must be greater or equal zero
  * @param cols the number of columns, must be greater or equal zero
- * @param channels the number of channels
+ * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @version 3.0
  * @since 3.0
  */
-public record Extent3d(int slices, int rows, int cols, int channels)
+public record Extent3d(int slices, int rows, int cols, int bands)
     implements Iterable<Index3d>
 {
+
+    /**
+     * Create a new 3-d extent.
+     *
+     * @param slices the number of slices, must be greater or equal zero
+     * @param rows the number of rows, must be greater or equal zero
+     * @param cols the number of columns, must be greater or equal zero
+     * @param bands the number of bands
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code slices*rows*cols*channels > Integer.MAX_VALUE}
+     */
+    public Extent3d {
+        if (slices < 0 || rows < 0 || cols < 0 || bands < 1 ||
+            multNotSave(slices, rows, cols, bands))
+        {
+            throw new IllegalArgumentException(
+                "Extent is out of bounds: [%d, %d, %d, bands=%d]."
+                    .formatted(slices, rows, cols, bands)
+            );
+        }
+    }
 
     /**
      * Create a new 3-d extent.
@@ -50,27 +71,6 @@ public record Extent3d(int slices, int rows, int cols, int channels)
      */
     public Extent3d(int slices, int rows, int cols) {
         this(slices, rows, cols, 1);
-    }
-
-    /**
-     * Create a new 3-d extent.
-     *
-     * @param slices the number of slices, must be greater or equal zero
-     * @param rows the number of rows, must be greater or equal zero
-     * @param cols the number of columns, must be greater or equal zero
-     * @param channels the number of channels
-     * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code slices*rows*cols*channels > Integer.MAX_VALUE}
-     */
-    public Extent3d {
-        if (slices < 0 || rows < 0 || cols < 0 || channels < 1 ||
-            multNotSave(slices, rows, cols, channels))
-        {
-            throw new IllegalArgumentException(
-                "Extent is out of bounds: [%d, %d, %d, channels=%d]."
-                    .formatted(slices, rows, cols, channels)
-            );
-        }
     }
 
     /**
@@ -89,7 +89,7 @@ public record Extent3d(int slices, int rows, int cols, int channels)
      * @return the array length needed for storing all cells
      */
     public int length() {
-        return size()*channels;
+        return size()* bands;
     }
 
     @Override

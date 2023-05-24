@@ -20,24 +20,24 @@
 package io.jenetics.lattices.structure;
 
 /**
- * This class represents a channel number. Channel numbers are zero based.
+ * This class represents a band number. Band numbers are zero based.
  *
- * @param value the zero based channel number
+ * @param value the zero based band number
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Channel(int value) {
+public record Band(int value) {
 
-    public static final Channel ZERO = new Channel(0);
-    public static final Channel ONE = new Channel(1);
-    public static final Channel TWO = new Channel(2);
+    public static final Band ZERO = new Band(0);
+    public static final Band ONE = new Band(1);
+    public static final Band TWO = new Band(2);
 
-    public Channel {
+    public Band {
         if (value < 0) {
             throw new IllegalArgumentException(
-                "Channels must be >= 0, but was %d.".formatted(value)
+                "Band must be >= 0, but was %d.".formatted(value)
             );
         }
     }

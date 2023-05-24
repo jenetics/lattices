@@ -53,9 +53,9 @@ public class View1dTest {
         final var structure = view.apply(STRUCTURE);
         assertThat(structure.extent().value()).isEqualTo(range.extent().value());
 
-        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View1d.of(Channel.ONE).apply(structure);
-        final var structure2 = View1d.of(Channel.TWO).apply(structure);
+        final var structure0 = View1d.of(Band.ZERO).apply(structure);
+        final var structure1 = View1d.of(Band.ONE).apply(structure);
+        final var structure2 = View1d.of(Band.TWO).apply(structure);
 
         for (int i = 0; i < structure.extent().value(); ++i) {
             final var offset = structure.offset(i);
@@ -89,9 +89,9 @@ public class View1dTest {
         assertThat(structure.extent().value())
             .isEqualTo(STRUCTURE.extent().value() - start.value());
 
-        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View1d.of(Channel.ONE).apply(structure);
-        final var structure2 = View1d.of(Channel.TWO).apply(structure);
+        final var structure0 = View1d.of(Band.ZERO).apply(structure);
+        final var structure1 = View1d.of(Band.ONE).apply(structure);
+        final var structure2 = View1d.of(Band.TWO).apply(structure);
 
         for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);
@@ -121,9 +121,9 @@ public class View1dTest {
         final var view = View1d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
-        final var structure0 = View1d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View1d.of(Channel.ONE).apply(structure);
-        final var structure2 = View1d.of(Channel.TWO).apply(structure);
+        final var structure0 = View1d.of(Band.ZERO).apply(structure);
+        final var structure1 = View1d.of(Band.ONE).apply(structure);
+        final var structure2 = View1d.of(Band.TWO).apply(structure);
 
         for (int i = 0; i < structure.extent().value(); ++i) {
             final int offset = structure.layout().offset(i);

@@ -77,8 +77,8 @@ public record Structure2d(Extent2d extent, Layout2d layout)
             new Layout2d(
                 Index2d.ZERO,
                 new Stride2d(
-                    extent.cols()*extent.channels(),
-                    extent.channels()
+                    extent.cols()*extent.bands(),
+                    extent.bands()
                 )
             )
         );

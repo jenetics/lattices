@@ -142,20 +142,19 @@ public interface View1d {
      * Return a transformation which creates a view onto the given
      * {@code channel}.
      *
-     * @param channel the channel number of the returned view
+     * @param band the channel number of the returned view
      * @return a transformation which creates a view onto the given
      *        {@code channel}
      */
-    static View1d of(Channel channel) {
-        requireNonNull(channel);
+    static View1d of(Band band) {
+        requireNonNull(band);
 
         return structure -> {
             return new Structure1d(
                 structure.extent(),
                 new Layout1d(
                     structure.layout().start(),
-                    structure.layout().stride(),
-                    channel
+                    structure.layout().stride(), band
                 )
             );
         };

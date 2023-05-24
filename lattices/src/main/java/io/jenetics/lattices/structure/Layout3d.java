@@ -34,22 +34,22 @@ import static java.util.Objects.requireNonNull;
  *
  * @param start the start index of the first element
  * @param stride the element strides
- * @param channel the channel number of this structure, zero based
+ * @param band the band number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout3d(Index3d start, Stride3d stride, Channel channel) {
-
-    public Layout3d(Index3d start, Stride3d stride) {
-        this(start, stride, Channel.ZERO);
-    }
+public record Layout3d(Index3d start, Stride3d stride, Band band) {
 
     public Layout3d {
         requireNonNull(start);
         requireNonNull(stride);
-        requireNonNull(channel);
+        requireNonNull(band);
+    }
+
+    public Layout3d(Index3d start, Stride3d stride) {
+        this(start, stride, Band.ZERO);
     }
 
     int offset(int slice, int row, int col) {
@@ -57,7 +57,7 @@ public record Layout3d(Index3d start, Stride3d stride, Channel channel) {
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
-            channel.value();
+            band.value();
     }
 
     int offset(Index3d index) {
@@ -69,7 +69,7 @@ public record Layout3d(Index3d start, Stride3d stride, Channel channel) {
             this.start.slice() -
             this.start.row() -
             this.start.col() -
-            channel.value();
+            band.value();
 
         final int slice = start/stride.slice();
         start = start - slice*stride.slice();

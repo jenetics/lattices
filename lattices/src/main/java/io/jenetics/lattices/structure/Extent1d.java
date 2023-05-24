@@ -27,15 +27,32 @@ import java.util.Iterator;
  * The extent of 1-d structures.
  *
  * @param value the number of elements, must be greater or equal zero
- * @param channels the number of channels
+ * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int value, int channels)
+public record Extent1d(int value, int bands)
     implements Comparable<Extent1d>, Iterable<Index1d>
 {
+
+    /**
+     * Create a new 1-d extent with the given size.
+     *
+     * @param value the size of the extent
+     * @param bands the number of bands
+     *
+     * @throws IllegalArgumentException if the {@code size} is smaller than zero
+     */
+    public Extent1d {
+        if (value < 0 || bands < 1 || multNotSave(value, bands)) {
+            throw new IllegalArgumentException(
+                "Extent is out of bounds: [%d, bands=%d]."
+                    .formatted(value, bands)
+            );
+        }
+    }
 
     /**
      * Create a new 1-d extent with the given size.
@@ -46,23 +63,6 @@ public record Extent1d(int value, int channels)
      */
     public Extent1d(int value) {
         this(value, 1);
-    }
-
-    /**
-     * Create a new 1-d extent with the given size.
-     *
-     * @param value the size of the extent
-     * @param channels the number of channels
-     *
-     * @throws IllegalArgumentException if the {@code size} is smaller than zero
-     */
-    public Extent1d {
-        if (value < 0 || channels < 1 || multNotSave(value, channels)) {
-            throw new IllegalArgumentException(
-                "Extent is out of bounds: [%d, channels=%d]."
-                    .formatted(value, channels)
-            );
-        }
     }
 
     /**
@@ -81,7 +81,7 @@ public record Extent1d(int value, int channels)
      * @return the array length needed for storing all cells
      */
     public int length() {
-        return size()*channels;
+        return size()* bands;
     }
 
     @Override
@@ -91,7 +91,7 @@ public record Extent1d(int value, int channels)
 
     @Override
     public String toString() {
-        return "[%d, channels=%d]".formatted(value, channels);
+        return "[%d, channels=%d]".formatted(value, bands);
     }
 
     @Override

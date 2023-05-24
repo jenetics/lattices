@@ -54,9 +54,9 @@ public class View2dTest {
         assertThat(structure.extent().rows()).isEqualTo(EXTENT.cols());
         assertThat(structure.extent().cols()).isEqualTo(EXTENT.rows());
 
-        final var structure0 = View2d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View2d.of(Channel.ONE).apply(structure);
-        final var structure2 = View2d.of(Channel.TWO).apply(structure);
+        final var structure0 = View2d.of(Band.ZERO).apply(structure);
+        final var structure1 = View2d.of(Band.ONE).apply(structure);
+        final var structure2 = View2d.of(Band.TWO).apply(structure);
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -81,9 +81,9 @@ public class View2dTest {
         final var structure = view.apply(STRUCTURE);
         assertThat(structure.extent().size()).isEqualTo(range.extent().size());
 
-        final var structure0 = View2d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View2d.of(Channel.ONE).apply(structure);
-        final var structure2 = View2d.of(Channel.TWO).apply(structure);
+        final var structure0 = View2d.of(Band.ZERO).apply(structure);
+        final var structure1 = View2d.of(Band.ONE).apply(structure);
+        final var structure2 = View2d.of(Band.TWO).apply(structure);
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -120,9 +120,9 @@ public class View2dTest {
         final var view = View2d.of(start);
         final var structure = view.apply(STRUCTURE);
 
-        final var structure0 = View2d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View2d.of(Channel.ONE).apply(structure);
-        final var structure2 = View2d.of(Channel.TWO).apply(structure);
+        final var structure0 = View2d.of(Band.ZERO).apply(structure);
+        final var structure1 = View2d.of(Band.ONE).apply(structure);
+        final var structure2 = View2d.of(Band.TWO).apply(structure);
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
@@ -157,9 +157,9 @@ public class View2dTest {
         final var view = View2d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
-        final var structure0 = View2d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View2d.of(Channel.ONE).apply(structure);
-        final var structure2 = View2d.of(Channel.TWO).apply(structure);
+        final var structure0 = View2d.of(Band.ZERO).apply(structure);
+        final var structure1 = View2d.of(Band.ONE).apply(structure);
+        final var structure2 = View2d.of(Band.TWO).apply(structure);
 
 
         for (int r = 0; r < structure.extent().rows(); ++r) {

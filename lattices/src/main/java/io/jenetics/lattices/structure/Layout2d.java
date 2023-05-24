@@ -34,29 +34,29 @@ import static java.util.Objects.requireNonNull;
  *
  * @param start the start index of the first element
  * @param stride the element strides
- * @param channel the channel number of this structure, zero based
+ * @param band the band number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout2d(Index2d start, Stride2d stride, Channel channel) {
-
-    public Layout2d(Index2d start, Stride2d stride) {
-        this(start, stride, Channel.ZERO);
-    }
+public record Layout2d(Index2d start, Stride2d stride, Band band) {
 
     public Layout2d {
         requireNonNull(start);
         requireNonNull(stride);
-        requireNonNull(channel);
+        requireNonNull(band);
+    }
+
+    public Layout2d(Index2d start, Stride2d stride) {
+        this(start, stride, Band.ZERO);
     }
 
     int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
-            channel.value();
+            band.value();
     }
 
     int offset(Index2d index) {
@@ -67,7 +67,7 @@ public record Layout2d(Index2d start, Stride2d stride, Channel channel) {
         int start = offset -
             this.start.row() -
             this.start.col() -
-            channel.value();
+            band.value();
 
         final int row = start/stride.row();
         start = start - row*stride.row();

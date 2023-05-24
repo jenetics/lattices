@@ -28,13 +28,33 @@ import java.util.Iterator;
  *
  * @param rows the number of rows, must be greater or equal zero
  * @param cols the number of columns, must be greater or equal zero
- * @param channels the number of channels
+ * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent2d(int rows, int cols, int channels) implements Iterable<Index2d> {
+public record Extent2d(int rows, int cols, int bands) implements Iterable<Index2d> {
+
+    /**
+     * Create a new 2-d extent.
+     *
+     * @param rows the number of rows
+     * @param cols the number of cols
+     * @param bands the number of bands
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
+     */
+    public Extent2d {
+        if (rows < 0 || cols < 0 || bands < 1 ||
+            multNotSave(rows, cols, bands))
+        {
+            throw new IllegalArgumentException(
+                "Extent is out of bounds: [%d, %d, bands=%d]."
+                    .formatted(rows, cols, bands)
+            );
+        }
+    }
 
     /**
      * Create a new 2-d extent.
@@ -46,26 +66,6 @@ public record Extent2d(int rows, int cols, int channels) implements Iterable<Ind
      */
     public Extent2d(int rows, int cols) {
         this(rows, cols, 1);
-    }
-
-    /**
-     * Create a new 2-d extent.
-     *
-     * @param rows the number of rows
-     * @param cols the number of cols
-     * @param channels the number of channels
-     * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
-     */
-    public Extent2d {
-        if (rows < 0 || cols < 0 || channels < 1 ||
-            multNotSave(rows, cols, channels))
-        {
-            throw new IllegalArgumentException(
-                "Extent is out of bounds: [%d, %d, channels=%d]."
-                    .formatted(rows, cols, channels)
-            );
-        }
     }
 
     /**
@@ -84,7 +84,7 @@ public record Extent2d(int rows, int cols, int channels) implements Iterable<Ind
      * @return the array length needed for storing all cells
      */
     public int length() {
-        return size()*channels;
+        return size()* bands;
     }
 
     @Override

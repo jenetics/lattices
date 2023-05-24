@@ -87,7 +87,7 @@ public interface View3d {
                         structure.layout().stride().col()*range.start().col()
                 ),
                 structure.layout().stride(),
-                structure.layout().channel()
+                structure.layout().band()
             )
         );
     }
@@ -157,7 +157,7 @@ public interface View3d {
                         layout.stride().row()*stride.row(),
                         layout.stride().col()*stride.col()
                     ),
-                    layout.channel()
+                    layout.band()
                 )
             );
         };
@@ -167,19 +167,18 @@ public interface View3d {
      * Return a transformation which creates a view onto the given
      * {@code channel}.
      *
-     * @param channel the channel number of the returned view
+     * @param band the channel number of the returned view
      * @return a transformation which creates a view onto the given
      *        {@code channel}
      */
-    static View3d of(Channel channel) {
-        requireNonNull(channel);
+    static View3d of(Band band) {
+        requireNonNull(band);
 
         return structure -> new Structure3d(
             structure.extent(),
             new Layout3d(
                 structure.layout().start(),
-                structure.layout().stride(),
-                channel
+                structure.layout().stride(), band
             )
         );
     }

@@ -76,7 +76,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
             extent,
             new Layout1d(
                 Index1d.ZERO,
-                new Stride1d(extent.channels())
+                new Stride1d(extent.bands())
             )
         );
     }

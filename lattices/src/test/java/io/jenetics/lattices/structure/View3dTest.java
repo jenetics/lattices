@@ -57,9 +57,9 @@ public class View3dTest {
         assertThat(structure.extent().size())
             .isEqualTo(range.extent().size());
 
-        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View3d.of(Channel.ONE).apply(structure);
-        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+        final var structure0 = View3d.of(Band.ZERO).apply(structure);
+        final var structure1 = View3d.of(Band.ONE).apply(structure);
+        final var structure2 = View3d.of(Band.TWO).apply(structure);
 
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
@@ -102,9 +102,9 @@ public class View3dTest {
         final var view = View3d.of(start);
         final var structure = view.apply(STRUCTURE);
 
-        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View3d.of(Channel.ONE).apply(structure);
-        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+        final var structure0 = View3d.of(Band.ZERO).apply(structure);
+        final var structure1 = View3d.of(Band.ONE).apply(structure);
+        final var structure2 = View3d.of(Band.TWO).apply(structure);
 
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
@@ -146,9 +146,9 @@ public class View3dTest {
         final var view = View3d.of(stride);
         final var structure = view.apply(STRUCTURE);
 
-        final var structure0 = View3d.of(Channel.ZERO).apply(structure);
-        final var structure1 = View3d.of(Channel.ONE).apply(structure);
-        final var structure2 = View3d.of(Channel.TWO).apply(structure);
+        final var structure0 = View3d.of(Band.ZERO).apply(structure);
+        final var structure1 = View3d.of(Band.ONE).apply(structure);
+        final var structure2 = View3d.of(Band.TWO).apply(structure);
 
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
