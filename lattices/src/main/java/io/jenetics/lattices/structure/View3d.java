@@ -178,7 +178,8 @@ public interface View3d {
             structure.extent(),
             new Layout3d(
                 structure.layout().start(),
-                structure.layout().stride(), band
+                structure.layout().stride(),
+                band
             )
         );
     }

@@ -154,7 +154,8 @@ public interface View1d {
                 structure.extent(),
                 new Layout1d(
                     structure.layout().start(),
-                    structure.layout().stride(), band
+                    structure.layout().stride(),
+                    band
                 )
             );
         };

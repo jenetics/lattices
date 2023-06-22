@@ -189,7 +189,8 @@ public interface View2d {
             structure.extent(),
             new Layout2d(
                 structure.layout().start(),
-                structure.layout().stride(), band
+                structure.layout().stride(),
+                band
             )
         );
     }
