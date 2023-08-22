@@ -26,8 +26,8 @@ import java.util.Iterator;
 /**
  * The extent of 2-d structures.
  *
- * @param rows the number of rows, must be greater or equal zero
- * @param cols the number of columns, must be greater or equal zero
+ * @param rows the number of rows must be greater or equal zero
+ * @param cols the number of columns must be greater or equal zero
  * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
