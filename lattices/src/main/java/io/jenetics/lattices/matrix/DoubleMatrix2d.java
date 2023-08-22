@@ -60,7 +60,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
     public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
             Structure2d.of(extent),
-            DenseDoubleArray.ofSize(extent.size())
+            DenseDoubleArray.ofSize(extent.nelements())
         );
 
     /**
@@ -178,11 +178,11 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
         }
         if (z == null) {
             final var struct = Structure1d.of(new Extent1d(rows()));
-            final var elems = array().like(struct.extent().value());
+            final var elems = array().like(struct.extent().nelements());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
-        if (cols() != y.extent().size() || rows() > z.extent().size()) {
+        if (cols() != y.extent().nelements() || rows() > z.extent().nelements()) {
             throw new IllegalArgumentException(
                 "Incompatible args: " + extent() + ", " + y.extent() + ", " + z.extent()
             );

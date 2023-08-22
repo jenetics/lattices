@@ -236,10 +236,10 @@ public interface Blas {
      */
     default int idamax(DoubleMatrix1d x) {
         int index = -1;
-        if (x.extent().size() > 0) {
+        if (x.extent().nelements() > 0) {
             double max = Math.abs(x.get(0));
             index = 0;
-            for (int i = 1; i < x.extent().size(); ++i) {
+            for (int i = 1; i < x.extent().nelements(); ++i) {
                 final var value = Math.abs(x.get(i));
 
                 if (max < value) {
@@ -343,7 +343,7 @@ public interface Blas {
             A = A.transpose();
         }
 
-        if (A.rows() != x.extent().size() || A.rows() != y.extent().size()) {
+        if (A.rows() != x.extent().nelements() || A.rows() != y.extent().nelements()) {
             throw new IllegalArgumentException(
                 A.extent() + ", " + x.extent() + ", " + y.extent()
             );
@@ -391,7 +391,7 @@ public interface Blas {
             isUpperTriangular = !isUpperTriangular;
         }
 
-        if (A.rows() != x.extent().size()) {
+        if (A.rows() != x.extent().nelements()) {
             throw new IllegalArgumentException(A.extent() + ", " + x.extent());
         }
 

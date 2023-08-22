@@ -53,7 +53,7 @@ public class CholeskyTest {
     public void solver() {
         final var extent = new Extent2d(15, 15);
         final var A = MatrixRandom.nextDoubleMatrix2d(extent);
-        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.rows(), 23));
+        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.nrows(), 23));
 
         assertEquals(
             Cholesky.decompose(A).solve(B),

@@ -39,8 +39,8 @@ public interface View2d {
      */
     View2d TRANSPOSE = structure ->  new Structure2d(
         new Extent2d(
-            structure.extent().cols(),
-            structure.extent().rows()
+            structure.extent().ncols(),
+            structure.extent().nrows()
         ),
         new Layout2d(
             new Index2d(
@@ -123,8 +123,8 @@ public interface View2d {
                 new Range2d(
                     start,
                     new Extent2d(
-                        structure.extent().rows() - start.row(),
-                        structure.extent().cols() - start.col()
+                        structure.extent().nrows() - start.row(),
+                        structure.extent().ncols() - start.col()
                     )
                 )
             )
@@ -156,11 +156,11 @@ public interface View2d {
 
             return new Structure2d(
                 new Extent2d(
-                    extent.rows() != 0
-                        ? (extent.rows() - 1)/stride.row() + 1
+                    extent.nrows() != 0
+                        ? (extent.nrows() - 1)/stride.row() + 1
                         : 0,
-                    extent.cols() != 0
-                        ? (extent.cols() - 1)/stride.col() + 1
+                    extent.ncols() != 0
+                        ? (extent.ncols() - 1)/stride.col() + 1
                         : 0
                 ),
                 new Layout2d(

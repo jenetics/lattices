@@ -35,10 +35,10 @@ public class Index2dIteratorTest {
     public void iterate(Range2d range) {
         final var it = new Index2dIterator(range);
 
-        for (int r = 0; r < range.extent().rows(); ++r) {
+        for (int r = 0; r < range.extent().nrows(); ++r) {
             final var row = r + range.start().row();
 
-            for (int c = 0; c < range.extent().cols(); ++c) {
+            for (int c = 0; c < range.extent().ncols(); ++c) {
                 final var col = c + range.start().col();
 
                 final var index = it.next();

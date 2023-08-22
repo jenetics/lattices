@@ -133,7 +133,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().nelements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -147,7 +147,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().nelements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -161,7 +161,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().nelements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -175,7 +175,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().nelements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }
@@ -189,7 +189,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().nelements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }
@@ -203,7 +203,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().nelements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }

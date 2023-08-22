@@ -56,7 +56,7 @@ public record LongGrid3d(Structure3d structure, LongArray array)
     public static final Grid3d.Factory<LongGrid3d> DENSE =
         extent -> new LongGrid3d(
             Structure3d.of(extent),
-            DenseLongArray.ofSize(extent.size())
+            DenseLongArray.ofSize(extent.nelements())
         );
 
     /**

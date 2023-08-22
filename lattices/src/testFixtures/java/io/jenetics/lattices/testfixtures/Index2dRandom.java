@@ -42,11 +42,11 @@ public class Index2dRandom {
 
         final int row = random.nextInt(
             start.row(),
-            start.row() + extent.rows()
+            start.row() + extent.nrows()
         );
         final int col = random.nextInt(
             start.col(),
-            start.col() + extent.cols()
+            start.col() + extent.ncols()
         );
 
         return new Index2d(row, col);

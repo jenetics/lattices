@@ -28,7 +28,7 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public void forEach(IntConsumer action) {
         requireNonNull(action);
 
-        for (int i = range.start().value() + range.extent().value(),
+        for (int i = range.start().value() + range.extent().nelements(),
              s = range.start().value(); --i >= s;)
         {
             action.accept(i);
@@ -39,7 +39,7 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
+        for (int i = range.start().value() + range.extent().nelements(),
              s = range.start().value(); --i >= s;)
         {
             if (predicate.test(i)) {
@@ -53,7 +53,7 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
+        for (int i = range.start().value() + range.extent().nelements(),
              s = range.start().value(); --i >= s;)
         {
             if (!predicate.test(i)) {
@@ -67,7 +67,7 @@ record Loop1dBackward(Range1d range) implements Loop1d {
     public boolean nonMatch(IntPredicate predicate) {
         requireNonNull(predicate);
 
-        for (int i = range.start().value() + range.extent().value(),
+        for (int i = range.start().value() + range.extent().nelements(),
              s = range.start().value(); --i >= s;)
         {
             if (predicate.test(i)) {

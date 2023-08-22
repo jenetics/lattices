@@ -26,36 +26,36 @@ import java.util.Iterator;
 /**
  * The extent of 3-d structures.
  *
- * @param slices the number of slices, must be greater or equal zero
- * @param rows the number of rows, must be greater or equal zero
- * @param cols the number of columns, must be greater or equal zero
- * @param bands the number of bands
+ * @param nslices the number of slices must be greater or equal zero
+ * @param nrows the number of rows must be greater or equal zero
+ * @param ncols the number of columns must be greater or equal zero
+ * @param nbands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @version 3.0
  * @since 3.0
  */
-public record Extent3d(int slices, int rows, int cols, int bands)
+public record Extent3d(int nslices, int nrows, int ncols, int nbands)
     implements Iterable<Index3d>
 {
 
     /**
      * Create a new 3-d extent.
      *
-     * @param slices the number of slices, must be greater or equal zero
-     * @param rows the number of rows, must be greater or equal zero
-     * @param cols the number of columns, must be greater or equal zero
-     * @param bands the number of bands
+     * @param nslices the number of slices must be greater or equal zero
+     * @param nrows the number of rows must be greater or equal zero
+     * @param ncols the number of columns must be greater or equal zero
+     * @param nbands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code slices*rows*cols*channels > Integer.MAX_VALUE}
      */
     public Extent3d {
-        if (slices < 0 || rows < 0 || cols < 0 || bands < 1 ||
-            multNotSave(slices, rows, cols, bands))
+        if (nslices < 0 || nrows < 0 || ncols < 0 || nbands < 1 ||
+            multNotSave(nslices, nrows, ncols, nbands))
         {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d, %d, bands=%d]."
-                    .formatted(slices, rows, cols, bands)
+                    .formatted(nslices, nrows, ncols, nbands)
             );
         }
     }
@@ -63,23 +63,23 @@ public record Extent3d(int slices, int rows, int cols, int bands)
     /**
      * Create a new 3-d extent.
      *
-     * @param slices the number of slices, must be greater or equal zero
-     * @param rows the number of rows, must be greater or equal zero
-     * @param cols the number of columns, must be greater or equal zero
+     * @param nslices the number of slices must be greater or equal zero
+     * @param nrows the number of rows must be greater or equal zero
+     * @param ncols the number of columns must be greater or equal zero
      * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code slices*rows*cols > Integer.MAX_VALUE}
      */
-    public Extent3d(int slices, int rows, int cols) {
-        this(slices, rows, cols, 1);
+    public Extent3d(int nslices, int nrows, int ncols) {
+        this(nslices, nrows, ncols, 1);
     }
 
     /**
-     * The number of elements of the structure.
+     * The number of elements.
      *
-     * @return the number of cells of the structure
+     * @return the number of elements
      */
-    public int size() {
-        return slices*rows*cols;
+    public int nelements() {
+        return nslices * nrows * ncols;
     }
 
     /**
@@ -88,8 +88,8 @@ public record Extent3d(int slices, int rows, int cols, int bands)
      *
      * @return the array length needed for storing all cells
      */
-    public int length() {
-        return size()* bands;
+    public int ncells() {
+        return nelements()* nbands;
     }
 
     @Override
@@ -99,7 +99,7 @@ public record Extent3d(int slices, int rows, int cols, int bands)
 
     @Override
     public String toString() {
-        return "[%d, %d, %d]".formatted(slices(), rows(), cols());
+        return "[%d, %d, %d]".formatted(nslices(), nrows(), ncols());
     }
 
 }

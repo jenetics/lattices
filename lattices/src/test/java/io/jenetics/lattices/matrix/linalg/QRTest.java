@@ -51,7 +51,7 @@ public class QRTest {
     public void solver() {
         final var extent = new Extent2d(15, 15);
         final var A = MatrixRandom.nextDoubleMatrix2d(extent);
-        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.rows(), 45));
+        final var B = MatrixRandom.nextDoubleMatrix2d(new Extent2d(extent.nrows(), 45));
 
         assertEquals(
             QR.decompose(A).solve(B),

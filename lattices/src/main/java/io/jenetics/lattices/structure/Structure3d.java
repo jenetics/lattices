@@ -77,9 +77,9 @@ public record Structure3d(Extent3d extent, Layout3d layout)
             new Layout3d(
                 Index3d.ZERO,
                 new Stride3d(
-                    extent.rows()*extent.cols()*extent.bands(),
-                    extent.cols()*extent.bands(),
-                    extent.bands()
+                    extent.nrows()*extent.ncols()*extent.nbands(),
+                    extent.ncols()*extent.nbands(),
+                    extent.nbands()
                 )
             )
         );

@@ -50,7 +50,7 @@ public interface Structured3d {
      * @return the number of slices of {@code this} structure
      */
     default int slices() {
-        return extent().slices();
+        return extent().nslices();
     }
 
     /**
@@ -59,7 +59,7 @@ public interface Structured3d {
      * @return the number of rows of {@code this} structure
      */
     default int rows() {
-        return extent().rows();
+        return extent().nrows();
     }
 
     /**
@@ -68,7 +68,7 @@ public interface Structured3d {
      * @return the number of columns of {@code this} structure
      */
     default int cols() {
-        return extent().cols();
+        return extent().ncols();
     }
 
 }

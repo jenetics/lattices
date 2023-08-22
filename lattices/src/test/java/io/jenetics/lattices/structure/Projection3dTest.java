@@ -34,7 +34,7 @@ public class Projection3dTest {
 
     private static final Structure3d STRUCTURE = Structure3d.of(EXTENT);
 
-    private static final String[] ARRAY = IntStream.range(0, EXTENT.size())
+    private static final String[] ARRAY = IntStream.range(0, EXTENT.nelements())
         .mapToObj(i -> {
             final var index = STRUCTURE.layout().index(i);
             return "v_" + index.slice() + "_" + index.row() + "_" + index.col();
@@ -46,8 +46,8 @@ public class Projection3dTest {
         final var projection = Projection3d.slice(32);
         final var structure = projection.apply(STRUCTURE);
 
-        for (int r = 0; r < structure.extent().rows(); ++r) {
-            for (int c = 0; c < structure.extent().cols(); ++c) {
+        for (int r = 0; r < structure.extent().nrows(); ++r) {
+            for (int c = 0; c < structure.extent().ncols(); ++c) {
                 final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_32_" + r + "_" + c;
@@ -62,8 +62,8 @@ public class Projection3dTest {
         final var projection = Projection3d.row(32);
         final var structure = projection.apply(STRUCTURE);
 
-        for (int r = 0; r < structure.extent().rows(); ++r) {
-            for (int c = 0; c < structure.extent().cols(); ++c) {
+        for (int r = 0; r < structure.extent().nrows(); ++r) {
+            for (int c = 0; c < structure.extent().ncols(); ++c) {
                 final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" + r + "_32_" + c;
@@ -83,8 +83,8 @@ public class Projection3dTest {
         final var view = View2d.of(range);
         final var structure = view.apply(projection.apply(STRUCTURE));
 
-        for (int r = 0; r < structure.extent().rows(); ++r) {
-            for (int c = 0; c < structure.extent().cols(); ++c) {
+        for (int r = 0; r < structure.extent().nrows(); ++r) {
+            for (int c = 0; c < structure.extent().ncols(); ++c) {
                 final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" +
@@ -101,8 +101,8 @@ public class Projection3dTest {
         final var projection = Projection3d.col(32);
         final var structure = projection.apply(STRUCTURE);
 
-        for (int r = 0; r < structure.extent().rows(); ++r) {
-            for (int c = 0; c < structure.extent().cols(); ++c) {
+        for (int r = 0; r < structure.extent().nrows(); ++r) {
+            for (int c = 0; c < structure.extent().ncols(); ++c) {
                 final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" + r + "_" + c + "_32";
@@ -118,7 +118,7 @@ public class Projection3dTest {
         final var prj2 = Projection2d.row(32);
         final var structure = prj2.apply(prj3.apply(STRUCTURE));
 
-        for (int i = 0; i < structure.extent().value(); ++i) {
+        for (int i = 0; i < structure.extent().nelements(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_32_" + "32_" + i;
@@ -133,7 +133,7 @@ public class Projection3dTest {
         final var prj2 = Projection2d.col(32);
         final var structure = prj2.apply(prj3.apply(STRUCTURE));
 
-        for (int i = 0; i < structure.extent().value(); ++i) {
+        for (int i = 0; i < structure.extent().nelements(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_32_" + i +  "_32";

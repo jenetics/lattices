@@ -106,9 +106,9 @@ public interface View3d {
                 new Range3d(
                     start,
                     new Extent3d(
-                        structure.extent().slices() - start.slice(),
-                        structure.extent().rows() - start.row(),
-                        structure.extent().cols() - start.col()
+                        structure.extent().nslices() - start.slice(),
+                        structure.extent().nrows() - start.row(),
+                        structure.extent().ncols() - start.col()
                     )
                 )
             )
@@ -140,14 +140,14 @@ public interface View3d {
 
             return new Structure3d(
                 new Extent3d(
-                    extent.slices() != 0
-                        ? (extent.slices() - 1)/stride.slice() + 1
+                    extent.nslices() != 0
+                        ? (extent.nslices() - 1)/stride.slice() + 1
                         : 0,
-                    extent.rows() != 0
-                        ? (extent.rows() - 1)/stride.row() + 1
+                    extent.nrows() != 0
+                        ? (extent.nrows() - 1)/stride.row() + 1
                         : 0,
-                    extent.cols() != 0
-                        ? (extent.cols() - 1)/stride.col() + 1
+                    extent.ncols() != 0
+                        ? (extent.ncols() - 1)/stride.col() + 1
                         : 0
                 ),
                 new Layout3d(

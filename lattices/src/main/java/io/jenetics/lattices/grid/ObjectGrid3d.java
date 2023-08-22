@@ -93,7 +93,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     public static <T> Grid3d.Factory<ObjectGrid3d<T>> dense(T... __) {
         return extent -> new ObjectGrid3d<T>(
             Structure3d.of(extent),
-            DenseObjectArray.ofSize(extent.size(), __)
+            DenseObjectArray.ofSize(extent.nelements(), __)
         );
     }
 

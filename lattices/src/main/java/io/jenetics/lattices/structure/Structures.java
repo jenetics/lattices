@@ -39,12 +39,12 @@ public final class Structures {
      *         required
      */
     public static void checkArraySize(final Structure1d structure, final int length) {
-        if (structure.extent().value() == 0) {
+        if (structure.extent().nelements() == 0) {
             return;
         }
 
         final var maxIndex = structure.offset(
-            structure.extent().value() - 1
+            structure.extent().nelements() - 1
         );
 
         if (maxIndex >= length) {
@@ -64,13 +64,13 @@ public final class Structures {
      *         required
      */
     public static void checkArraySize(final Structure2d structure, final int length) {
-        if (structure.extent().size() == 0) {
+        if (structure.extent().nelements() == 0) {
             return;
         }
 
         final var maxIndex = structure.offset(
-            structure.extent().rows() - 1,
-            structure.extent().cols() - 1
+            structure.extent().nrows() - 1,
+            structure.extent().ncols() - 1
         );
 
         if (maxIndex >= length) {
@@ -90,14 +90,14 @@ public final class Structures {
      *         required
      */
     public static void checkArraySize(final Structure3d structure, final int length) {
-        if (structure.extent().size() == 0) {
+        if (structure.extent().nelements() == 0) {
             return;
         }
 
         final var maxIndex = structure.offset(
-            structure.extent().slices() - 1,
-            structure.extent().rows() - 1,
-            structure.extent().cols() - 1
+            structure.extent().nslices() - 1,
+            structure.extent().nrows() - 1,
+            structure.extent().ncols() - 1
         );
 
         if (maxIndex >= length) {
@@ -164,7 +164,7 @@ public final class Structures {
      * @return {@code true} if the {@code a} is square, {@code false} otherwise
      */
     public static boolean isSquare(final Extent2d a) {
-        return a.rows() == a.cols();
+        return a.nrows() == a.ncols();
     }
 
     /**
@@ -188,7 +188,7 @@ public final class Structures {
      * @throws IllegalArgumentException if {@code a.rows() < a.cols()}
      */
     public static void checkRectangular(final Extent2d a) {
-        if (a.rows() < a.cols()) {
+        if (a.nrows() < a.ncols()) {
             throw new IllegalArgumentException(
                 "Grid extent must be rectangular: " + a
             );

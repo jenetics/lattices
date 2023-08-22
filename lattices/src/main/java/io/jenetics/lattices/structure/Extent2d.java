@@ -26,32 +26,34 @@ import java.util.Iterator;
 /**
  * The extent of 2-d structures.
  *
- * @param rows the number of rows must be greater or equal zero
- * @param cols the number of columns must be greater or equal zero
- * @param bands the number of bands
+ * @param nrows the number of rows must be greater or equal zero
+ * @param ncols the number of columns must be greater or equal zero
+ * @param nbands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent2d(int rows, int cols, int bands) implements Iterable<Index2d> {
+public record Extent2d(int nrows, int ncols, int nbands)
+    implements Iterable<Index2d>
+{
 
     /**
      * Create a new 2-d extent.
      *
-     * @param rows the number of rows
-     * @param cols the number of cols
-     * @param bands the number of bands
+     * @param nrows the number of rows
+     * @param ncols the number of cols
+     * @param nbands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
      */
     public Extent2d {
-        if (rows < 0 || cols < 0 || bands < 1 ||
-            multNotSave(rows, cols, bands))
+        if (nrows < 0 || ncols < 0 || nbands < 1 ||
+            multNotSave(nrows, ncols, nbands))
         {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d, bands=%d]."
-                    .formatted(rows, cols, bands)
+                    .formatted(nrows, ncols, nbands)
             );
         }
     }
@@ -69,12 +71,12 @@ public record Extent2d(int rows, int cols, int bands) implements Iterable<Index2
     }
 
     /**
-     * The number of elements of the structure.
+     * The number of elements.
      *
-     * @return the number of cells of the structure
+     * @return the number of elements
      */
-    public int size() {
-        return rows*cols;
+    public int nelements() {
+        return nrows*ncols;
     }
 
     /**
@@ -83,8 +85,8 @@ public record Extent2d(int rows, int cols, int bands) implements Iterable<Index2
      *
      * @return the array length needed for storing all cells
      */
-    public int length() {
-        return size()* bands;
+    public int ncells() {
+        return nelements()*nbands;
     }
 
     @Override
@@ -94,7 +96,7 @@ public record Extent2d(int rows, int cols, int bands) implements Iterable<Index2
 
     @Override
     public String toString() {
-        return "[%d, %d]".formatted(rows(), cols());
+        return "[%d, %d]".formatted(nrows(), ncols());
     }
 
 }

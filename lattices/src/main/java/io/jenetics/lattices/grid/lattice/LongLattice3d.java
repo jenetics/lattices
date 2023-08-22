@@ -210,7 +210,7 @@ public interface LongLattice3d extends Lattice3d<LongArray>, Structure3dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().size() == 0) {
+        if (extent().nelements() == 0) {
             return OptionalLong.empty();
         }
 

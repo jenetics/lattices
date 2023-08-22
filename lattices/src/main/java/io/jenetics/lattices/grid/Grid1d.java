@@ -110,7 +110,7 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
     default G like(Extent1d extent) {
         return create(
             Structure1d.of(extent),
-            array().like(extent.value())
+            array().like(extent.nelements())
         );
     }
 
