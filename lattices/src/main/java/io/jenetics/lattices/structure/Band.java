@@ -20,9 +20,9 @@
 package io.jenetics.lattices.structure;
 
 /**
- * This class represents a band number. Band numbers are zero based.
+ * This class represents a band number. Band numbers are zero-based.
  *
- * @param value the zero based band number
+ * @param value the zero-based band number
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0

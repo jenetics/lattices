@@ -184,15 +184,21 @@ fun setupJavadoc(project: Project) {
 			"implNote:a:Implementation Note:"
 		)
 
-		doLast {
-			project.copy {
-				from("src/main/java") {
-					include("io/**/doc-files/*.*")
-				}
-				includeEmptyDirs = false
-				into(destinationDir!!)
-			}
-		}
+        doLast {
+            val dir = if (project.extra.has("moduleName")) {
+                project.extra["moduleName"].toString()
+            } else {
+                ""
+            }
+
+            project.copy {
+                from("src/main/java") {
+                    include("io/**/doc-files/*.*")
+                }
+                includeEmptyDirs = false
+                into(destinationDir!!.resolve(dir))
+            }
+        }
 	}
 
 	val javadoc = project.tasks.findByName("javadoc") as Javadoc?

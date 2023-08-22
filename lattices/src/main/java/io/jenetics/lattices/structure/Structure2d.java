@@ -65,7 +65,7 @@ public record Structure2d(Extent2d extent, Layout2d layout)
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
@@ -86,7 +86,7 @@ public record Structure2d(Extent2d extent, Layout2d layout)
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param rows the number of rows of the structure
