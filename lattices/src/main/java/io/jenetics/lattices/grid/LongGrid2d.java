@@ -56,7 +56,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
     public static final Grid2d.Factory<LongGrid2d> DENSE =
         extent -> new LongGrid2d(
             Structure2d.of(extent),
-            DenseLongArray.ofSize(extent.nelements())
+            DenseLongArray.ofSize(extent.ncells())
         );
 
     /**

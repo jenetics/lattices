@@ -102,7 +102,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     /**
      * Return a factory for creating dense 2-d object grids.
      *
-     * @param __ not used (Java trick for getting "reified" element type)
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @param <T> the grid element type
      * @return the dense object factory
      */
@@ -111,7 +111,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
         return extent -> new ObjectGrid2d<T>(
             Structure2d.of(extent),
-            DenseObjectArray.ofSize(extent.nelements(), __)
+            DenseObjectArray.ofSize(extent.ncells(), __)
         );
     }
 

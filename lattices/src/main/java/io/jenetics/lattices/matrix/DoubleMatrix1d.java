@@ -55,7 +55,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
     public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
         extent -> new DoubleMatrix1d(
             Structure1d.of(extent),
-            DenseDoubleArray.ofSize(extent.nelements())
+            DenseDoubleArray.ofSize(extent.ncells())
         );
 
     /**

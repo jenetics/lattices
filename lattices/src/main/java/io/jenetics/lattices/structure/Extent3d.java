@@ -79,7 +79,7 @@ public record Extent3d(int nslices, int nrows, int ncols, int nbands)
      * @return the number of elements
      */
     public int nelements() {
-        return nslices * nrows * ncols;
+        return nslices*nrows*ncols;
     }
 
     /**
@@ -89,7 +89,7 @@ public record Extent3d(int nslices, int nrows, int ncols, int nbands)
      * @return the array length needed for storing all cells
      */
     public int ncells() {
-        return nelements()* nbands;
+        return nelements()*nbands;
     }
 
     @Override

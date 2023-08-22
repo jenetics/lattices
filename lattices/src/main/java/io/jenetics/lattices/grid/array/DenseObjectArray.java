@@ -132,7 +132,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
-     * @param __ not used (Java trick for getting "reified" element type)
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs

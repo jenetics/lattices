@@ -54,7 +54,7 @@ public record IntGrid1d(Structure1d structure, IntArray array)
     public static final Grid1d.Factory<IntGrid1d> DENSE =
         extent -> new IntGrid1d(
             Structure1d.of(extent),
-            DenseIntArray.ofSize(extent.nelements())
+            DenseIntArray.ofSize(extent.ncells())
         );
 
     /**
