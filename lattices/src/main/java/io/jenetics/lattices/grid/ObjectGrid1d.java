@@ -71,7 +71,7 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
     @SafeVarargs
     public static <T> Grid1d.Factory<ObjectGrid1d<T>> dense(T... __) {
         return extent -> new ObjectGrid1d<T>(
-            Structure1d.of(extent),
+            new Structure1d(extent),
             DenseObjectArray.ofSize(extent.cells(), __)
         );
     }

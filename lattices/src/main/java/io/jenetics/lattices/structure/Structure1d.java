@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = Structure1d.of(new Extent1d(1000));
+ * final var structure = new Structure1d(1000);
  * }</pre>
  *
  * @param extent the extent of the structure
@@ -48,6 +48,35 @@ public record Structure1d(Extent1d extent, Layout1d layout)
     public Structure1d {
         requireNonNull(extent);
         requireNonNull(layout);
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     */
+    public Structure1d(Extent1d extent) {
+        this(
+            extent,
+            new Layout1d(
+                Index1d.ZERO,
+                new Stride1d(extent.bands()),
+                Band.ZERO
+            )
+        );
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     */
+    public Structure1d(int extent) {
+        this(new Extent1d(extent));
     }
 
     /**
@@ -94,36 +123,6 @@ public record Structure1d(Extent1d extent, Layout1d layout)
         Objects.checkIndex(index.value(), extent.elements());
 
         return index;
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way of creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @return a new structure object with the given extent
-     */
-    public static Structure1d of(Extent1d extent) {
-        return new Structure1d(
-            extent,
-            new Layout1d(
-                Index1d.ZERO,
-                new Stride1d(extent.bands())
-            )
-        );
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way of creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @return a new structure object with the given extent
-     */
-    public static Structure1d of(int extent) {
-        return of(new Extent1d(extent));
     }
 
 }

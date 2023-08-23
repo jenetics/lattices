@@ -110,7 +110,7 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      */
     default G like(Extent3d extent) {
         return create(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             array().like(extent.elements())
         );
     }

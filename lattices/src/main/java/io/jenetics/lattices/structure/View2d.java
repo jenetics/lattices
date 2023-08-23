@@ -50,7 +50,8 @@ public interface View2d {
             new Stride2d(
                 structure.layout().stride().col(),
                 structure.layout().stride().row()
-            )
+            ),
+            structure.layout().band()
         )
     );
 
@@ -104,7 +105,8 @@ public interface View2d {
                     structure.layout().start().col() +
                         structure.layout().stride().col()*range.start().col()
                 ),
-                structure.layout().stride()
+                structure.layout().stride(),
+                structure.layout().band()
             )
         );
     }
@@ -168,7 +170,8 @@ public interface View2d {
                     new Stride2d(
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
-                    )
+                    ),
+                    structure.layout().band()
                 )
             );
         };

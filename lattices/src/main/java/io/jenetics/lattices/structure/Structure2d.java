@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = Structure2d.of(new Extent2d(500, 1000));
+ * final var structure = new Structure2d(500, 1000);
  * }</pre>
  *
  * @param extent the extent of the structure
@@ -48,6 +48,39 @@ public record Structure2d(Extent2d extent, Layout2d layout)
     public Structure2d {
         requireNonNull(extent);
         requireNonNull(layout);
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
+     *
+     * @param extent the extent of the structure
+     */
+    public Structure2d(Extent2d extent) {
+        this(
+            extent,
+            new Layout2d(
+                Index2d.ZERO,
+                new Stride2d(
+                    extent.cols()*extent.bands(),
+                    extent.bands()
+                ),
+                Band.ZERO
+            )
+        );
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
+     *
+     * @param rows the number of rows
+     * @param cols the number of columns
+     */
+    public Structure2d(int rows, int cols) {
+        this(new Extent2d(rows, cols));
     }
 
     /**
@@ -97,40 +130,6 @@ public record Structure2d(Extent2d extent, Layout2d layout)
         Objects.checkIndex(index.col(), extent.cols());
 
         return index;
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way of creating instances of structure
-     * objects.
-     *
-     * @param extent the extent of the structure
-     * @return a new structure object with the given extent
-     */
-    public static Structure2d of(Extent2d extent) {
-        return new Structure2d(
-            extent,
-            new Layout2d(
-                Index2d.ZERO,
-                new Stride2d(
-                    extent.cols()*extent.bands(),
-                    extent.bands()
-                )
-            )
-        );
-    }
-
-    /**
-     * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way of creating instances of structure
-     * objects.
-     *
-     * @param rows the number of rows of the structure
-     * @param cols the number of columns of the structure
-     * @return a new structure object with the given extent
-     */
-    public static Structure2d of(int rows, int cols) {
-        return of(new Extent2d(rows, cols));
     }
 
 }

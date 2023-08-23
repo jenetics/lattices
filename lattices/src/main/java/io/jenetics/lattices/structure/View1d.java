@@ -82,7 +82,8 @@ public interface View1d {
                     structure.layout().start().value() +
                     structure.layout().stride().value()*range.start().value()
                 ),
-                structure.layout().stride()
+                structure.layout().stride(),
+                structure.layout().band()
             )
         );
     }
@@ -133,7 +134,8 @@ public interface View1d {
             ),
             new Layout1d(
                 new Index1d(structure.layout().start().value()),
-                new Stride1d(structure.layout().stride().value()*stride.value())
+                new Stride1d(structure.layout().stride().value()*stride.value()),
+                structure.layout().band()
             )
         );
     }

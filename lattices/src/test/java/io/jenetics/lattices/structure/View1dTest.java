@@ -32,7 +32,7 @@ public class View1dTest {
     private static final int CHANNELS = 3;
     private static final Extent1d EXTENT = new Extent1d(10_000, CHANNELS);
 
-    private static final Structure1d STRUCTURE = Structure1d.of(EXTENT);
+    private static final Structure1d STRUCTURE = new Structure1d(EXTENT);
 
     private static final String[] ARRAY = new String[EXTENT.cells()];
     static {

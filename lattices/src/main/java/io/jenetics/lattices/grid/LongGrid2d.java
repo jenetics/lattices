@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * final var extent = new Extent2d(50, 100);
  * final var values = new long[extent.size()];
  * final var grid = new LongGrid2d(
- *     Structure2d.of(extent),
+ *     new Structure2d(extent),
  *     new DenseLongArray(values)
  * );
  * }</pre>
@@ -55,7 +55,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      */
     public static final Grid2d.Factory<LongGrid2d> DENSE =
         extent -> new LongGrid2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             DenseLongArray.ofSize(extent.cells())
         );
 
@@ -115,7 +115,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      */
     public static LongGrid2d of(Extent2d extent, long... values) {
         return new LongGrid2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             new DenseLongArray(values)
         );
     }

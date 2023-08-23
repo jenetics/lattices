@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * <pre>{@code
  * final var values = new double[100];
  * final var grid = new DoubleGrid1d(
- *     Structure1d.of(new Extent1d(100)),
+ *     new Structure1d(new Extent1d(100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -53,7 +53,7 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      */
     public static final Grid1d.Factory<DoubleGrid1d> DENSE =
         extent -> new DoubleGrid1d(
-            Structure1d.of(extent),
+            new Structure1d(extent),
             DenseDoubleArray.ofSize(extent.cells())
         );
 
@@ -88,7 +88,7 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      */
     public static DoubleGrid1d of(double... values) {
         return new DoubleGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
+            new Structure1d(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

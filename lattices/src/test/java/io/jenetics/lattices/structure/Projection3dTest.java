@@ -32,7 +32,7 @@ public class Projection3dTest {
 
     private static final Extent3d EXTENT = new Extent3d(100, 100, 100);
 
-    private static final Structure3d STRUCTURE = Structure3d.of(EXTENT);
+    private static final Structure3d STRUCTURE = new Structure3d(EXTENT);
 
     private static final String[] ARRAY = IntStream.range(0, EXTENT.elements())
         .mapToObj(i -> {

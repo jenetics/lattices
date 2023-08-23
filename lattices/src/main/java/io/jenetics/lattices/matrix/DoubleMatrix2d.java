@@ -59,7 +59,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      */
     public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             DenseDoubleArray.ofSize(extent.cells())
         );
 
@@ -177,7 +177,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
             return transpose().mult(y, z, alpha, beta, false);
         }
         if (z == null) {
-            final var struct = Structure1d.of(new Extent1d(rows()));
+            final var struct = new Structure1d(new Extent1d(rows()));
             final var elems = array().like(struct.extent().elements());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
@@ -376,7 +376,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      */
     public static DoubleMatrix2d of(Extent2d extent, double... values) {
         return new DoubleMatrix2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             new DenseDoubleArray(values)
         );
     }

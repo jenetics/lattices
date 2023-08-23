@@ -51,13 +51,13 @@ public class Layout1dTest {
     @DataProvider
     public Object[][] layouts() {
         return new Object[][] {
-            { new Layout1d(new Index1d(0), new Stride1d(1)) },
-            { new Layout1d(new Index1d(0), new Stride1d(2)) },
-            { new Layout1d(new Index1d(0), new Stride1d(3)) },
-            { new Layout1d(new Index1d(0), new Stride1d(5)) },
-            { new Layout1d(new Index1d(0), new Stride1d(11)) },
-            { new Layout1d(new Index1d(7), new Stride1d(1)) },
-            { new Layout1d(new Index1d(11), new Stride1d(17)) }
+            { new Layout1d(new Index1d(0), new Stride1d(1), Band.ZERO) },
+            { new Layout1d(new Index1d(0), new Stride1d(2), Band.ZERO) },
+            { new Layout1d(new Index1d(0), new Stride1d(3), Band.ZERO) },
+            { new Layout1d(new Index1d(0), new Stride1d(5), Band.ZERO) },
+            { new Layout1d(new Index1d(0), new Stride1d(11), Band.ZERO) },
+            { new Layout1d(new Index1d(7), new Stride1d(1), Band.ZERO) },
+            { new Layout1d(new Index1d(11), new Stride1d(17), Band.ZERO) }
         };
     }
 

@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
  * @apiNote
  * Note, that the direct manipulation/creation of the <em>layout</em> object
  * usually doesn't lead to the expected result. It is expected that layouts
- * are created by the <em>structure</em> object; {@link Structure2d#of(Extent2d)}.
+ * are created by the <em>structure</em> object; {@link Structure2d#Structure2d(Extent2d)}.
  *
  * @see Structure2d
  *
@@ -46,10 +46,6 @@ public record Layout2d(Index2d start, Stride2d stride, Band band) {
         requireNonNull(start);
         requireNonNull(stride);
         requireNonNull(band);
-    }
-
-    public Layout2d(Index2d start, Stride2d stride) {
-        this(start, stride, Band.ZERO);
     }
 
     /**

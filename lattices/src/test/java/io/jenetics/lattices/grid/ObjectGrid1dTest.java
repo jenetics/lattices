@@ -35,7 +35,7 @@ public class ObjectGrid1dTest {
     @Test
     public void assign() {
         final var extent = new Extent1d(100);
-        final var structure = Structure1d.of(extent);
+        final var structure = new Structure1d(extent);
         final var grid = new ObjectGrid1d<String>(
             structure,
             DenseObjectArray.ofSize(extent.cells())

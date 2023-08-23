@@ -37,7 +37,7 @@ public class Layout2dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = Structure2d.of(new Extent2d(100,1000));
+        final var structure = new Structure2d(new Extent2d(100,1000));
         final var range = new Range2d(structure.extent());
         final var layout = structure.layout();
 

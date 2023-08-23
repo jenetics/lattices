@@ -35,7 +35,7 @@ public class DoubleGrid1dTest {
     @Test
     public void assign() {
         final var extent = new Extent1d(100);
-        final var structure = Structure1d.of(extent);
+        final var structure = new Structure1d(extent);
         final var grid = new DoubleGrid1d(
             structure,
             DenseDoubleArray.ofSize(extent.cells())

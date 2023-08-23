@@ -41,7 +41,7 @@ The main entry point for creating mapper functions is the `Structure<N>d` class,
 final var extent = new Extent2d(100, 400);
 
 // Creating the 2-d structure.
-final var structure = Structure2d.of(extent);
+final var structure = new Structure2d(extent);
 
 // Creating the array, which holds the values to be stored.
 final var values = new double[extent.length()];

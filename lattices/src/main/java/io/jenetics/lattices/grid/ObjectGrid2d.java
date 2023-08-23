@@ -110,7 +110,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     @SafeVarargs
     public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
         return extent -> new ObjectGrid2d<T>(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             DenseObjectArray.ofSize(extent.cells(), __)
         );
     }

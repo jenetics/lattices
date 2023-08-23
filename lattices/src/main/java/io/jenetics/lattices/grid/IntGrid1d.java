@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * <pre>{@code
  * final var values = new int[100];
  * final var grid = new IntGrid1d(
- *     Structure1d.of(new Extent1d(100)),
+ *     new Structure1d(new Extent1d(100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
@@ -53,7 +53,7 @@ public record IntGrid1d(Structure1d structure, IntArray array)
      */
     public static final Grid1d.Factory<IntGrid1d> DENSE =
         extent -> new IntGrid1d(
-            Structure1d.of(extent),
+            new Structure1d(extent),
             DenseIntArray.ofSize(extent.cells())
         );
 
@@ -88,7 +88,7 @@ public record IntGrid1d(Structure1d structure, IntArray array)
      */
     public static IntGrid1d of(int... values) {
         return new IntGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
+            new Structure1d(new Extent1d(values.length)),
             new DenseIntArray(values)
         );
     }

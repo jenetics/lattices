@@ -36,7 +36,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new int[3*50*100];
  * final var grid = new IntGrid3d(
- *     Structure3d.of(new Extent3d(3, 50, 100)),
+ *     new Structure3d(new Extent3d(3, 50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
@@ -54,7 +54,7 @@ public record IntGrid3d(Structure3d structure, IntArray array)
      */
     public static final Grid3d.Factory<IntGrid3d> DENSE =
         extent -> new IntGrid3d(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             DenseIntArray.ofSize(extent.cells())
         );
 
@@ -90,7 +90,7 @@ public record IntGrid3d(Structure3d structure, IntArray array)
 
     public static IntGrid3d of(Extent3d extent, int... values) {
         return new IntGrid3d(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             new DenseIntArray(values)
         );
     }
