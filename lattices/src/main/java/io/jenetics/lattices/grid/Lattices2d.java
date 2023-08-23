@@ -22,7 +22,7 @@ package io.jenetics.lattices.grid;
 import static java.util.Objects.requireNonNull;
 
 import io.jenetics.lattices.structure.Index2d;
-import io.jenetics.lattices.structure.OffsetMapper2d;
+import io.jenetics.lattices.structure.Mapper2d;
 
 /**
  * This class provides structural access to a one-dimensional array.
@@ -42,14 +42,14 @@ import io.jenetics.lattices.structure.OffsetMapper2d;
  */
 public final class Lattices2d {
 
-    private final OffsetMapper2d mapper;
+    private final Mapper2d mapper;
 
     /**
      * Create a new object for accessing multidimensional data from an array.
      *
      * @param mapper the defining offset mapper
      */
-    public Lattices2d(OffsetMapper2d mapper) {
+    public Lattices2d(Mapper2d mapper) {
         this.mapper = requireNonNull(mapper);
     }
 

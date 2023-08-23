@@ -42,7 +42,7 @@ import java.util.Objects;
  * @version 3.0
  */
 public record Structure1d(Extent1d extent, Layout1d layout)
-    implements OffsetMapper1d
+    implements Mapper1d
 {
 
     public Structure1d {

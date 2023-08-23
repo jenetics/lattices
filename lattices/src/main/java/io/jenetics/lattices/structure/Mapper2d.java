@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface OffsetMapper2d {
+public interface Mapper2d {
 
     /**
      * Return the position of the given coordinate within the (virtual or
