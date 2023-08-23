@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
+
 /**
  * Defines the structure of a 1-d matrix, which is defined by the dimension of
  * the matrix and the index order of the underlying element array. The
@@ -48,24 +50,55 @@ public record Structure1d(Extent1d extent, Layout1d layout)
         requireNonNull(layout);
     }
 
+    /**
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal 1-d array.
+     *
+     * @param index the index of the element.
+     * @return the (linearized) index of the given {@code index}
+     * @throws IndexOutOfBoundsException if the given index value is out of
+     *         bounds
+     */
     @Override
     public int offset(int index) {
+        Objects.checkIndex(index, extent.nelements());
+
         return layout.offset(index);
     }
 
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     * @throws IndexOutOfBoundsException if the given index value is out of
+     *         bounds
+     */
     @Override
     public int offset(Index1d index) {
-        return layout.offset(index);
+        return offset(index.value());
     }
 
+    /**
+     * Calculates the index for the given {@code offset}. This is the
+     * <em>inverse</em> operation of the {@link #offset(Index1d)} method.
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     * @throws IndexOutOfBoundsException if the index, represented by the offset,
+     *         is out of bounds
+     */
     @Override
     public Index1d index(int offset) {
-        return layout.index(offset);
+        final var index = layout.index(offset);
+        Objects.checkIndex(index.value(), extent.nelements());
+
+        return index;
     }
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
@@ -83,7 +116,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure

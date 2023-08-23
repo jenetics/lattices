@@ -52,7 +52,18 @@ public record Layout3d(Index3d start, Stride3d stride, Band band) {
         this(start, stride, Band.ZERO);
     }
 
-    int offset(int slice, int row, int col) {
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     * <em>This method doesn't do any range checks.</em>
+     *
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code slice}, {@code row}
+     *         and {@code col}
+     */
+    public int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
@@ -60,11 +71,26 @@ public record Layout3d(Index3d start, Stride3d stride, Band band) {
             band.value();
     }
 
-    int offset(Index3d index) {
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     * <em>This method doesn't do any range checks.</em>
+     *
+     * @param index the dimensional index
+     * @return the array index
+     */
+    public int offset(Index3d index) {
         return offset(index.slice(), index.row(), index.col());
     }
 
-    Index3d index(int offset) {
+    /**
+     * Calculates the index for the given {@code offset}. This is the
+     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
+     * <em>This method doesn't do any range checks.</em>
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     */
+    public Index3d index(int offset) {
         int start = offset -
             this.start.slice() -
             this.start.row() -

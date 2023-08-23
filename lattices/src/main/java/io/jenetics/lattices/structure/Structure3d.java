@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
+
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
  * the index oder of the underlying 1-d structure. The {@link View3d} and
@@ -48,24 +50,62 @@ public record Structure3d(Extent3d extent, Layout3d layout)
         requireNonNull(layout);
     }
 
+    /**
+     * Return the position of the given coordinate within the (virtual or
+     * non-virtual) internal 1-d array.
+     *
+     * @param slice the slice index
+     * @param row the row index
+     * @param col the column index
+     * @return the (linearized) index of the given {@code slice}, {@code row}
+     *         and {@code col}
+     * @throws IndexOutOfBoundsException if the given index values are out of
+     *         bounds
+     */
     @Override
     public int offset(int slice, int row, int col) {
+        Objects.checkIndex(slice, extent.nslices());
+        Objects.checkIndex(row, extent.nrows());
+        Objects.checkIndex(col, extent.ncols());
+
         return layout.offset(slice, row, col);
     }
 
+    /**
+     * Return the <em>array</em> index from the given <em>dimensional</em> index.
+     *
+     * @param index the dimensional index
+     * @return the array index
+     * @throws IndexOutOfBoundsException if the given index value is out of
+     *         bounds
+     */
     @Override
     public int offset(Index3d index) {
-        return layout.offset(index);
+        return offset(index.slice(), index.row(), index.col());
     }
 
+    /**
+     * Calculates the index for the given {@code offset}. This is the
+     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     * @throws IndexOutOfBoundsException if the index, represented by the offset,
+     *         is out of bounds
+     */
     @Override
     public Index3d index(int offset) {
-        return layout.index(offset);
+        final var index = layout.index(offset);
+        Objects.checkIndex(index.slice(), extent.nslices());
+        Objects.checkIndex(index.row(), extent.nrows());
+        Objects.checkIndex(index.col(), extent.ncols());
+
+        return index;
     }
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
