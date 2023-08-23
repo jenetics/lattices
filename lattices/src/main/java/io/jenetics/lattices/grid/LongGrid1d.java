@@ -55,7 +55,7 @@ public record LongGrid1d(Structure1d structure, LongArray array)
     public static final Grid1d.Factory<LongGrid1d> DENSE =
         extent -> new LongGrid1d(
             Structure1d.of(extent),
-            new DenseLongArray(new long[extent.nelements()])
+            new DenseLongArray(new long[extent.elements()])
         );
 
     /**

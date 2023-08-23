@@ -62,8 +62,8 @@ public record Structure2d(Extent2d extent, Layout2d layout)
      */
     @Override
     public int offset(int row, int col) {
-        Objects.checkIndex(row, extent.nrows());
-        Objects.checkIndex(col, extent.ncols());
+        Objects.checkIndex(row, extent.rows());
+        Objects.checkIndex(col, extent.cols());
 
         return layout.offset(row, col);
     }
@@ -93,8 +93,8 @@ public record Structure2d(Extent2d extent, Layout2d layout)
     @Override
     public Index2d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.row(), extent.nrows());
-        Objects.checkIndex(index.col(), extent.ncols());
+        Objects.checkIndex(index.row(), extent.rows());
+        Objects.checkIndex(index.col(), extent.cols());
 
         return index;
     }
@@ -113,8 +113,8 @@ public record Structure2d(Extent2d extent, Layout2d layout)
             new Layout2d(
                 Index2d.ZERO,
                 new Stride2d(
-                    extent.ncols()*extent.nbands(),
-                    extent.nbands()
+                    extent.cols()*extent.bands(),
+                    extent.bands()
                 )
             )
         );

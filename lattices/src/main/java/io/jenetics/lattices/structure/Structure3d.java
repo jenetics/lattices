@@ -64,9 +64,9 @@ public record Structure3d(Extent3d extent, Layout3d layout)
      */
     @Override
     public int offset(int slice, int row, int col) {
-        Objects.checkIndex(slice, extent.nslices());
-        Objects.checkIndex(row, extent.nrows());
-        Objects.checkIndex(col, extent.ncols());
+        Objects.checkIndex(slice, extent.slices());
+        Objects.checkIndex(row, extent.rows());
+        Objects.checkIndex(col, extent.cols());
 
         return layout.offset(slice, row, col);
     }
@@ -96,9 +96,9 @@ public record Structure3d(Extent3d extent, Layout3d layout)
     @Override
     public Index3d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.slice(), extent.nslices());
-        Objects.checkIndex(index.row(), extent.nrows());
-        Objects.checkIndex(index.col(), extent.ncols());
+        Objects.checkIndex(index.slice(), extent.slices());
+        Objects.checkIndex(index.row(), extent.rows());
+        Objects.checkIndex(index.col(), extent.cols());
 
         return index;
     }
@@ -117,9 +117,9 @@ public record Structure3d(Extent3d extent, Layout3d layout)
             new Layout3d(
                 Index3d.ZERO,
                 new Stride3d(
-                    extent.nrows()*extent.ncols()*extent.nbands(),
-                    extent.ncols()*extent.nbands(),
-                    extent.nbands()
+                    extent.rows()*extent.cols()*extent.bands(),
+                    extent.cols()*extent.bands(),
+                    extent.bands()
                 )
             )
         );

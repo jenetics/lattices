@@ -42,15 +42,15 @@ public class Index3dRandom {
 
         final int slice = random.nextInt(
             start.slice(),
-            start.slice() + bound.nslices()
+            start.slice() + bound.slices()
         );
         final int row = random.nextInt(
             start.row(),
-            start.row() + bound.nrows()
+            start.row() + bound.rows()
         );
         final int col = random.nextInt(
             start.col(),
-            start.col() + bound.ncols()
+            start.col() + bound.cols()
         );
 
         return new Index3d(slice, row, col);

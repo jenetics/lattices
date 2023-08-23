@@ -245,7 +245,7 @@ public interface ObjectLattice3d<T>
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return Optional.empty();
         }
 

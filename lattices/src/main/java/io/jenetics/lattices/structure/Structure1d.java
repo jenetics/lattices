@@ -61,7 +61,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
      */
     @Override
     public int offset(int index) {
-        Objects.checkIndex(index, extent.nelements());
+        Objects.checkIndex(index, extent.elements());
 
         return layout.offset(index);
     }
@@ -91,7 +91,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
     @Override
     public Index1d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.value(), extent.nelements());
+        Objects.checkIndex(index.value(), extent.elements());
 
         return index;
     }
@@ -109,7 +109,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
             extent,
             new Layout1d(
                 Index1d.ZERO,
-                new Stride1d(extent.nbands())
+                new Stride1d(extent.bands())
             )
         );
     }

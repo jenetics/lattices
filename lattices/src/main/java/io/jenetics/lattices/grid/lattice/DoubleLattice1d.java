@@ -159,12 +159,12 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalDouble.empty();
         }
 
-        double a = f.applyAsDouble(get(extent().nelements() - 1));
-        for (int i = extent().nelements() - 1; --i >= 0;) {
+        double a = f.applyAsDouble(get(extent().elements() - 1));
+        for (int i = extent().elements() - 1; --i >= 0;) {
             a = reducer.applyAsDouble(a, f.applyAsDouble(get(i)));
         }
 

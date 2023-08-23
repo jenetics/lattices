@@ -196,7 +196,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalDouble.empty();
         }
 

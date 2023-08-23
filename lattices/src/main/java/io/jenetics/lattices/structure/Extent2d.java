@@ -24,34 +24,34 @@ import java.util.Iterator;
 /**
  * The extent of 2-d structures.
  *
- * @param nrows the number of rows must be greater or equal zero
- * @param ncols the number of columns must be greater or equal zero
- * @param nbands the number of bands
+ * @param rows the number of rows must be greater or equal zero
+ * @param cols the number of columns must be greater or equal zero
+ * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent2d(int nrows, int ncols, int nbands)
+public record Extent2d(int rows, int cols, int bands)
     implements Iterable<Index2d>
 {
 
     /**
      * Create a new 2-d extent.
      *
-     * @param nrows the number of rows
-     * @param ncols the number of cols
-     * @param nbands the number of bands
+     * @param rows the number of rows
+     * @param cols the number of cols
+     * @param bands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
      *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
      */
     public Extent2d {
-        if (nrows < 0 || ncols < 0 || nbands < 1 ||
-            Checks.multNotSave(nrows, ncols, nbands))
+        if (rows < 0 || cols < 0 || bands < 1 ||
+            Checks.multNotSave(rows, cols, bands))
         {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d, bands=%d]."
-                    .formatted(nrows, ncols, nbands)
+                    .formatted(rows, cols, bands)
             );
         }
     }
@@ -73,8 +73,8 @@ public record Extent2d(int nrows, int ncols, int nbands)
      *
      * @return the number of elements
      */
-    public int nelements() {
-        return nrows*ncols;
+    public int elements() {
+        return rows*cols;
     }
 
     /**
@@ -83,8 +83,8 @@ public record Extent2d(int nrows, int ncols, int nbands)
      *
      * @return the array length needed for storing all cells
      */
-    public int ncells() {
-        return nelements()*nbands;
+    public int cells() {
+        return elements()*bands;
     }
 
     @Override
@@ -94,7 +94,7 @@ public record Extent2d(int nrows, int ncols, int nbands)
 
     @Override
     public String toString() {
-        return "[%d, %d]".formatted(nrows(), ncols());
+        return "[%d, %d]".formatted(rows(), cols());
     }
 
 }

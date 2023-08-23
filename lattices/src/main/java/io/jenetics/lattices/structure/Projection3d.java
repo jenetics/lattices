@@ -79,12 +79,12 @@ public interface Projection3d {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            Objects.checkIndex(index, structure.extent().nslices());
+            Objects.checkIndex(index, structure.extent().slices());
 
             return new Structure2d(
                 new Extent2d(
-                    structure.extent().nrows(),
-                    structure.extent().ncols()
+                    structure.extent().rows(),
+                    structure.extent().cols()
                 ),
                 new Layout2d(
                     new Index2d(
@@ -111,12 +111,12 @@ public interface Projection3d {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            Objects.checkIndex(index, structure.extent().nrows());
+            Objects.checkIndex(index, structure.extent().rows());
 
             return new Structure2d(
                 new Extent2d(
-                    structure.extent().nslices(),
-                    structure.extent().ncols()
+                    structure.extent().slices(),
+                    structure.extent().cols()
                 ),
                 new Layout2d(
                     new Index2d(
@@ -144,12 +144,12 @@ public interface Projection3d {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            Objects.checkIndex(index, structure.extent().ncols());
+            Objects.checkIndex(index, structure.extent().cols());
 
             return new Structure2d(
                 new Extent2d(
-                    structure.extent().nslices(),
-                    structure.extent().nrows()
+                    structure.extent().slices(),
+                    structure.extent().rows()
                 ),
                 new Layout2d(
                     new Index2d(

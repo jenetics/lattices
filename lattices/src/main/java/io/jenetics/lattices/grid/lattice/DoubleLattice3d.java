@@ -210,7 +210,7 @@ public interface DoubleLattice3d extends Lattice3d<DoubleArray>, Structure3dOps 
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalDouble.empty();
         }
 

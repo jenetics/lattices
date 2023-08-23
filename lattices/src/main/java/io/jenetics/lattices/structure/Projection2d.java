@@ -78,10 +78,10 @@ public interface Projection2d {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            Objects.checkIndex(index, structure.extent().nrows());
+            Objects.checkIndex(index, structure.extent().rows());
 
             return new Structure1d(
-                new Extent1d(structure.extent().ncols()),
+                new Extent1d(structure.extent().cols()),
                 new Layout1d(
                     new Index1d(structure.layout().offset(index, 0)),
                     new Stride1d(structure.layout().stride().col())
@@ -102,10 +102,10 @@ public interface Projection2d {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
-            Objects.checkIndex(index, structure.extent().ncols());
+            Objects.checkIndex(index, structure.extent().cols());
 
             return new Structure1d(
-                new Extent1d(structure.extent().nrows()),
+                new Extent1d(structure.extent().rows()),
                 new Layout1d(
                     new Index1d(structure.layout().offset(0, index)),
                     new Stride1d(structure.layout().stride().row())

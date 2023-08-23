@@ -35,13 +35,13 @@ public class Index3dIteratorTest {
     public void iterate(Range3d range) {
         final var it = new Index3dIterator(range);
 
-        for (int s = 0; s < range.extent().nslices(); ++s) {
+        for (int s = 0; s < range.extent().slices(); ++s) {
             final var slice = s + range.start().slice();
 
-            for (int r = 0; r < range.extent().nrows(); ++r) {
+            for (int r = 0; r < range.extent().rows(); ++r) {
                 final var row = r + range.start().row();
 
-                for (int c = 0; c < range.extent().ncols(); ++c) {
+                for (int c = 0; c < range.extent().cols(); ++c) {
                     final var col = c + range.start().col();
 
                     final var index = it.next();

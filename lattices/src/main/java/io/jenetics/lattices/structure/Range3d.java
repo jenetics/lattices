@@ -78,9 +78,9 @@ public record Range3d(Index3d start, Extent3d extent)
     @Override
     public String toString() {
         return "[%d..%d, %d..%d, %d..%d]".formatted(
-            start.row(), start.row() + extent.nrows(),
-            start.col(), start.col() + extent.ncols(),
-            start.slice(), start.slice() + extent.nslices()
+            start.row(), start.row() + extent.rows(),
+            start.col(), start.col() + extent.cols(),
+            start.slice(), start.slice() + extent.slices()
         );
     }
 

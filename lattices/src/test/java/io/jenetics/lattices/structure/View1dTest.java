@@ -34,9 +34,9 @@ public class View1dTest {
 
     private static final Structure1d STRUCTURE = Structure1d.of(EXTENT);
 
-    private static final String[] ARRAY = new String[EXTENT.ncells()];
+    private static final String[] ARRAY = new String[EXTENT.cells()];
     static {
-        for (int i = 0; i < EXTENT.nelements(); ++i) {
+        for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
             final var index = STRUCTURE.index(offset);
             final var value = "v_" + index.value();
@@ -51,13 +51,13 @@ public class View1dTest {
     public void ofRange(Range1d range) {
         final var view = View1d.of(range);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().nelements()).isEqualTo(range.extent().nelements());
+        assertThat(structure.extent().elements()).isEqualTo(range.extent().elements());
 
         final var structure0 = View1d.of(Band.ZERO).apply(structure);
         final var structure1 = View1d.of(Band.ONE).apply(structure);
         final var structure2 = View1d.of(Band.TWO).apply(structure);
 
-        for (int i = 0; i < structure.extent().nelements(); ++i) {
+        for (int i = 0; i < structure.extent().elements(); ++i) {
             final var offset = structure.offset(i);
 
             final var expected = "v_" + (i + range.start().value());
@@ -86,14 +86,14 @@ public class View1dTest {
     public void ofStart(Index1d start) {
         final var view = View1d.of(start);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().nelements())
-            .isEqualTo(STRUCTURE.extent().nelements() - start.value());
+        assertThat(structure.extent().elements())
+            .isEqualTo(STRUCTURE.extent().elements() - start.value());
 
         final var structure0 = View1d.of(Band.ZERO).apply(structure);
         final var structure1 = View1d.of(Band.ONE).apply(structure);
         final var structure2 = View1d.of(Band.TWO).apply(structure);
 
-        for (int i = 0; i < structure.extent().nelements(); ++i) {
+        for (int i = 0; i < structure.extent().elements(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_" + (i + start.value());
@@ -125,7 +125,7 @@ public class View1dTest {
         final var structure1 = View1d.of(Band.ONE).apply(structure);
         final var structure2 = View1d.of(Band.TWO).apply(structure);
 
-        for (int i = 0; i < structure.extent().nelements(); ++i) {
+        for (int i = 0; i < structure.extent().elements(); ++i) {
             final int offset = structure.layout().offset(i);
 
             final var expected = "v_" + i*stride.value();

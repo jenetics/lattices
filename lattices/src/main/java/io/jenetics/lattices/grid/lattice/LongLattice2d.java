@@ -196,7 +196,7 @@ public interface LongLattice2d extends Lattice2d<LongArray>, Structure2dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalLong.empty();
         }
 

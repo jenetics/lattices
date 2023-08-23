@@ -210,7 +210,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalInt.empty();
         }
 

@@ -28,11 +28,11 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
         requireNonNull(action);
 
         for (int r = range.start().row(),
-             h = range.start().row() + range.extent().nrows();
+             h = range.start().row() + range.extent().rows();
              r < h; ++r)
         {
             for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().ncols();
+                 w = range.start().col() + range.extent().cols();
                  c < w; ++c)
             {
                 action.accept(r, c);
@@ -45,11 +45,11 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),
-             h = range.start().row() + range.extent().nrows();
+             h = range.start().row() + range.extent().rows();
              r < h; ++r)
         {
             for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().ncols();
+                 w = range.start().col() + range.extent().cols();
                  c < w; ++c)
             {
                 if (predicate.test(r, c)) {
@@ -66,11 +66,11 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),
-             h = range.start().row() + range.extent().nrows();
+             h = range.start().row() + range.extent().rows();
              r < h; ++r)
         {
             for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().ncols();
+                 w = range.start().col() + range.extent().cols();
                  c < w; ++c)
             {
                 if (!predicate.test(r, c)) {
@@ -87,11 +87,11 @@ record Loop2dRowFirst(Range2d range) implements Loop2d {
         requireNonNull(predicate);
 
         for (int r = range.start().row(),
-             h = range.start().row() + range.extent().nrows();
+             h = range.start().row() + range.extent().rows();
              r < h; ++r)
         {
             for (int c = range.start().col(),
-                 w = range.start().col() + range.extent().ncols();
+                 w = range.start().col() + range.extent().cols();
                  c < w; ++c)
             {
                 if (predicate.test(r, c)) {

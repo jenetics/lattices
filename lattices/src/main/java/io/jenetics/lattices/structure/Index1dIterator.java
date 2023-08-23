@@ -45,14 +45,14 @@ final class Index1dIterator implements Iterator<Index1d> {
 
     @Override
     public boolean hasNext() {
-        return cursor < range.start().value() + range.extent().nelements();
+        return cursor < range.start().value() + range.extent().elements();
     }
 
     @Override
     public Index1d next() {
         final int i = cursor;
 
-        if (cursor >= range.start().value() + range.extent().nelements()) {
+        if (cursor >= range.start().value() + range.extent().elements()) {
             throw new NoSuchElementException();
         }
 

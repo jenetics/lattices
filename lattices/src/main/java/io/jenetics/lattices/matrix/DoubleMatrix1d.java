@@ -55,7 +55,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
     public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
         extent -> new DoubleMatrix1d(
             Structure1d.of(extent),
-            DenseDoubleArray.ofSize(extent.ncells())
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**
@@ -96,7 +96,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
             return 0;
         }
 
-        final int to = min(min(extent().nelements(), y.extent().nelements()), from + length);
+        final int to = min(min(extent().elements(), y.extent().elements()), from + length);
 
         double sum = 0;
         for (int i = from; i < to; ++i) {
@@ -114,7 +114,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @return the sum of products
      */
     public double dotProduct(DoubleMatrix1d y) {
-        return dotProduct(y, 0, extent().nelements());
+        return dotProduct(y, 0, extent().elements());
     }
 
     /**
@@ -136,7 +136,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         int cardinality = 0;
-        for (int i = 0; i < extent().nelements(); ++i) {
+        for (int i = 0; i < extent().elements(); ++i) {
             if (context.isZero(get(i))) {
                 ++cardinality;
             }
@@ -153,7 +153,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         final var indices = IntStream.builder();
-        for (int i = 0; i < extent().nelements(); ++i) {
+        for (int i = 0; i < extent().elements(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);
             }

@@ -196,7 +196,7 @@ public interface IntLattice2d extends Lattice2d<IntArray>, Structure2dOps {
         requireNonNull(reducer);
         requireNonNull(f);
 
-        if (extent().nelements() == 0) {
+        if (extent().elements() == 0) {
             return OptionalInt.empty();
         }
 

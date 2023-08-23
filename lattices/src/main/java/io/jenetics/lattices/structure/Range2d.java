@@ -77,8 +77,8 @@ public record Range2d(Index2d start, Extent2d extent)
     @Override
     public String toString() {
         return "[%d..%d, %d..%d]".formatted(
-            start.row(), start.row() + extent.nrows(),
-            start.col(), start.col() + extent.ncols());
+            start.row(), start.row() + extent.rows(),
+            start.col(), start.col() + extent.cols());
     }
 
 }

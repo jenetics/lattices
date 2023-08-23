@@ -48,9 +48,9 @@ final class Index3dIterator implements Iterator<Index3d> {
     @Override
     public boolean hasNext() {
         return
-            sliceCursor < range.start().slice() + range.extent().nslices() &&
-            rowCursor < range.start().row() + range.extent().nrows() &&
-            colCursor < range.start().col() + range.extent().ncols();
+            sliceCursor < range.start().slice() + range.extent().slices() &&
+            rowCursor < range.start().row() + range.extent().rows() &&
+            colCursor < range.start().col() + range.extent().cols();
     }
 
     @Override
@@ -59,19 +59,19 @@ final class Index3dIterator implements Iterator<Index3d> {
         final int r = rowCursor;
         final int c = colCursor;
 
-        if (sliceCursor >= range.start().slice() + range.extent().nslices() &&
-            rowCursor >= range.start().row() + range.extent().nrows() &&
-            colCursor >= range.start().col() + range.extent().ncols())
+        if (sliceCursor >= range.start().slice() + range.extent().slices() &&
+            rowCursor >= range.start().row() + range.extent().rows() &&
+            colCursor >= range.start().col() + range.extent().cols())
         {
             throw new NoSuchElementException();
         }
 
         colCursor = c + 1;
-        if (colCursor >= range.start().col() + range.extent().ncols()) {
+        if (colCursor >= range.start().col() + range.extent().cols()) {
             colCursor = range.start().col();
             rowCursor = r + 1;
 
-            if (rowCursor >= range.start().row() + range.extent().nrows()) {
+            if (rowCursor >= range.start().row() + range.extent().rows()) {
                 colCursor = range.start().col();
                 rowCursor = range.start().row();
                 sliceCursor = s + 1;

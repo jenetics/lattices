@@ -46,8 +46,8 @@ final class Index2dIterator implements Iterator<Index2d> {
     @Override
     public boolean hasNext() {
         return
-            rowCursor < range.start().row() + range.extent().nrows() &&
-            colCursor < range.start().col() + range.extent().ncols();
+            rowCursor < range.start().row() + range.extent().rows() &&
+            colCursor < range.start().col() + range.extent().cols();
     }
 
     @Override
@@ -55,14 +55,14 @@ final class Index2dIterator implements Iterator<Index2d> {
         final int r = rowCursor;
         final int c = colCursor;
 
-        if (rowCursor >= range.start().row() + range.extent().nrows() &&
-            colCursor >= range.start().col() + range.extent().ncols())
+        if (rowCursor >= range.start().row() + range.extent().rows() &&
+            colCursor >= range.start().col() + range.extent().cols())
         {
             throw new NoSuchElementException();
         }
 
         colCursor = c + 1;
-        if (colCursor >= range.start().col() + range.extent().ncols()) {
+        if (colCursor >= range.start().col() + range.extent().cols()) {
             colCursor = range.start().col();
             rowCursor = r + 1;
         }

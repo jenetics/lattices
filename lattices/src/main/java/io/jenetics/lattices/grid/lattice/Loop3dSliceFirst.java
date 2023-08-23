@@ -42,15 +42,15 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
         requireNonNull(action);
 
         for (int s = range.start().slice(),
-             d = range.start().slice() + range.extent().nslices();
+             d = range.start().slice() + range.extent().slices();
              s < d; ++s)
         {
             for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().nrows();
+                 h = range.start().row() + range.extent().rows();
                  r < h; ++r)
             {
                 for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().ncols();
+                     w = range.start().col() + range.extent().cols();
                      c < w; ++c)
                 {
                     action.accept(s, r, c);
@@ -64,15 +64,15 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
-             d = range.start().slice() + range.extent().nslices();
+             d = range.start().slice() + range.extent().slices();
              s < d; ++s)
         {
             for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().nrows();
+                 h = range.start().row() + range.extent().rows();
                  r < h; ++r)
             {
                 for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().ncols();
+                     w = range.start().col() + range.extent().cols();
                      c < w; ++c)
                 {
                     if (predicate.test(s, r, c)) {
@@ -90,15 +90,15 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
-             d = range.start().slice() + range.extent().nslices();
+             d = range.start().slice() + range.extent().slices();
              s < d; ++s)
         {
             for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().nrows();
+                 h = range.start().row() + range.extent().rows();
                  r < h; ++r)
             {
                 for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().ncols();
+                     w = range.start().col() + range.extent().cols();
                      c < w; ++c)
                 {
                     if (!predicate.test(s, r, c)) {
@@ -116,15 +116,15 @@ record Loop3dSliceFirst(Range3d range) implements Loop3d {
         requireNonNull(predicate);
 
         for (int s = range.start().slice(),
-             d = range.start().slice() + range.extent().nslices();
+             d = range.start().slice() + range.extent().slices();
              s < d; ++s)
         {
             for (int r = range.start().row(),
-                 h = range.start().row() + range.extent().nrows();
+                 h = range.start().row() + range.extent().rows();
                  r < h; ++r)
             {
                 for (int c = range.start().col(),
-                     w = range.start().col() + range.extent().ncols();
+                     w = range.start().col() + range.extent().cols();
                      c < w; ++c)
                 {
                     if (predicate.test(s, r, c)) {

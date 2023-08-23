@@ -111,7 +111,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
         return extent -> new ObjectGrid2d<T>(
             Structure2d.of(extent),
-            DenseObjectArray.ofSize(extent.ncells(), __)
+            DenseObjectArray.ofSize(extent.cells(), __)
         );
     }
 

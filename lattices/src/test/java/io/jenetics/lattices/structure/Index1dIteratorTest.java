@@ -37,7 +37,7 @@ public class Index1dIteratorTest {
 
         int calls = 0;
         for (int i = range.start().value();
-             i < range.start().value() + range.extent().nelements();
+             i < range.start().value() + range.extent().elements();
              i += stride.value())
         {
             ++calls;
@@ -45,7 +45,7 @@ public class Index1dIteratorTest {
         }
 
         assertThat(it.hasNext()).isFalse();
-        assertThat(calls).isEqualTo(range.extent().nelements()/stride.value());
+        assertThat(calls).isEqualTo(range.extent().elements()/stride.value());
     }
 
     @DataProvider

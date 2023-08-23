@@ -55,7 +55,7 @@ public record DoubleGrid2d(Structure2d structure, DoubleArray array)
     public static final Grid2d.Factory<DoubleGrid2d> DENSE =
         extent -> new DoubleGrid2d(
             Structure2d.of(extent),
-            DenseDoubleArray.ofSize(extent.ncells())
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**

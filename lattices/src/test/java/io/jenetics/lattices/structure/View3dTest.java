@@ -35,9 +35,9 @@ public class View3dTest {
 
     private static final Structure3d STRUCTURE = Structure3d.of(EXTENT);
 
-    private static final String[] ARRAY = new String[EXTENT.ncells()];
+    private static final String[] ARRAY = new String[EXTENT.cells()];
     static {
-        for (int i = 0; i < EXTENT.nelements(); ++i) {
+        for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
             final var index = STRUCTURE.index(offset);
             final var value ="v_" + index.slice() +
@@ -54,16 +54,16 @@ public class View3dTest {
     public void ofRange(Range3d range) {
         final var view = View3d.of(range);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().nelements())
-            .isEqualTo(range.extent().nelements());
+        assertThat(structure.extent().elements())
+            .isEqualTo(range.extent().elements());
 
         final var structure0 = View3d.of(Band.ZERO).apply(structure);
         final var structure1 = View3d.of(Band.ONE).apply(structure);
         final var structure2 = View3d.of(Band.TWO).apply(structure);
 
-        for (int s = 0; s < structure.extent().nslices(); ++s) {
-            for (int r = 0; r < structure.extent().nrows(); ++r) {
-                for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int s = 0; s < structure.extent().slices(); ++s) {
+            for (int r = 0; r < structure.extent().rows(); ++r) {
+                for (int c = 0; c < structure.extent().cols(); ++c) {
                     final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +
@@ -106,9 +106,9 @@ public class View3dTest {
         final var structure1 = View3d.of(Band.ONE).apply(structure);
         final var structure2 = View3d.of(Band.TWO).apply(structure);
 
-        for (int s = 0; s < structure.extent().nslices(); ++s) {
-            for (int r = 0; r < structure.extent().nrows(); ++r) {
-                for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int s = 0; s < structure.extent().slices(); ++s) {
+            for (int r = 0; r < structure.extent().rows(); ++r) {
+                for (int c = 0; c < structure.extent().cols(); ++c) {
                     final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +
@@ -150,9 +150,9 @@ public class View3dTest {
         final var structure1 = View3d.of(Band.ONE).apply(structure);
         final var structure2 = View3d.of(Band.TWO).apply(structure);
 
-        for (int s = 0; s < structure.extent().nslices(); ++s) {
-            for (int r = 0; r < structure.extent().nrows(); ++r) {
-                for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int s = 0; s < structure.extent().slices(); ++s) {
+            for (int r = 0; r < structure.extent().rows(); ++r) {
+                for (int c = 0; c < structure.extent().cols(); ++c) {
                     final int offset = structure.offset(s, r, c);
 
                     final var expected = "v_" +

@@ -53,7 +53,7 @@ public interface Structured2d {
      * @return the number of rows of {@code this} structure
      */
     default int rows() {
-        return extent().nrows();
+        return extent().rows();
     }
 
     /**
@@ -62,7 +62,7 @@ public interface Structured2d {
      * @return the number of columns of {@code this} structure
      */
     default int cols() {
-        return extent().ncols();
+        return extent().cols();
     }
 
 }

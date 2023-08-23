@@ -35,9 +35,9 @@ public class View2dTest {
 
     private static final Structure2d STRUCTURE = Structure2d.of(EXTENT);
 
-    private static final String[] ARRAY = new String[EXTENT.ncells()];
+    private static final String[] ARRAY = new String[EXTENT.cells()];
     static {
-        for (int i = 0; i < EXTENT.nelements(); ++i) {
+        for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
             final var index = STRUCTURE.index(offset);
             final var value = "v_" + index.row() + "_" + index.col();
@@ -51,15 +51,15 @@ public class View2dTest {
     @Test
     public void transpose() {
         final var structure = View2d.TRANSPOSE.apply(STRUCTURE);
-        assertThat(structure.extent().nrows()).isEqualTo(EXTENT.ncols());
-        assertThat(structure.extent().ncols()).isEqualTo(EXTENT.nrows());
+        assertThat(structure.extent().rows()).isEqualTo(EXTENT.cols());
+        assertThat(structure.extent().cols()).isEqualTo(EXTENT.rows());
 
         final var structure0 = View2d.of(Band.ZERO).apply(structure);
         final var structure1 = View2d.of(Band.ONE).apply(structure);
         final var structure2 = View2d.of(Band.TWO).apply(structure);
 
-        for (int r = 0; r < structure.extent().nrows(); ++r) {
-            for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int r = 0; r < structure.extent().rows(); ++r) {
+            for (int c = 0; c < structure.extent().cols(); ++c) {
                 final int offset = structure.offset(r, c);
 
                 final var expected = "v_" + c + "_" + r;
@@ -79,14 +79,14 @@ public class View2dTest {
     public void ofRange(Range2d range) {
         final var view = View2d.of(range);
         final var structure = view.apply(STRUCTURE);
-        assertThat(structure.extent().nelements()).isEqualTo(range.extent().nelements());
+        assertThat(structure.extent().elements()).isEqualTo(range.extent().elements());
 
         final var structure0 = View2d.of(Band.ZERO).apply(structure);
         final var structure1 = View2d.of(Band.ONE).apply(structure);
         final var structure2 = View2d.of(Band.TWO).apply(structure);
 
-        for (int r = 0; r < structure.extent().nrows(); ++r) {
-            for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int r = 0; r < structure.extent().rows(); ++r) {
+            for (int c = 0; c < structure.extent().cols(); ++c) {
                 final int offset = structure.offset(r, c);
 
                 final var expected = "v_" +
@@ -124,8 +124,8 @@ public class View2dTest {
         final var structure1 = View2d.of(Band.ONE).apply(structure);
         final var structure2 = View2d.of(Band.TWO).apply(structure);
 
-        for (int r = 0; r < structure.extent().nrows(); ++r) {
-            for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int r = 0; r < structure.extent().rows(); ++r) {
+            for (int c = 0; c < structure.extent().cols(); ++c) {
                 int offset = structure.offset(r, c);
 
                 final var expected = "v_" +
@@ -162,8 +162,8 @@ public class View2dTest {
         final var structure2 = View2d.of(Band.TWO).apply(structure);
 
 
-        for (int r = 0; r < structure.extent().nrows(); ++r) {
-            for (int c = 0; c < structure.extent().ncols(); ++c) {
+        for (int r = 0; r < structure.extent().rows(); ++r) {
+            for (int c = 0; c < structure.extent().cols(); ++c) {
                 final int offset = structure.offset(r, c);
 
                 final var expected = "v_" +
