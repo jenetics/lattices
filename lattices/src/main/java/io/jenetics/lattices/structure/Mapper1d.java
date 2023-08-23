@@ -40,10 +40,14 @@ public interface Mapper1d {
     /**
      * Return the <em>array</em> index from the given <em>dimensional</em> index.
      *
+     * @see #offset(int)
+     *
      * @param index the dimensional index
      * @return the array index
      */
-    int offset(Index1d index);
+    default int offset(Index1d index) {
+        return offset(index.value());
+    }
 
     /**
      * Calculates the index for the given {@code offset}. This is the

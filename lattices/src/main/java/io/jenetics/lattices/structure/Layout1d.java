@@ -40,7 +40,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout1d(Index1d start, Stride1d stride, Band band) {
+public record Layout1d(Index1d start, Stride1d stride, Band band)
+    implements Mapper1d
+{
 
     public Layout1d {
         requireNonNull(start);
@@ -56,19 +58,9 @@ public record Layout1d(Index1d start, Stride1d stride, Band band) {
      * @param index the index of the element.
      * @return the (linearized) index of the given {@code index}
      */
+    @Override
     public int offset(int index) {
         return start.value() + index*stride.value() + band.value();
-    }
-
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param index the dimensional index
-     * @return the array index
-     */
-    public int offset(Index1d index) {
-        return offset(index.value() - band.value());
     }
 
     /**
@@ -79,6 +71,7 @@ public record Layout1d(Index1d start, Stride1d stride, Band band) {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
+    @Override
     public Index1d index(int offset) {
         final int start = offset - this.start.value();
         final int index = start/stride.value();

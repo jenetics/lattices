@@ -99,24 +99,8 @@ public record Structure3d(Extent3d extent, Layout3d layout)
      */
     @Override
     public int offset(int slice, int row, int col) {
-        Objects.checkIndex(slice, extent.slices());
-        Objects.checkIndex(row, extent.rows());
-        Objects.checkIndex(col, extent.cols());
-
+        Checks.checkIndex(slice, row, col, extent);
         return layout.offset(slice, row, col);
-    }
-
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     *
-     * @param index the dimensional index
-     * @return the array index
-     * @throws IndexOutOfBoundsException if the given index value is out of
-     *         bounds
-     */
-    @Override
-    public int offset(Index3d index) {
-        return offset(index.slice(), index.row(), index.col());
     }
 
     /**
@@ -131,10 +115,7 @@ public record Structure3d(Extent3d extent, Layout3d layout)
     @Override
     public Index3d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.slice(), extent.slices());
-        Objects.checkIndex(index.row(), extent.rows());
-        Objects.checkIndex(index.col(), extent.cols());
-
+        Checks.checkIndex(index.slice(), index.row(), index.col(), extent);
         return index;
     }
 

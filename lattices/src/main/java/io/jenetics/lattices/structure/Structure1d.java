@@ -90,22 +90,8 @@ public record Structure1d(Extent1d extent, Layout1d layout)
      */
     @Override
     public int offset(int index) {
-        Objects.checkIndex(index, extent.elements());
-
+        Checks.checkIndex(index, extent);
         return layout.offset(index);
-    }
-
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     *
-     * @param index the dimensional index
-     * @return the array index
-     * @throws IndexOutOfBoundsException if the given index value is out of
-     *         bounds
-     */
-    @Override
-    public int offset(Index1d index) {
-        return offset(index.value());
     }
 
     /**
@@ -120,8 +106,7 @@ public record Structure1d(Extent1d extent, Layout1d layout)
     @Override
     public Index1d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.value(), extent.elements());
-
+        Checks.checkIndex(index.value(), extent);
         return index;
     }
 

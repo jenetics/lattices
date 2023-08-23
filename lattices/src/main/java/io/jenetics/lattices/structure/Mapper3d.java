@@ -43,10 +43,14 @@ public interface Mapper3d {
     /**
      * Return the <em>array</em> index from the given <em>dimensional</em> index.
      *
+     * @see #offset(int, int, int)
+     *
      * @param index the dimensional index
      * @return the array index
      */
-    int offset(Index3d index);
+    default int offset(Index3d index) {
+        return offset(index.slice(), index.row(), index.col());
+    }
 
     /**
      * Calculates the index for the given {@code offset}. This is the

@@ -95,23 +95,8 @@ public record Structure2d(Extent2d extent, Layout2d layout)
      */
     @Override
     public int offset(int row, int col) {
-        Objects.checkIndex(row, extent.rows());
-        Objects.checkIndex(col, extent.cols());
-
+        Checks.checkIndex(row, col, extent);
         return layout.offset(row, col);
-    }
-
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     *
-     * @param index the dimensional index
-     * @return the array index
-     * @throws IndexOutOfBoundsException if the given index value is out of
-     *         bounds
-     */
-    @Override
-    public int offset(Index2d index) {
-        return offset(index.row(), index.col());
     }
 
     /**
@@ -126,9 +111,7 @@ public record Structure2d(Extent2d extent, Layout2d layout)
     @Override
     public Index2d index(int offset) {
         final var index = layout.index(offset);
-        Objects.checkIndex(index.row(), extent.rows());
-        Objects.checkIndex(index.col(), extent.cols());
-
+        Checks.checkIndex(index.row(), index.col(), extent);
         return index;
     }
 

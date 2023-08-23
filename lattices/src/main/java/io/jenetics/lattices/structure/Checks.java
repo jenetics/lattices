@@ -59,4 +59,37 @@ final class Checks {
             return true;
         }
     }
+
+    static void checkIndex(int value, Extent1d extent) {
+        if (value < 0 || value >= extent.elements()) {
+            throw new IndexOutOfBoundsException(
+                "%s out of bounds %s."
+                    .formatted(new Index1d(value), extent)
+            );
+        }
+    }
+
+    static void checkIndex(int row, int col, Extent2d extent) {
+        if (row < 0 || row >= extent.rows() ||
+            col < 0 || col >= extent.cols())
+        {
+            throw new IndexOutOfBoundsException(
+                "%s out of bounds %s."
+                    .formatted(new Index2d(row, col), extent)
+            );
+        }
+    }
+
+    static void checkIndex(int slice, int row, int col, Extent3d extent) {
+        if (slice < 0 || slice >= extent.slices() ||
+            row < 0 || row >= extent.rows() ||
+            col < 0 || col >= extent.cols())
+        {
+            throw new IndexOutOfBoundsException(
+                "%s out of bounds %s."
+                    .formatted(new Index2d(row, col), extent)
+            );
+        }
+    }
+
 }

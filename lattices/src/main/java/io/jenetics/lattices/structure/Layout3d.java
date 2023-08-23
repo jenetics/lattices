@@ -40,7 +40,9 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Layout3d(Index3d start, Stride3d stride, Band band) {
+public record Layout3d(Index3d start, Stride3d stride, Band band)
+    implements Mapper3d
+{
 
     public Layout3d {
         requireNonNull(start);
@@ -59,23 +61,13 @@ public record Layout3d(Index3d start, Stride3d stride, Band band) {
      * @return the (linearized) index of the given {@code slice}, {@code row}
      *         and {@code col}
      */
+    @Override
     public int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
             band.value();
-    }
-
-    /**
-     * Return the <em>array</em> index from the given <em>dimensional</em> index.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param index the dimensional index
-     * @return the array index
-     */
-    public int offset(Index3d index) {
-        return offset(index.slice(), index.row(), index.col());
     }
 
     /**
@@ -86,6 +78,7 @@ public record Layout3d(Index3d start, Stride3d stride, Band band) {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
+    @Override
     public Index3d index(int offset) {
         int start = offset -
             this.start.slice() -

@@ -41,10 +41,14 @@ public interface Mapper2d {
     /**
      * Return the <em>array</em> index from the given <em>dimensional</em> index.
      *
+     * @see #offset(int, int)
+     *
      * @param index the dimensional index
      * @return the array index
      */
-    int offset(Index2d index);
+    default int offset(Index2d index) {
+        return offset(index.row(), index.col());
+    }
 
     /**
      * Calculates the index for the given {@code offset}. This is the
