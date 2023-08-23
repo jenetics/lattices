@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid.lattice;
 
+import io.jenetics.lattices.grid.Structured2d;
 import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structured2d;
 
 /**
  * This interface implements operations for 2-d structures.

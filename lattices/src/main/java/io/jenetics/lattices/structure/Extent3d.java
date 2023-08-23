@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import static io.jenetics.lattices.structure.Structures.multNotSave;
-
 import java.util.Iterator;
 
 /**
@@ -51,7 +49,7 @@ public record Extent3d(int nslices, int nrows, int ncols, int nbands)
      */
     public Extent3d {
         if (nslices < 0 || nrows < 0 || ncols < 0 || nbands < 1 ||
-            multNotSave(nslices, nrows, ncols, nbands))
+            Checks.multNotSave(nslices, nrows, ncols, nbands))
         {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, %d, %d, bands=%d]."

@@ -22,7 +22,7 @@ package io.jenetics.lattices.matrix.linalg;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static io.jenetics.lattices.structure.Structures.checkRectangular;
+import static io.jenetics.lattices.grid.Structures.checkRectangular;
 
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;

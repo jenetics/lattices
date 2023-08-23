@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid.lattice;
 
+import io.jenetics.lattices.grid.Structured3d;
 import io.jenetics.lattices.structure.Range3d;
-import io.jenetics.lattices.structure.Structured3d;
 
 /**
  * This interface implements operations for 3-d structures.

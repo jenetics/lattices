@@ -17,7 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.grid;
+
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Structure1d;
 
 /**
  * Defines the structure of a grid.
@@ -26,49 +29,22 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Structured3d {
+public interface Structured1d {
 
     /**
      * Return the lattice structure.
      *
      * @return the lattice structure
      */
-    Structure3d structure();
+    Structure1d structure();
 
     /**
      * Return the dimension of {@code this} structure.
      *
      * @return the dimension of {@code this} structure
      */
-    default Extent3d extent() {
+    default Extent1d extent() {
         return structure().extent();
-    }
-
-    /**
-     * Return the number of slices of {@code this} structure.
-     *
-     * @return the number of slices of {@code this} structure
-     */
-    default int slices() {
-        return extent().nslices();
-    }
-
-    /**
-     * Return the number of rows of {@code this} structure.
-     *
-     * @return the number of rows of {@code this} structure
-     */
-    default int rows() {
-        return extent().nrows();
-    }
-
-    /**
-     * Return the number of columns of {@code this} structure.
-     *
-     * @return the number of columns of {@code this} structure
-     */
-    default int cols() {
-        return extent().ncols();
     }
 
 }

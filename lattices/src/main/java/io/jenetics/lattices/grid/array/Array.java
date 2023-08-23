@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.grid.array;
 
-import io.jenetics.lattices.structure.Self;
+import io.jenetics.lattices.grid.Self;
 
 /**
  * Base interface of all array implementations. An array is a container of

@@ -17,16 +17,19 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.grid;
 
 import static java.util.Objects.requireNonNull;
+
+import io.jenetics.lattices.structure.Index2d;
+import io.jenetics.lattices.structure.OffsetMapper2d;
 
 /**
  * This class provides structural access to a one-dimensional array.
  *
  * <pre>{@code
  * final var values = new double[structure.extent().size()]
- * final var lattices = Lattices1d.of(structure);
+ * final var lattices = Lattices2d.of(structure);
  *
  * lattice.set(values, index, 0.5);
  * final var value = lattices.get(values, index);
@@ -37,16 +40,16 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  * @since 3.0
  */
-public final class Lattices1d {
+public final class Lattices2d {
 
-    private final OffsetMapper1d mapper;
+    private final OffsetMapper2d mapper;
 
     /**
      * Create a new object for accessing multidimensional data from an array.
      *
      * @param mapper the defining offset mapper
      */
-    public Lattices1d(OffsetMapper1d mapper) {
+    public Lattices2d(OffsetMapper2d mapper) {
         this.mapper = requireNonNull(mapper);
     }
 
@@ -59,7 +62,7 @@ public final class Lattices1d {
      * @param <T> the lattice element type
      * @return the element at the given {@code index}
      */
-    public <T> T get(T[] array, Index1d index) {
+    public <T> T get(T[] array, Index2d index) {
         return array[mapper.offset(index)];
     }
 
@@ -68,25 +71,13 @@ public final class Lattices1d {
      * the given {@code array}. This method doesn't do any index checking.
      *
      * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
+     * @param row the row index
+     * @param col the column index
      * @param <T> the lattice element type
      * @return the element at the given {@code index}
      */
-    public <T> T get(T[] array, int index) {
-        return array[mapper.offset(index)];
-    }
-
-    /**
-     * Set the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
-     * @param <T> the lattice element type
-     */
-    public <T> void set(T[] array, Index1d index, T value) {
-        array[mapper.offset(index)] = value;
+    public <T> T get(T[] array, int row, int col) {
+        return array[mapper.offset(row, col)];
     }
 
     /**
@@ -98,8 +89,22 @@ public final class Lattices1d {
      * @param value the new lattice value at the given {@code index}
      * @param <T> the lattice element type
      */
-    public <T> void set(T[] array, int index, T value) {
+    public <T> void set(T[] array, Index2d index, T value) {
         array[mapper.offset(index)] = value;
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     * @param <T> the lattice element type
+     */
+    public <T> void set(T[] array, int row, int col, T value) {
+        array[mapper.offset(row, col)] = value;
     }
 
     /**
@@ -110,8 +115,46 @@ public final class Lattices1d {
      * @param index the lattice index of the returned element
      * @return the element at the given {@code index}
      */
-    public int get(int[] array, Index1d index) {
+    public int get(int[] array, Index2d index) {
         return array[mapper.offset(index)];
+    }
+
+    /**
+     * Return the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
+     */
+    public int get(int[] array, int row, int col) {
+        return array[mapper.offset(row, col)];
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param index the lattice index of the returned element
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(int[] array, Index2d index, int value) {
+        array[mapper.offset(index)] = value;
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(int[] array, int row, int col, int value) {
+        array[mapper.offset(row, col)] = value;
     }
 
     /**
@@ -122,20 +165,21 @@ public final class Lattices1d {
      * @param index the lattice index of the returned element
      * @return the element at the given {@code index}
      */
-    public int get(int[] array, int index) {
+    public long get(long[] array, Index2d index) {
         return array[mapper.offset(index)];
     }
 
     /**
-     * Set the lattice element at the given index. The elements are stored in
+     * Return the lattice element at the given index. The elements are stored in
      * the given {@code array}. This method doesn't do any index checking.
      *
      * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
+     * @param row the row index
+     * @param col the column index
+     * @return the element at the given {@code index}
      */
-    public void set(int[] array, Index1d index, int value) {
-        array[mapper.offset(index)] = value;
+    public long get(long[] array, int row, int col) {
+        return array[mapper.offset(row, col)];
     }
 
     /**
@@ -146,8 +190,21 @@ public final class Lattices1d {
      * @param index the lattice index of the returned element
      * @param value the new lattice value at the given {@code index}
      */
-    public void set(int[] array, int index, int value) {
+    public void set(long[] array, Index2d index, long value) {
         array[mapper.offset(index)] = value;
+    }
+
+    /**
+     * Set the lattice element at the given index. The elements are stored in
+     * the given {@code array}. This method doesn't do any index checking.
+     *
+     * @param array the array where the elements are stored
+     * @param row the row index
+     * @param col the column index
+     * @param value the new lattice value at the given {@code index}
+     */
+    public void set(long[] array, int row, int col, long value) {
+        array[mapper.offset(row, col)] = value;
     }
 
     /**
@@ -158,7 +215,7 @@ public final class Lattices1d {
      * @param index the lattice index of the returned element
      * @return the element at the given {@code index}
      */
-    public long get(long[] array, Index1d index) {
+    public double get(double[] array, Index2d index) {
         return array[mapper.offset(index)];
     }
 
@@ -167,11 +224,12 @@ public final class Lattices1d {
      * the given {@code array}. This method doesn't do any index checking.
      *
      * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
+     * @param row the row index
+     * @param col the column index
      * @return the element at the given {@code index}
      */
-    public long get(long[] array, int index) {
-        return array[mapper.offset(index)];
+    public double get(double[] array, int row, int col) {
+        return array[mapper.offset(row, col)];
     }
 
     /**
@@ -182,7 +240,7 @@ public final class Lattices1d {
      * @param index the lattice index of the returned element
      * @param value the new lattice value at the given {@code index}
      */
-    public void set(long[] array, Index1d index, long value) {
+    public void set(double[] array, Index2d index, double value) {
         array[mapper.offset(index)] = value;
     }
 
@@ -191,59 +249,12 @@ public final class Lattices1d {
      * the given {@code array}. This method doesn't do any index checking.
      *
      * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
+     * @param row the row index
+     * @param col the column index
      * @param value the new lattice value at the given {@code index}
      */
-    public void set(long[] array, int index, long value) {
-        array[mapper.offset(index)] = value;
-    }
-
-    /**
-     * Return the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @return the element at the given {@code index}
-     */
-    public double get(double[] array, Index1d index) {
-        return array[mapper.offset(index)];
-    }
-
-    /**
-     * Return the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @return the element at the given {@code index}
-     */
-    public double get(double[] array, int index) {
-        return array[mapper.offset(index)];
-    }
-
-    /**
-     * Set the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
-     */
-    public void set(double[] array, Index1d index, double value) {
-        array[mapper.offset(index)] = value;
-    }
-
-    /**
-     * Set the lattice element at the given index. The elements are stored in
-     * the given {@code array}. This method doesn't do any index checking.
-     *
-     * @param array the array where the elements are stored
-     * @param index the lattice index of the returned element
-     * @param value the new lattice value at the given {@code index}
-     */
-    public void set(double[] array, int index, double value) {
-        array[mapper.offset(index)] = value;
+    public void set(double[] array, int row, int col, double value) {
+        array[mapper.offset(row, col)] = value;
     }
 
 }

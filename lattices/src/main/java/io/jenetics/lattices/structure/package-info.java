@@ -117,7 +117,7 @@
  * given structure.
  * <p>
  * <em><b>A layout is a kind of low-level helper type, used for offset
- * calculation. It is not meat to be used directly. The <em>structure</em> classes
+ * calculation. It is not meat to be used directly. The <i>structure</i> classes
  * are usually the entry point for creating proper offset mapping objects.</b></em>
  *
  *

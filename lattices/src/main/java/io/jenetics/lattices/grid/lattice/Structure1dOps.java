@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid.lattice;
 
+import io.jenetics.lattices.grid.Structured1d;
 import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Structured1d;
 
 /**
  * This interface implements operations for 1-d structures.

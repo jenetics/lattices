@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix;
 
-import static io.jenetics.lattices.structure.Structures.checkSquare;
+import static io.jenetics.lattices.grid.Structures.checkSquare;
 
 /**
  * Some helper methods for checking pre-conditions.

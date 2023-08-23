@@ -20,46 +20,43 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Defines the structure of a grid.
+ * Some helper methods for checking pre-conditions.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Structured2d {
-
-    /**
-     * Return the lattice structure.
-     *
-     * @return the lattice structure
-     */
-    Structure2d structure();
-
-    /**
-     * Return the dimension of {@code this} structure.
-     *
-     * @return the dimension of {@code this} structure
-     */
-    default Extent2d extent() {
-        return structure().extent();
+final class Checks {
+    private Checks() {
     }
 
-    /**
-     * Return the number of rows of {@code this} structure.
-     *
-     * @return the number of rows of {@code this} structure
-     */
-    default int rows() {
-        return extent().nrows();
+    static boolean multNotSave(int a, int b) {
+        long r = (long)a*(long)b;
+        return (int)r != r;
     }
 
-    /**
-     * Return the number of columns of {@code this} structure.
-     *
-     * @return the number of columns of {@code this} structure
-     */
-    default int cols() {
-        return extent().ncols();
+    static boolean multNotSave(int a, int b, int c) {
+        final long r1 = (long)a*(long)b;
+        if ((int)r1 == r1) {
+            final long r2 = r1*(long)c;
+            return (int)r2 != r2;
+        } else {
+            return true;
+        }
     }
 
+    static boolean multNotSave(int a, int b, int c, int d) {
+        final long r1 = (long)a*(long)b;
+        if ((int)r1 == r1) {
+            final long r2 = r1*(long)c;
+            if ((int)r2 == r2) {
+                final long r3 = r2*(long)d;
+                return (int)r3 != r3;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
 }

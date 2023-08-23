@@ -17,7 +17,14 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure;
+package io.jenetics.lattices.grid;
+
+import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.structure.Structure3d;
 
 /**
  * Some helper methods for checking pre-conditions.
@@ -192,37 +199,6 @@ public final class Structures {
             throw new IllegalArgumentException(
                 "Grid extent must be rectangular: " + a
             );
-        }
-    }
-
-
-    static boolean multNotSave(int a, int b) {
-        long r = (long)a*(long)b;
-        return (int)r != r;
-    }
-
-    static boolean multNotSave(int a, int b, int c) {
-        final long r1 = (long)a*(long)b;
-        if ((int)r1 == r1) {
-            final long r2 = r1*(long)c;
-            return (int)r2 != r2;
-        } else {
-            return true;
-        }
-    }
-
-    static boolean multNotSave(int a, int b, int c, int d) {
-        final long r1 = (long)a*(long)b;
-        if ((int)r1 == r1) {
-            final long r2 = r1*(long)c;
-            if ((int)r2 == r2) {
-                final long r3 = r2*(long)d;
-                return (int)r3 != r3;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
         }
     }
 

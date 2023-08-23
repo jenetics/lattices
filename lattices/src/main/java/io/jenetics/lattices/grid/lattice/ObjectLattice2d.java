@@ -20,7 +20,7 @@
 package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
-import static io.jenetics.lattices.structure.Structures.checkSameExtent;
+import static io.jenetics.lattices.grid.Structures.checkSameExtent;
 
 import java.util.Objects;
 import java.util.Optional;

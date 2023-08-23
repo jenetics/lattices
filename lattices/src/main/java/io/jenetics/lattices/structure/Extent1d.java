@@ -19,7 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import static io.jenetics.lattices.structure.Structures.multNotSave;
 
 import java.util.Iterator;
 
@@ -46,7 +45,7 @@ public record Extent1d(int nelements, int nbands)
      * @throws IllegalArgumentException if the {@code size} is smaller than zero
      */
     public Extent1d {
-        if (nelements < 0 || nbands < 1 || multNotSave(nelements, nbands)) {
+        if (nelements < 0 || nbands < 1 || Checks.multNotSave(nelements, nbands)) {
             throw new IllegalArgumentException(
                 "Extent is out of bounds: [%d, bands=%d]."
                     .formatted(nelements, nbands)
