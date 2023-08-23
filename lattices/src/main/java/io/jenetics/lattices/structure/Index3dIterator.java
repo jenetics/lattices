@@ -55,16 +55,13 @@ final class Index3dIterator implements Iterator<Index3d> {
 
     @Override
     public Index3d next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
         final int s = sliceCursor;
         final int r = rowCursor;
         final int c = colCursor;
-
-        if (sliceCursor >= range.start().slice() + range.extent().slices() &&
-            rowCursor >= range.start().row() + range.extent().rows() &&
-            colCursor >= range.start().col() + range.extent().cols())
-        {
-            throw new NoSuchElementException();
-        }
 
         colCursor = c + 1;
         if (colCursor >= range.start().col() + range.extent().cols()) {
