@@ -32,7 +32,7 @@ package io.jenetics.lattices.structure;
 public record Index2d(int row, int col) {
 
     /**
-     * Index where row and column is zero.
+     * Index where row and column are zero.
      */
     public static final Index2d ZERO = new Index2d(0, 0);
 

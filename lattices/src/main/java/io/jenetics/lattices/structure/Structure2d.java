@@ -21,8 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
-
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
  * the layout of the underlying 1-d structure. This is the main class for working
@@ -41,9 +39,7 @@ import java.util.Objects;
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout)
-    implements Mapper2d
-{
+public record Structure2d(Extent2d extent, Layout2d layout) {
 
     public Structure2d {
         requireNonNull(extent);
@@ -81,38 +77,6 @@ public record Structure2d(Extent2d extent, Layout2d layout)
      */
     public Structure2d(int rows, int cols) {
         this(new Extent2d(rows, cols));
-    }
-
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code row} and {@code col}
-     * @throws IndexOutOfBoundsException if the given index values are out of
-     *         bounds
-     */
-    @Override
-    public int offset(int row, int col) {
-        Checks.checkIndex(row, col, extent);
-        return layout.offset(row, col);
-    }
-
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index2d)} method.
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     * @throws IndexOutOfBoundsException if the index, represented by the offset,
-     *         is out of bounds
-     */
-    @Override
-    public Index2d index(int offset) {
-        final var index = layout.index(offset);
-        Checks.checkIndex(index.row(), index.col(), extent);
-        return index;
     }
 
 }

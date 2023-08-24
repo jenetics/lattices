@@ -21,8 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
-
 /**
  * Defines the structure of a 1-d matrix, which is defined by the dimension of
  * the matrix and the index order of the underlying element array. The
@@ -41,9 +39,7 @@ import java.util.Objects;
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Layout1d layout)
-    implements Mapper1d
-{
+public record Structure1d(Extent1d extent, Layout1d layout) {
 
     public Structure1d {
         requireNonNull(extent);
@@ -77,37 +73,6 @@ public record Structure1d(Extent1d extent, Layout1d layout)
      */
     public Structure1d(int extent) {
         this(new Extent1d(extent));
-    }
-
-    /**
-     * Return the position of the element with the given relative {@code rank}
-     * within the (virtual or non-virtual) internal 1-d array.
-     *
-     * @param index the index of the element.
-     * @return the (linearized) index of the given {@code index}
-     * @throws IndexOutOfBoundsException if the given index value is out of
-     *         bounds
-     */
-    @Override
-    public int offset(int index) {
-        Checks.checkIndex(index, extent);
-        return layout.offset(index);
-    }
-
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index1d)} method.
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     * @throws IndexOutOfBoundsException if the index, represented by the offset,
-     *         is out of bounds
-     */
-    @Override
-    public Index1d index(int offset) {
-        final var index = layout.index(offset);
-        Checks.checkIndex(index.value(), extent);
-        return index;
     }
 
 }

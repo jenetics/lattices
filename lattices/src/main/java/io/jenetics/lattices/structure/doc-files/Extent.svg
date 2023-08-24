@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.2" width="133.36mm" height="80.02mm" viewBox="1635 2778 13336 8002" preserveAspectRatio="xMidYMid"
-     fill-rule="evenodd" stroke-width="28.222" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"
-     xml:space="preserve">
+<svg version="1.2" width="133.36mm" height="80.02mm" viewBox="1635 2778 13336 8002" preserveAspectRatio="xMidYMid" fill-rule="evenodd" stroke-width="28.222" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" xmlns:ooo="http://xml.openoffice.org/svg/export" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:presentation="http://sun.com/xmlns/staroffice/presentation" xmlns:smil="http://www.w3.org/2001/SMIL20/" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xml:space="preserve">
  <defs>
   <font id="EmbeddedFont_1" horiz-adv-x="2048">
    <font-face font-family="Nimbus Mono PS embedded" units-per-em="2048" font-weight="normal" font-style="normal" ascent="1217" descent="820"/>
@@ -120,19 +118,19 @@
   <g class="TextShape">
    <g id="id8">
     <rect class="BoundingBox" stroke="none" fill="none" x="1635" y="5557" width="815" height="2302"/>
-    <text class="SVGTextShape" transform="rotate(-90 2099 7608)"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="2099" y="7608"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">nrows</tspan></tspan></tspan></text>
+    <text class="SVGTextShape" transform="rotate(-90 2099 7608)"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="2099" y="7608"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">rows</tspan></tspan></tspan></text>
    </g>
   </g>
   <g class="TextShape">
    <g id="id9">
     <rect class="BoundingBox" stroke="none" fill="none" x="5557" y="9965" width="2302" height="815"/>
-    <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="5807" y="10429"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">ncols</tspan></tspan></tspan></text>
+    <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="5807" y="10429"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">cols</tspan></tspan></tspan></text>
    </g>
   </g>
   <g class="TextShape">
    <g id="id10">
     <rect class="BoundingBox" stroke="none" fill="none" x="10775" y="7898" width="2125" height="2549"/>
-    <text class="SVGTextShape" transform="rotate(-55 11298 10040)"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="11298" y="10040"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">nbands</tspan></tspan></tspan></text>
+    <text class="SVGTextShape" transform="rotate(-55 11298 10040)"><tspan class="TextParagraph" font-family="Nimbus Mono PS, monospace" font-size="564px" font-weight="400"><tspan class="TextPosition" x="11298" y="10040"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bands</tspan></tspan></tspan></text>
    </g>
   </g>
   <g class="com.sun.star.drawing.ConnectorShape">

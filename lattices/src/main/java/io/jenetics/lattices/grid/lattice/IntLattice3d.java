@@ -49,7 +49,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * bounds
      */
     default int get(int slice, int row, int col) {
-        return array().get(structure().offset(slice, row, col));
+        return array().get(structure().layout().offset(slice, row, col));
     }
 
     /**
@@ -64,7 +64,7 @@ public interface IntLattice3d extends Lattice3d<IntArray>, Structure3dOps {
      * bounds
      */
     default void set(int slice, int row, int col, int value) {
-        array().set(structure().offset(slice, row, col), value);
+        array().set(structure().layout().offset(slice, row, col), value);
     }
 
     /**

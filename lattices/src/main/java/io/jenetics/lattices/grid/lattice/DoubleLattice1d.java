@@ -47,7 +47,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *         bounds
      */
     default double get(int index) {
-        return array().get(structure().offset(index));
+        return array().get(structure().layout().offset(index));
     }
 
     /**
@@ -60,7 +60,7 @@ public interface DoubleLattice1d extends Lattice1d<DoubleArray>, Structure1dOps 
      *         bounds
      */
     default void set(int index, double value) {
-        array().set(structure().offset(index), value);
+        array().set(structure().layout().offset(index), value);
     }
 
     /**

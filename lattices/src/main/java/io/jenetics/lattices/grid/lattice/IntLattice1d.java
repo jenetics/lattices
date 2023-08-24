@@ -48,7 +48,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *         bounds
      */
     default int get(int index) {
-        return array().get(structure().offset(index));
+        return array().get(structure().layout().offset(index));
     }
 
     /**
@@ -61,7 +61,7 @@ public interface IntLattice1d extends Lattice1d<IntArray>, Structure1dOps {
      *         bounds
      */
     default void set(int index, int value) {
-        array().set(structure().offset(index), value);
+        array().set(structure().layout().offset(index), value);
     }
 
     /**

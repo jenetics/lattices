@@ -21,8 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
-
 /**
  * Defines a 3-d structure, which is defined by the extent of the structure and
  * the index oder of the underlying 1-d structure. The {@link View3d} and
@@ -41,9 +39,7 @@ import java.util.Objects;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout)
-    implements Mapper3d
-{
+public record Structure3d(Extent3d extent, Layout3d layout) {
 
     public Structure3d {
         requireNonNull(extent);
@@ -83,40 +79,6 @@ public record Structure3d(Extent3d extent, Layout3d layout)
      */
     public Structure3d(int slices, int rows, int cols) {
         this(new Extent3d(slices, rows, cols));
-    }
-
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     *
-     * @param slice the slice index
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code slice}, {@code row}
-     *         and {@code col}
-     * @throws IndexOutOfBoundsException if the given index values are out of
-     *         bounds
-     */
-    @Override
-    public int offset(int slice, int row, int col) {
-        Checks.checkIndex(slice, row, col, extent);
-        return layout.offset(slice, row, col);
-    }
-
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     * @throws IndexOutOfBoundsException if the index, represented by the offset,
-     *         is out of bounds
-     */
-    @Override
-    public Index3d index(int offset) {
-        final var index = layout.index(offset);
-        Checks.checkIndex(index.slice(), index.row(), index.col(), extent);
-        return index;
     }
 
 }

@@ -47,7 +47,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      *         bounds
      */
     default double get(int row, int col) {
-        return array().get(structure().offset(row, col));
+        return array().get(structure().layout().offset(row, col));
     }
 
     /**
@@ -61,7 +61,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      *         bounds
      */
     default void set(int row, int col, double value) {
-        array().set(structure().offset(row, col), value);
+        array().set(structure().layout().offset(row, col), value);
     }
 
     /**

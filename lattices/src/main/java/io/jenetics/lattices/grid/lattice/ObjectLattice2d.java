@@ -52,7 +52,7 @@ public interface ObjectLattice2d<T>
      *         bounds
      */
     default T get(int row, int col) {
-        return array().get(structure().offset(row, col));
+        return array().get(structure().layout().offset(row, col));
     }
 
     /**
@@ -66,7 +66,7 @@ public interface ObjectLattice2d<T>
      *         bounds
      */
     default void set(int row, int col, T value) {
-        array().set(structure().offset(row, col), value);
+        array().set(structure().layout().offset(row, col), value);
     }
 
     /**

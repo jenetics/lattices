@@ -50,17 +50,6 @@ public record Layout3d(Index3d start, Stride3d stride, Band band)
         requireNonNull(band);
     }
 
-    /**
-     * Return the position of the given coordinate within the (virtual or
-     * non-virtual) internal 1-d array.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param slice the slice index
-     * @param row the row index
-     * @param col the column index
-     * @return the (linearized) index of the given {@code slice}, {@code row}
-     *         and {@code col}
-     */
     @Override
     public int offset(int slice, int row, int col) {
         return
@@ -70,14 +59,6 @@ public record Layout3d(Index3d start, Stride3d stride, Band band)
             band.value();
     }
 
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index3d)} method.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     */
     @Override
     public Index3d index(int offset) {
         int start = offset -

@@ -39,7 +39,7 @@ public class View3dTest {
     static {
         for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
-            final var index = STRUCTURE.index(offset);
+            final var index = STRUCTURE.layout().index(offset);
             final var value ="v_" + index.slice() +
                 "_" + index.row() +
                 "_" + index.col();
@@ -64,7 +64,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.offset(s, r, c);
+                    final int offset = structure.layout().offset(s, r, c);
 
                     final var expected = "v_" +
                         (s + range.start().slice()) + "_" +
@@ -75,9 +75,9 @@ public class View3dTest {
                     assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                     assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
-                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
-                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
+                    assertThat(ARRAY[structure0.layout().offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.layout().offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.layout().offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }
@@ -109,7 +109,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.offset(s, r, c);
+                    final int offset = structure.layout().offset(s, r, c);
 
                     final var expected = "v_" +
                         (s + start.slice()) + "_" +
@@ -120,9 +120,9 @@ public class View3dTest {
                     assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                     assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
-                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
-                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
+                    assertThat(ARRAY[structure0.layout().offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.layout().offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.layout().offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }
@@ -153,7 +153,7 @@ public class View3dTest {
         for (int s = 0; s < structure.extent().slices(); ++s) {
             for (int r = 0; r < structure.extent().rows(); ++r) {
                 for (int c = 0; c < structure.extent().cols(); ++c) {
-                    final int offset = structure.offset(s, r, c);
+                    final int offset = structure.layout().offset(s, r, c);
 
                     final var expected = "v_" +
                         (s*stride.slice()) + "_" +
@@ -164,9 +164,9 @@ public class View3dTest {
                     assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                     assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                    assertThat(ARRAY[structure0.offset(s, r, c)]).isEqualTo(expected);
-                    assertThat(ARRAY[structure1.offset(s, r, c)]).isEqualTo(expected + "_c2");
-                    assertThat(ARRAY[structure2.offset(s, r, c)]).isEqualTo(expected + "_c3");
+                    assertThat(ARRAY[structure0.layout().offset(s, r, c)]).isEqualTo(expected);
+                    assertThat(ARRAY[structure1.layout().offset(s, r, c)]).isEqualTo(expected + "_c2");
+                    assertThat(ARRAY[structure2.layout().offset(s, r, c)]).isEqualTo(expected + "_c3");
                 }
             }
         }

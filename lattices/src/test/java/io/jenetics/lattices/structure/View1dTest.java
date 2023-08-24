@@ -38,7 +38,7 @@ public class View1dTest {
     static {
         for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
-            final var index = STRUCTURE.index(offset);
+            final var index = STRUCTURE.layout().index(offset);
             final var value = "v_" + index.value();
 
             ARRAY[offset] = value;
@@ -58,7 +58,7 @@ public class View1dTest {
         final var structure2 = View1d.of(Band.TWO).apply(structure);
 
         for (int i = 0; i < structure.extent().elements(); ++i) {
-            final var offset = structure.offset(i);
+            final var offset = structure.layout().offset(i);
 
             final var expected = "v_" + (i + range.start().value());
 
@@ -66,9 +66,9 @@ public class View1dTest {
             assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
             assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
-            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
-            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
+            assertThat(ARRAY[structure0.layout().offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.layout().offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.layout().offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 
@@ -102,9 +102,9 @@ public class View1dTest {
             assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
             assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
-            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
-            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
+            assertThat(ARRAY[structure0.layout().offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.layout().offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.layout().offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 
@@ -134,9 +134,9 @@ public class View1dTest {
             assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
             assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-            assertThat(ARRAY[structure0.offset(i)]).isEqualTo(expected);
-            assertThat(ARRAY[structure1.offset(i)]).isEqualTo(expected + "_c2");
-            assertThat(ARRAY[structure2.offset(i)]).isEqualTo(expected + "_c3");
+            assertThat(ARRAY[structure0.layout().offset(i)]).isEqualTo(expected);
+            assertThat(ARRAY[structure1.layout().offset(i)]).isEqualTo(expected + "_c2");
+            assertThat(ARRAY[structure2.layout().offset(i)]).isEqualTo(expected + "_c3");
         }
     }
 

@@ -48,7 +48,7 @@ public interface LongLattice2d extends Lattice2d<LongArray>, Structure2dOps {
      *         bounds
      */
     default long get(int row, int col) {
-        return array().get(structure().offset(row, col));
+        return array().get(structure().layout().offset(row, col));
     }
 
     /**
@@ -62,7 +62,7 @@ public interface LongLattice2d extends Lattice2d<LongArray>, Structure2dOps {
      *         bounds
      */
     default void set(int row, int col, long value) {
-        array().set(structure().offset(row, col), value);
+        array().set(structure().layout().offset(row, col), value);
     }
 
     /**

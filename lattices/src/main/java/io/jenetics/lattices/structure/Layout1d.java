@@ -50,27 +50,11 @@ public record Layout1d(Index1d start, Stride1d stride, Band band)
         requireNonNull(band);
     }
 
-    /**
-     * Return the position of the element with the given relative {@code rank}
-     * within the (virtual or non-virtual) internal 1-d array.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param index the index of the element.
-     * @return the (linearized) index of the given {@code index}
-     */
     @Override
     public int offset(int index) {
         return start.value() + index*stride.value() + band.value();
     }
 
-    /**
-     * Calculates the index for the given {@code offset}. This is the
-     * <em>inverse</em> operation of the {@link #offset(Index1d)} method.
-     * <em>This method doesn't do any range checks.</em>
-     *
-     * @param offset the offset for which to calculate the index
-     * @return the index for the given {@code offset}
-     */
     @Override
     public Index1d index(int offset) {
         final int start = offset - this.start.value();

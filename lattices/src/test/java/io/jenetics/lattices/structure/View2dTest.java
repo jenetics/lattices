@@ -39,7 +39,7 @@ public class View2dTest {
     static {
         for (int i = 0; i < EXTENT.elements(); ++i) {
             final var offset = i*CHANNELS;
-            final var index = STRUCTURE.index(offset);
+            final var index = STRUCTURE.layout().index(offset);
             final var value = "v_" + index.row() + "_" + index.col();
 
             ARRAY[offset] = value;
@@ -60,7 +60,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.offset(r, c);
+                final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" + c + "_" + r;
 
@@ -68,9 +68,9 @@ public class View2dTest {
                 assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                 assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                assertThat(ARRAY[structure0.offset(r, c)]).isEqualTo(expected);
-                assertThat(ARRAY[structure1.offset(r, c)]).isEqualTo(expected + "_c2");
-                assertThat(ARRAY[structure2.offset(r, c)]).isEqualTo(expected + "_c3");
+                assertThat(ARRAY[structure0.layout().offset(r, c)]).isEqualTo(expected);
+                assertThat(ARRAY[structure1.layout().offset(r, c)]).isEqualTo(expected + "_c2");
+                assertThat(ARRAY[structure2.layout().offset(r, c)]).isEqualTo(expected + "_c3");
             }
         }
     }
@@ -87,7 +87,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.offset(r, c);
+                final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" +
                     (r + range.start().row()) + "_" +
@@ -97,9 +97,9 @@ public class View2dTest {
                 assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                 assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                assertThat(ARRAY[structure0.offset(r, c)]).isEqualTo(expected);
-                assertThat(ARRAY[structure1.offset(r, c)]).isEqualTo(expected + "_c2");
-                assertThat(ARRAY[structure2.offset(r, c)]).isEqualTo(expected + "_c3");
+                assertThat(ARRAY[structure0.layout().offset(r, c)]).isEqualTo(expected);
+                assertThat(ARRAY[structure1.layout().offset(r, c)]).isEqualTo(expected + "_c2");
+                assertThat(ARRAY[structure2.layout().offset(r, c)]).isEqualTo(expected + "_c3");
             }
         }
     }
@@ -126,7 +126,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                int offset = structure.offset(r, c);
+                int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" +
                     (r + start.row()) + "_" +
@@ -136,9 +136,9 @@ public class View2dTest {
                 assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                 assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                assertThat(ARRAY[structure0.offset(r, c)]).isEqualTo(expected);
-                assertThat(ARRAY[structure1.offset(r, c)]).isEqualTo(expected + "_c2");
-                assertThat(ARRAY[structure2.offset(r, c)]).isEqualTo(expected + "_c3");
+                assertThat(ARRAY[structure0.layout().offset(r, c)]).isEqualTo(expected);
+                assertThat(ARRAY[structure1.layout().offset(r, c)]).isEqualTo(expected + "_c2");
+                assertThat(ARRAY[structure2.layout().offset(r, c)]).isEqualTo(expected + "_c3");
             }
         }
     }
@@ -164,7 +164,7 @@ public class View2dTest {
 
         for (int r = 0; r < structure.extent().rows(); ++r) {
             for (int c = 0; c < structure.extent().cols(); ++c) {
-                final int offset = structure.offset(r, c);
+                final int offset = structure.layout().offset(r, c);
 
                 final var expected = "v_" +
                     (r*stride.row()) + "_" +
@@ -174,9 +174,9 @@ public class View2dTest {
                 assertThat(ARRAY[offset + 1]).isEqualTo(expected + "_c2");
                 assertThat(ARRAY[offset + 2]).isEqualTo(expected + "_c3");
 
-                assertThat(ARRAY[structure0.offset(r, c)]).isEqualTo(expected);
-                assertThat(ARRAY[structure1.offset(r, c)]).isEqualTo(expected + "_c2");
-                assertThat(ARRAY[structure2.offset(r, c)]).isEqualTo(expected + "_c3");
+                assertThat(ARRAY[structure0.layout().offset(r, c)]).isEqualTo(expected);
+                assertThat(ARRAY[structure1.layout().offset(r, c)]).isEqualTo(expected + "_c2");
+                assertThat(ARRAY[structure2.layout().offset(r, c)]).isEqualTo(expected + "_c3");
             }
         }
     }

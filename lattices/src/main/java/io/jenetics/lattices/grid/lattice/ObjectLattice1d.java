@@ -52,7 +52,7 @@ public interface ObjectLattice1d<T>
      *         bounds
      */
     default T get(int index) {
-        return array().get(structure().offset(index));
+        return array().get(structure().layout().offset(index));
     }
 
     /**
@@ -65,7 +65,7 @@ public interface ObjectLattice1d<T>
      *         bounds
      */
     default void set(int index, T value) {
-        array().set(structure().offset(index), value);
+        array().set(structure().layout().offset(index), value);
     }
 
     /**

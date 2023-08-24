@@ -53,7 +53,7 @@ public interface ObjectLattice3d<T>
      * bounds
      */
     default T get(int slice, int row, int col) {
-        return array().get(structure().offset(slice, row, col));
+        return array().get(structure().layout().offset(slice, row, col));
     }
 
     /**
@@ -68,7 +68,7 @@ public interface ObjectLattice3d<T>
      * bounds
      */
     default void set(int slice, int row, int col, T value) {
-        array().set(structure().offset(slice, row, col), value);
+        array().set(structure().layout().offset(slice, row, col), value);
     }
 
     /**
