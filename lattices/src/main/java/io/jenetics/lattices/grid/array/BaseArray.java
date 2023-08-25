@@ -30,7 +30,7 @@ import io.jenetics.lattices.grid.Self;
  * @since 3.0
  * @version 3.0
  */
-public interface Array<A extends Array<A>> extends Self<A> {
+public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
 
     /**
      * Return the size of {@code this} array.
