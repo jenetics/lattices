@@ -45,4 +45,17 @@ public class DoubleGrid1dTest {
         grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
     }
 
+    interface Base<T extends Base<T>> {
+    }
+
+    interface A<T extends A<T>> extends Base<T> {
+    }
+
+    interface B<T extends B<T>> extends Base<T> {
+    }
+
+    class C implements A<C>, B<C> {
+
+    }
+
 }

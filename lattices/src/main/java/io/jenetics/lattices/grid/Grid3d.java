@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.BaseArray;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -35,7 +35,7 @@ import io.jenetics.lattices.structure.View3d;
  * @since 3.0
  * @version 3.0
  */
-public interface Grid3d<A extends BaseArray<A>, G extends Grid3d<A, G>>
+public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
     extends Lattice3d<A>, Self<G>
 {
 

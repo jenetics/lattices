@@ -17,30 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.lattice;
-
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.structure.Structure1d;
+package io.jenetics.lattices.grid.array;
 
 /**
- * A lattice is defined via an <em>array</em> and a 1-d structure.
+ * Definition of an array with {@code Object} values.
  *
- * @param <A> the array type
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public interface Lattice1d<A extends Array<A>> {
+public interface ObjectArray<T> extends Array<ObjectArray<T>> {
 
     /**
-     * Return the lattice structure.
+     * Return the array value at the given {@code index}.
      *
-     * @return the lattice structure
+     * @param index the array index of the returned element
+     * @return the element at the given {@code index}
      */
-    Structure1d structure();
+    T get(int index);
 
     /**
-     * Return the array storing the lattice elements.
+     * Set the given {@code value} at the given {@code index}.
      *
-     * @return the array storing the lattice elements
+     * @param index the array index of the new value
+     * @param value the value to be set at the given index
      */
-    A array();
+    void set(int index, T value);
 
 }

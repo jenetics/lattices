@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.DenseArray;
-import io.jenetics.lattices.grid.array.Array;
+import io.jenetics.lattices.grid.array.DenseObjectArray;
+import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.grid.lattice.ObjectLattice2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -38,8 +38,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid2d<T>(Structure2d structure, Array<T> array)
-    implements ObjectLattice2d<T>, Grid2d<Array<T>, ObjectGrid2d<T>>
+public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
+    implements ObjectLattice2d<T>, Grid2d<ObjectArray<T>, ObjectGrid2d<T>>
 {
 
     /**
@@ -47,12 +47,12 @@ public record ObjectGrid2d<T>(Structure2d structure, Array<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid2d(Lattice2d<? extends Array<T>> lattice) {
+    public ObjectGrid2d(Lattice2d<? extends ObjectArray<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid2d<T> create(Structure2d structure, Array<T> array) {
+    public ObjectGrid2d<T> create(Structure2d structure, ObjectArray<T> array) {
         return new ObjectGrid2d<>(structure, array);
     }
 
@@ -111,7 +111,7 @@ public record ObjectGrid2d<T>(Structure2d structure, Array<T> array)
     public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
         return extent -> new ObjectGrid2d<T>(
             new Structure2d(extent),
-            DenseArray.ofSize(extent.cells(), __)
+            DenseObjectArray.ofSize(extent.cells(), __)
         );
     }
 

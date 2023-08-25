@@ -36,8 +36,8 @@ import java.util.stream.Stream;
  * @param length the length of the sub-array
  * @param <T> the value type
  */
-public record DenseArray<T>(T[] elements, int from, int length)
-    implements Array<T>
+public record DenseObjectArray<T>(T[] elements, int from, int length)
+    implements ObjectArray<T>
 {
 
     /**
@@ -49,7 +49,7 @@ public record DenseArray<T>(T[] elements, int from, int length)
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
-    public DenseArray {
+    public DenseObjectArray {
         requireNonNull(elements);
         checkFromIndexSize(from, length, elements.length);
     }
@@ -62,7 +62,7 @@ public record DenseArray<T>(T[] elements, int from, int length)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseArray(T[] elements, int from) {
+    public DenseObjectArray(T[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
@@ -71,7 +71,7 @@ public record DenseArray<T>(T[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      */
-    public DenseArray(T[] elements) {
+    public DenseObjectArray(T[] elements) {
         this(elements, 0, elements.length);
     }
 
@@ -91,22 +91,22 @@ public record DenseArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public DenseArray<T> copy() {
+    public DenseObjectArray<T> copy() {
         final var elems = Arrays.copyOfRange(elements, from, from + length);
-        return new DenseArray<>(elems);
+        return new DenseObjectArray<>(elems);
     }
 
     @Override
-    public DenseArray<T> copy(int start, int length) {
+    public DenseObjectArray<T> copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
         );
-        return new DenseArray<>(array);
+        return new DenseObjectArray<>(array);
     }
 
     @Override
-    public DenseArray<T> like(int length) {
+    public DenseObjectArray<T> like(int length) {
         return ofSize(length);
     }
 
@@ -135,11 +135,11 @@ public record DenseArray<T>(T[] elements, int from, int length)
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs
-    public static <T> DenseArray<T> ofSize(int length, T... __) {
+    public static <T> DenseObjectArray<T> ofSize(int length, T... __) {
         @SuppressWarnings("unchecked")
         final T[] elements = (T[])java.lang.reflect.Array
             .newInstance(__.getClass().getComponentType(), length);
-        return new DenseArray<>(elements);
+        return new DenseObjectArray<>(elements);
     }
 
 }

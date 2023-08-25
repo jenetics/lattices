@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.grid.array.BaseArray;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -27,7 +27,7 @@ import io.jenetics.lattices.structure.Structure2d;
  *
  * @param <A> the array type
  */
-public interface Lattice2d<A extends BaseArray<A>> {
+public interface Lattice2d<A extends Array<A>> {
 
     /**
      * Return the lattice structure.

@@ -19,29 +19,125 @@
  */
 package io.jenetics.lattices.grid.array;
 
+import io.jenetics.lattices.grid.Self;
+
 /**
- * Definition of an array with {@code Object} values.
+ * Base interface of all array implementations. An array is a container of
+ * elements, which can be accessed by an <em>index</em> and has a fixed
+ * <em>size</em>.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Array<T> extends BaseArray<Array<T>> {
+public interface Array<A extends Array<A>> extends Self<A> {
 
     /**
-     * Return the array value at the given {@code index}.
+     * Mixin interface of <em>dense</em> array implementations. This interface
+     * defines a lightweight wrapper for the underlying <em>dense</em>Java array
+     * of type {@code T_PRIMITIVE}.
      *
-     * @param index the array index of the returned element
-     * @return the element at the given {@code index}
+     * @param <JAVA_ARRAY> the wrapped Java array type, like {@code double[]},
+     *        {@code int[]} or {@code Object[]}
+     * @param <D> the implementation type of the dense array wrapper
      */
-    T get(int index);
+    interface Dense<JAVA_ARRAY, D extends Dense<JAVA_ARRAY, D>> {
+
+        /**
+         * Return the underlying <em>native</em> Java array.
+         *
+         * @return the underlying <em>native</em> Java array
+         */
+        JAVA_ARRAY elements();
+
+        /**
+         * The start index of the underlying Java array (inclusively).
+         *
+         * @return start index of the underlying Java array (inclusively)
+         */
+        int from();
+
+        default void assign(D src, int srcPos, int destPos, int length) {
+            System.arraycopy(
+                src.elements(),
+                srcPos + src.from(),
+                elements(),
+                destPos + from(),
+                length
+            );
+        }
+    }
+
+    interface Layout {
+    }
+
+
+    interface OfDouble extends Array<OfDouble> {
+
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        double get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, double value);
+
+    }
+
 
     /**
-     * Set the given {@code value} at the given {@code index}.
+     * Return the size of {@code this} array.
      *
-     * @param index the array index of the new value
-     * @param value the value to be set at the given index
+     * @return the size of {@code this} array
      */
-    void set(int index, T value);
+    int length();
+
+    /**
+     * Copies the specified range of this array
+     *
+     * @param start the initial index of the range to be copied, inclusive
+     * @param length the size the range to be copied
+     * @return a new array of the given range
+     */
+    A copy(int start, int length);
+
+    /**
+     * Return a new copy of the given double array.
+     *
+     * @see #copy(int, int)
+     *
+     * @return a new copy of the given double array
+     */
+    default A copy() {
+        return copy(0, length());
+    }
+
+    /**
+     * Return a new array of the same type with the given {@code length}.
+     *
+     * @param length the size of the new array
+     * @return a new array of the same type with the given {@code length}
+     */
+    A like(int length);
+
+    /**
+     * Return a new array of the same type and {@link #length()} as this one.
+     *
+     * @return a new array of the same type
+     */
+    default A like() {
+        return like(length());
+    }
+
+    default void assign(A src, int srcPos, int destPos, int length) {
+    }
 
 }

@@ -32,7 +32,7 @@ import io.jenetics.lattices.grid.IntGrid2d;
 import io.jenetics.lattices.grid.ObjectGrid2d;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.array.DenseIntArray;
-import io.jenetics.lattices.grid.array.DenseArray;
+import io.jenetics.lattices.grid.array.DenseObjectArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
 
@@ -76,7 +76,7 @@ public final class CsvReader implements Closeable {
 
             return new ObjectGrid2d<>(
                 new Structure2d(new Extent2d(row, cols)),
-                new DenseArray<>(array.toArray(String[]::new))
+                new DenseObjectArray<>(array.toArray(String[]::new))
             );
         } catch (UncheckedIOException e) {
             throw e.getCause();
