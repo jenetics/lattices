@@ -29,7 +29,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.grid.array.ObjectArray;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
 
 /**
@@ -40,7 +40,7 @@ import io.jenetics.lattices.structure.Extent1d;
  * @version 3.0
  */
 public interface ObjectLattice1d<T>
-    extends Lattice1d<ObjectArray<T>>, Structure1dOps
+    extends Lattice1d<Array<T>>, Structure1dOps
 {
 
     /**

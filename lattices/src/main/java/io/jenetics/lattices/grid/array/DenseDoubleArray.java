@@ -19,16 +19,18 @@
  */
 package io.jenetics.lattices.grid.array;
 
-import static java.util.Objects.checkFromIndexSize;
-import static java.util.Objects.requireNonNull;
-
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import static java.util.Objects.checkFromIndexSize;
+import static java.util.Objects.requireNonNull;
+
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code double} values. This is
+ * <em>just</em> a wrapper around the underlying {@code double[]} array and no
+ * values are copied.
  *
  * @param elements the underlying {@code double} element values
  * @param from the index of the first array element (inclusively)
@@ -73,7 +75,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      */
-    public DenseDoubleArray(double[] elements) {
+    public DenseDoubleArray(double... elements) {
         this(elements, 0, elements.length);
     }
 

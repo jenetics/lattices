@@ -29,7 +29,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.grid.array.ObjectArray;
+import io.jenetics.lattices.grid.array.Array;
 
 /**
  * This interface <em>structures</em> the elements into a 3-dimensional lattice.
@@ -39,7 +39,7 @@ import io.jenetics.lattices.grid.array.ObjectArray;
  * @version 3.0
  */
 public interface ObjectLattice3d<T>
-    extends Lattice3d<ObjectArray<T>>, Structure3dOps
+    extends Lattice3d<Array<T>>, Structure3dOps
 {
 
     /**

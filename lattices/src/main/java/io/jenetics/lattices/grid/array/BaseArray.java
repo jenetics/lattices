@@ -33,20 +33,38 @@ import io.jenetics.lattices.grid.Self;
 public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
 
     /**
+     * Base interface of all <em>dense</em> array implementations. This interface
+     * defines a lightweight wrapper for the underlying Java array of type
+     * {@code T_PRIMITIVE}.
+     *
+     * @param <T_PRIMITIVE> the wrapped Java array type, like {@code double[]},
+     *        {@code int[]} or {@code Object[]}
+     * @param <D> the implementation type of the dense array wrapper
+     */
+    interface Dense<T_PRIMITIVE, D extends Dense<T_PRIMITIVE, D>>
+        extends BaseArray<D>
+    {
+        T_PRIMITIVE elements();
+        int from();
+
+        @Override
+        default void assign(D src, int srcPos, int destPos, int length) {
+            System.arraycopy(
+                src.elements(),
+                srcPos + src.from(),
+                elements(),
+                destPos + from(),
+                length
+            );
+        }
+    }
+
+    /**
      * Return the size of {@code this} array.
      *
      * @return the size of {@code this} array
      */
     int length();
-
-    /**
-     * Return a new copy of the given double array.
-     *
-     * @return a new copy of the given double array
-     */
-    default A copy() {
-        return copy(0, length());
-    }
 
     /**
      * Copies the specified range of this array
@@ -56,6 +74,17 @@ public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
      * @return a new array of the given range
      */
     A copy(int start, int length);
+
+    /**
+     * Return a new copy of the given double array.
+     *
+     * @see #copy(int, int)
+     *
+     * @return a new copy of the given double array
+     */
+    default A copy() {
+        return copy(0, length());
+    }
 
     /**
      * Return a new array of the same type with the given {@code length}.
@@ -72,6 +101,10 @@ public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
      */
     default A like() {
         return like(length());
+    }
+
+    default void assign(A src, int srcPos, int destPos, int length) {
+
     }
 
 }

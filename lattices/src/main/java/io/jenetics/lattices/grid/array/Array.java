@@ -26,7 +26,7 @@ package io.jenetics.lattices.grid.array;
  * @since 3.0
  * @version 3.0
  */
-public interface ObjectArray<T> extends BaseArray<ObjectArray<T>> {
+public interface Array<T> extends BaseArray<Array<T>> {
 
     /**
      * Return the array value at the given {@code index}.
