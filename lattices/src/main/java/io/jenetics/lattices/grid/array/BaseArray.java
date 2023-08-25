@@ -33,21 +33,20 @@ import io.jenetics.lattices.grid.Self;
 public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
 
     /**
-     * Base interface of all <em>dense</em> array implementations. This interface
-     * defines a lightweight wrapper for the underlying Java array of type
-     * {@code T_PRIMITIVE}.
+     * Mixin interface of <em>dense</em> array implementations. This interface
+     * defines a lightweight wrapper for the underlying <em>dense</em>Java array
+     * of type {@code T_PRIMITIVE}.
      *
-     * @param <T_PRIMITIVE> the wrapped Java array type, like {@code double[]},
+     * @param <JAVA_ARRAY> the wrapped Java array type, like {@code double[]},
      *        {@code int[]} or {@code Object[]}
      * @param <D> the implementation type of the dense array wrapper
      */
-    interface Dense<T_PRIMITIVE, D extends Dense<T_PRIMITIVE, D>>
-        extends BaseArray<D>
-    {
-        T_PRIMITIVE elements();
+    interface Dense<JAVA_ARRAY, D extends Dense<JAVA_ARRAY, D>> {
+
+        JAVA_ARRAY elements();
+
         int from();
 
-        @Override
         default void assign(D src, int srcPos, int destPos, int length) {
             System.arraycopy(
                 src.elements(),
@@ -58,6 +57,31 @@ public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
             );
         }
     }
+
+    interface Layout {
+    }
+
+
+    interface OfDouble extends BaseArray<OfDouble> {
+
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        double get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, double value);
+
+    }
+
 
     /**
      * Return the size of {@code this} array.
@@ -104,7 +128,6 @@ public interface BaseArray<A extends BaseArray<A>> extends Self<A> {
     }
 
     default void assign(A src, int srcPos, int destPos, int length) {
-
     }
 
 }

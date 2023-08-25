@@ -41,7 +41,8 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record DenseDoubleArray(double[] elements, int from, int length)
-    implements DoubleArray
+    implements DoubleArray,
+                BaseArray.Dense<double[], DenseDoubleArray>
 {
 
     /**
@@ -101,7 +102,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DoubleArray copy(int start, int length) {
+    public DenseDoubleArray copy(int start, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             start + from, start + from + length
@@ -110,7 +111,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DoubleArray like(final int length) {
+    public DenseDoubleArray like(final int length) {
         return ofSize(length);
     }
 
