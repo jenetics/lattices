@@ -28,7 +28,6 @@ import java.util.function.DoubleUnaryOperator;
 import io.jenetics.lattices.grid.Grid2d;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice2d;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -51,7 +50,7 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
-    implements DoubleLattice2d<DoubleArray>, Grid2d<DoubleArray, DoubleMatrix2d>
+    implements Lattice2d.OfDouble<DoubleArray>, Grid2d<DoubleArray, DoubleMatrix2d>
 {
 
     /**
@@ -79,7 +78,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
 
     @Override
     public void assign(DoubleMatrix2d other) {
-        DoubleLattice2d.super.assign(other);
+        OfDouble.super.assign(other);
     }
 
     /* *************************************************************************

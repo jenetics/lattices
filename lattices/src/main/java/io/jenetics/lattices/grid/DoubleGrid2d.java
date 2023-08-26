@@ -21,7 +21,6 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice2d;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -46,7 +45,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public record DoubleGrid2d(Structure2d structure, DoubleArray array)
-    implements DoubleLattice2d<DoubleArray>, Grid2d<DoubleArray, DoubleGrid2d>
+    implements Lattice2d.OfDouble<DoubleArray>, Grid2d<DoubleArray, DoubleGrid2d>
 {
 
     /**
@@ -74,7 +73,7 @@ public record DoubleGrid2d(Structure2d structure, DoubleArray array)
 
     @Override
     public void assign(DoubleGrid2d other) {
-        DoubleLattice2d.super.assign(other);
+        OfDouble.super.assign(other);
     }
 
     /**
