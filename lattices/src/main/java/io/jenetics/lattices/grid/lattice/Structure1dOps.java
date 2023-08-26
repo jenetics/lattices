@@ -29,7 +29,7 @@ import io.jenetics.lattices.structure.Range1d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structure1dOps extends Structured1d, Loopable1d {
+interface Structure1dOps extends Structured1d, Loopable1d {
 
     /**
      * Return the default looping strategy of this structural, which can be

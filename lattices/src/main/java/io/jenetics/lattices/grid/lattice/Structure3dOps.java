@@ -29,7 +29,7 @@ import io.jenetics.lattices.structure.Range3d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structure3dOps extends Structured3d, Loopable3d {
+interface Structure3dOps extends Structured3d, Loopable3d {
 
     /**
      * Return the default looping strategy of this structural, which can be
