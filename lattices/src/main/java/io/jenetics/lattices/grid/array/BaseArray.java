@@ -63,6 +63,24 @@ public interface BaseArray {
         void set(int index, long value);
     }
 
+    interface OfObject<T> extends BaseArray {
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        T get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, T value);
+    }
+
     interface Copier<A extends BaseArray> {
 
         /**

@@ -22,7 +22,6 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.grid.array.DenseLongArray;
 import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
-import io.jenetics.lattices.grid.lattice.LongLattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -47,7 +46,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public record LongGrid2d(Structure2d structure, LongArray array)
-    implements LongLattice2d, Grid2d<LongArray, LongGrid2d>
+    implements Lattice2d.OfLong<LongArray>, Grid2d<LongArray, LongGrid2d>
 {
 
     /**
@@ -75,7 +74,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
 
     @Override
     public void assign(LongGrid2d other) {
-        LongLattice2d.super.assign(other);
+        OfLong.super.assign(other);
     }
 
     /**
