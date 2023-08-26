@@ -22,7 +22,6 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.grid.array.DenseLongArray;
 import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
-import io.jenetics.lattices.grid.lattice.LongLattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -47,7 +46,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record LongGrid3d(Structure3d structure, LongArray array)
-    implements LongLattice3d, Grid3d<LongArray, LongGrid3d>
+    implements Lattice3d.OfLong<LongArray>, Grid3d<LongArray, LongGrid3d>
 {
 
     /**
@@ -75,7 +74,7 @@ public record LongGrid3d(Structure3d structure, LongArray array)
 
     @Override
     public void assign(LongGrid3d other) {
-        LongLattice3d.super.assign(other);
+        OfLong.super.assign(other);
     }
 
     /**

@@ -109,7 +109,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfDouble<? extends BaseArray.OfDouble> source) {
+        default void assign(OfDouble<?> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
@@ -173,7 +173,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *          value of {@code y}
          * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
          */
-        default void assign(OfDouble<? extends BaseArray.OfDouble> y, DoubleBinaryOperator f) {
+        default void assign(OfDouble<?> y, DoubleBinaryOperator f) {
             requireNonNull(f);
             checkSameExtent(extent(), y.extent());
 
@@ -196,7 +196,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *
          * @throws IllegalArgumentException if {@code extent() != other.extent()}.
          */
-        default void swap(OfDouble<? extends BaseArray.OfDouble> other) {
+        default void swap(OfDouble<?> other) {
             checkSameExtent(extent(), other.extent());
 
             forEach((r, c) -> {
@@ -256,7 +256,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfDouble<? extends BaseArray.OfDouble> other) {
+        default boolean equals(OfDouble<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
         }
@@ -307,7 +307,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfInt<? extends BaseArray.OfInt> source) {
+        default void assign(OfInt<?> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
@@ -371,7 +371,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *          value of {@code y}
          * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
          */
-        default void assign(OfInt<? extends BaseArray.OfInt> y, IntBinaryOperator f) {
+        default void assign(OfInt<?> y, IntBinaryOperator f) {
             requireNonNull(f);
             checkSameExtent(extent(), y.extent());
 
@@ -394,7 +394,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *
          * @throws IllegalArgumentException if {@code extent() != other.extent()}.
          */
-        default void swap(OfInt<? extends BaseArray.OfInt> other) {
+        default void swap(OfInt<?> other) {
             checkSameExtent(extent(), other.extent());
 
             forEach((r, c) -> {
@@ -453,7 +453,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfInt<? extends BaseArray.OfInt> other) {
+        default boolean equals(OfInt<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch((r, c) -> get(r, c) == other.get(r, c));
         }
@@ -504,7 +504,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfLong<? extends BaseArray.OfLong> source) {
+        default void assign(OfLong<?> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
@@ -568,7 +568,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *          value of {@code y}
          * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
          */
-        default void assign(OfLong<? extends BaseArray.OfLong> y, LongBinaryOperator f) {
+        default void assign(OfLong<?> y, LongBinaryOperator f) {
             requireNonNull(f);
             checkSameExtent(extent(), y.extent());
 
@@ -591,7 +591,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *
          * @throws IllegalArgumentException if {@code extent() != other.extent()}.
          */
-        default void swap(OfLong<? extends BaseArray.OfLong> other) {
+        default void swap(OfLong<?> other) {
             checkSameExtent(extent(), other.extent());
 
             forEach((r, c) -> {
@@ -650,7 +650,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfLong<? extends BaseArray.OfLong> other) {
+        default boolean equals(OfLong<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch((r, c) -> get(r, c) == other.get(r, c));
         }

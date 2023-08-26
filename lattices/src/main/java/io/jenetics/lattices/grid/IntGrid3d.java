@@ -21,7 +21,6 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.grid.array.DenseIntArray;
 import io.jenetics.lattices.grid.array.IntArray;
-import io.jenetics.lattices.grid.lattice.IntLattice3d;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
@@ -46,7 +45,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record IntGrid3d(Structure3d structure, IntArray array)
-    implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
+    implements Lattice3d.OfInt<IntArray>, Grid3d<IntArray, IntGrid3d>
 {
 
     /**
@@ -74,7 +73,7 @@ public record IntGrid3d(Structure3d structure, IntArray array)
 
     @Override
     public void assign(IntGrid3d other) {
-        IntLattice3d.super.assign(other);
+        OfInt.super.assign(other);
     }
 
     /**

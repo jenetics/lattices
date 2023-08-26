@@ -104,7 +104,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfDouble<? extends BaseArray.OfDouble> source) {
+        default void assign(OfDouble<?> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
@@ -155,7 +155,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @param a the grid used for the update
          * @param f the combiner function
          */
-        default void assign(OfDouble<? extends BaseArray.OfDouble> a, DoubleBinaryOperator f) {
+        default void assign(OfDouble<?> a, DoubleBinaryOperator f) {
             checkSameExtent(extent(), a.extent());
             forEach(i -> set(i, f.applyAsDouble(get(i), a.get(i))));
         }
@@ -165,7 +165,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *
          * @throws IllegalArgumentException if {@code size() != other.size()}.
          */
-        default void swap(final OfDouble<? extends BaseArray.OfDouble> other) {
+        default void swap(final OfDouble<?> other) {
             checkSameExtent(extent(), other.extent());
             forEach(i -> {
                 final var tmp = get(i);
@@ -212,7 +212,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfDouble<? extends BaseArray.OfDouble> other) {
+        default boolean equals(OfDouble<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch(i -> Double.compare(get(i), other.get(i)) == 0);
         }
@@ -261,7 +261,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
          */
-        default void assign(OfInt<? extends BaseArray.OfInt> other) {
+        default void assign(OfInt<?> other) {
             if (other == this) {
                 return;
             }
@@ -312,7 +312,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @param a the grid used for the update
          * @param f the combiner function
          */
-        default void assign(OfInt<? extends BaseArray.OfInt> a, IntBinaryOperator f) {
+        default void assign(OfInt<?> a, IntBinaryOperator f) {
             checkSameExtent(extent(), a.extent());
             forEach(i -> set(i, f.applyAsInt(get(i), a.get(i))));
         }
@@ -322,7 +322,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *
          * @throws IllegalArgumentException if {@code size() != other.size()}.
          */
-        default void swap(final OfInt<? extends BaseArray.OfInt> other) {
+        default void swap(final OfInt<?> other) {
             checkSameExtent(extent(), other.extent());
             forEach(i -> {
                 final var tmp = get(i);
@@ -368,7 +368,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfInt<? extends BaseArray.OfInt> other) {
+        default boolean equals(OfInt<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch(i -> get(i) == other.get(i));
         }
@@ -417,7 +417,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
          */
-        default void assign(OfLong<? extends BaseArray.OfLong> other) {
+        default void assign(OfLong<?> other) {
             if (other == this) {
                 return;
             }
@@ -468,7 +468,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @param a the grid used for the update
          * @param f the combiner function
          */
-        default void assign(OfLong<? extends BaseArray.OfLong> a, LongBinaryOperator f) {
+        default void assign(OfLong<?> a, LongBinaryOperator f) {
             checkSameExtent(extent(), a.extent());
             forEach(i -> set(i, f.applyAsLong(get(i), a.get(i))));
         }
@@ -478,7 +478,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *
          * @throws IllegalArgumentException if {@code size() != other.size()}.
          */
-        default void swap(final OfLong<? extends BaseArray.OfLong> other) {
+        default void swap(final OfLong<?> other) {
             checkSameExtent(extent(), other.extent());
             forEach(i -> {
                 final var tmp = get(i);
@@ -524,7 +524,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @return {@code true} if the two given matrices are equal, {@code false}
          *         otherwise
          */
-        default boolean equals(OfLong<? extends BaseArray.OfLong> other) {
+        default boolean equals(OfLong<?> other) {
             return extent().equals(other.extent()) &&
                 allMatch(i -> get(i) == other.get(i));
         }

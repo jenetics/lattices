@@ -24,7 +24,6 @@ import java.util.Objects;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
 import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
-import io.jenetics.lattices.grid.lattice.ObjectLattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -41,7 +40,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  */
 public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
-    implements ObjectLattice3d<T>, Grid3d<ObjectArray<T>, ObjectGrid3d<T>>
+    implements Lattice3d.OfObject<T, ObjectArray<T>>, Grid3d<ObjectArray<T>, ObjectGrid3d<T>>
 {
 
     /**
@@ -60,7 +59,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
 
     @Override
     public void assign(ObjectGrid3d<T> other) {
-        ObjectLattice3d.super.assign(other);
+        OfObject.super.assign(other);
     }
 
     public ObjectGrid2d<T> project(Projection3d projection) {
