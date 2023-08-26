@@ -85,8 +85,6 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
      * @return a new copy of the given double array
      */
     default A copy() {
-        //Arrays.copyOfRange()
-        java.lang.reflect.Array a;
         return copy(0, length());
     }
 
