@@ -44,8 +44,4 @@ public interface DoubleArray extends Array<DoubleArray> {
      */
     void set(int index, double value);
 
-    @Override
-    default void assign(DoubleArray src, int srcPos, int destPos, int length) {
-        Array.super.assign(src, srcPos, destPos, length);
-    }
 }
