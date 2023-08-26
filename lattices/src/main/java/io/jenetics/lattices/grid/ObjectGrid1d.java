@@ -54,11 +54,6 @@ public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
         return new ObjectGrid1d<>(structure, array);
     }
 
-    @Override
-    public void assign(ObjectGrid1d<T> other) {
-        OfObject.super.assign(other);
-    }
-
     /**
      * Return a factory for creating dense 1-d object grids.
      *

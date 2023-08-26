@@ -76,11 +76,6 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         return new DoubleMatrix2d(structure, array);
     }
 
-    @Override
-    public void assign(DoubleMatrix2d other) {
-        OfDouble.super.assign(other);
-    }
-
     /* *************************************************************************
      * Matrix view methods.
      * ************************************************************************/

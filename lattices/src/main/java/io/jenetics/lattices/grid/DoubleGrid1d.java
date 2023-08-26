@@ -70,11 +70,6 @@ public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
         return new DoubleGrid1d(structure, array);
     }
 
-    @Override
-    public void assign(DoubleGrid1d other) {
-        OfDouble.super.assign(other);
-    }
-
     /**
      * Return a 1-d grid view of the given input {@code values}.
      *

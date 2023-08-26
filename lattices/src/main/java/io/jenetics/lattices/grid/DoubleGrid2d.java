@@ -71,11 +71,6 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
         return new DoubleGrid2d(structure, array);
     }
 
-    @Override
-    public void assign(DoubleGrid2d other) {
-        OfDouble.super.assign(other);
-    }
-
     /**
      * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
      * a view onto this grid {@link #array()}.

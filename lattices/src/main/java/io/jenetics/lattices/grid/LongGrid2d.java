@@ -72,11 +72,6 @@ public record LongGrid2d(Structure2d structure, Array.OfLong array)
         return new LongGrid2d(structure, array);
     }
 
-    @Override
-    public void assign(LongGrid2d other) {
-        OfLong.super.assign(other);
-    }
-
     /**
      * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
      * a view onto this grid {@link #array()}.

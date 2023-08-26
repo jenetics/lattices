@@ -90,16 +90,9 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      * @param lattice the underlying lattice data
      * @return a new grid (view)
      */
-    default G create(Lattice3d<A> lattice) {
+    default G create(Lattice3d<? extends A> lattice) {
         return create(lattice.structure(), lattice.array());
     }
-
-    /**
-     * Assigns the elements of the {@code other} grid to this grid.
-     *
-     * @param other the source of the grid elements
-     */
-    void assign(G other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of

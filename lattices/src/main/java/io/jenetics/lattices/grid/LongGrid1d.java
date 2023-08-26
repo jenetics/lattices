@@ -71,11 +71,6 @@ public record LongGrid1d(Structure1d structure, Array.OfLong array)
         return new LongGrid1d(structure, array);
     }
 
-    @Override
-    public void assign(LongGrid1d other) {
-        OfLong.super.assign(other);
-    }
-
     /**
      * Return a 1-d grid view of the given input {@code values}.
      *

@@ -63,7 +63,7 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
         /**
          * Create a new matrix with the given {@code size}.
          *
-         * @param size the number of element
+         * @param size the number of elements
          * @return a new structure with the given size
          */
         default G create(int size) {
@@ -88,16 +88,9 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param lattice the underlying lattice data
      * @return a new grid (view)
      */
-    default G create(Lattice1d<A> lattice) {
+    default G create(Lattice1d<? extends A> lattice) {
         return create(lattice.structure(), lattice.array());
     }
-
-    /**
-     * Assigns the elements of the {@code other} grid to this grid.
-     *
-     * @param other the source of the grid elements
-     */
-    void assign(G other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -129,7 +122,7 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      */
     default G copy() {
         final var copy = like();
-        copy.assign(self());
+        copy.assign(this);
         return copy;
     }
 

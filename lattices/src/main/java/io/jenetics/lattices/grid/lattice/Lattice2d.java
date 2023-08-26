@@ -66,6 +66,17 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
     A array();
 
     /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param source the source lattice to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
+     */
+    void assign(Lattice2d<? extends A> source);
+
+
+    /**
      * This interface <em>structures</em> the elements into a 2-dimensional lattice.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -109,13 +120,16 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfDouble<?> source) {
+        @Override
+        default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach((r, c) -> set(r, c, source.get(r, c)));
+
+            final var layout = source.structure().layout();
+            forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 
         /**
@@ -307,13 +321,15 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfInt<?> source) {
+        default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach((r, c) -> set(r, c, source.get(r, c)));
+
+            final var layout = source.structure().layout();
+            forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 
         /**
@@ -504,13 +520,15 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfLong<?> source) {
+        default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach((r, c) -> set(r, c, source.get(r, c)));
+
+            final var layout = source.structure().layout();
+            forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 
         /**
@@ -701,13 +719,15 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfObject<? extends T, ?> source) {
+        default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach((r, c) -> set(r, c, source.get(r, c)));
+
+            final var layout = source.structure().layout();
+            forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 
         /**

@@ -22,6 +22,7 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
@@ -89,16 +90,16 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param lattice the underlying lattice data
      * @return a new grid (view)
      */
-    default G create(Lattice2d<A> lattice) {
+    default G create(Lattice2d<? extends A> lattice) {
         return create(lattice.structure(), lattice.array());
     }
 
-    /**
-     * Assigns the elements of the {@code other} grid to this grid.
-     *
-     * @param other the source of the grid elements
-     */
-    void assign(final G other);
+//    /**
+//     * Assigns the elements of the {@code other} grid to this grid.
+//     *
+//     * @param other the source of the grid elements
+//     */
+//    void assign(final Lattice2d<? extends A> other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of

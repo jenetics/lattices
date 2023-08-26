@@ -57,11 +57,6 @@ public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
         return new ObjectGrid3d<>(structure, array);
     }
 
-    @Override
-    public void assign(ObjectGrid3d<T> other) {
-        OfObject.super.assign(other);
-    }
-
     public ObjectGrid2d<T> project(Projection3d projection) {
         return new ObjectGrid2d<>(projection.apply(structure), array);
     }

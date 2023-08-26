@@ -19,7 +19,6 @@
  */
 package io.jenetics.lattices.grid.lattice;
 
-import io.jenetics.lattices.grid.Structured1d;
 import io.jenetics.lattices.structure.Range1d;
 
 /**

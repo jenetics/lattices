@@ -62,6 +62,16 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
     A array();
 
     /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param source the source lattice to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
+     */
+    void assign(Lattice3d<? extends A> source);
+
+    /**
      * This interface <em>structures</em> the elements into a 3-dimensional lattice.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -103,17 +113,21 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if
          *         {@code !extent().equals(other.extent())}
          */
-        default void assign(OfDouble<?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice3d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
-            forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
+            checkSameExtent(extent(), source.extent());
+
+            final var layout = source.structure().layout();
+            forEach((s, r, c) -> set(s, r, c, source.array().get(layout.offset(s, r, c))));
         }
 
         /**
@@ -317,17 +331,21 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if
          *         {@code !extent().equals(other.extent())}
          */
-        default void assign(OfInt<?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice3d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
-            forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
+            checkSameExtent(extent(), source.extent());
+
+            final var layout = source.structure().layout();
+            forEach((s, r, c) -> set(s, r, c, source.array().get(layout.offset(s, r, c))));
         }
 
         /**
@@ -530,17 +548,21 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if
          *         {@code !extent().equals(other.extent())}
          */
-        default void assign(OfLong<?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice3d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
-            forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
+            checkSameExtent(extent(), source.extent());
+
+            final var layout = source.structure().layout();
+            forEach((s, r, c) -> set(s, r, c, source.array().get(layout.offset(s, r, c))));
         }
 
         /**
@@ -743,17 +765,21 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if
          *         {@code !extent().equals(other.extent())}
          */
-        default void assign(OfObject<? extends T, ?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice3d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
-            forEach((s, r, c) -> set(s, r, c, other.get(s, r, c)));
+            checkSameExtent(extent(), source.extent());
+
+            final var layout = source.structure().layout();
+            forEach((s, r, c) -> set(s, r, c, source.array().get(layout.offset(s, r, c))));
         }
 
         /**

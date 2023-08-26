@@ -71,11 +71,6 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
         return new DoubleMatrix1d(structure, array);
     }
 
-    @Override
-    public void assign(DoubleMatrix1d other) {
-        OfDouble.super.assign(other);
-    }
-
     /* *************************************************************************
      * Additional matrix methods.
      * ************************************************************************/

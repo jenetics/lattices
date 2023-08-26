@@ -38,7 +38,7 @@ import io.jenetics.lattices.structure.Structure2d;
  */
 public class Loop1dTest {
 
-    record DoubleLattice(Array.OfDouble array, Structure2d structure)
+    record DoubleLattice(Structure2d structure, Array.OfDouble array)
         implements Lattice2d.OfDouble<Array.OfDouble>
     {
     }

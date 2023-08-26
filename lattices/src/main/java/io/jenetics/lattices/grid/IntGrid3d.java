@@ -71,11 +71,6 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
         return new IntGrid3d(structure, array);
     }
 
-    @Override
-    public void assign(IntGrid3d other) {
-        OfInt.super.assign(other);
-    }
-
     /**
      * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
      * a view onto this grid {@link #array()}.

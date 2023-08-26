@@ -63,6 +63,16 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
     A array();
 
     /**
+     * Replaces all cell values of the receiver with the values of another
+     * matrix. Both matrices must have the same number of rows and columns.
+     *
+     * @param source the source lattice to copy from (maybe identical to the
+     *        receiver).
+     * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
+     */
+    void assign(Lattice1d<? extends A> source);
+
+    /**
      * This interface <em>structures</em> the elements into a 1-dimensional lattice.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -104,13 +114,16 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfDouble<?> source) {
+        @Override
+        default void assign(Lattice1d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach(i -> set(i, source.get(i)));
+
+            final var layout = source.structure().layout();
+            forEach((i) -> set(i, source.array().get(layout.offset(i))));
         }
 
         /**
@@ -257,17 +270,20 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
          */
-        default void assign(OfInt<?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice1d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
+            checkSameExtent(extent(), source.extent());
 
-            forEach(i -> set(i, other.get(i)));
+            final var layout = source.structure().layout();
+            forEach((i) -> set(i, source.array().get(layout.offset(i))));
         }
 
         /**
@@ -413,17 +429,20 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
          *
-         * @param other the source matrix to copy from (maybe identical to the
+         * @param source the source matrix to copy from (maybe identical to the
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(other.extent())}
          */
-        default void assign(OfLong<?> other) {
-            if (other == this) {
+        @Override
+        default void assign(Lattice1d<? extends A> source) {
+            requireNonNull(source);
+            if (source == this) {
                 return;
             }
-            checkSameExtent(extent(), other.extent());
+            checkSameExtent(extent(), source.extent());
 
-            forEach(i -> set(i, other.get(i)));
+            final var layout = source.structure().layout();
+            forEach((i) -> set(i, source.array().get(layout.offset(i))));
         }
 
         /**
@@ -573,13 +592,16 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfObject<? extends T, ?> source) {
+        @Override
+        default void assign(Lattice1d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
             }
             checkSameExtent(extent(), source.extent());
-            forEach(i -> set(i, source.get(i)));
+
+            final var layout = source.structure().layout();
+            forEach((i) -> set(i, source.array().get(layout.offset(i))));
         }
 
         /**

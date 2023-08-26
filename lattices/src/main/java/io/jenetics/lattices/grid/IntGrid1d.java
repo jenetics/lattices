@@ -70,11 +70,6 @@ public record IntGrid1d(Structure1d structure, Array.OfInt array)
         return new IntGrid1d(structure, array);
     }
 
-    @Override
-    public void assign(IntGrid1d other) {
-        OfInt.super.assign(other);
-    }
-
     /**
      * Return a 1-d grid view of the given input {@code values}.
      *
