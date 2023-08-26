@@ -26,7 +26,7 @@ import java.util.OptionalDouble;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-import io.jenetics.lattices.grid.array.DoubleArray;
+import io.jenetics.lattices.grid.array.BaseArray;
 
 /**
  * This interface <em>structures</em> the elements into a 2-dimensional lattice.
@@ -35,7 +35,7 @@ import io.jenetics.lattices.grid.array.DoubleArray;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps {
+public interface DoubleLattice2d<A extends BaseArray.OfDouble> extends Lattice2d<A> {
 
     /**
      * Returns the grid cell value at coordinate {@code [row, col]}.
@@ -72,7 +72,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      *        receiver).
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
-    default void assign(DoubleLattice2d source) {
+    default void assign(DoubleLattice2d<? extends BaseArray.OfDouble> source) {
         requireNonNull(source);
         if (source == this) {
             return;
@@ -136,7 +136,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      *          value of {@code y}
      * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
      */
-    default void assign(DoubleLattice2d y, DoubleBinaryOperator f) {
+    default void assign(DoubleLattice2d<? extends BaseArray.OfDouble> y, DoubleBinaryOperator f) {
         requireNonNull(f);
         checkSameExtent(extent(), y.extent());
 
@@ -159,7 +159,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      *
      * @throws IllegalArgumentException if {@code extent() != other.extent()}.
      */
-    default void swap(DoubleLattice2d other) {
+    default void swap(DoubleLattice2d<? extends BaseArray.OfDouble> other) {
         checkSameExtent(extent(), other.extent());
 
         forEach((r, c) -> {
@@ -219,7 +219,7 @@ public interface DoubleLattice2d extends Lattice2d<DoubleArray>, Structure2dOps 
      * @return {@code true} if the two given matrices are equal, {@code false}
      *         otherwise
      */
-    default boolean equals(DoubleLattice2d other) {
+    default boolean equals(DoubleLattice2d<? extends BaseArray.OfDouble> other) {
         return extent().equals(other.extent()) &&
             allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
     }

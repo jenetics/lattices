@@ -51,7 +51,7 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
-    implements DoubleLattice2d, Grid2d<DoubleArray, DoubleMatrix2d>
+    implements DoubleLattice2d<DoubleArray>, Grid2d<DoubleArray, DoubleMatrix2d>
 {
 
     /**

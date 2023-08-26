@@ -9,9 +9,58 @@ public interface BaseArray {
      */
     int length();
 
-    interface OfFloat extends BaseArray {
-        float get(int index);
-        void set(int index, float value);
+    interface OfDouble extends BaseArray {
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        double get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, double value);
+    }
+
+    interface OfInt extends BaseArray {
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        int get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, int value);
+    }
+
+    interface OfLong extends BaseArray {
+        /**
+         * Return the array value at the given {@code index}.
+         *
+         * @param index the array index of the returned element
+         * @return the element at the given {@code index}
+         */
+        long get(int index);
+
+        /**
+         * Set the given {@code value} at the given {@code index}.
+         *
+         * @param index the array index of the new value
+         * @param value the value to be set at the given index
+         */
+        void set(int index, long value);
     }
 
     interface Copier<A extends BaseArray> {

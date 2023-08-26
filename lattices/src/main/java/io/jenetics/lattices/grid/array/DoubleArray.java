@@ -26,22 +26,5 @@ package io.jenetics.lattices.grid.array;
  * @since 3.0
  * @version 3.0
  */
-public interface DoubleArray extends Array<DoubleArray> {
-
-    /**
-     * Return the array value at the given {@code index}.
-     *
-     * @param index the array index of the returned element
-     * @return the element at the given {@code index}
-     */
-    double get(int index);
-
-    /**
-     * Set the given {@code value} at the given {@code index}.
-     *
-     * @param index the array index of the new value
-     * @param value the value to be set at the given index
-     */
-    void set(int index, double value);
-
+public interface DoubleArray extends BaseArray.OfDouble, Array<DoubleArray> {
 }
