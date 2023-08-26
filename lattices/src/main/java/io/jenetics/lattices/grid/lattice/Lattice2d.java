@@ -701,7 +701,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
-        default void assign(OfObject<? extends T, ? extends A> source) {
+        default void assign(OfObject<? extends T, ?> source) {
             requireNonNull(source);
             if (source == this) {
                 return;
@@ -765,7 +765,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *          value of {@code y}
          * @throws IllegalArgumentException if {@code !extent().equals(y.extent())}
          */
-        default void assign(OfObject<? extends T, ? extends A> y, BinaryOperator<T> f) {
+        default void assign(OfObject<? extends T, ?> y, BinaryOperator<T> f) {
             requireNonNull(f);
             checkSameExtent(extent(), y.extent());
 
@@ -796,7 +796,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @throws IllegalArgumentException if {@code extent() != other.extent()}
          */
         default  <A> void assign(
-            OfObject<? extends A, ? extends A> a,
+            OfObject<? extends A, ?> a,
             Function<? super A, ? extends T> f
         ) {
             checkSameExtent(extent(), a.extent());
@@ -819,7 +819,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *
          * @throws IllegalArgumentException if {@code extent() != other.extent()}.
          */
-        default void swap(OfObject<T, ? extends A> other) {
+        default void swap(OfObject<T, ?> other) {
             checkSameExtent(extent(), other.extent());
 
             forEach((r, c) -> {

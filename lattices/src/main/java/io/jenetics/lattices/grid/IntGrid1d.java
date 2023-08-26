@@ -21,7 +21,6 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.grid.array.DenseIntArray;
 import io.jenetics.lattices.grid.array.IntArray;
-import io.jenetics.lattices.grid.lattice.IntLattice1d;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -45,7 +44,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record IntGrid1d(Structure1d structure, IntArray array)
-    implements IntLattice1d, Grid1d<IntArray, IntGrid1d>
+    implements Lattice1d.OfInt<IntArray>, Grid1d<IntArray, IntGrid1d>
 {
 
     /**
@@ -73,7 +72,7 @@ public record IntGrid1d(Structure1d structure, IntArray array)
 
     @Override
     public void assign(IntGrid1d other) {
-        IntLattice1d.super.assign(other);
+        OfInt.super.assign(other);
     }
 
     /**
