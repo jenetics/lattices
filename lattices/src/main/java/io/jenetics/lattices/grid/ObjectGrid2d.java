@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -37,8 +37,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
-    implements Lattice2d.OfObject<T, ObjectArray<T>>, Grid2d<ObjectArray<T>, ObjectGrid2d<T>>
+public record ObjectGrid2d<T>(Structure2d structure, Array.OfObject<T> array)
+    implements Lattice2d.OfObject<T, Array.OfObject<T>>, Grid2d<Array.OfObject<T>, ObjectGrid2d<T>>
 {
 
     /**
@@ -46,12 +46,12 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid2d(Lattice2d<? extends ObjectArray<T>> lattice) {
+    public ObjectGrid2d(Lattice2d<? extends Array.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid2d<T> create(Structure2d structure, ObjectArray<T> array) {
+    public ObjectGrid2d<T> create(Structure2d structure, Array.OfObject<T> array) {
         return new ObjectGrid2d<>(structure, array);
     }
 

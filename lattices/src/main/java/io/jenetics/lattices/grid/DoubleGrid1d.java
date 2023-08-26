@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -43,8 +43,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleGrid1d(Structure1d structure, DoubleArray array)
-    implements Lattice1d.OfDouble<DoubleArray>, Grid1d<DoubleArray, DoubleGrid1d>
+public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleGrid1d>
 {
 
     /**
@@ -61,12 +61,12 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleGrid1d(Lattice1d<? extends DoubleArray> lattice) {
+    public DoubleGrid1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleGrid1d create(Structure1d structure, DoubleArray array) {
+    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
         return new DoubleGrid1d(structure, array);
     }
 

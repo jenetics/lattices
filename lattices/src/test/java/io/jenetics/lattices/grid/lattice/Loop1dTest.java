@@ -27,10 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.Loop1d;
-import io.jenetics.lattices.grid.lattice.Loop1dBackward;
-import io.jenetics.lattices.grid.lattice.Loop1dForward;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
@@ -41,8 +38,8 @@ import io.jenetics.lattices.structure.Structure2d;
  */
 public class Loop1dTest {
 
-    record DoubleLattice(DoubleArray array, Structure2d structure)
-        implements Lattice2d.OfDouble<DoubleArray>
+    record DoubleLattice(Array.OfDouble array, Structure2d structure)
+        implements Lattice2d.OfDouble<Array.OfDouble>
     {
     }
 

@@ -26,8 +26,8 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -49,8 +49,8 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
-    implements Lattice2d.OfDouble<DoubleArray>, Grid2d<DoubleArray, DoubleMatrix2d>
+public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, DoubleMatrix2d>
 {
 
     /**
@@ -67,12 +67,12 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleMatrix2d(Lattice2d<? extends DoubleArray> lattice) {
+    public DoubleMatrix2d(Lattice2d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleMatrix2d create(Structure2d structure, DoubleArray array) {
+    public DoubleMatrix2d create(Structure2d structure, Array.OfDouble array) {
         return new DoubleMatrix2d(structure, array);
     }
 

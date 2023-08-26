@@ -20,7 +20,7 @@ import java.util.stream.LongStream;
  * @version 3.0
  */
 public record DenseLongArray(long[] elements, int from, int length)
-    implements LongArray
+    implements Array.OfLong
 {
 
     /**

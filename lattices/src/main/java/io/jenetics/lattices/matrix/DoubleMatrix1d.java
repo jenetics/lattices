@@ -25,8 +25,8 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.grid.Grid1d;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -44,8 +44,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
-    implements Lattice1d.OfDouble<DoubleArray>, Grid1d<DoubleArray, DoubleMatrix1d>
+public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleMatrix1d>
 {
 
     /**
@@ -62,12 +62,12 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleMatrix1d(Lattice1d<? extends DoubleArray> lattice) {
+    public DoubleMatrix1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleMatrix1d create(Structure1d structure, DoubleArray array) {
+    public DoubleMatrix1d create(Structure1d structure, Array.OfDouble array) {
         return new DoubleMatrix1d(structure, array);
     }
 

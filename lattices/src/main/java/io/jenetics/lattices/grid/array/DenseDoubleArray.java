@@ -41,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record DenseDoubleArray(double[] elements, int from, int length)
-    implements DoubleArray, Array.Dense<double[], DenseDoubleArray>
+    implements Array.OfDouble, Array.Dense<double[], DenseDoubleArray>
 {
 
     /**

@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * @param <T> the value type
  */
 public record DenseObjectArray<T>(T[] elements, int from, int length)
-    implements ObjectArray<T>
+    implements Array.OfObject<T>
 {
 
     /**

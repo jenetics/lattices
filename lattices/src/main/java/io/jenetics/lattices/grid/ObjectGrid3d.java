@@ -21,8 +21,8 @@ package io.jenetics.lattices.grid;
 
 import java.util.Objects;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -39,8 +39,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
-    implements Lattice3d.OfObject<T, ObjectArray<T>>, Grid3d<ObjectArray<T>, ObjectGrid3d<T>>
+public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
+    implements Lattice3d.OfObject<T, Array.OfObject<T>>, Grid3d<Array.OfObject<T>, ObjectGrid3d<T>>
 {
 
     /**
@@ -48,12 +48,12 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid3d(Lattice3d<? extends ObjectArray<T>> lattice) {
+    public ObjectGrid3d(Lattice3d<? extends Array.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid3d<T> create(Structure3d structure, ObjectArray<T> array) {
+    public ObjectGrid3d<T> create(Structure3d structure, Array.OfObject<T> array) {
         return new ObjectGrid3d<>(structure, array);
     }
 

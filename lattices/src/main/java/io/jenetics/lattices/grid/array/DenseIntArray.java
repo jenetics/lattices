@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
  * @version 3.0
  */
 public record DenseIntArray(int[] elements, int from, int length)
-    implements IntArray
+    implements Array.OfInt
 {
 
     /**

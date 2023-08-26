@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -36,8 +36,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
-    implements Lattice1d.OfObject<T, ObjectArray<T>>, Grid1d<ObjectArray<T>, ObjectGrid1d<T>>
+public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
+    implements Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d<Array.OfObject<T>, ObjectGrid1d<T>>
 {
 
     /**
@@ -45,12 +45,12 @@ public record ObjectGrid1d<T>(Structure1d structure, ObjectArray<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid1d(Lattice1d<? extends ObjectArray<T>> lattice) {
+    public ObjectGrid1d(Lattice1d<? extends Array.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid1d<T> create(Structure1d structure, ObjectArray<T> array) {
+    public ObjectGrid1d<T> create(Structure1d structure, Array.OfObject<T> array) {
         return new ObjectGrid1d<>(structure, array);
     }
 

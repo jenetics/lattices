@@ -108,4 +108,43 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
     default void assign(A src, int srcPos, int destPos, int length) {
     }
 
+    /**
+     * Definition of an array with {@code double} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfDouble extends BaseArray.OfDouble, Array<OfDouble> {
+    }
+
+    /**
+     * Definition of an array with {@code int} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt extends BaseArray.OfInt, Array<OfInt> {
+    }
+
+    /**
+     * Definition of an array with {@code long} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong extends BaseArray.OfLong, Array<OfLong> {
+    }
+
+    /**
+     * Definition of an array with {@code Object} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T> extends BaseArray.OfObject<T>, Array<OfObject<T>> {
+    }
 }
