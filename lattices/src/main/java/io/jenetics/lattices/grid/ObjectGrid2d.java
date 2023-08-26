@@ -22,7 +22,6 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
 import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
-import io.jenetics.lattices.grid.lattice.ObjectLattice2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 
@@ -39,7 +38,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  */
 public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
-    implements ObjectLattice2d<T>, Grid2d<ObjectArray<T>, ObjectGrid2d<T>>
+    implements Lattice2d.OfObject<T, ObjectArray<T>>, Grid2d<ObjectArray<T>, ObjectGrid2d<T>>
 {
 
     /**
@@ -58,7 +57,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
 
     @Override
     public void assign(ObjectGrid2d<T> other) {
-        ObjectLattice2d.super.assign(other);
+        OfObject.super.assign(other);
     }
 
     public ObjectGrid1d<T> project(Projection2d projection) {
