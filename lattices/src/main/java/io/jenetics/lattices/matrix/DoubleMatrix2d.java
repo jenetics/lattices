@@ -80,10 +80,6 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      * Matrix view methods.
      * ************************************************************************/
 
-    public DoubleMatrix2d view(View2d view) {
-        return new DoubleMatrix2d(view.apply(structure), array);
-    }
-
     /**
      * Return a <em>transposed</em> view of this matrix.
      *

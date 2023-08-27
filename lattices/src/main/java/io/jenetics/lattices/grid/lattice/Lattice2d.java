@@ -38,6 +38,7 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.UnaryOperator;
 
 import io.jenetics.lattices.grid.array.BaseArray;
+import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -905,5 +906,38 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
                 allMatch((r, c) -> Objects.equals(get(r, c), other.get(r, c)));
         }
 
+    }
+
+    /**
+     * Factory interface for creating 2-d grids.
+     *
+     * @param <L> the lattice type created by the factory
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    @FunctionalInterface
+    interface Factory<L extends Lattice2d<?>> {
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param extent the extent of the created object
+         * @return a new object with the given {@code extent}
+         */
+        L create(Extent2d extent);
+
+        /**
+         * Create a new matrix with the given {@code size}.
+         *
+         * @param rows the number of rows
+         * @param cols the number of columns
+         * @return a new structure with the given size
+         */
+        default L create(int rows, int cols) {
+            return create(new Extent2d(rows, cols));
+        }
     }
 }

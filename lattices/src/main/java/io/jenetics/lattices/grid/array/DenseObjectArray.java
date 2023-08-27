@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * @param <T> the value type
  */
 public record DenseObjectArray<T>(T[] elements, int from, int length)
-    implements Array.OfObject<T>
+    implements Array.OfObject<T>, Array.Dense<T[], DenseObjectArray<T>>
 {
 
     /**
@@ -97,10 +97,10 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public DenseObjectArray<T> copy(int start, int length) {
+    public DenseObjectArray<T> copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseObjectArray<>(array);
     }

@@ -88,7 +88,7 @@ public record IntGrid2d(Structure2d structure, Array.OfInt array)
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
-     * final var grid = DoubleGrid2d.of(
+     * final var grid = IntGrid2d.of(
      *     new Extent2d(3, 4),
      *     1, 2,  3,  4,
      *     5, 6,  7,  8,

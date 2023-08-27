@@ -40,38 +40,6 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
 {
 
     /**
-     * Factory interface for creating 1-d grids.
-     *
-     * @param <G> the type created by the factory
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
-     */
-    @FunctionalInterface
-    interface Factory<G extends Grid1d<?, G>> {
-
-        /**
-         * Create a new matrix with the given {@code dimension} and default
-         * <em>order</em>.
-         *
-         * @param extent the extent of the created object
-         * @return a new object with the given {@code extent}
-         */
-        G create(Extent1d extent);
-
-        /**
-         * Create a new matrix with the given {@code size}.
-         *
-         * @param size the number of elements
-         * @return a new structure with the given size
-         */
-        default G create(int size) {
-            return create(new Extent1d(size));
-        }
-    }
-
-    /**
      * Create a new grid (view) with the given structure and the underlying
      * data array.
      *

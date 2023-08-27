@@ -741,4 +741,36 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
         }
 
     }
+
+    /**
+     * Factory interface for creating 1-d grids.
+     *
+     * @param <L> the lattice type created by the factory
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    @FunctionalInterface
+    interface Factory<L extends Lattice1d<?>> {
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param extent the extent of the created object
+         * @return a new object with the given {@code extent}
+         */
+        L create(Extent1d extent);
+
+        /**
+         * Create a new matrix with the given {@code size}.
+         *
+         * @param size the number of elements
+         * @return a new structure with the given size
+         */
+        default L create(int size) {
+            return create(new Extent1d(size));
+        }
+    }
 }

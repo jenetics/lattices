@@ -20,7 +20,7 @@ import java.util.stream.LongStream;
  * @version 3.0
  */
 public record DenseLongArray(long[] elements, int from, int length)
-    implements Array.OfLong
+    implements Array.OfLong, Array.Dense<long[], DenseLongArray>
 {
 
     /**
@@ -80,10 +80,10 @@ public record DenseLongArray(long[] elements, int from, int length)
     }
 
     @Override
-    public DenseLongArray copy(int start, int length) {
+    public DenseLongArray copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseLongArray(array);
     }

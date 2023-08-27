@@ -35,7 +35,7 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
     /**
      * Mixin interface of <em>dense</em> array implementations. This interface
      * defines a lightweight wrapper for the underlying <em>dense</em>Java array
-     * of type {@code T_PRIMITIVE}.
+     * of type {@code JAVA_ARRAY}.
      *
      * @param <JAVA_ARRAY> the wrapped Java array type, like {@code double[]},
      *        {@code int[]} or {@code Object[]}
@@ -57,6 +57,13 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
          */
         int from();
 
+        /**
+         * Return the length of the Java array view.
+         *
+         * @return the array length
+         */
+        int length();
+
         default void assign(D src, int srcPos, int destPos, int length) {
             System.arraycopy(
                 src.elements(),
@@ -71,11 +78,11 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
     /**
      * Copies the specified range of this array
      *
-     * @param start the initial index of the range to be copied, inclusive
+     * @param from the initial index of the range to be copied, inclusive
      * @param length the size the range to be copied
      * @return a new array of the given range
      */
-    A copy(int start, int length);
+    A copy(int from, int length);
 
     /**
      * Return a new copy of the given double array.

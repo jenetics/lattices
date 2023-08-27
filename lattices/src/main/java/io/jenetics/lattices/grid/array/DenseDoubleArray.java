@@ -101,10 +101,10 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DenseDoubleArray copy(int start, int length) {
+    public DenseDoubleArray copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseDoubleArray(array);
     }

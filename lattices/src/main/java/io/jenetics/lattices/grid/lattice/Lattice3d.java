@@ -38,6 +38,7 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.UnaryOperator;
 
 import io.jenetics.lattices.grid.array.BaseArray;
+import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
@@ -971,5 +972,39 @@ public interface Lattice3d<A extends BaseArray> extends Structure3dOps {
                 allMatch((s, r, c) -> Objects.equals(get(s, r, c), other.get(s, r, c)));
         }
 
+    }
+
+    /**
+     * Factory interface for creating 3-d grids.
+     *
+     * @param <L> the lattice type created by the factory
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    @FunctionalInterface
+    interface Factory<L extends Lattice3d<?>> {
+
+        /**
+         * Create a new matrix with the given {@code dimension} and default
+         * <em>order</em>.
+         *
+         * @param extent the extent of the created object
+         * @return a new object with the given {@code extent}
+         */
+        L create(Extent3d extent);
+
+        /**
+         * Create a new matrix with the given {@code size}.
+         *
+         * @param slices the number of slices
+         * @param rows the number of rows
+         * @param cols the number of columns
+         * @return a new structure with the given size
+         */
+        default L create(int slices, int rows, int cols) {
+            return create(new Extent3d(slices, rows, cols));
+        }
     }
 }
