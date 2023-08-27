@@ -249,7 +249,7 @@ public final class SingularValue {
 
             // This section of the program inspects for
             // negligible elements in the s and e arrays.  On
-            // completion the variables kase and k are set as follows.
+            //  completion, the variables kase and k are set as follows.
 
             // case = 1     if s(p) and e[k-1] are negligible and k<p
             // case = 2     if s(k) is negligible and k<p

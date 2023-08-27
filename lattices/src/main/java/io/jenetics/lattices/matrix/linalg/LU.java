@@ -159,7 +159,7 @@ public final class LU implements Solver {
             throw new IllegalArgumentException("LU-matrix is singular.");
         }
 
-        // Right hand side with pivoting
+        // Right-hand side with pivoting
         Permutations.permuteRows(X, pivot);
 
         final DoubleMatrix1d[] B_rows = new DoubleMatrix1d[n];

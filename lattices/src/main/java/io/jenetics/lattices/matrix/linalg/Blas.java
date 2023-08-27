@@ -31,7 +31,7 @@ import io.jenetics.lattices.matrix.NumericalContext;
  * (Basic Linear Algebra System). High quality "building block" routines for
  * performing basic vector and matrix operations. Because the BLAS are efficient,
  * portable, and widely available, they're commonly used in the development of
- * high quality linear algebra software.
+ * high-quality linear algebra software.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -64,8 +64,8 @@ public interface Blas {
 
     /**
      * Constructs a Givens plane rotation for {@code (a,b)}. Taken from the
-     * LINPACK translation from FORTRAN to Java, interface slightly modified. In
-     * the LINPACK listing DROTG is attributed to Jack Dongarra
+     * LINPACK translation from FORTRAN to Java, the interface is slightly
+     * modified. In the LINPACK listing DROTG is attributed to Jack Dongarra.
      *
      * @param a rotational elimination parameter a.
      * @param b rotational elimination parameter b.
@@ -123,7 +123,7 @@ public interface Blas {
     }
 
     /**
-     * Applies a givens plane rotation to (x, y);
+     * Applies a given plane rotation to (x, y);
      * <pre>{@code
      * x = c*x + s*y
      * y = c*y - s*x

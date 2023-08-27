@@ -22,9 +22,7 @@ package io.jenetics.lattices.grid.array;
 import io.jenetics.lattices.grid.Self;
 
 /**
- * Base interface of all array implementations. An array is a container of
- * elements, which can be accessed by an <em>index</em> and has a fixed
- * <em>size</em>.
+ * Extents the base-array with <em>copy</em> capabilities.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0

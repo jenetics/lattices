@@ -143,7 +143,7 @@ public final class QR implements Solver {
      *
      * @param B a matrix with as many rows as {@code A} and any number of
      *        columns
-     * @return {@code X} that minimizes the two norm of {@code Q*R*X - B}
+     * @return {@code X} that minimizes the two-norm of {@code Q*R*X - B}
      * @throws IllegalArgumentException if {@code B.rows() != A.rows()} or
      *         {@code !hasFullRank()} ({@code A} is rank deficient)
      */
@@ -159,7 +159,7 @@ public final class QR implements Solver {
             throw new IllegalArgumentException("Matrix is rank deficient.");
         }
 
-        // Copy right hand side
+        // Copy right-hand side
         final var X = B.copy();
 
         // Compute Y = transpose(Q)*B
