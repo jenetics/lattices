@@ -41,7 +41,9 @@ import io.jenetics.lattices.grid.array.BaseArray;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * A lattice is defined via an <em>array</em> and a 2-d structure.
+ * A lattice is defined via an <em>array</em> and a 2-d structure. It consists
+ * of a {@link Structure2d} object defining the <em>structure</em> of the
+ * lattices and an <em>array</em>, which contains the actual data.
  *
  * @param <A> the array type
  *

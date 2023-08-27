@@ -20,9 +20,7 @@
 package io.jenetics.lattices.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -31,6 +29,7 @@ import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.View1d;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

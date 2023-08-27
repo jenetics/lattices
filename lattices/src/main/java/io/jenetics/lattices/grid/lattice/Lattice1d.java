@@ -42,7 +42,9 @@ import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
- * A lattice is defined via an <em>array</em> and a 1-d structure.
+ * A lattice is defined via an <em>array</em> and a 1-d structure.  It consists
+ * of a {@link Structure1d} object defining the <em>structure</em> of the
+ * lattices and an <em>array</em>, which contains the actual data.
  *
  * @param <A> the array type
  */

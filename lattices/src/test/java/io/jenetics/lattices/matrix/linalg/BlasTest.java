@@ -33,9 +33,9 @@ import java.util.stream.Stream;
 import org.assertj.core.util.DoubleComparator;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid1d;
 import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;

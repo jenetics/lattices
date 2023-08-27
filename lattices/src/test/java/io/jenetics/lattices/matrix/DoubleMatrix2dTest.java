@@ -20,17 +20,15 @@
 package io.jenetics.lattices.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.lattice.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
@@ -39,6 +37,7 @@ import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 import io.jenetics.lattices.testfixtures.Colts;
+import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

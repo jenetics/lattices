@@ -19,12 +19,12 @@
  */
 package io.jenetics.lattices.testfixtures;
 
+import java.util.random.RandomGenerator;
+
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
-
-import java.util.random.RandomGenerator;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

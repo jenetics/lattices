@@ -41,7 +41,9 @@ import io.jenetics.lattices.grid.array.BaseArray;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * A lattice is defined via an <em>array</em> and a 3-d structure.
+ * A lattice is defined via an <em>array</em> and a 3-d structure. It consists
+ * of a {@link Structure3d} object defining the <em>structure</em> of the
+ * lattices and an <em>array</em>, which contains the actual data.
  *
  * @param <A> the array type
  */
