@@ -77,7 +77,7 @@ public interface Loop3d {
      *
      * @param predicate predicate to apply to positions of this dimension
      * @return {@code true} if either no position of the dimension match the
-     *         provided predicate or the dimension is empty, otherwise
+     *         provided predicate, or the dimension is empty, otherwise
      *         {@code false}
      */
     boolean nonMatch(Int3Predicate predicate);
