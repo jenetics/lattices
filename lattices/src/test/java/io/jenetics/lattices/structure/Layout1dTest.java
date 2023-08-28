@@ -26,7 +26,7 @@ import java.util.random.RandomGenerator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.testfixtures.Index1dRandom;
+import io.jenetics.lattices.Index1dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

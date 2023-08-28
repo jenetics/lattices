@@ -17,9 +17,9 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfixtures;
+package io.jenetics.lattices;
 
-import static io.jenetics.lattices.testfixtures.Colts.toColt;
+import static io.jenetics.lattices.Colts.toColt;
 
 import cern.colt.matrix.linalg.SeqBlas;
 

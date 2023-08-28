@@ -17,36 +17,39 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfixtures;
+package io.jenetics.lattices;
 
-import java.util.Comparator;
+import java.util.random.RandomGenerator;
 
-import org.assertj.core.util.DoubleComparator;
-
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Index2d;
+import io.jenetics.lattices.structure.Range2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class DoubleMatrix2dComparator implements Comparator<DoubleMatrix2d> {
+public class Index2dRandom {
 
-    private final DoubleComparator comparator;
+    private final RandomGenerator random;
 
-    public DoubleMatrix2dComparator(final double precision) {
-        this.comparator = new DoubleComparator(precision);
+    public Index2dRandom(RandomGenerator random) {
+        this.random = random;
     }
 
-    @Override
-    public int compare(final DoubleMatrix2d o1, final DoubleMatrix2d o2) {
-        final var equals = o1.extent().equals(o2.extent()) &&
-            o1.allMatch((i, j) -> comparator.compare(o1.get(i, j), o2.get(i, j)) == 0);
+    public Index2d next(Range2d range) {
+        final Index2d start = range.start();
+        final Extent2d extent = range.extent();
 
-        return equals ? 0 : 1;
-    }
+        final int row = random.nextInt(
+            start.row(),
+            start.row() + extent.rows()
+        );
+        final int col = random.nextInt(
+            start.col(),
+            start.col() + extent.cols()
+        );
 
-    @Override
-    public String toString() {
-        return String.format("DoubleMatrix2dComparator[precision=%s]", comparator.getEpsilon());
+        return new Index2d(row, col);
     }
 
 }

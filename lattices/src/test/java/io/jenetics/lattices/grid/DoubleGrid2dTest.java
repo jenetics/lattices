@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

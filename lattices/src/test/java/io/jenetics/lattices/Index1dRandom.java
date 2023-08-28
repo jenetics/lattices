@@ -17,28 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.structure.testfixtures;
+package io.jenetics.lattices;
 
 import java.util.random.RandomGenerator;
 
+import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Stride1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class Stride1dRandom {
+public class Index1dRandom {
 
     private final RandomGenerator random;
 
-    public Stride1dRandom(RandomGenerator random) {
+    public Index1dRandom(RandomGenerator random) {
         this.random = random;
     }
 
-    public Stride1d next(Range1d range) {
+    public Index1d next(Range1d range) {
         final int start = range.start().value();
-        final int bound = range.extent().elements() + 1;
-        return new Stride1d(random.nextInt(start, bound));
+        final int bound = range.extent().elements();
+        return new Index1d(random.nextInt(start, bound));
     }
 
 }

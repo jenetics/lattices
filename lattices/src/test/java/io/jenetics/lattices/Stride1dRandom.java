@@ -17,36 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.testfixtures;
+package io.jenetics.lattices;
 
-import java.util.Comparator;
+import java.util.random.RandomGenerator;
 
-import org.assertj.core.util.DoubleComparator;
-
-import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.structure.Stride1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class DoubleGrid2dComparator implements Comparator<DoubleGrid2d> {
+public class Stride1dRandom {
 
-    private final DoubleComparator comparator;
+    private final RandomGenerator random;
 
-    public DoubleGrid2dComparator(final double precision) {
-        this.comparator = new DoubleComparator(precision);
+    public Stride1dRandom(RandomGenerator random) {
+        this.random = random;
     }
 
-    @Override
-    public int compare(final DoubleGrid2d o1, final DoubleGrid2d o2) {
-        final var equals = o1.extent().equals(o2.extent()) &&
-            o1.allMatch((i, j) -> comparator.compare(o1.get(i, j), o2.get(i, 0)) == 0);
-
-        return equals ? 0 : 1;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("DoubleGrid1dComparator[precision=%s]", comparator.getEpsilon());
+    public Stride1d next(Range1d range) {
+        final int start = range.start().value();
+        final int bound = range.extent().elements() + 1;
+        return new Stride1d(random.nextInt(start, bound));
     }
 
 }

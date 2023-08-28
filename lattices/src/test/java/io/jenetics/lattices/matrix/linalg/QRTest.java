@@ -19,16 +19,16 @@
  */
 package io.jenetics.lattices.matrix.linalg;
 
-import static io.jenetics.lattices.testfixtures.Colts.toColt;
-import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.lattices.Colts.toColt;
+import static io.jenetics.lattices.Colts.toLinealgebra;
+import static io.jenetics.lattices.LinealgebraAsserts.assertEquals;
 
 import cern.colt.matrix.linalg.QRDecomposition;
 
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

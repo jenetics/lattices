@@ -36,8 +36,8 @@ import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
-import io.jenetics.lattices.testfixtures.Colts;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
+import io.jenetics.lattices.Colts;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

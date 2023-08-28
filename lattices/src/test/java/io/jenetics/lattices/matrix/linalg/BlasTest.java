@@ -20,8 +20,8 @@
 package io.jenetics.lattices.matrix.linalg;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertNotEquals;
+import static io.jenetics.lattices.LinealgebraAsserts.assertEquals;
+import static io.jenetics.lattices.LinealgebraAsserts.assertNotEquals;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -39,12 +39,12 @@ import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.testfixtures.Colts;
-import io.jenetics.lattices.testfixtures.DoubleGrid1dComparator;
-import io.jenetics.lattices.testfixtures.DoubleGrid2dComparator;
-import io.jenetics.lattices.testfixtures.DoubleMatrix1dComparator;
-import io.jenetics.lattices.testfixtures.DoubleMatrix2dComparator;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
+import io.jenetics.lattices.Colts;
+import io.jenetics.lattices.DoubleGrid1dComparator;
+import io.jenetics.lattices.DoubleGrid2dComparator;
+import io.jenetics.lattices.DoubleMatrix1dComparator;
+import io.jenetics.lattices.DoubleMatrix2dComparator;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

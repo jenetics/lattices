@@ -20,10 +20,10 @@
 package io.jenetics.lattices.matrix.linalg;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.Colts.toColt;
-import static io.jenetics.lattices.testfixtures.Colts.toLinealgebra;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.EPSILON;
-import static io.jenetics.lattices.testfixtures.LinealgebraAsserts.assertEquals;
+import static io.jenetics.lattices.Colts.toColt;
+import static io.jenetics.lattices.Colts.toLinealgebra;
+import static io.jenetics.lattices.LinealgebraAsserts.EPSILON;
+import static io.jenetics.lattices.LinealgebraAsserts.assertEquals;
 
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 
@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 
 import io.jenetics.lattices.matrix.Matrices;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

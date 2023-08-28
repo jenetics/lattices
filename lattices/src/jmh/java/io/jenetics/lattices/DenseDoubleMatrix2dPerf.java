@@ -35,8 +35,6 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.linalg.Algebra;
-import io.jenetics.lattices.testfixtures.Colts;
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 
 @Warmup(iterations = 3)
 @Measurement(iterations = 7)
