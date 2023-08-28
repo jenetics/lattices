@@ -25,7 +25,7 @@
  */
 plugins {
 	base
-	id("me.champeau.jmh") version "0.7.0" apply false
+	id("me.champeau.jmh") version "0.7.1" apply false
 }
 
 rootProject.version = Lattices.VERSION
@@ -131,7 +131,7 @@ fun setupTestReporting(project: Project) {
 	project.apply(plugin = "jacoco")
 
 	project.configure<JacocoPluginExtension> {
-		toolVersion = "0.8.8"
+		toolVersion = "0.8.10"
 	}
 
 	project.tasks {
