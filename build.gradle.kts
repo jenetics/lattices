@@ -31,7 +31,7 @@ plugins {
 rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "8.1"
+	version = "8.3"
 	distributionType = Wrapper.DistributionType.ALL
 }
 

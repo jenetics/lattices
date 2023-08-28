@@ -22,7 +22,6 @@
  */
 plugins {
     `java-library`
-    `java-test-fixtures`
     idea
     `maven-publish`
     id("me.champeau.jmh")
