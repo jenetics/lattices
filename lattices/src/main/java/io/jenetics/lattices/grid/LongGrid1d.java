@@ -19,10 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
-import io.jenetics.lattices.grid.lattice.LongLattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -36,7 +35,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * final var extent = new Extent1d(100);
  * final var values = new long[extent.size()];
  * final var grid = new LongGrid1d(
- *     Structure1d.of(extent),
+ *     new Structure1d(extent),
  *     new DenseLongArray(values)
  * );
  * }</pre>
@@ -45,8 +44,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record LongGrid1d(Structure1d structure, LongArray array)
-    implements LongLattice1d, Grid1d<LongArray, LongGrid1d>
+public record LongGrid1d(Structure1d structure, Array.OfLong array)
+    implements Lattice1d.OfLong<Array.OfLong>, Grid1d<Array.OfLong, LongGrid1d>
 {
 
     /**
@@ -54,8 +53,8 @@ public record LongGrid1d(Structure1d structure, LongArray array)
      */
     public static final Grid1d.Factory<LongGrid1d> DENSE =
         extent -> new LongGrid1d(
-            Structure1d.of(extent),
-            new DenseLongArray(new long[extent.size()])
+            new Structure1d(extent),
+            new DenseLongArray(new long[extent.elements()])
         );
 
     /**
@@ -63,18 +62,13 @@ public record LongGrid1d(Structure1d structure, LongArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public LongGrid1d(Lattice1d<? extends LongArray> lattice) {
+    public LongGrid1d(Lattice1d<? extends Array.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public LongGrid1d create(Structure1d structure, LongArray array) {
+    public LongGrid1d create(Structure1d structure, Array.OfLong array) {
         return new LongGrid1d(structure, array);
-    }
-
-    @Override
-    public void assign(LongGrid1d other) {
-        LongLattice1d.super.assign(other);
     }
 
     /**
@@ -89,7 +83,7 @@ public record LongGrid1d(Structure1d structure, LongArray array)
      */
     public static LongGrid1d of(long... values) {
         return new LongGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
+            new Structure1d(new Extent1d(values.length)),
             new DenseLongArray(values)
         );
     }

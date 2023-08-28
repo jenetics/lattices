@@ -26,9 +26,8 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice2d;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -50,8 +49,8 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
-    implements DoubleLattice2d, Grid2d<DoubleArray, DoubleMatrix2d>
+public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, DoubleMatrix2d>
 {
 
     /**
@@ -59,8 +58,8 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      */
     public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
-            Structure2d.of(extent),
-            DenseDoubleArray.ofSize(extent.size())
+            new Structure2d(extent),
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**
@@ -68,27 +67,18 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleMatrix2d(Lattice2d<? extends DoubleArray> lattice) {
+    public DoubleMatrix2d(Lattice2d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleMatrix2d create(Structure2d structure, DoubleArray array) {
+    public DoubleMatrix2d create(Structure2d structure, Array.OfDouble array) {
         return new DoubleMatrix2d(structure, array);
-    }
-
-    @Override
-    public void assign(DoubleMatrix2d other) {
-        DoubleLattice2d.super.assign(other);
     }
 
     /* *************************************************************************
      * Matrix view methods.
      * ************************************************************************/
-
-    public DoubleMatrix2d view(View2d view) {
-        return new DoubleMatrix2d(view.apply(structure), array);
-    }
 
     /**
      * Return a <em>transposed</em> view of this matrix.
@@ -177,12 +167,12 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
             return transpose().mult(y, z, alpha, beta, false);
         }
         if (z == null) {
-            final var struct = Structure1d.of(new Extent1d(rows()));
-            final var elems = array().like(struct.extent().value());
+            final var struct = new Structure1d(new Extent1d(rows()));
+            final var elems = array().like(struct.extent().elements());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
-        if (cols() != y.extent().size() || rows() > z.extent().size()) {
+        if (cols() != y.extent().elements() || rows() > z.extent().elements()) {
             throw new IllegalArgumentException(
                 "Incompatible args: " + extent() + ", " + y.extent() + ", " + z.extent()
             );
@@ -376,7 +366,7 @@ public record DoubleMatrix2d(Structure2d structure, DoubleArray array)
      */
     public static DoubleMatrix2d of(Extent2d extent, double... values) {
         return new DoubleMatrix2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             new DenseDoubleArray(values)
         );
     }

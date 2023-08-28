@@ -20,15 +20,14 @@
 package io.jenetics.lattices.grid;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -38,10 +37,10 @@ public class DoubleGrid2dTest {
     @Test
     public void setAndGet() {
         final var extent = new Extent2d(100, 20);
-        final var structure = Structure2d.of(extent);
+        final var structure = new Structure2d(extent);
         final var grid = new DoubleGrid2d(
             structure,
-            DenseDoubleArray.ofSize(extent.size())
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
         grid.forEach((row, col) -> grid.set(row, col, row*col));
@@ -95,7 +94,7 @@ public class DoubleGrid2dTest {
         final var array = new DenseDoubleArray(data);
 
         // Define the structure (extent) of your 2-d grid.
-        final var structure = Structure2d.of(new Extent2d(10, 15));
+        final var structure = new Structure2d(new Extent2d(10, 15));
         // Create the grid with your defined structure and data.
         // The grid is a 2-d view onto your one-dimensional double array.
         final var grid = new DoubleGrid2d(structure, array);

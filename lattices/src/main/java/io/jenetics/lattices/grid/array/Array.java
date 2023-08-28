@@ -19,43 +19,79 @@
  */
 package io.jenetics.lattices.grid.array;
 
-import io.jenetics.lattices.structure.Self;
+import io.jenetics.lattices.grid.Self;
 
 /**
- * Base interface of all array implementations. An array is a container of
- * elements, which can be accessed by an <em>index</em> and has a fixed
- * <em>size</em>.
+ * Extents the base-array with <em>copy</em> capabilities.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Array<A extends Array<A>> extends Self<A> {
+public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
 
     /**
-     * Return the size of {@code this} array.
+     * Mixin interface of <em>dense</em> array implementations. This interface
+     * defines a lightweight wrapper for the underlying <em>dense</em>Java array
+     * of type {@code JAVA_ARRAY}.
      *
-     * @return the size of {@code this} array
+     * @param <JAVA_ARRAY> the wrapped Java array type, like {@code double[]},
+     *        {@code int[]} or {@code Object[]}
+     * @param <D> the implementation type of the dense array wrapper
      */
-    int length();
+    interface Dense<JAVA_ARRAY, D extends Dense<JAVA_ARRAY, D>> {
+
+        /**
+         * Return the underlying <em>native</em> Java array.
+         *
+         * @return the underlying <em>native</em> Java array
+         */
+        JAVA_ARRAY elements();
+
+        /**
+         * The start index of the underlying Java array (inclusively).
+         *
+         * @return start index of the underlying Java array (inclusively)
+         */
+        int from();
+
+        /**
+         * Return the length of the Java array view.
+         *
+         * @return the array length
+         */
+        int length();
+
+        default void assign(D src, int srcPos, int destPos, int length) {
+            System.arraycopy(
+                src.elements(),
+                srcPos + src.from(),
+                elements(),
+                destPos + from(),
+                length
+            );
+        }
+    }
+
+    /**
+     * Copies the specified range of this array
+     *
+     * @param from the initial index of the range to be copied, inclusive
+     * @param length the size the range to be copied
+     * @return a new array of the given range
+     */
+    A copy(int from, int length);
 
     /**
      * Return a new copy of the given double array.
+     *
+     * @see #copy(int, int)
      *
      * @return a new copy of the given double array
      */
     default A copy() {
         return copy(0, length());
     }
-
-    /**
-     * Copies the specified range of this array
-     *
-     * @param start the initial index of the range to be copied, inclusive
-     * @param length the size the range to be copied
-     * @return a new array of the given range
-     */
-    A copy(int start, int length);
 
     /**
      * Return a new array of the same type with the given {@code length}.
@@ -74,4 +110,46 @@ public interface Array<A extends Array<A>> extends Self<A> {
         return like(length());
     }
 
+    default void assign(A src, int srcPos, int destPos, int length) {
+    }
+
+    /**
+     * Definition of an array with {@code double} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfDouble extends BaseArray.OfDouble, Array<OfDouble> {
+    }
+
+    /**
+     * Definition of an array with {@code int} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt extends BaseArray.OfInt, Array<OfInt> {
+    }
+
+    /**
+     * Definition of an array with {@code long} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong extends BaseArray.OfLong, Array<OfLong> {
+    }
+
+    /**
+     * Definition of an array with {@code Object} values.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T> extends BaseArray.OfObject<T>, Array<OfObject<T>> {
+    }
 }

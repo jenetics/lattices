@@ -25,7 +25,7 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.testfixtures.Index1dRandom;
+import io.jenetics.lattices.Index1dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -37,7 +37,7 @@ public class Structure1dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = Structure1d.of(new Extent1d(400));
+        final var structure = new Structure1d(new Extent1d(400));
         final var layout = structure.layout();
         final var range = new Range1d(structure.extent());
 

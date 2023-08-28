@@ -25,13 +25,13 @@
  */
 plugins {
 	base
-	id("me.champeau.jmh") version "0.7.0" apply false
+	id("me.champeau.jmh") version "0.7.1" apply false
 }
 
 rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "8.0.2"
+	version = "8.3"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -131,7 +131,7 @@ fun setupTestReporting(project: Project) {
 	project.apply(plugin = "jacoco")
 
 	project.configure<JacocoPluginExtension> {
-		toolVersion = "0.8.8"
+		toolVersion = "0.8.10"
 	}
 
 	project.tasks {
@@ -184,15 +184,21 @@ fun setupJavadoc(project: Project) {
 			"implNote:a:Implementation Note:"
 		)
 
-		doLast {
-			project.copy {
-				from("src/main/java") {
-					include("io/**/doc-files/*.*")
-				}
-				includeEmptyDirs = false
-				into(destinationDir!!)
-			}
-		}
+        doLast {
+            val dir = if (project.extra.has("moduleName")) {
+                project.extra["moduleName"].toString()
+            } else {
+                ""
+            }
+
+            project.copy {
+                from("src/main/java") {
+                    include("io/**/doc-files/*.*")
+                }
+                includeEmptyDirs = false
+                into(destinationDir!!.resolve(dir))
+            }
+        }
 	}
 
 	val javadoc = project.tasks.findByName("javadoc") as Javadoc?

@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice3d;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
@@ -36,7 +35,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new double[3*50*100];
  * final var grid = new DoubleGrid3d(
- *     Structure3d.of(new Extent3d(3, 50, 100)),
+ *     new Structure3d(new Extent3d(3, 50, 100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -45,8 +44,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleGrid3d(Structure3d structure, DoubleArray array)
-    implements DoubleLattice3d, Grid3d<DoubleArray, DoubleGrid3d>
+public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
+    implements Lattice3d.OfDouble<Array.OfDouble>, Grid3d<Array.OfDouble, DoubleGrid3d>
 {
 
     /**
@@ -54,8 +53,8 @@ public record DoubleGrid3d(Structure3d structure, DoubleArray array)
      */
     public static final Grid3d.Factory<DoubleGrid3d> DENSE =
         extent -> new DoubleGrid3d(
-            Structure3d.of(extent),
-            DenseDoubleArray.ofSize(extent.size())
+            new Structure3d(extent),
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**
@@ -63,18 +62,13 @@ public record DoubleGrid3d(Structure3d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleGrid3d(Lattice3d<? extends DoubleArray> lattice) {
+    public DoubleGrid3d(Lattice3d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleGrid3d create(Structure3d structure, DoubleArray array) {
+    public DoubleGrid3d create(Structure3d structure, Array.OfDouble array) {
         return new DoubleGrid3d(structure, array);
-    }
-
-    @Override
-    public void assign(DoubleGrid3d other) {
-        DoubleLattice3d.super.assign(other);
     }
 
     /**
@@ -90,7 +84,7 @@ public record DoubleGrid3d(Structure3d structure, DoubleArray array)
 
     public static DoubleGrid3d of(Extent3d extent, double... values) {
         return new DoubleGrid3d(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             new DenseDoubleArray(values)
         );
     }

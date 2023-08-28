@@ -84,7 +84,8 @@ public interface Projection2d {
                 new Extent1d(structure.extent().cols()),
                 new Layout1d(
                     new Index1d(structure.layout().offset(index, 0)),
-                    new Stride1d(structure.layout().stride().col())
+                    new Stride1d(structure.layout().stride().col()),
+                    structure.layout().band()
                 )
             );
         };
@@ -108,7 +109,8 @@ public interface Projection2d {
                 new Extent1d(structure.extent().rows()),
                 new Layout1d(
                     new Index1d(structure.layout().offset(0, index)),
-                    new Stride1d(structure.layout().stride().row())
+                    new Stride1d(structure.layout().stride().row()),
+                    structure.layout().band()
                 )
             );
         };

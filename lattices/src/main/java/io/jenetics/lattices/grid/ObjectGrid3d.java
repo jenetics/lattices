@@ -21,10 +21,9 @@ package io.jenetics.lattices.grid;
 
 import java.util.Objects;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
-import io.jenetics.lattices.grid.lattice.ObjectLattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
@@ -40,8 +39,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
-    implements ObjectLattice3d<T>, Grid3d<ObjectArray<T>, ObjectGrid3d<T>>
+public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
+    implements Lattice3d.OfObject<T, Array.OfObject<T>>, Grid3d<Array.OfObject<T>, ObjectGrid3d<T>>
 {
 
     /**
@@ -49,18 +48,13 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid3d(Lattice3d<? extends ObjectArray<T>> lattice) {
+    public ObjectGrid3d(Lattice3d<? extends Array.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid3d<T> create(Structure3d structure, ObjectArray<T> array) {
+    public ObjectGrid3d<T> create(Structure3d structure, Array.OfObject<T> array) {
         return new ObjectGrid3d<>(structure, array);
-    }
-
-    @Override
-    public void assign(ObjectGrid3d<T> other) {
-        ObjectLattice3d.super.assign(other);
     }
 
     public ObjectGrid2d<T> project(Projection3d projection) {
@@ -84,7 +78,7 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     /**
      * Return a factory for creating dense 3-d object grids.
      *
-     * @param __ not used (Java trick for getting "reified" element type)
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @param <T> the grid element type
      * @return the dense object factory
      */
@@ -92,8 +86,8 @@ public record ObjectGrid3d<T>(Structure3d structure, ObjectArray<T> array)
     @SafeVarargs
     public static <T> Grid3d.Factory<ObjectGrid3d<T>> dense(T... __) {
         return extent -> new ObjectGrid3d<T>(
-            Structure3d.of(extent),
-            DenseObjectArray.ofSize(extent.size(), __)
+            new Structure3d(extent),
+            DenseObjectArray.ofSize(extent.cells(), __)
         );
     }
 

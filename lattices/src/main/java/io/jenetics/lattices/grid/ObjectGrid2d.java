@@ -19,10 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.array.ObjectArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
-import io.jenetics.lattices.grid.lattice.ObjectLattice2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 
@@ -38,8 +37,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
-    implements ObjectLattice2d<T>, Grid2d<ObjectArray<T>, ObjectGrid2d<T>>
+public record ObjectGrid2d<T>(Structure2d structure, Array.OfObject<T> array)
+    implements Lattice2d.OfObject<T, Array.OfObject<T>>, Grid2d<Array.OfObject<T>, ObjectGrid2d<T>>
 {
 
     /**
@@ -47,18 +46,13 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid2d(Lattice2d<? extends ObjectArray<T>> lattice) {
+    public ObjectGrid2d(Lattice2d<? extends Array.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public ObjectGrid2d<T> create(Structure2d structure, ObjectArray<T> array) {
+    public ObjectGrid2d<T> create(Structure2d structure, Array.OfObject<T> array) {
         return new ObjectGrid2d<>(structure, array);
-    }
-
-    @Override
-    public void assign(ObjectGrid2d<T> other) {
-        ObjectLattice2d.super.assign(other);
     }
 
     public ObjectGrid1d<T> project(Projection2d projection) {
@@ -102,7 +96,7 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     /**
      * Return a factory for creating dense 2-d object grids.
      *
-     * @param __ not used (Java trick for getting "reified" element type)
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @param <T> the grid element type
      * @return the dense object factory
      */
@@ -110,8 +104,8 @@ public record ObjectGrid2d<T>(Structure2d structure, ObjectArray<T> array)
     @SafeVarargs
     public static <T> Grid2d.Factory<ObjectGrid2d<T>> dense(T... __) {
         return extent -> new ObjectGrid2d<T>(
-            Structure2d.of(extent),
-            DenseObjectArray.ofSize(extent.size(), __)
+            new Structure2d(extent),
+            DenseObjectArray.ofSize(extent.cells(), __)
         );
     }
 

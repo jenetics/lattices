@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseIntArray;
-import io.jenetics.lattices.grid.array.IntArray;
-import io.jenetics.lattices.grid.lattice.IntLattice2d;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -36,7 +35,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * <pre>{@code
  * final var values = new int[50*100];
  * final var grid = new IntGrid2d(
- *     Structure2d.of(new Extent2d(50, 100)),
+ *     new Structure2d(new Extent2d(50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
@@ -45,8 +44,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public record IntGrid2d(Structure2d structure, IntArray array)
-    implements IntLattice2d, Grid2d<IntArray, IntGrid2d>
+public record IntGrid2d(Structure2d structure, Array.OfInt array)
+    implements Lattice2d.OfInt<Array.OfInt>, Grid2d<Array.OfInt, IntGrid2d>
 {
 
     /**
@@ -54,8 +53,8 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      */
     public static final Grid2d.Factory<IntGrid2d> DENSE =
         extent -> new IntGrid2d(
-            Structure2d.of(extent),
-            DenseIntArray.ofSize(extent.size())
+            new Structure2d(extent),
+            DenseIntArray.ofSize(extent.cells())
         );
 
     /**
@@ -63,18 +62,13 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public IntGrid2d(Lattice2d<? extends IntArray> lattice) {
+    public IntGrid2d(Lattice2d<? extends Array.OfInt> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public IntGrid2d create(Structure2d structure, IntArray array) {
+    public IntGrid2d create(Structure2d structure, Array.OfInt array) {
         return new IntGrid2d(structure, array);
-    }
-
-    @Override
-    public void assign(IntGrid2d other) {
-        IntLattice2d.super.assign(other);
     }
 
     /**
@@ -94,7 +88,7 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
-     * final var grid = DoubleGrid2d.of(
+     * final var grid = IntGrid2d.of(
      *     new Extent2d(3, 4),
      *     1, 2,  3,  4,
      *     5, 6,  7,  8,
@@ -114,7 +108,7 @@ public record IntGrid2d(Structure2d structure, IntArray array)
      */
     public static IntGrid2d of(Extent2d extent, int... values) {
         return new IntGrid2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             new DenseIntArray(values)
         );
     }

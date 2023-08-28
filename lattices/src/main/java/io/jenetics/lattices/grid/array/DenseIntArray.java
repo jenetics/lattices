@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
  * @version 3.0
  */
 public record DenseIntArray(int[] elements, int from, int length)
-    implements IntArray
+    implements Array.OfInt, Array.Dense<int[], DenseIntArray>
 {
 
     /**
@@ -98,10 +98,10 @@ public record DenseIntArray(int[] elements, int from, int length)
     }
 
     @Override
-    public DenseIntArray copy(int start, int length) {
+    public DenseIntArray copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseIntArray(array);
     }

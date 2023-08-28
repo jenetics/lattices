@@ -28,46 +28,42 @@ import static java.util.Objects.requireNonNull;
  * @apiNote
  * Note, that the direct manipulation/creation of the <em>layout</em> object
  * usually doesn't lead to the expected result. It is expected that layouts
- * are created by the <em>structure</em> object; {@link Structure2d#of(Extent2d)}.
+ * are created by the <em>structure</em> object; {@link Structure2d#Structure2d(Extent2d)}.
  *
  * @see Structure2d
  *
  * @param start the start index of the first element
  * @param stride the element strides
- * @param channel the channel number of this structure, zero based
+ * @param band the band number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout2d(Index2d start, Stride2d stride, Channel channel) {
-
-    public Layout2d(Index2d start, Stride2d stride) {
-        this(start, stride, Channel.ZERO);
-    }
+public record Layout2d(Index2d start, Stride2d stride, Band band)
+    implements Mapper2d
+{
 
     public Layout2d {
         requireNonNull(start);
         requireNonNull(stride);
-        requireNonNull(channel);
+        requireNonNull(band);
     }
 
-    int offset(int row, int col) {
+    @Override
+    public int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
-            channel.value();
+            band.value();
     }
 
-    int offset(Index2d index) {
-        return offset(index.row(), index.col());
-    }
-
-    Index2d index(int offset) {
+    @Override
+    public Index2d index(int offset) {
         int start = offset -
             this.start.row() -
             this.start.col() -
-            channel.value();
+            band.value();
 
         final int row = start/stride.row();
         start = start - row*stride.row();

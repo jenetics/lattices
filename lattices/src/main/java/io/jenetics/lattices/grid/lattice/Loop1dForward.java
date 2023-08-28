@@ -29,7 +29,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
         requireNonNull(action);
 
         for (int i = range.start().value(),
-             n = range.start().value() + range.extent().value(); i < n; ++i)
+             n = range.start().value() + range.extent().elements(); i < n; ++i)
         {
             action.accept(i);
         }
@@ -40,7 +40,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),
-             n = range.start().value() + range.extent().value(); i < n; ++i)
+             n = range.start().value() + range.extent().elements(); i < n; ++i)
         {
             if (predicate.test(i)) {
                 return true;
@@ -54,7 +54,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),
-             n = range.start().value() + range.extent().value(); i < n; ++i)
+             n = range.start().value() + range.extent().elements(); i < n; ++i)
         {
             if (!predicate.test(i)) {
                 return false;
@@ -68,7 +68,7 @@ record Loop1dForward(Range1d range) implements Loop1d {
         requireNonNull(predicate);
 
         for (int i = range.start().value(),
-             n = range.start().value() + range.extent().value(); i < n; ++i)
+             n = range.start().value() + range.extent().elements(); i < n; ++i)
         {
             if (predicate.test(i)) {
                 return false;

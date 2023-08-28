@@ -25,7 +25,7 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.testfixtures.Index2dRandom;
+import io.jenetics.lattices.Index2dRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -37,7 +37,7 @@ public class Layout2dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = Structure2d.of(new Extent2d(100,1000));
+        final var structure = new Structure2d(new Extent2d(100,1000));
         final var range = new Range2d(structure.extent());
         final var layout = structure.layout();
 

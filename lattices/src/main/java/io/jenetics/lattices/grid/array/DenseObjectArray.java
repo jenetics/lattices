@@ -22,7 +22,6 @@ package io.jenetics.lattices.grid.array;
 import static java.util.Objects.checkFromIndexSize;
 import static java.util.Objects.requireNonNull;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ import java.util.stream.Stream;
  * @param <T> the value type
  */
 public record DenseObjectArray<T>(T[] elements, int from, int length)
-    implements ObjectArray<T>
+    implements Array.OfObject<T>, Array.Dense<T[], DenseObjectArray<T>>
 {
 
     /**
@@ -98,10 +97,10 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
     }
 
     @Override
-    public DenseObjectArray<T> copy(int start, int length) {
+    public DenseObjectArray<T> copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseObjectArray<>(array);
     }
@@ -132,13 +131,13 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
-     * @param __ not used (Java trick for getting "reified" element type)
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs
     public static <T> DenseObjectArray<T> ofSize(int length, T... __) {
         @SuppressWarnings("unchecked")
-        final T[] elements = (T[])Array
+        final T[] elements = (T[])java.lang.reflect.Array
             .newInstance(__.getClass().getComponentType(), length);
         return new DenseObjectArray<>(elements);
     }

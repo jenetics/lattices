@@ -28,48 +28,44 @@ import static java.util.Objects.requireNonNull;
  * @apiNote
  * Note, that the direct manipulation/creation of the <em>layout</em> object
  * usually doesn't lead to the expected result. It is expected that layouts
- * are created by the <em>structure</em> object; {@link Structure3d#of(Extent3d)}.
+ * are created by the <em>structure</em> object; {@link Structure3d#Structure3d(Extent3d)}.
  *
  * @see Structure3d
  *
  * @param start the start index of the first element
  * @param stride the element strides
- * @param channel the channel number of this structure, zero based
+ * @param band the band number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout3d(Index3d start, Stride3d stride, Channel channel) {
-
-    public Layout3d(Index3d start, Stride3d stride) {
-        this(start, stride, Channel.ZERO);
-    }
+public record Layout3d(Index3d start, Stride3d stride, Band band)
+    implements Mapper3d
+{
 
     public Layout3d {
         requireNonNull(start);
         requireNonNull(stride);
-        requireNonNull(channel);
+        requireNonNull(band);
     }
 
-    int offset(int slice, int row, int col) {
+    @Override
+    public int offset(int slice, int row, int col) {
         return
             start.slice() + slice*stride.slice() +
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
-            channel.value();
+            band.value();
     }
 
-    int offset(Index3d index) {
-        return offset(index.slice(), index.row(), index.col());
-    }
-
-    Index3d index(int offset) {
+    @Override
+    public Index3d index(int offset) {
         int start = offset -
             this.start.slice() -
             this.start.row() -
             this.start.col() -
-            channel.value();
+            band.value();
 
         final int slice = start/stride.slice();
         start = start - slice*stride.slice();

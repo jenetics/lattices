@@ -20,9 +20,9 @@
 package io.jenetics.lattices.matrix.linalg;
 
 import static java.util.Objects.requireNonNull;
+import static io.jenetics.lattices.grid.Structures.checkRectangular;
+import static io.jenetics.lattices.grid.Structures.checkSquare;
 import static io.jenetics.lattices.matrix.Matrices.isSingular;
-import static io.jenetics.lattices.structure.Structures.checkRectangular;
-import static io.jenetics.lattices.structure.Structures.checkSquare;
 
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
@@ -159,7 +159,7 @@ public final class LU implements Solver {
             throw new IllegalArgumentException("LU-matrix is singular.");
         }
 
-        // Right hand side with pivoting
+        // Right-hand side with pivoting
         Permutations.permuteRows(X, pivot);
 
         final DoubleMatrix1d[] B_rows = new DoubleMatrix1d[n];

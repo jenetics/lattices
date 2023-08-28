@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = Structure3d.of(new Extent3d(500, 1000, 50));
+ * final var structure = new Structure3d(500, 1000, 50);
  * }</pre>
  *
  * @param extent the extent of the structure
@@ -39,64 +39,46 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout)
-    implements OffsetMapper3d
-{
+public record Structure3d(Extent3d extent, Layout3d layout) {
 
     public Structure3d {
         requireNonNull(extent);
         requireNonNull(layout);
     }
 
-    @Override
-    public int offset(int slice, int row, int col) {
-        return layout.offset(slice, row, col);
-    }
-
-    @Override
-    public int offset(Index3d index) {
-        return layout.offset(index);
-    }
-
-    @Override
-    public Index3d index(int offset) {
-        return layout.index(offset);
-    }
-
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
-     * @return a new structure object with the given extent
      */
-    public static Structure3d of(Extent3d extent) {
-        return new Structure3d(
+    public Structure3d(Extent3d extent) {
+        this(
             extent,
             new Layout3d(
                 Index3d.ZERO,
                 new Stride3d(
-                    extent.rows()*extent.cols()*extent.channels(),
-                    extent.cols()*extent.channels(),
-                    extent.channels()
-                )
+                    extent.rows()*extent.cols()*extent.bands(),
+                    extent.cols()*extent.bands(),
+                    extent.bands()
+                ),
+                Band.ZERO
             )
         );
     }
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
-     * @param slices the number of slices of the structure
-     * @param rows the number of rows of the structure
-     * @param cols the number of columns of the structure
-     * @return a new structure object with the given extent
+     * @param slices the number of slices
+     * @param rows the number of rows
+     * @param cols the number of columns
      */
-    public static Structure3d of(int slices, int rows, int cols) {
-        return of(new Extent3d(slices, rows, cols));
+    public Structure3d(int slices, int rows, int cols) {
+        this(new Extent3d(slices, rows, cols));
     }
 
 }

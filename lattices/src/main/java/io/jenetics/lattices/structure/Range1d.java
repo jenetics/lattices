@@ -85,7 +85,7 @@ public record Range1d(Index1d start, Extent1d extent)
     public String toString() {
         return "[%d..%d]".formatted(
             start.value(),
-            start.value() + extent.value()
+            start.value() + extent.elements()
         );
     }
 

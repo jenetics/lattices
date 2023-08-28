@@ -52,14 +52,12 @@ final class Index2dIterator implements Iterator<Index2d> {
 
     @Override
     public Index2d next() {
-        final int r = rowCursor;
-        final int c = colCursor;
-
-        if (rowCursor >= range.start().row() + range.extent().rows() &&
-            colCursor >= range.start().col() + range.extent().cols())
-        {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
+
+        final int r = rowCursor;
+        final int c = colCursor;
 
         colCursor = c + 1;
         if (colCursor >= range.start().col() + range.extent().cols()) {

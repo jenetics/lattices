@@ -20,17 +20,15 @@
 package io.jenetics.lattices.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.grid.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.lattice.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
@@ -38,7 +36,8 @@ import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
-import io.jenetics.lattices.testfixtures.Colts;
+import io.jenetics.lattices.Colts;
+import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -133,7 +132,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().elements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -147,7 +146,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().elements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -161,7 +160,7 @@ public class DoubleMatrix2dTest {
         for (int c = 0; c < A.cols(); ++c) {
             final var column = A.colAt(c);
 
-            assertThat(column.extent().size()).isEqualTo(A.rows());
+            assertThat(column.extent().elements()).isEqualTo(A.rows());
             for (int i = 0; i < A.rows(); ++i) {
                 assertThat(column.get(i)).isEqualTo(A.get(i, c));
             }
@@ -175,7 +174,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().elements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }
@@ -189,7 +188,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().elements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }
@@ -203,7 +202,7 @@ public class DoubleMatrix2dTest {
         for (int r = 0; r < A.rows(); ++r) {
             final var row = A.rowAt(r);
 
-            assertThat(row.extent().size()).isEqualTo(A.cols());
+            assertThat(row.extent().elements()).isEqualTo(A.cols());
             for (int i = 0; i < A.cols(); ++i) {
                 assertThat(row.get(i)).isEqualTo(A.get(r, i));
             }
@@ -309,17 +308,17 @@ public class DoubleMatrix2dTest {
         final var matrix = DoubleMatrix2d.DENSE.create(extent);
 
         final var structure = matrix.structure();
-        final var copy = Structure2d.of(extent);
+        final var copy = new Structure2d(extent);
         assertThat(copy).isEqualTo(structure);
 
-        final var copy2 = Structure2d.of(new Extent2d(3, 6));
+        final var copy2 = new Structure2d(new Extent2d(3, 6));
         assertThat(copy2).isNotEqualTo(structure);
     }
 
     @Test
     public void foo() {
         final var matrix = new DoubleMatrix2d(
-            Structure2d.of(new Extent2d(3, 4)),
+            new Structure2d(new Extent2d(3, 4)),
             new DenseDoubleArray(new double[] {
                 1, 2,  3,  4,
                 5, 6,  7,  8,

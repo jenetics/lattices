@@ -19,10 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
-import io.jenetics.lattices.grid.lattice.LongLattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -37,7 +36,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * final var extent = new Extent2d(50, 100);
  * final var values = new long[extent.size()];
  * final var grid = new LongGrid2d(
- *     Structure2d.of(extent),
+ *     new Structure2d(extent),
  *     new DenseLongArray(values)
  * );
  * }</pre>
@@ -46,8 +45,8 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public record LongGrid2d(Structure2d structure, LongArray array)
-    implements LongLattice2d, Grid2d<LongArray, LongGrid2d>
+public record LongGrid2d(Structure2d structure, Array.OfLong array)
+    implements Lattice2d.OfLong<Array.OfLong>, Grid2d<Array.OfLong, LongGrid2d>
 {
 
     /**
@@ -55,8 +54,8 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      */
     public static final Grid2d.Factory<LongGrid2d> DENSE =
         extent -> new LongGrid2d(
-            Structure2d.of(extent),
-            DenseLongArray.ofSize(extent.size())
+            new Structure2d(extent),
+            DenseLongArray.ofSize(extent.cells())
         );
 
     /**
@@ -64,18 +63,13 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public LongGrid2d(Lattice2d<? extends LongArray> lattice) {
+    public LongGrid2d(Lattice2d<? extends Array.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public LongGrid2d create(Structure2d structure, LongArray array) {
+    public LongGrid2d create(Structure2d structure, Array.OfLong array) {
         return new LongGrid2d(structure, array);
-    }
-
-    @Override
-    public void assign(LongGrid2d other) {
-        LongLattice2d.super.assign(other);
     }
 
     /**
@@ -95,7 +89,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
-     * final var grid = DoubleGrid2d.of(
+     * final var grid = LongGrid2d.of(
      *     new Extent2d(3, 4),
      *     1, 2,  3,  4,
      *     5, 6,  7,  8,
@@ -115,7 +109,7 @@ public record LongGrid2d(Structure2d structure, LongArray array)
      */
     public static LongGrid2d of(Extent2d extent, long... values) {
         return new LongGrid2d(
-            Structure2d.of(extent),
+            new Structure2d(extent),
             new DenseLongArray(values)
         );
     }

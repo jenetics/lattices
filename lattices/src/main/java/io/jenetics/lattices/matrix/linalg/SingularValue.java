@@ -22,7 +22,7 @@ package io.jenetics.lattices.matrix.linalg;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static io.jenetics.lattices.structure.Structures.checkRectangular;
+import static io.jenetics.lattices.grid.Structures.checkRectangular;
 
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
@@ -249,7 +249,7 @@ public final class SingularValue {
 
             // This section of the program inspects for
             // negligible elements in the s and e arrays.  On
-            // completion the variables kase and k are set as follows.
+            //  completion, the variables kase and k are set as follows.
 
             // case = 1     if s(p) and e[k-1] are negligible and k<p
             // case = 2     if s(k) is negligible and k<p

@@ -25,9 +25,8 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.grid.Grid1d;
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice1d;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -45,8 +44,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
-    implements DoubleLattice1d, Grid1d<DoubleArray, DoubleMatrix1d>
+public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleMatrix1d>
 {
 
     /**
@@ -54,8 +53,8 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      */
     public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
         extent -> new DoubleMatrix1d(
-            Structure1d.of(extent),
-            DenseDoubleArray.ofSize(extent.value())
+            new Structure1d(extent),
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**
@@ -63,18 +62,13 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleMatrix1d(Lattice1d<? extends DoubleArray> lattice) {
+    public DoubleMatrix1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleMatrix1d create(Structure1d structure, DoubleArray array) {
+    public DoubleMatrix1d create(Structure1d structure, Array.OfDouble array) {
         return new DoubleMatrix1d(structure, array);
-    }
-
-    @Override
-    public void assign(DoubleMatrix1d other) {
-        DoubleLattice1d.super.assign(other);
     }
 
     /* *************************************************************************
@@ -96,7 +90,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
             return 0;
         }
 
-        final int to = min(min(extent().size(), y.extent().size()), from + length);
+        final int to = min(min(extent().elements(), y.extent().elements()), from + length);
 
         double sum = 0;
         for (int i = from; i < to; ++i) {
@@ -114,7 +108,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      * @return the sum of products
      */
     public double dotProduct(DoubleMatrix1d y) {
-        return dotProduct(y, 0, extent().size());
+        return dotProduct(y, 0, extent().elements());
     }
 
     /**
@@ -136,7 +130,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         int cardinality = 0;
-        for (int i = 0; i < extent().size(); ++i) {
+        for (int i = 0; i < extent().elements(); ++i) {
             if (context.isZero(get(i))) {
                 ++cardinality;
             }
@@ -153,7 +147,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
         final var context = NumericalContext.get();
 
         final var indices = IntStream.builder();
-        for (int i = 0; i < extent().size(); ++i) {
+        for (int i = 0; i < extent().elements(); ++i) {
             if (context.isNotZero(get(i))) {
                 indices.add(i);
             }
@@ -196,7 +190,7 @@ public record DoubleMatrix1d(Structure1d structure, DoubleArray array)
      */
     public static DoubleMatrix1d of(double... values) {
         return new DoubleMatrix1d(
-            Structure1d.of(new Extent1d(values.length)),
+            new Structure1d(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = Structure2d.of(new Extent2d(500, 1000));
+ * final var structure = new Structure2d(500, 1000);
  * }</pre>
  *
  * @param extent the extent of the structure
@@ -39,62 +39,44 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout)
-    implements OffsetMapper2d
-{
+public record Structure2d(Extent2d extent, Layout2d layout) {
 
     public Structure2d {
         requireNonNull(extent);
         requireNonNull(layout);
     }
 
-    @Override
-    public int offset(int row, int col) {
-        return layout.offset(row, col);
-    }
-
-    @Override
-    public int offset(Index2d index) {
-        return layout.offset(index);
-    }
-
-    @Override
-    public Index2d index(int offset) {
-        return layout.index(offset);
-    }
-
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
-     * @return a new structure object with the given extent
      */
-    public static Structure2d of(Extent2d extent) {
-        return new Structure2d(
+    public Structure2d(Extent2d extent) {
+        this(
             extent,
             new Layout2d(
                 Index2d.ZERO,
                 new Stride2d(
-                    extent.cols()*extent.channels(),
-                    extent.channels()
-                )
+                    extent.cols()*extent.bands(),
+                    extent.bands()
+                ),
+                Band.ZERO
             )
         );
     }
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
-     * @param rows the number of rows of the structure
-     * @param cols the number of columns of the structure
-     * @return a new structure object with the given extent
+     * @param rows the number of rows
+     * @param cols the number of columns
      */
-    public static Structure2d of(int rows, int cols) {
-        return of(new Extent2d(rows, cols));
+    public Structure2d(int rows, int cols) {
+        this(new Extent2d(rows, cols));
     }
 
 }

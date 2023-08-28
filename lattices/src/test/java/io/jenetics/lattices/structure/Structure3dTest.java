@@ -25,7 +25,7 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.testfixtures.Index3dRandom;
+import io.jenetics.lattices.Index3dRandom;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
@@ -36,7 +36,7 @@ public class Structure3dTest {
 
     @Test
     public void indexOffset() {
-        final var structure = Structure3d.of(new Extent3d(100, 400, 78));
+        final var structure = new Structure3d(new Extent3d(100, 400, 78));
         final var layout = structure.layout();
         final var range = new Range3d(structure.extent());
 

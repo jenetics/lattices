@@ -19,10 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.array.LongArray;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
-import io.jenetics.lattices.grid.lattice.LongLattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -37,7 +36,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * final var extent = new Extent3d(30, 50, 100);
  * final var values = new long[extent.size()];
  * final var grid = new LongGrid3d(
- *     Structure3d.of(extent),
+ *     new Structure3d(extent),
  *     new DenseLongArray(values)
  * );
  * }</pre>
@@ -46,8 +45,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public record LongGrid3d(Structure3d structure, LongArray array)
-    implements LongLattice3d, Grid3d<LongArray, LongGrid3d>
+public record LongGrid3d(Structure3d structure, Array.OfLong array)
+    implements Lattice3d.OfLong<Array.OfLong>, Grid3d<Array.OfLong, LongGrid3d>
 {
 
     /**
@@ -55,8 +54,8 @@ public record LongGrid3d(Structure3d structure, LongArray array)
      */
     public static final Grid3d.Factory<LongGrid3d> DENSE =
         extent -> new LongGrid3d(
-            Structure3d.of(extent),
-            DenseLongArray.ofSize(extent.size())
+            new Structure3d(extent),
+            DenseLongArray.ofSize(extent.cells())
         );
 
     /**
@@ -64,18 +63,13 @@ public record LongGrid3d(Structure3d structure, LongArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public LongGrid3d(Lattice3d<? extends LongArray> lattice) {
+    public LongGrid3d(Lattice3d<? extends Array.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public LongGrid3d create(Structure3d structure, LongArray array) {
+    public LongGrid3d create(Structure3d structure, Array.OfLong array) {
         return new LongGrid3d(structure, array);
-    }
-
-    @Override
-    public void assign(LongGrid3d other) {
-        LongLattice3d.super.assign(other);
     }
 
     /**
@@ -91,7 +85,7 @@ public record LongGrid3d(Structure3d structure, LongArray array)
 
     public static LongGrid3d of(Extent3d extent, long... values) {
         return new LongGrid3d(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             new DenseLongArray(values)
         );
     }

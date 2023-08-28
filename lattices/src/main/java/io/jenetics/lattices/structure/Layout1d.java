@@ -28,39 +28,35 @@ import static java.util.Objects.requireNonNull;
  * @apiNote
  * Note, that the direct manipulation/creation of the <em>layout</em> object
  * usually doesn't lead to the expected result. It is expected that layouts
- * are created by the <em>structure</em> object; {@link Structure1d#of(Extent1d)}.
+ * are created by the <em>structure</em> object; {@link Structure1d#Structure1d(int)}.
  *
  * @see Structure1d
  *
  * @param start the index of the first element
  * @param stride the number of indexes between any two elements
- * @param channel the channel number of this structure, zero based
+ * @param band the band number of this structure, zero based
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Layout1d(Index1d start, Stride1d stride, Channel channel) {
-
-    public Layout1d(Index1d start, Stride1d stride) {
-        this(start, stride, Channel.ZERO);
-    }
+public record Layout1d(Index1d start, Stride1d stride, Band band)
+    implements Mapper1d
+{
 
     public Layout1d {
         requireNonNull(start);
         requireNonNull(stride);
-        requireNonNull(channel);
+        requireNonNull(band);
     }
 
-    int offset(int index) {
-        return start.value() + index*stride.value() + channel.value();
+    @Override
+    public int offset(int index) {
+        return start.value() + index*stride.value() + band.value();
     }
 
-    int offset(Index1d index) {
-        return offset(index.value() - channel.value());
-    }
-
-    Index1d index(int offset) {
+    @Override
+    public Index1d index(int offset) {
         final int start = offset - this.start.value();
         final int index = start/stride.value();
         return new Index1d(index);

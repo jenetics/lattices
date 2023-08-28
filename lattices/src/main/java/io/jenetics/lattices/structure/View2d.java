@@ -50,7 +50,8 @@ public interface View2d {
             new Stride2d(
                 structure.layout().stride().col(),
                 structure.layout().stride().row()
-            )
+            ),
+            structure.layout().band()
         )
     );
 
@@ -104,7 +105,8 @@ public interface View2d {
                     structure.layout().start().col() +
                         structure.layout().stride().col()*range.start().col()
                 ),
-                structure.layout().stride()
+                structure.layout().stride(),
+                structure.layout().band()
             )
         );
     }
@@ -168,7 +170,8 @@ public interface View2d {
                     new Stride2d(
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
-                    )
+                    ),
+                    structure.layout().band()
                 )
             );
         };
@@ -178,19 +181,19 @@ public interface View2d {
      * Return a transformation which creates a view onto the given
      * {@code channel}.
      *
-     * @param channel the channel number of the returned view
+     * @param band the channel number of the returned view
      * @return a transformation which creates a view onto the given
      *        {@code channel}
      */
-    static View2d of(Channel channel) {
-        requireNonNull(channel);
+    static View2d of(Band band) {
+        requireNonNull(band);
 
         return structure -> new Structure2d(
             structure.extent(),
             new Layout2d(
                 structure.layout().start(),
                 structure.layout().stride(),
-                channel
+                band
             )
         );
     }

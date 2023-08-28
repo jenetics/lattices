@@ -19,8 +19,8 @@
  */
 package io.jenetics.lattices.matrix.linalg;
 
-import static io.jenetics.lattices.structure.Structures.checkSameExtent;
-import static io.jenetics.lattices.structure.Structures.checkSquare;
+import static io.jenetics.lattices.grid.Structures.checkSameExtent;
+import static io.jenetics.lattices.grid.Structures.checkSquare;
 
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
@@ -31,7 +31,7 @@ import io.jenetics.lattices.matrix.NumericalContext;
  * (Basic Linear Algebra System). High quality "building block" routines for
  * performing basic vector and matrix operations. Because the BLAS are efficient,
  * portable, and widely available, they're commonly used in the development of
- * high quality linear algebra software.
+ * high-quality linear algebra software.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -64,8 +64,8 @@ public interface Blas {
 
     /**
      * Constructs a Givens plane rotation for {@code (a,b)}. Taken from the
-     * LINPACK translation from FORTRAN to Java, interface slightly modified. In
-     * the LINPACK listing DROTG is attributed to Jack Dongarra
+     * LINPACK translation from FORTRAN to Java, the interface is slightly
+     * modified. In the LINPACK listing DROTG is attributed to Jack Dongarra.
      *
      * @param a rotational elimination parameter a.
      * @param b rotational elimination parameter b.
@@ -123,7 +123,7 @@ public interface Blas {
     }
 
     /**
-     * Applies a givens plane rotation to (x, y);
+     * Applies a given plane rotation to (x, y);
      * <pre>{@code
      * x = c*x + s*y
      * y = c*y - s*x
@@ -236,10 +236,10 @@ public interface Blas {
      */
     default int idamax(DoubleMatrix1d x) {
         int index = -1;
-        if (x.extent().size() > 0) {
+        if (x.extent().elements() > 0) {
             double max = Math.abs(x.get(0));
             index = 0;
-            for (int i = 1; i < x.extent().size(); ++i) {
+            for (int i = 1; i < x.extent().elements(); ++i) {
                 final var value = Math.abs(x.get(i));
 
                 if (max < value) {
@@ -343,7 +343,7 @@ public interface Blas {
             A = A.transpose();
         }
 
-        if (A.rows() != x.extent().size() || A.rows() != y.extent().size()) {
+        if (A.rows() != x.extent().elements() || A.rows() != y.extent().elements()) {
             throw new IllegalArgumentException(
                 A.extent() + ", " + x.extent() + ", " + y.extent()
             );
@@ -391,7 +391,7 @@ public interface Blas {
             isUpperTriangular = !isUpperTriangular;
         }
 
-        if (A.rows() != x.extent().size()) {
+        if (A.rows() != x.extent().elements()) {
             throw new IllegalArgumentException(A.extent() + ", " + x.extent());
         }
 

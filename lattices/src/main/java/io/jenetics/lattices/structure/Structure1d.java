@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>{@code
  * // Creating a new structure with the given extent.
- * final var structure = Structure1d.of(new Extent1d(1000));
+ * final var structure = new Structure1d(1000);
  * }</pre>
  *
  * @param extent the extent of the structure
@@ -39,58 +39,40 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Layout1d layout)
-    implements OffsetMapper1d
-{
+public record Structure1d(Extent1d extent, Layout1d layout) {
 
     public Structure1d {
         requireNonNull(extent);
         requireNonNull(layout);
     }
 
-    @Override
-    public int offset(int index) {
-        return layout.offset(index);
-    }
-
-    @Override
-    public int offset(Index1d index) {
-        return layout.offset(index);
-    }
-
-    @Override
-    public Index1d index(int offset) {
-        return layout.index(offset);
-    }
-
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
-     * @return a new structure object with the given extent
      */
-    public static Structure1d of(Extent1d extent) {
-        return new Structure1d(
+    public Structure1d(Extent1d extent) {
+        this(
             extent,
             new Layout1d(
                 Index1d.ZERO,
-                new Stride1d(extent.channels())
+                new Stride1d(extent.bands()),
+                Band.ZERO
             )
         );
     }
 
     /**
      * Create a new matrix structure with the given dimension and the default
-     * element order. This is the usual way for creating instances of structure
+     * element order. This is the usual way of creating instances of structure
      * objects.
      *
      * @param extent the extent of the structure
-     * @return a new structure object with the given extent
      */
-    public static Structure1d of(int extent) {
-        return of(new Extent1d(extent));
+    public Structure1d(int extent) {
+        this(new Extent1d(extent));
     }
 
 }

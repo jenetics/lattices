@@ -22,7 +22,6 @@ package io.jenetics.lattices.grid;
 import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Self;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
@@ -41,39 +40,6 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
 {
 
     /**
-     * Factory interface for creating 2-d grids.
-     *
-     * @param <G> the type created by the factory
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
-     */
-    @FunctionalInterface
-    interface Factory<G extends Grid2d<?, G>> {
-
-        /**
-         * Create a new matrix with the given {@code dimension} and default
-         * <em>order</em>.
-         *
-         * @param extent the extent of the created object
-         * @return a new object with the given {@code extent}
-         */
-        G create(Extent2d extent);
-
-        /**
-         * Create a new matrix with the given {@code size}.
-         *
-         * @param rows the number of rows
-         * @param cols the number of columns
-         * @return a new structure with the given size
-         */
-        default G create(int rows, int cols) {
-            return create(new Extent2d(rows, cols));
-        }
-    }
-
-    /**
      * Create a new grid (view) with the given structure and the underlying
      * data array.
      *
@@ -90,16 +56,9 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param lattice the underlying lattice data
      * @return a new grid (view)
      */
-    default G create(Lattice2d<A> lattice) {
+    default G create(Lattice2d<? extends A> lattice) {
         return create(lattice.structure(), lattice.array());
     }
-
-    /**
-     * Assigns the elements of the {@code other} grid to this grid.
-     *
-     * @param other the source of the grid elements
-     */
-    void assign(final G other);
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -110,8 +69,8 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      */
     default G like(Extent2d extent) {
         return create(
-            Structure2d.of(extent),
-            array().like(extent.size())
+            new Structure2d(extent),
+            array().like(extent.elements())
         );
     }
 

@@ -28,7 +28,9 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code double} values. This is
+ * <em>just</em> a wrapper around the underlying {@code double[]} array and no
+ * values are copied.
  *
  * @param elements the underlying {@code double} element values
  * @param from the index of the first array element (inclusively)
@@ -39,7 +41,7 @@ import java.util.stream.IntStream;
  * @version 3.0
  */
 public record DenseDoubleArray(double[] elements, int from, int length)
-    implements DoubleArray
+    implements Array.OfDouble, Array.Dense<double[], DenseDoubleArray>
 {
 
     /**
@@ -73,7 +75,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      */
-    public DenseDoubleArray(double[] elements) {
+    public DenseDoubleArray(double... elements) {
         this(elements, 0, elements.length);
     }
 
@@ -99,16 +101,16 @@ public record DenseDoubleArray(double[] elements, int from, int length)
     }
 
     @Override
-    public DoubleArray copy(int start, int length) {
+    public DenseDoubleArray copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
-            start + from, start + from + length
+            from + this.from, from + this.from + length
         );
         return new DenseDoubleArray(array);
     }
 
     @Override
-    public DoubleArray like(final int length) {
+    public DenseDoubleArray like(final int length) {
         return ofSize(length);
     }
 

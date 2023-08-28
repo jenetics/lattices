@@ -20,7 +20,6 @@
 package io.jenetics.lattices.grid.lattice;
 
 import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structured2d;
 
 /**
  * This interface implements operations for 2-d structures.
@@ -29,7 +28,7 @@ import io.jenetics.lattices.structure.Structured2d;
  * @since 3.0
  * @version 3.0
  */
-public interface Structure2dOps extends Structured2d, Loopable2d {
+interface Structure2dOps extends Structured2d, Loopable2d {
 
     /**
      * Return the default looping strategy of this structural, which can be

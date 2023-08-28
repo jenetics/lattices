@@ -19,13 +19,10 @@
  */
 package io.jenetics.lattices;
 
-import static io.jenetics.lattices.testfixtures.MatrixRandom.next;
-
 import cern.colt.matrix.DoubleMatrix2D;
 
 import java.util.concurrent.TimeUnit;
 
-import io.jenetics.lattices.testfixtures.MatrixRandom;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -38,10 +35,9 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.linalg.Algebra;
-import io.jenetics.lattices.testfixtures.Colts;
 
-@Warmup(iterations = 2)
-@Measurement(iterations = 4)
+@Warmup(iterations = 3)
+@Measurement(iterations = 7)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -86,6 +82,40 @@ public class DenseDoubleMatrix2dPerf {
 
 }
 
+/*
+2023.04.20: AMD Ryzen 9 6900HX with Radeon Graphics
+# Run complete. Total time: 06:49:41
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                              (size)  Mode  Cnt          Score       Error  Units
+DenseDoubleMatrix2dPerf.coltSolve          10  avgt   35          4.150 ±       0.045  us/op
+DenseDoubleMatrix2dPerf.coltSolve         100  avgt   35       1046.594 ±     155.752  us/op
+DenseDoubleMatrix2dPerf.coltSolve        1000  avgt   35     586896.972 ±    1226.371  us/op
+DenseDoubleMatrix2dPerf.coltSolve        5000  avgt   35  126671442.380 ± 4076229.379  us/op
+DenseDoubleMatrix2dPerf.colt_mult          10  avgt   35          0.709 ±       0.015  us/op
+DenseDoubleMatrix2dPerf.colt_mult         100  avgt   35        378.015 ±       8.594  us/op
+DenseDoubleMatrix2dPerf.colt_mult        1000  avgt   35     330048.586 ±     379.302  us/op
+DenseDoubleMatrix2dPerf.colt_mult        5000  avgt   35   53925701.172 ± 3435970.365  us/op
+DenseDoubleMatrix2dPerf.latticesSolve      10  avgt   35          7.951 ±       0.484  us/op
+DenseDoubleMatrix2dPerf.latticesSolve     100  avgt   35       1159.098 ±      24.599  us/op
+DenseDoubleMatrix2dPerf.latticesSolve    1000  avgt   35     878433.700 ±    6961.658  us/op
+DenseDoubleMatrix2dPerf.latticesSolve    5000  avgt   35  136369539.169 ±  579327.266  us/op
+DenseDoubleMatrix2dPerf.lattices_mult      10  avgt   35          0.630 ±       0.001  us/op
+DenseDoubleMatrix2dPerf.lattices_mult     100  avgt   35        387.917 ±       2.299  us/op
+DenseDoubleMatrix2dPerf.lattices_mult    1000  avgt   35     389612.837 ±     423.564  us/op
+DenseDoubleMatrix2dPerf.lattices_mult    5000  avgt   35   52829619.097 ±   76934.165  us/op
+ */
 
 /*
 # Run complete. Total time: 01:24:55

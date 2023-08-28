@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseIntArray;
-import io.jenetics.lattices.grid.array.IntArray;
-import io.jenetics.lattices.grid.lattice.IntLattice3d;
 import io.jenetics.lattices.grid.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
@@ -36,7 +35,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * <pre>{@code
  * final var values = new int[3*50*100];
  * final var grid = new IntGrid3d(
- *     Structure3d.of(new Extent3d(3, 50, 100)),
+ *     new Structure3d(new Extent3d(3, 50, 100)),
  *     new DenseIntArray(values)
  * );
  * }</pre>
@@ -45,8 +44,8 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public record IntGrid3d(Structure3d structure, IntArray array)
-    implements IntLattice3d, Grid3d<IntArray, IntGrid3d>
+public record IntGrid3d(Structure3d structure, Array.OfInt array)
+    implements Lattice3d.OfInt<Array.OfInt>, Grid3d<Array.OfInt, IntGrid3d>
 {
 
     /**
@@ -54,8 +53,8 @@ public record IntGrid3d(Structure3d structure, IntArray array)
      */
     public static final Grid3d.Factory<IntGrid3d> DENSE =
         extent -> new IntGrid3d(
-            Structure3d.of(extent),
-            DenseIntArray.ofSize(extent.size())
+            new Structure3d(extent),
+            DenseIntArray.ofSize(extent.cells())
         );
 
     /**
@@ -63,18 +62,13 @@ public record IntGrid3d(Structure3d structure, IntArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public IntGrid3d(Lattice3d<? extends IntArray> lattice) {
+    public IntGrid3d(Lattice3d<? extends Array.OfInt> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public IntGrid3d create(Structure3d structure, IntArray array) {
+    public IntGrid3d create(Structure3d structure, Array.OfInt array) {
         return new IntGrid3d(structure, array);
-    }
-
-    @Override
-    public void assign(IntGrid3d other) {
-        IntLattice3d.super.assign(other);
     }
 
     /**
@@ -90,7 +84,7 @@ public record IntGrid3d(Structure3d structure, IntArray array)
 
     public static IntGrid3d of(Extent3d extent, int... values) {
         return new IntGrid3d(
-            Structure3d.of(extent),
+            new Structure3d(extent),
             new DenseIntArray(values)
         );
     }

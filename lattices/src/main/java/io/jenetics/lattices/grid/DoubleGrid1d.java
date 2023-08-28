@@ -19,9 +19,8 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.grid.array.Array;
 import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DoubleArray;
-import io.jenetics.lattices.grid.lattice.DoubleLattice1d;
 import io.jenetics.lattices.grid.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -35,7 +34,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * <pre>{@code
  * final var values = new double[100];
  * final var grid = new DoubleGrid1d(
- *     Structure1d.of(new Extent1d(100)),
+ *     new Structure1d(new Extent1d(100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -44,8 +43,8 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleGrid1d(Structure1d structure, DoubleArray array)
-    implements DoubleLattice1d, Grid1d<DoubleArray, DoubleGrid1d>
+public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleGrid1d>
 {
 
     /**
@@ -53,8 +52,8 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      */
     public static final Grid1d.Factory<DoubleGrid1d> DENSE =
         extent -> new DoubleGrid1d(
-            Structure1d.of(extent),
-            DenseDoubleArray.ofSize(extent.size())
+            new Structure1d(extent),
+            DenseDoubleArray.ofSize(extent.cells())
         );
 
     /**
@@ -62,18 +61,13 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleGrid1d(Lattice1d<? extends DoubleArray> lattice) {
+    public DoubleGrid1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     @Override
-    public DoubleGrid1d create(Structure1d structure, DoubleArray array) {
+    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
         return new DoubleGrid1d(structure, array);
-    }
-
-    @Override
-    public void assign(DoubleGrid1d other) {
-        DoubleLattice1d.super.assign(other);
     }
 
     /**
@@ -88,7 +82,7 @@ public record DoubleGrid1d(Structure1d structure, DoubleArray array)
      */
     public static DoubleGrid1d of(double... values) {
         return new DoubleGrid1d(
-            Structure1d.of(new Extent1d(values.length)),
+            new Structure1d(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
     }

@@ -82,7 +82,8 @@ public interface View1d {
                     structure.layout().start().value() +
                     structure.layout().stride().value()*range.start().value()
                 ),
-                structure.layout().stride()
+                structure.layout().stride(),
+                structure.layout().band()
             )
         );
     }
@@ -100,7 +101,7 @@ public interface View1d {
             .of(
                 new Range1d(
                     start,
-                    new Extent1d(structure.extent().value() - start.value())
+                    new Extent1d(structure.extent().elements() - start.value())
                 )
             )
             .apply(structure);
@@ -127,13 +128,14 @@ public interface View1d {
 
         return structure -> new Structure1d(
             new Extent1d(
-                structure.extent().value() != 0
-                    ? (structure.extent().value() - 1)/stride.value() + 1
+                structure.extent().elements() != 0
+                    ? (structure.extent().elements() - 1)/stride.value() + 1
                     : 0
             ),
             new Layout1d(
                 new Index1d(structure.layout().start().value()),
-                new Stride1d(structure.layout().stride().value()*stride.value())
+                new Stride1d(structure.layout().stride().value()*stride.value()),
+                structure.layout().band()
             )
         );
     }
@@ -142,12 +144,12 @@ public interface View1d {
      * Return a transformation which creates a view onto the given
      * {@code channel}.
      *
-     * @param channel the channel number of the returned view
+     * @param band the channel number of the returned view
      * @return a transformation which creates a view onto the given
      *        {@code channel}
      */
-    static View1d of(Channel channel) {
-        requireNonNull(channel);
+    static View1d of(Band band) {
+        requireNonNull(band);
 
         return structure -> {
             return new Structure1d(
@@ -155,7 +157,7 @@ public interface View1d {
                 new Layout1d(
                     structure.layout().start(),
                     structure.layout().stride(),
-                    channel
+                    band
                 )
             );
         };
