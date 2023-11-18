@@ -612,7 +612,7 @@ final class Lifecycle {
 			} else {
 				try {
 					method.accept(object);
-				} catch (VirtualMachineError|ThreadDeath|LinkageError e) {
+				} catch (VirtualMachineError|LinkageError e) {
 					throw e;
 				} catch (Throwable e) {
 					error = e;
