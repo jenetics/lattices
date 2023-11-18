@@ -28,9 +28,9 @@ import cern.colt.matrix.linalg.CholeskyDecomposition;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.Colts;
 import io.jenetics.lattices.MatrixRandom;
+import io.jenetics.lattices.structure.Extent2d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

@@ -27,8 +27,10 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.Colts;
+import io.jenetics.lattices.MatrixRandom;
 import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.lattice.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
@@ -36,8 +38,6 @@ import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
-import io.jenetics.lattices.Colts;
-import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
