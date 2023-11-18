@@ -22,7 +22,7 @@ package io.jenetics.lattices.array;
 import io.jenetics.lattices.grid.Self;
 
 /**
- * Extents the base-array with <em>copy</em> capabilities.
+ * Extents the base-array with <em>copy</em> and <em>creation</em> capabilities.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -62,6 +62,22 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
          */
         int length();
 
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @see System#arraycopy(Object, int, Object, int, int)
+         *
+         * @param src the source array.
+         * @param srcPos starting position in the source array.
+         * @param destPos starting position in the destination data
+         * @param length the number of array elements to be copied
+         * @throws IndexOutOfBoundsException  if copying causes access of data
+         *         outside array bounds.
+         * @throws ArrayStoreException  if an element in the {@code src} array
+         *         could not be stored into the {@code dest} array because of a
+         *         type mismatch.
+         * @throws NullPointerException if either {@code src} is {@code null}.
+         */
         default void assign(D src, int srcPos, int destPos, int length) {
             System.arraycopy(
                 src.elements(),
@@ -110,9 +126,6 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
         return like(length());
     }
 
-    default void assign(A src, int srcPos, int destPos, int length) {
-    }
-
     /**
      * Definition of an array with {@code double} values.
      *
@@ -152,4 +165,5 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
      */
     interface OfObject<T> extends BaseArray.OfObject<T>, Array<OfObject<T>> {
     }
+
 }

@@ -53,7 +53,7 @@ public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
     public static final Grid1d.Factory<DoubleGrid1d> DENSE =
         extent -> new DoubleGrid1d(
             new Structure1d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**

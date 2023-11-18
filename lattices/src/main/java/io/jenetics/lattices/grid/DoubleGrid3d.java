@@ -54,7 +54,7 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
     public static final Grid3d.Factory<DoubleGrid3d> DENSE =
         extent -> new DoubleGrid3d(
             new Structure3d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**

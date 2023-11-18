@@ -40,7 +40,7 @@ public class DoubleGrid2dTest {
         final var structure = new Structure2d(extent);
         final var grid = new DoubleGrid2d(
             structure,
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
         grid.forEach((row, col) -> grid.set(row, col, row*col));

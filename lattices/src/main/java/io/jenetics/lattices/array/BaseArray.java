@@ -19,10 +19,16 @@
  */
 package io.jenetics.lattices.array;
 
+import java.util.Objects;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+
 /**
  * Base interface of all array implementations. An array is a container of
  * elements, which can be accessed by an <em>index</em> and has a fixed
- * <em>size</em>.
+ * <em>length</em>.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -31,14 +37,14 @@ package io.jenetics.lattices.array;
 public interface BaseArray {
 
     /**
-     * Return the size of {@code this} array.
+     * Return the length of {@code this} array.
      *
-     * @return the size of {@code this} array
+     * @return the length of {@code this} array
      */
     int length();
 
     /**
-     * Definition of an array with {@code double} values.
+     * Definition of an array of {@code double} values.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -50,6 +56,8 @@ public interface BaseArray {
          *
          * @param index the array index of the returned element
          * @return the element at the given {@code index}
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         double get(int index);
 
@@ -58,12 +66,52 @@ public interface BaseArray {
          *
          * @param index the array index of the new value
          * @param value the value to be set at the given index
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         void set(int index, double value);
+
+        /**
+         * Return a double stream from the given array.
+         *
+         * @return a double stream from the given array
+         */
+        default DoubleStream stream() {
+            return IntStream.range(0, length()).mapToDouble(this::get);
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         * @param srcPos starting position in the source array.
+         * @param destPos starting position in the destination data
+         * @param length the number of array elements to be copied
+         * @throws IndexOutOfBoundsException  if copying causes access of data
+         *         outside array bounds.
+         * @throws NullPointerException if either {@code src} is {@code null}.
+         */
+        default void assign(OfDouble src, int srcPos, int destPos, int length) {
+            Objects.checkFromIndexSize(srcPos, length, src.length());
+            Objects.checkFromIndexSize(destPos, length, this.length());
+
+            for (int i = 0; i < length; ++i) {
+                set(destPos + i, src.get(srcPos + i));
+            }
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         */
+        default void assign(OfDouble src) {
+            assign(src, 0, 0, Math.min(src.length(), this.length()));
+        }
     }
 
     /**
-     * Definition of an array with {@code int} values.
+     * Definition of an array of {@code int} values.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -75,6 +123,8 @@ public interface BaseArray {
          *
          * @param index the array index of the returned element
          * @return the element at the given {@code index}
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         int get(int index);
 
@@ -83,12 +133,52 @@ public interface BaseArray {
          *
          * @param index the array index of the new value
          * @param value the value to be set at the given index
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         void set(int index, int value);
+
+        /**
+         * Return an int stream from the given array.
+         *
+         * @return an int stream from the given array
+         */
+        default IntStream stream() {
+            return IntStream.range(0, length()).map(this::get);
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         * @param srcPos starting position in the source array.
+         * @param destPos starting position in the destination data
+         * @param length the number of array elements to be copied
+         * @throws IndexOutOfBoundsException  if copying causes access of data
+         *         outside array bounds.
+         * @throws NullPointerException if either {@code src} is {@code null}.
+         */
+        default void assign(OfInt src, int srcPos, int destPos, int length) {
+            Objects.checkFromIndexSize(srcPos, length, src.length());
+            Objects.checkFromIndexSize(destPos, length, this.length());
+
+            for (int i = 0; i < length; ++i) {
+                set(destPos + i, src.get(srcPos + i));
+            }
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         */
+        default void assign(OfInt src) {
+            assign(src, 0, 0, Math.min(src.length(), this.length()));
+        }
     }
 
     /**
-     * Definition of an array with {@code long} values.
+     * Definition of an array of {@code long} values.
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -100,6 +190,8 @@ public interface BaseArray {
          *
          * @param index the array index of the returned element
          * @return the element at the given {@code index}
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         long get(int index);
 
@@ -108,12 +200,54 @@ public interface BaseArray {
          *
          * @param index the array index of the new value
          * @param value the value to be set at the given index
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         void set(int index, long value);
+
+        /**
+         * Return {@code long}  stream from the given array.
+         *
+         * @return an {@code long} stream from the given array
+         */
+        default LongStream stream() {
+            return IntStream.range(0, length()).mapToLong(this::get);
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         * @param srcPos starting position in the source array.
+         * @param destPos starting position in the destination data
+         * @param length the number of array elements to be copied
+         * @throws IndexOutOfBoundsException  if copying causes access of data
+         *         outside array bounds.
+         * @throws NullPointerException if either {@code src} is {@code null}.
+         */
+        default void assign(OfLong src, int srcPos, int destPos, int length) {
+            Objects.checkFromIndexSize(srcPos, length, src.length());
+            Objects.checkFromIndexSize(destPos, length, this.length());
+
+            for (int i = 0; i < length; ++i) {
+                set(destPos + i, src.get(srcPos + i));
+            }
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         */
+        default void assign(OfLong src) {
+            assign(src, 0, 0, Math.min(src.length(), this.length()));
+        }
     }
 
     /**
-     * Definition of an array with {@code T} objects.
+     * Definition of an array of objects of type {@code T}.
+     *
+     * @param <T> the array element type
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -125,6 +259,8 @@ public interface BaseArray {
          *
          * @param index the array index of the returned element
          * @return the element at the given {@code index}
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         T get(int index);
 
@@ -133,8 +269,48 @@ public interface BaseArray {
          *
          * @param index the array index of the new value
          * @param value the value to be set at the given index
+         * @throws ArrayIndexOutOfBoundsException if {@code index < 0} or
+         *        {@code index > length()}
          */
         void set(int index, T value);
+
+        /**
+         * Return a double stream from the given array.
+         *
+         * @return a double stream from the given array
+         */
+        default Stream<T> stream() {
+            return IntStream.range(0, length()).mapToObj(this::get);
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         * @param srcPos starting position in the source array.
+         * @param destPos starting position in the destination data
+         * @param length the number of array elements to be copied
+         * @throws IndexOutOfBoundsException  if copying causes access of data
+         *         outside array bounds.
+         * @throws NullPointerException if either {@code src} is {@code null}.
+         */
+        default void assign(OfObject<? extends T> src, int srcPos, int destPos, int length) {
+            Objects.checkFromIndexSize(srcPos, length, src.length());
+            Objects.checkFromIndexSize(destPos, length, this.length());
+
+            for (int i = 0; i < length; ++i) {
+                set(destPos + i, src.get(srcPos + i));
+            }
+        }
+
+        /**
+         * Assigns the given {@code src} Java array to {@code this} array.
+         *
+         * @param src the source array.
+         */
+        default void assign(OfObject<? extends T> src) {
+            assign(src, 0, 0, Math.min(src.length(), this.length()));
+        }
     }
 
 }

@@ -66,7 +66,7 @@ public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
     public static <T> Grid1d.Factory<ObjectGrid1d<T>> dense(T... __) {
         return extent -> new ObjectGrid1d<T>(
             new Structure1d(extent),
-            DenseObjectArray.ofSize(extent.cells(), __)
+            DenseObjectArray.ofLength(extent.cells(), __)
         );
     }
 

@@ -59,7 +59,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
     public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
             new Structure2d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**

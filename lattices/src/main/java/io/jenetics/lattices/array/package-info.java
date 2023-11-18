@@ -20,7 +20,7 @@
 
 /**
  * This package contains the array <em>abstractions</em> used for the <em>grid</em>
- * implementations. The <em>dens</em> arrays are mainly wrapper of the nativly
+ * implementations. The <em>dens</em> arrays are mainly wrapper of the natively
  * supported one-dimensional Java arrays.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

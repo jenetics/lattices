@@ -54,7 +54,7 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
     public static final Grid3d.Factory<IntGrid3d> DENSE =
         extent -> new IntGrid3d(
             new Structure3d(extent),
-            DenseIntArray.ofSize(extent.cells())
+            DenseIntArray.ofLength(extent.cells())
         );
 
     /**

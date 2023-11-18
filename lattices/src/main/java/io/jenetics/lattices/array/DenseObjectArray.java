@@ -25,15 +25,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Implementation of a <em>dense</em> array of {@code Object} values.
  *
  * @param elements the underlying {@code Object} element values
  * @param from the index of the first array element (inclusively)
- * @param length the length of the sub-array
+ * @param length the length of the subarray
  * @param <T> the value type
  */
 public record DenseObjectArray<T>(T[] elements, int from, int length)
@@ -45,7 +43,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      * @param from the index of the first array element (inclusively)
-     * @param length the length of the sub-array
+     * @param length the length of the subarray
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
@@ -107,17 +105,7 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
 
     @Override
     public DenseObjectArray<T> like(int length) {
-        return ofSize(length);
-    }
-
-    /**
-     * Return a double stream from the given array.
-     *
-     * @return a double stream from the given array
-     */
-    public Stream<T> stream() {
-        return IntStream.range(0, length())
-            .mapToObj(this::get);
+        return ofLength(length);
     }
 
     @Override
@@ -131,11 +119,11 @@ public record DenseObjectArray<T>(T[] elements, int from, int length)
      * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
-     * @param __ not used (a Java trick for getting "reified" element type)
+     * @param __ not used; a Java trick for getting "reified" element type
      * @return a new dense {@code int} array with the given {@code length}
      */
     @SafeVarargs
-    public static <T> DenseObjectArray<T> ofSize(int length, T... __) {
+    public static <T> DenseObjectArray<T> ofLength(int length, T... __) {
         @SuppressWarnings("unchecked")
         final T[] elements = (T[])java.lang.reflect.Array
             .newInstance(__.getClass().getComponentType(), length);

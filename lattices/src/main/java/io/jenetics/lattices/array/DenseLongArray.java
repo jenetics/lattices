@@ -5,15 +5,13 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 /**
  * Implementation of a <em>dense</em> array of {@code int} values.
  *
  * @param elements the underlying {@code int} element values
  * @param from the index of the first array element (inclusively)
- * @param length the length of the sub-array
+ * @param length the length of the subarray
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -28,7 +26,7 @@ public record DenseLongArray(long[] elements, int from, int length)
      *
      * @param elements the underlying {@code long} element values
      * @param from the index of the first array element (inclusively)
-     * @param length the length of the sub-array
+     * @param length the length of the subarray
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
@@ -90,17 +88,7 @@ public record DenseLongArray(long[] elements, int from, int length)
 
     @Override
     public DenseLongArray like(int length) {
-        return ofSize(length);
-    }
-
-    /**
-     * Return {@code long}  stream from the given array.
-     *
-     * @return an {@code long} stream from the given array
-     */
-    public LongStream stream() {
-        return IntStream.range(0, length())
-            .mapToLong(this::get);
+        return ofLength(length);
     }
 
     @Override
@@ -116,7 +104,7 @@ public record DenseLongArray(long[] elements, int from, int length)
      * @param length the length of the created array
      * @return a new dense {@code long} array with the given {@code length}
      */
-    public static DenseLongArray ofSize(int length) {
+    public static DenseLongArray ofLength(int length) {
         return new DenseLongArray(new long[length]);
     }
 

@@ -54,7 +54,7 @@ public record IntGrid2d(Structure2d structure, Array.OfInt array)
     public static final Grid2d.Factory<IntGrid2d> DENSE =
         extent -> new IntGrid2d(
             new Structure2d(extent),
-            DenseIntArray.ofSize(extent.cells())
+            DenseIntArray.ofLength(extent.cells())
         );
 
     /**

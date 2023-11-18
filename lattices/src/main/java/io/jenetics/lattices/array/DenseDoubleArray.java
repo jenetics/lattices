@@ -24,8 +24,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 /**
  * Implementation of a <em>dense</em> array of {@code double} values. This is
@@ -49,7 +47,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      *
      * @param elements the underlying {@code double} element values
      * @param from the index of the first array element (inclusively)
-     * @param length the length of the sub-array
+     * @param length the length of the subarray
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
@@ -111,17 +109,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
 
     @Override
     public DenseDoubleArray like(final int length) {
-        return ofSize(length);
-    }
-
-    /**
-     * Return a double stream from the given array.
-     *
-     * @return a double stream from the given array
-     */
-    public DoubleStream stream() {
-        return IntStream.range(0, length())
-            .mapToDouble(this::get);
+        return ofLength(length);
     }
 
     @Override
@@ -137,7 +125,7 @@ public record DenseDoubleArray(double[] elements, int from, int length)
      * @param length the length of the created array
      * @return a new dense {@code double} array with the given {@code length}
      */
-    public static DenseDoubleArray ofSize(int length) {
+    public static DenseDoubleArray ofLength(int length) {
         return new DenseDoubleArray(new double[length]);
     }
 
