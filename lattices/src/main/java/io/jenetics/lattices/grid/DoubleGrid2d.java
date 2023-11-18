@@ -66,24 +66,8 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public DoubleGrid2d create(Structure2d structure, Array.OfDouble array) {
-        return new DoubleGrid2d(structure, array);
-    }
-
     /**
-     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 1-d projection from this 2-d grid
-     */
-    public DoubleGrid1d project(Projection2d projection) {
-        return new DoubleGrid1d(projection.apply(structure()), array());
-    }
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
+     * Create a 2-d grid view of the given input {@code values}. It is assumed
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
@@ -101,15 +85,27 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      *
      * @param extent the extent of the given values
      * @param values the returned grid values
-     * @return a grid view of the given input data
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static DoubleGrid2d of(Extent2d extent, double... values) {
-        return new DoubleGrid2d(
-            new Structure2d(extent),
-            new DenseDoubleArray(values)
-        );
+    public DoubleGrid2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
+    }
+
+    @Override
+    public DoubleGrid2d create(Structure2d structure, Array.OfDouble array) {
+        return new DoubleGrid2d(structure, array);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
+     */
+    public DoubleGrid1d project(Projection2d projection) {
+        return new DoubleGrid1d(projection.apply(structure()), array());
     }
 
 }

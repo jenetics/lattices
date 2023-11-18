@@ -65,26 +65,25 @@ public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
-        return new DoubleGrid1d(structure, array);
-    }
-
     /**
-     * Return a 1-d grid view of the given input {@code values}.
+     * Create a 1-d grid view of the given input {@code values}.
      *
      * @implSpec
      * The given input data is <b>not</b> copied, the returned object is a
      * <em>view</em> onto the given input data.
      *
      * @param values the returned grid
-     * @return a grid view of the given input data
      */
-    public static DoubleGrid1d of(double... values) {
-        return new DoubleGrid1d(
+    public DoubleGrid1d(double... values) {
+        this(
             new Structure1d(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
+    }
+
+    @Override
+    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
+        return new DoubleGrid1d(structure, array);
     }
 
 }

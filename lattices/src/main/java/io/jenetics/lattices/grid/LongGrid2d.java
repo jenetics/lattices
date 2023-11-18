@@ -67,25 +67,8 @@ public record LongGrid2d(Structure2d structure, Array.OfLong array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public LongGrid2d create(Structure2d structure, Array.OfLong array) {
-        return new LongGrid2d(structure, array);
-    }
-
     /**
-     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 1-d projection from this 2-d grid
-     */
-    public LongGrid1d project(Projection2d projection) {
-        return new LongGrid1d(projection.apply(structure()), array());
-    }
-
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
+     * Create a 2-d grid view of the given input {@code values}. It is assumed
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
@@ -103,16 +86,27 @@ public record LongGrid2d(Structure2d structure, Array.OfLong array)
      *
      * @param extent the extent of the given values
      * @param values the returned grid values
-     * @return a grid view of the given input data
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static LongGrid2d of(Extent2d extent, long... values) {
-        return new LongGrid2d(
-            new Structure2d(extent),
-            new DenseLongArray(values)
-        );
+    public LongGrid2d(Extent2d extent, long... values) {
+        this(new Structure2d(extent), new DenseLongArray(values));
     }
 
+    @Override
+    public LongGrid2d create(Structure2d structure, Array.OfLong array) {
+        return new LongGrid2d(structure, array);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
+     */
+    public LongGrid1d project(Projection2d projection) {
+        return new LongGrid1d(projection.apply(structure()), array());
+    }
 
 }

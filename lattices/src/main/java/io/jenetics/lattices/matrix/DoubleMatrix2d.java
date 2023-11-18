@@ -56,7 +56,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
+    public static final Lattice2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
             new Structure2d(extent),
             DenseDoubleArray.ofLength(extent.cells())

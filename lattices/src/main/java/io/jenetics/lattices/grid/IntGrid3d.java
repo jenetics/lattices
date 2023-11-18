@@ -66,6 +66,22 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
         this(lattice.structure(), lattice.array());
     }
 
+    /**
+     * Create a 3-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public IntGrid3d(Extent3d extent, int... values) {
+        this(new Structure3d(extent), new DenseIntArray(values));
+    }
+
     @Override
     public IntGrid3d create(Structure3d structure, Array.OfInt array) {
         return new IntGrid3d(structure, array);
@@ -80,13 +96,6 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
      */
     public IntGrid2d project(Projection3d projection) {
         return new IntGrid2d(projection.apply(structure()), array());
-    }
-
-    public static IntGrid3d of(Extent3d extent, int... values) {
-        return new IntGrid3d(
-            new Structure3d(extent),
-            new DenseIntArray(values)
-        );
     }
 
 }

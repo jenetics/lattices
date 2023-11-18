@@ -66,6 +66,22 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
         this(lattice.structure(), lattice.array());
     }
 
+    /**
+     * Create a 3-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public DoubleGrid3d(Extent3d extent, double... values) {
+        this(new Structure3d(extent), new DenseDoubleArray(values));
+    }
+
     @Override
     public DoubleGrid3d create(Structure3d structure, Array.OfDouble array) {
         return new DoubleGrid3d(structure, array);
@@ -80,13 +96,6 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
      */
     public DoubleGrid2d project(Projection3d projection) {
         return new DoubleGrid2d(projection.apply(structure()), array());
-    }
-
-    public static DoubleGrid3d of(Extent3d extent, double... values) {
-        return new DoubleGrid3d(
-            new Structure3d(extent),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

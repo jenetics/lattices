@@ -66,25 +66,8 @@ public record IntGrid2d(Structure2d structure, Array.OfInt array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public IntGrid2d create(Structure2d structure, Array.OfInt array) {
-        return new IntGrid2d(structure, array);
-    }
-
     /**
-     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
-     * a view onto this grid {@link #array()}.
-     *
-     * @param projection the projection to apply
-     * @return a 1-d projection from this 2-d grid
-     */
-    public IntGrid1d project(Projection2d projection) {
-        return new IntGrid1d(projection.apply(structure()), array());
-    }
-
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
+     * Create a 2-d grid view of the given input {@code values}. It is assumed
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
@@ -102,15 +85,27 @@ public record IntGrid2d(Structure2d structure, Array.OfInt array)
      *
      * @param extent the extent of the given values
      * @param values the returned grid values
-     * @return a grid view of the given input data
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public static IntGrid2d of(Extent2d extent, int... values) {
-        return new IntGrid2d(
-            new Structure2d(extent),
-            new DenseIntArray(values)
-        );
+    public IntGrid2d(Extent2d extent, int... values) {
+        this(new Structure2d(extent), new DenseIntArray(values));
+    }
+
+    @Override
+    public IntGrid2d create(Structure2d structure, Array.OfInt array) {
+        return new IntGrid2d(structure, array);
+    }
+
+    /**
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+     * a view onto this grid {@link #array()}.
+     *
+     * @param projection the projection to apply
+     * @return a 1-d projection from this 2-d grid
+     */
+    public IntGrid1d project(Projection2d projection) {
+        return new IntGrid1d(projection.apply(structure()), array());
     }
 
 }

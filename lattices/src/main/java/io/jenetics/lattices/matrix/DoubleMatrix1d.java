@@ -51,7 +51,7 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
+    public static final Lattice1d.Factory<DoubleMatrix1d> DENSE =
         extent -> new DoubleMatrix1d(
             new Structure1d(extent),
             DenseDoubleArray.ofLength(extent.cells())
