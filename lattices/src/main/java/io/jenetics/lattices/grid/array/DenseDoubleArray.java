@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
  *
  * @param elements the underlying {@code double} element values
  * @param from the index of the first array element (inclusively)
- * @param length the length of the sub-array
+ * @param length the length of the subarea
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
