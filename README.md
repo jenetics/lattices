@@ -12,7 +12,7 @@ The library contains of two modules. The `io.jenetics.lattices.structure` module
 
 ## Build the library
 
-**Lattices** requires at least **Java 17** to compile and run.
+**Lattices** requires at least **Java 21** to compile and run.
 
 Check out the master branch from GitHub.
 
