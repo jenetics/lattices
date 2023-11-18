@@ -324,6 +324,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
+        @Override
         default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
@@ -523,6 +524,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
+        @Override
         default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {
@@ -722,6 +724,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *        receiver).
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
+        @Override
         default void assign(Lattice2d<? extends A> source) {
             requireNonNull(source);
             if (source == this) {

@@ -676,7 +676,7 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
          * @param f the mapping function
          * @throws IllegalArgumentException if {@code extent() != other.extent()}
          */
-        default  <A> void assign(
+        default <A> void assign(
             OfObject<? extends A, ?> a,
             Function<? super A, ? extends T> f
         ) {
