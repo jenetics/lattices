@@ -17,28 +17,13 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.function;
 
 /**
- * Represents a predicate (boolean-valued function) of an (int, int, int)-valued
- * argument.
+ * This package contains some additional functional interfaces, needed by the
+ * implemented algorithms.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-@FunctionalInterface
-public interface Int3Predicate {
-
-    /**
-     * Tests whether the two arguments are treated equals.
-     *
-     * @param i the first value
-     * @param j the second value
-     * @param k the third value
-     * @return {@code true} if the values are treated as equal, {@code false}
-     *         otherwise
-     */
-    boolean test(int i, int j, int k);
-
-}
+package io.jenetics.lattices.function;

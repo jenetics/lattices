@@ -17,10 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.function;
+package io.jenetics.lattices.function;
 
 /**
- * Represents an operation that accepts an (int, int, int)-valued argument and
+ * Represents an operation that accepts an (int, int)-valued argument and
  * returns no result.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -28,15 +28,13 @@ package io.jenetics.lattices.grid.function;
  * @version 3.0
  */
 @FunctionalInterface
-public interface Int3Consumer {
+public interface Int2Consumer {
 
     /**
      * Performs this operation on the given arguments.
      *
      * @param i first value
      * @param j second value
-     * @param k third value
      */
-    void accept(int i, int j, int k);
-
+    void accept(int i, int j);
 }

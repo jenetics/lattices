@@ -21,8 +21,8 @@ package io.jenetics.lattices.grid.lattice;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.grid.function.Int3Consumer;
-import io.jenetics.lattices.grid.function.Int3Predicate;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Range3d;
 

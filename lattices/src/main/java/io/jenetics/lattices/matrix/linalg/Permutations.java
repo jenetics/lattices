@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.matrix.linalg;
 
-import io.jenetics.lattices.grid.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
 /**
