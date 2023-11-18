@@ -28,7 +28,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.lattice.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;

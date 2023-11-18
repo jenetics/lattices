@@ -17,72 +17,71 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.array;
+package io.jenetics.lattices.array;
 
 import static java.util.Objects.checkFromIndexSize;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
- * Implementation of a <em>dense</em> array of {@code int} values.
+ * Implementation of a <em>dense</em> array of {@code Object} values.
  *
- * @param elements the underlying {@code int} element values
+ * @param elements the underlying {@code Object} element values
  * @param from the index of the first array element (inclusively)
  * @param length the length of the sub-array
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
+ * @param <T> the value type
  */
-public record DenseIntArray(int[] elements, int from, int length)
-    implements Array.OfInt, Array.Dense<int[], DenseIntArray>
+public record DenseObjectArray<T>(T[] elements, int from, int length)
+    implements Array.OfObject<T>, Array.Dense<T[], DenseObjectArray<T>>
 {
 
     /**
-     * Create a new <em>dense</em> int array with the given values
+     * Create a new <em>dense</em> double array with the given values
      *
-     * @param elements the underlying {@code int} element values
+     * @param elements the underlying {@code double} element values
      * @param from the index of the first array element (inclusively)
      * @param length the length of the sub-array
      * @throws IndexOutOfBoundsException if the given {@code from} value and
      *         {@code length} is out of bounds
      */
-    public DenseIntArray {
+    public DenseObjectArray {
         requireNonNull(elements);
         checkFromIndexSize(from, length, elements.length);
     }
 
     /**
-     * Create a new <em>dense</em> int array with the given values
+     * Create a new <em>dense</em> double array with the given values
      *
-     * @param elements the underlying {@code int} element values
+     * @param elements the underlying {@code double} element values
      * @param from the index of the first array element (inclusively)
      * @throws IndexOutOfBoundsException if the given {@code from} value is out
      *         of bounds
      */
-    public DenseIntArray(int[] elements, int from) {
+    public DenseObjectArray(T[] elements, int from) {
         this(elements, from, elements.length - from);
     }
 
     /**
-     * Create a new <em>dense</em> array of {@code int} values.
+     * Create a new <em>dense</em> array of {@code double} values.
      *
-     * @param elements the underlying {@code int} element values
+     * @param elements the underlying {@code double} element values
      */
-    public DenseIntArray(int[] elements) {
+    public DenseObjectArray(T[] elements) {
         this(elements, 0, elements.length);
     }
 
     @Override
-    public int get(int index) {
+    public T get(final int index) {
         return elements[index + from];
     }
 
     @Override
-    public void set(int index, int value) {
+    public void set(int index, final T value) {
         elements[index + from] = value;
     }
 
@@ -92,39 +91,39 @@ public record DenseIntArray(int[] elements, int from, int length)
     }
 
     @Override
-    public DenseIntArray copy() {
+    public DenseObjectArray<T> copy() {
         final var elems = Arrays.copyOfRange(elements, from, from + length);
-        return new DenseIntArray(elems);
+        return new DenseObjectArray<>(elems);
     }
 
     @Override
-    public DenseIntArray copy(int from, int length) {
+    public DenseObjectArray<T> copy(int from, int length) {
         final var array = Arrays.copyOfRange(
             elements,
             from + this.from, from + this.from + length
         );
-        return new DenseIntArray(array);
+        return new DenseObjectArray<>(array);
     }
 
     @Override
-    public DenseIntArray like(int length) {
+    public DenseObjectArray<T> like(int length) {
         return ofSize(length);
     }
 
     /**
-     * Return an int stream from the given array.
+     * Return a double stream from the given array.
      *
-     * @return an int stream from the given array
+     * @return a double stream from the given array
      */
-    public IntStream stream() {
+    public Stream<T> stream() {
         return IntStream.range(0, length())
-            .map(this::get);
+            .mapToObj(this::get);
     }
 
     @Override
     public String toString() {
         return stream()
-            .mapToObj(Integer::toString)
+            .map(Objects::toString)
             .collect(Collectors.joining(", ", "[", "]"));
     }
 
@@ -132,10 +131,15 @@ public record DenseIntArray(int[] elements, int from, int length)
      * Create a new dense {@code int} array with the given {@code length}.
      *
      * @param length the length of the created array
+     * @param __ not used (a Java trick for getting "reified" element type)
      * @return a new dense {@code int} array with the given {@code length}
      */
-    public static DenseIntArray ofSize(int length) {
-        return new DenseIntArray(new int[length]);
+    @SafeVarargs
+    public static <T> DenseObjectArray<T> ofSize(int length, T... __) {
+        @SuppressWarnings("unchecked")
+        final T[] elements = (T[])java.lang.reflect.Array
+            .newInstance(__.getClass().getComponentType(), length);
+        return new DenseObjectArray<>(elements);
     }
 
 }

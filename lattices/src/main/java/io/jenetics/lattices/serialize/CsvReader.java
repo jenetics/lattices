@@ -30,9 +30,9 @@ import java.util.ArrayList;
 import io.jenetics.lattices.grid.DoubleGrid2d;
 import io.jenetics.lattices.grid.IntGrid2d;
 import io.jenetics.lattices.grid.ObjectGrid2d;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.array.DenseIntArray;
-import io.jenetics.lattices.grid.array.DenseObjectArray;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.DenseIntArray;
+import io.jenetics.lattices.array.DenseObjectArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
 

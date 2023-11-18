@@ -37,7 +37,7 @@ import java.util.function.LongBinaryOperator;
 import java.util.function.LongUnaryOperator;
 import java.util.function.UnaryOperator;
 
-import io.jenetics.lattices.grid.array.BaseArray;
+import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Structure3d;
 

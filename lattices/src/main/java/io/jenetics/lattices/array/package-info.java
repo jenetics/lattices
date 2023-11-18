@@ -27,4 +27,4 @@
  * @since 3.0
  * @version 3.0
  */
-package io.jenetics.lattices.grid.array;
+package io.jenetics.lattices.array;

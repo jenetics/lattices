@@ -23,7 +23,7 @@
  * @since 3.0
  */
 module io.jenetics.lattices {
-    exports io.jenetics.lattices.grid.array;
+    exports io.jenetics.lattices.array;
     exports io.jenetics.lattices.grid.function;
     exports io.jenetics.lattices.grid.lattice;
     exports io.jenetics.lattices.grid;
