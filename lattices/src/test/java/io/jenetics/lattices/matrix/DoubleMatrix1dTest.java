@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.lattice.Loop1d;
+import io.jenetics.lattices.lattice.Loop1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;

@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseObjectArray;
-import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 

@@ -17,12 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.lattice;
+
+import io.jenetics.lattices.structure.Range1d;
 
 /**
- * This package contains basic implementations for multi dimensional lattices.
+ * This interface implements operations for 1-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-package io.jenetics.lattices.grid.lattice;
+interface Structure1dOps extends Structured1d, Loopable1d {
+
+    /**
+     * Return the default looping strategy of this structural, which can be
+     * overridden by the implementation, if desired.
+     *
+     * @return the looping strategy of this structural
+     */
+    @Override
+    default Loop1d loop() {
+        return Loop1d.of(new Range1d(extent()));
+    }
+
+}

@@ -17,34 +17,45 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.lattice;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Structure1d;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 
 /**
- * Defines the structure of a grid.
+ * Defines the looping strategy of a 3-d grid.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-interface Structured1d {
+public interface Loopable3d extends Loop3d {
 
     /**
-     * Return the lattice structure.
+     * Return the looping strategy.
      *
-     * @return the lattice structure
+     * @return the looping strategy
      */
-    Structure1d structure();
+    Loop3d loop();
 
-    /**
-     * Return the dimension of {@code this} structure.
-     *
-     * @return the dimension of {@code this} structure
-     */
-    default Extent1d extent() {
-        return structure().extent();
+    @Override
+    default void forEach(Int3Consumer action) {
+        loop().forEach(action);
+    }
+
+    @Override
+    default boolean anyMatch(Int3Predicate predicate) {
+        return loop().anyMatch(predicate);
+    }
+
+    @Override
+    default boolean allMatch(Int3Predicate predicate) {
+        return loop().allMatch(predicate);
+    }
+
+    @Override
+    default boolean nonMatch(Int3Predicate predicate) {
+        return loop().nonMatch(predicate);
     }
 
 }

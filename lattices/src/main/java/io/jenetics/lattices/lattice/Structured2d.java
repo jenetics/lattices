@@ -17,10 +17,10 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.lattice;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
  * Defines the structure of a grid.
@@ -29,31 +29,22 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-interface Structured3d {
+interface Structured2d {
 
     /**
      * Return the lattice structure.
      *
      * @return the lattice structure
      */
-    Structure3d structure();
+    Structure2d structure();
 
     /**
      * Return the dimension of {@code this} structure.
      *
      * @return the dimension of {@code this} structure
      */
-    default Extent3d extent() {
+    default Extent2d extent() {
         return structure().extent();
-    }
-
-    /**
-     * Return the number of slices of {@code this} structure.
-     *
-     * @return the number of slices of {@code this} structure
-     */
-    default int slices() {
-        return extent().slices();
     }
 
     /**

@@ -17,30 +17,30 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid.lattice;
+package io.jenetics.lattices.lattice;
 
 import static java.util.Objects.requireNonNull;
 
-import io.jenetics.lattices.function.Int3Consumer;
-import io.jenetics.lattices.function.Int3Predicate;
-import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Range3d;
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Range2d;
 
 /**
- * Looping strategies for 3-d structures.
+ * Looping strategies for 2-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loop3d {
+public interface Loop2d {
 
     /**
      * Performs an action for each position of {@code this} dimension.
      *
      * @param action an action to perform on the positions
      */
-    void forEach(Int3Consumer action);
+    void forEach(Int2Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -52,7 +52,7 @@ public interface Loop3d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(Int3Predicate predicate);
+    boolean anyMatch(Int2Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -67,7 +67,7 @@ public interface Loop3d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(Int3Predicate predicate);
+    boolean allMatch(Int2Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -80,7 +80,7 @@ public interface Loop3d {
      *         provided predicate, or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(Int3Predicate predicate);
+    boolean nonMatch(Int2Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.
@@ -88,9 +88,9 @@ public interface Loop3d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop3d of(Range3d range) {
+    static Loop2d of(Range2d range) {
         requireNonNull(range);
-        return new Loop3dSliceFirst(range);
+        return new Loop2dRowFirst(range);
     }
 
     /**
@@ -99,8 +99,8 @@ public interface Loop3d {
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop3d of(Extent3d extent) {
-        return of(new Range3d(extent));
+    static Loop2d of(Extent2d extent) {
+        return of(new Range2d(extent));
     }
 
 }
