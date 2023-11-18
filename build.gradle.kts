@@ -25,13 +25,12 @@
  */
 plugins {
 	base
-	id("me.champeau.jmh") version "0.7.1" apply false
 }
 
 rootProject.version = Lattices.VERSION
 
 tasks.named<Wrapper>("wrapper") {
-	version = "8.3"
+	version = "8.4"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -69,8 +68,8 @@ gradle.projectsEvaluated {
 		plugins.withType<JavaPlugin> {
 			configure<JavaPluginExtension> {
                 modularity.inferModulePath.set(true)
-				sourceCompatibility = JavaVersion.VERSION_17
-				targetCompatibility = JavaVersion.VERSION_17
+				sourceCompatibility = JavaVersion.VERSION_21
+				targetCompatibility = JavaVersion.VERSION_21
 			}
 
 			setupJava(project)
@@ -131,7 +130,7 @@ fun setupTestReporting(project: Project) {
 	project.apply(plugin = "jacoco")
 
 	project.configure<JacocoPluginExtension> {
-		toolVersion = "0.8.10"
+		toolVersion = "0.8.11"
 	}
 
 	project.tasks {
