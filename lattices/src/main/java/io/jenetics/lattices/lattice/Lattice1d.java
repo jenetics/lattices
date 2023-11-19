@@ -773,4 +773,5 @@ public interface Lattice1d<A extends BaseArray> extends Structure1dOps {
             return create(new Extent1d(size));
         }
     }
+
 }

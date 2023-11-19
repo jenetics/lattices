@@ -38,7 +38,7 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  */
 public record ObjectGrid2d<T>(Structure2d structure, Array.OfObject<T> array)
-    implements Lattice2d.OfObject<T, Array.OfObject<T>>, Grid2d<Array.OfObject<T>, ObjectGrid2d<T>>
+    implements Lattice2d.OfObject<T, Array.OfObject<T>>, Grid2d.OfObject<T, ObjectGrid2d<T>>
 {
 
     /**

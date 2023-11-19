@@ -17,26 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.lattice.Lattice2d;
+import io.jenetics.lattices.array.BaseArray;
+import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * Generic class for 2-d grids holding {@code double} elements. The
- * {@code DoubleGrid2d} is <em>just</em> a 2-d view onto a 1-d Java
- * {@code double[]} array. The following example shows how to create such a grid
- * view from a given {@code double[]} array.
+ * Generic class for 2-d lattice holding {@code long} elements. The
+ * {@code LongLattice2d} is <em>just</em> a 2-d view onto a 1-d Java
+ * {@code long[]} array. The following example shows how to create such a grid
+ * view from a given {@code long[]} array.
  *
  * <pre>{@code
- * final var values = new double[50*100];
- * final var grid = new DoubleGrid2d(
- *     new Structure2d(new Extent2d(50, 100)),
- *     new DenseDoubleArray(values)
+ * final var extent = new Extent2d(50, 100);
+ * final var values = new long[extent.size()];
+ * final var grid = new LongLattice2d(
+ *     new Structure2d(extent),
+ *     new DenseLongArray(values)
  * );
  * }</pre>
  *
@@ -44,17 +44,17 @@ import io.jenetics.lattices.structure.Structure2d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
-    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d.OfDouble<DoubleGrid2d>
+public record LongLattice2d(Structure2d structure, BaseArray.OfLong array)
+    implements Lattice2d.OfLong<BaseArray.OfLong>
 {
 
     /**
-     * Factory for creating <em>dense</em> grid instances.
+     * Factory for creating <em>dense</em> lattice instances.
      */
-    public static final Grid2d.Factory<DoubleGrid2d> DENSE =
-        extent -> new DoubleGrid2d(
+    public static final Lattice2d.Factory<LongLattice2d> DENSE =
+        extent -> new LongLattice2d(
             new Structure2d(extent),
-            DenseDoubleArray.ofLength(extent.cells())
+            DenseLongArray.ofLength(extent.cells())
         );
 
     /**
@@ -62,16 +62,16 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleGrid2d(Lattice2d<? extends Array.OfDouble> lattice) {
+    public LongLattice2d(Lattice2d<? extends BaseArray.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     /**
-     * Create a 2-d grid view of the given input {@code values}. It is assumed
+     * Create a 2-d lattice view of the given input {@code values}. It is assumed
      * that the values are given in row-major order. The following example shows
      * how to create a <em>dense</em> 3x4 grid.
      * <pre>{@code
-     * final var grid = new DoubleGrid2d(
+     * final var grid = new LongLattice2d(
      *     new Extent2d(3, 4),
      *     1, 2,  3,  4,
      *     5, 6,  7,  8,
@@ -88,13 +88,8 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public DoubleGrid2d(Extent2d extent, double... values) {
-        this(new Structure2d(extent), new DenseDoubleArray(values));
-    }
-
-    @Override
-    public DoubleGrid2d create(Structure2d structure, Array.OfDouble array) {
-        return new DoubleGrid2d(structure, array);
+    public LongLattice2d(Extent2d extent, long... values) {
+        this(new Structure2d(extent), new DenseLongArray(values));
     }
 
     /**
@@ -104,9 +99,8 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
-    @Override
-    public DoubleGrid1d project(Projection2d projection) {
-        return new DoubleGrid1d(projection.apply(structure()), array());
+    public LongLattice1d project(Projection2d projection) {
+        return new LongLattice1d(projection.apply(structure()), array());
     }
 
 }

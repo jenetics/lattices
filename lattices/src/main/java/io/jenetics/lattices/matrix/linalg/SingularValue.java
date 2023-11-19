@@ -24,6 +24,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static io.jenetics.lattices.grid.Structures.checkRectangular;
 
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 
@@ -48,7 +49,7 @@ public final class SingularValue {
     private SingularValue() {
     }
 
-    private void init(DoubleMatrix2d Arg) {
+    private void init(Lattice2d.OfDouble<?> Arg) {
         checkRectangular(Arg.extent());
 
         // Derived from LINPACK code.
@@ -528,7 +529,7 @@ public final class SingularValue {
      * @return the <em>Eigenvalue</em>-decomposition of the given matrix {@code A}
      * @throws IllegalArgumentException if {@code A} is not square
      */
-    public static SingularValue decompose(DoubleMatrix2d A) {
+    public static SingularValue decompose(Lattice2d.OfDouble<?> A) {
         final var singular = new SingularValue();
         singular.init(A);
         return singular;

@@ -17,25 +17,26 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
 import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.array.DenseIntArray;
-import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.array.BaseArray;
+import io.jenetics.lattices.array.DenseLongArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
- * Generic class for 1-d grids holding {@code int} elements. The
- * {@code DoubleGrid1d} is <em>just</em> a view onto a 1-d Java {@code int[]}
- * array. The following example shows how to create such a grid view from a given
- * {@code int[]} array.
+ * Generic class for 1-d lattice holding {@code long} elements. The
+ * {@code LongLattice1d} is <em>just</em> a 1-d view onto a 1-d Java
+ * {@code long[]} array. The following example shows how to create such a lattice
+ * view from a given {@code long[]} array.
  *
  * <pre>{@code
- * final var values = new int[100];
- * final var grid = new IntGrid1d(
- *     new Structure1d(new Extent1d(100)),
- *     new DenseIntArray(values)
+ * final var extent = new Extent1d(100);
+ * final var values = new long[extent.size()];
+ * final var grid = new LongLattice1d(
+ *     new Structure1d(extent),
+ *     new DenseLongArray(values)
  * );
  * }</pre>
  *
@@ -43,17 +44,17 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public record IntGrid1d(Structure1d structure, Array.OfInt array)
-    implements Lattice1d.OfInt<Array.OfInt>, Grid1d.OfInt<IntGrid1d>
+public record LongLattice1d(Structure1d structure, BaseArray.OfLong array)
+    implements Lattice1d.OfLong<BaseArray.OfLong>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid1d.Factory<IntGrid1d> DENSE =
-        extent -> new IntGrid1d(
+    public static final Lattice1d.Factory<LongLattice1d> DENSE =
+        extent -> new LongLattice1d(
             new Structure1d(extent),
-            DenseIntArray.ofLength(extent.cells())
+            new DenseLongArray(new long[extent.elements()])
         );
 
     /**
@@ -61,7 +62,7 @@ public record IntGrid1d(Structure1d structure, Array.OfInt array)
      *
      * @param lattice the underlying lattice data
      */
-    public IntGrid1d(Lattice1d<? extends Array.OfInt> lattice) {
+    public LongLattice1d(Lattice1d<? extends BaseArray.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
@@ -74,16 +75,11 @@ public record IntGrid1d(Structure1d structure, Array.OfInt array)
      *
      * @param values the returned grid
      */
-    public IntGrid1d(int... values) {
+    public LongLattice1d(long... values) {
         this(
             new Structure1d(new Extent1d(values.length)),
-            new DenseIntArray(values)
+            new DenseLongArray(values)
         );
-    }
-
-    @Override
-    public IntGrid1d create(Structure1d structure, Array.OfInt array) {
-        return new IntGrid1d(structure, array);
     }
 
 }

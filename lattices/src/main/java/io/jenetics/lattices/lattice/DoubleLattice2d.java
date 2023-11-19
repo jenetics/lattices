@@ -17,25 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.lattice.Lattice3d;
-import io.jenetics.lattices.structure.Extent3d;
-import io.jenetics.lattices.structure.Projection3d;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * Generic class for 3-d grids holding {@code double} elements. The
- * {@code DoubleGrid3d} is <em>just</em> a 3-d view onto a 1-d Java
+ * Generic class for 2-d lattices holding {@code double} elements. The
+ * {@code DoubleGrid2d} is <em>just</em> a 2-d view onto a 1-d Java
  * {@code double[]} array. The following example shows how to create such a grid
  * view from a given {@code double[]} array.
  *
  * <pre>{@code
- * final var values = new double[3*50*100];
- * final var grid = new DoubleGrid3d(
- *     new Structure3d(new Extent3d(3, 50, 100)),
+ * final var values = new double[50*100];
+ * final var grid = new DoubleLattice2d(
+ *     new Structure2d(new Extent2d(50, 100)),
  *     new DenseDoubleArray(values)
  * );
  * }</pre>
@@ -44,30 +43,40 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
-    implements Lattice3d.OfDouble<Array.OfDouble>, Grid3d.OfDouble<DoubleGrid3d>
+public record DoubleLattice2d(Structure2d structure, BaseArray.OfDouble array)
+    implements Lattice2d.OfDouble<BaseArray.OfDouble>
 {
 
     /**
-     * Factory for creating <em>dense</em> grid instances.
+     * Factory for creating <em>dense</em> lattice instances.
      */
-    public static final Grid3d.Factory<DoubleGrid3d> DENSE =
-        extent -> new DoubleGrid3d(
-            new Structure3d(extent),
+    public static final Lattice2d.Factory<DoubleLattice2d> DENSE =
+        extent -> new DoubleLattice2d(
+            new Structure2d(extent),
             DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**
-     * Create a new grid view from the given lattice.
+     * Create a new lattice view from the given lattice.
      *
      * @param lattice the underlying lattice data
      */
-    public DoubleGrid3d(Lattice3d<? extends Array.OfDouble> lattice) {
+    public DoubleLattice2d(Lattice2d<? extends BaseArray.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
     /**
-     * Create a 3-d grid view of the given input {@code values}.
+     * Create a 2-d lattice view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 grid.
+     * <pre>{@code
+     * final var grid = new DoubleLattice2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
      *
      * @implSpec
      * The given input data is <b>not</b> copied, the returned object is a
@@ -78,24 +87,19 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
      * @throws IllegalArgumentException if the desired extent of the grid
      *         requires fewer elements than given
      */
-    public DoubleGrid3d(Extent3d extent, double... values) {
-        this(new Structure3d(extent), new DenseDoubleArray(values));
-    }
-
-    @Override
-    public DoubleGrid3d create(Structure3d structure, Array.OfDouble array) {
-        return new DoubleGrid3d(structure, array);
+    public DoubleLattice2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
     }
 
     /**
-     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+     * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
      * a view onto this grid {@link #array()}.
      *
      * @param projection the projection to apply
-     * @return a 2-d projection from this 3-d grid
+     * @return a 1-d projection from this 2-d grid
      */
-    public DoubleGrid2d project(Projection3d projection) {
-        return new DoubleGrid2d(projection.apply(structure()), array());
+    public DoubleLattice1d project(Projection2d projection) {
+        return new DoubleLattice1d(projection.apply(structure()), array());
     }
 
 }

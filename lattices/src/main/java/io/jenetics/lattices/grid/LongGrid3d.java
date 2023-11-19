@@ -46,7 +46,7 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record LongGrid3d(Structure3d structure, Array.OfLong array)
-    implements Lattice3d.OfLong<Array.OfLong>, Grid3d<Array.OfLong, LongGrid3d>
+    implements Lattice3d.OfLong<Array.OfLong>, Grid3d.OfLong<LongGrid3d>
 {
 
     /**

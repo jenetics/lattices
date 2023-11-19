@@ -17,26 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
-import io.jenetics.lattices.array.DenseIntArray;
-import io.jenetics.lattices.lattice.Lattice3d;
+import io.jenetics.lattices.array.BaseArray;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 
 /**
- * Generic class for 3-d grids holding {@code int} elements. The
- * {@code IntGrid3d} is <em>just</em> a 3-d view onto a 1-d Java
- * {@code int[]} array. The following example shows how to create such a grid
- * view from a given {@code int[]} array.
+ * Generic class for 3-d lattices holding {@code double} elements. The
+ * {@code DoubleLattice3d} is <em>just</em> a 3-d view onto a 1-d Java
+ * {@code double[]} array. The following example shows how to create such a grid
+ * view from a given {@code double[]} array.
  *
  * <pre>{@code
- * final var values = new int[3*50*100];
- * final var grid = new IntGrid3d(
+ * final var values = new double[3*50*100];
+ * final var grid = new DoubleLattice3d(
  *     new Structure3d(new Extent3d(3, 50, 100)),
- *     new DenseIntArray(values)
+ *     new DenseDoubleArray(values)
  * );
  * }</pre>
  *
@@ -44,17 +43,17 @@ import io.jenetics.lattices.structure.Structure3d;
  * @since 3.0
  * @version 3.0
  */
-public record IntGrid3d(Structure3d structure, Array.OfInt array)
-    implements Lattice3d.OfInt<Array.OfInt>, Grid3d.OfInt<IntGrid3d>
+public record DoubleLattice3d(Structure3d structure, BaseArray.OfDouble array)
+    implements Lattice3d.OfDouble<BaseArray.OfDouble>
 {
 
     /**
-     * Factory for creating <em>dense</em> grid instances.
+     * Factory for creating <em>dense</em> lattice instances.
      */
-    public static final Grid3d.Factory<IntGrid3d> DENSE =
-        extent -> new IntGrid3d(
+    public static final Lattice3d.Factory<DoubleLattice3d> DENSE =
+        extent -> new DoubleLattice3d(
             new Structure3d(extent),
-            DenseIntArray.ofLength(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**
@@ -62,7 +61,7 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
      *
      * @param lattice the underlying lattice data
      */
-    public IntGrid3d(Lattice3d<? extends Array.OfInt> lattice) {
+    public DoubleLattice3d(Lattice3d<? extends BaseArray.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
@@ -75,27 +74,22 @@ public record IntGrid3d(Structure3d structure, Array.OfInt array)
      *
      * @param extent the extent of the given values
      * @param values the returned grid values
-     * @throws IllegalArgumentException if the desired extent of the grid
+     * @throws IllegalArgumentException if the desired extent of the lattice
      *         requires fewer elements than given
      */
-    public IntGrid3d(Extent3d extent, int... values) {
-        this(new Structure3d(extent), new DenseIntArray(values));
-    }
-
-    @Override
-    public IntGrid3d create(Structure3d structure, Array.OfInt array) {
-        return new IntGrid3d(structure, array);
+    public DoubleLattice3d(Extent3d extent, double... values) {
+        this(new Structure3d(extent), new DenseDoubleArray(values));
     }
 
     /**
-     * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
-     * a view onto this grid {@link #array()}.
+     * Return a 2-d projection from this 3-d lattice. The returned 2-d grid is
+     * a view onto this lattice {@link #array()}.
      *
      * @param projection the projection to apply
-     * @return a 2-d projection from this 1-d grid
+     * @return a 2-d projection from this 3-d lattice
      */
-    public IntGrid2d project(Projection3d projection) {
-        return new IntGrid2d(projection.apply(structure()), array());
+    public DoubleLattice2d project(Projection3d projection) {
+        return new DoubleLattice2d(projection.apply(structure()), array());
     }
 
 }

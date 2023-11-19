@@ -943,4 +943,5 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
             return create(new Extent2d(rows, cols));
         }
     }
+
 }

@@ -45,7 +45,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
-    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleMatrix1d>
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d.OfDouble<DoubleMatrix1d>
 {
 
     /**
@@ -64,6 +64,22 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      */
     public DoubleMatrix1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 1-d matrix view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned matrix
+     */
+    public DoubleMatrix1d(double... values) {
+        this(
+            new Structure1d(new Extent1d(values.length)),
+            new DenseDoubleArray(values)
+        );
     }
 
     @Override
@@ -176,23 +192,6 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
             equals(matrix);
-    }
-
-    /**
-     * Return a 1-d matrix view of the given input {@code values}.
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <em>view</em> onto the given input data.
-     *
-     * @param values the returned matrix
-     * @return a matrix view of the given input data
-     */
-    public static DoubleMatrix1d of(double... values) {
-        return new DoubleMatrix1d(
-            new Structure1d(new Extent1d(values.length)),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

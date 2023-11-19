@@ -45,7 +45,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record LongGrid1d(Structure1d structure, Array.OfLong array)
-    implements Lattice1d.OfLong<Array.OfLong>, Grid1d<Array.OfLong, LongGrid1d>
+    implements Lattice1d.OfLong<Array.OfLong>, Grid1d.OfLong<LongGrid1d>
 {
 
     /**

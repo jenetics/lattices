@@ -50,7 +50,7 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
-    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, DoubleMatrix2d>
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d.OfDouble<DoubleMatrix2d>
 {
 
     /**
@@ -69,6 +69,32 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      */
     public DoubleMatrix2d(Lattice2d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 2-d matrix view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 matrix.
+     * <pre>{@code
+     * final var matrix = new DoubleMatrix2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned matrix values
+     * @throws IllegalArgumentException if the desired extent of the matrix
+     *         requires fewer elements than given
+     */
+    public DoubleMatrix2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
     }
 
     @Override
@@ -96,6 +122,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
+    @Override
     public DoubleMatrix1d project(Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
@@ -339,36 +366,6 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
             equals(matrix);
-    }
-
-    /**
-     * Return a 2-d matrix view of the given input {@code values}. It is assumed
-     * that the values are given in row-major order. The following example shows
-     * how to create a <em>dense</em> 3x4 matrix.
-     * <pre>{@code
-     * final var matrix = DoubleMatrix2d.of(
-     *     new Extent2d(3, 4),
-     *     1, 2,  3,  4,
-     *     5, 6,  7,  8,
-     *     9, 10, 11, 12
-     * );
-     * }</pre>
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <b>view</b> onto the given input data.
-     *
-     * @param extent the extent of the given values
-     * @param values the returned matrix values
-     * @return a matrix view of the given input data
-     * @throws IllegalArgumentException if the desired extent of the matrix
-     *         requires fewer elements than given
-     */
-    public static DoubleMatrix2d of(Extent2d extent, double... values) {
-        return new DoubleMatrix2d(
-            new Structure2d(extent),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

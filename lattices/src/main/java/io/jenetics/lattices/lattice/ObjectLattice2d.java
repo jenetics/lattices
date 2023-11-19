@@ -17,30 +17,27 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
-import java.util.Objects;
-
-import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.array.DenseObjectArray;
-import io.jenetics.lattices.lattice.Lattice3d;
-import io.jenetics.lattices.structure.Projection3d;
-import io.jenetics.lattices.structure.Structure3d;
+import io.jenetics.lattices.structure.Projection2d;
+import io.jenetics.lattices.structure.Structure2d;
 
 /**
- * Object 3-d grid implementation.
+ * Object 2-d grid implementation.
  *
  * @param <T> the grid element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
- *        and the <em>order</em> which determines the index mapping {@code N -> N^3}.
+ *        and the <em>order</em> which determines the index mapping {@code N -> N^2}.
  * @param array The underlying {@code double[]} array.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
-    implements Lattice3d.OfObject<T, Array.OfObject<T>>, Grid3d.OfObject<T, ObjectGrid3d<T>>
+public record ObjectLattice2d<T>(Structure2d structure, BaseArray.OfObject<T> array)
+    implements Lattice2d.OfObject<T, BaseArray.OfObject<T>>
 {
 
     /**
@@ -48,35 +45,50 @@ public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid3d(Lattice3d<? extends Array.OfObject<T>> lattice) {
+    public ObjectLattice2d(Lattice2d<? extends BaseArray.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public ObjectGrid3d<T> create(Structure3d structure, Array.OfObject<T> array) {
-        return new ObjectGrid3d<>(structure, array);
-    }
-
-    public ObjectGrid2d<T> project(Projection3d projection) {
-        return new ObjectGrid2d<>(projection.apply(structure), array);
-    }
-
-    @Override
-    public int hashCode() {
-        final int[] hash = new int[]{37};
-        forEach((s, r, c) -> hash[0] += Objects.hashCode(get(s, r, c)) * 17);
-        return hash[0];
+    public ObjectLattice1d<T> project(Projection2d projection) {
+        return new ObjectLattice1d<>(projection.apply(structure), array);
     }
 
     @Override
     public boolean equals(Object object) {
         return object == this ||
-            object instanceof ObjectGrid3d<?> grid &&
+            object instanceof ObjectLattice2d<?> grid &&
                 equals(grid);
     }
 
+    @Override
+    public String toString() {
+        final var out = new StringBuilder();
+
+        out.append("[");
+        for (int i = 0; i < rows(); ++i) {
+            if (i != 0) {
+                out.append(" ");
+            }
+            out.append("[");
+            for (int j = 0; j < cols(); ++j) {
+                out.append(get(i, j));
+                if (j < cols() - 1) {
+                    out.append(", ");
+                }
+            }
+            out.append("]");
+            if (i < rows() - 1) {
+                out.append("\n");
+            }
+        }
+
+        out.append("]");
+
+        return out.toString();
+    }
+
     /**
-     * Return a factory for creating dense 3-d object grids.
+     * Return a factory for creating dense 2-d object grids.
      *
      * @param __ not used (a Java trick for getting "reified" element type)
      * @param <T> the grid element type
@@ -84,9 +96,9 @@ public record ObjectGrid3d<T>(Structure3d structure, Array.OfObject<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Grid3d.Factory<ObjectGrid3d<T>> dense(T... __) {
-        return extent -> new ObjectGrid3d<T>(
-            new Structure3d(extent),
+    public static <T> Lattice2d.Factory<ObjectLattice2d<T>> dense(T... __) {
+        return extent -> new ObjectLattice2d<T>(
+            new Structure2d(extent),
             DenseObjectArray.ofLength(extent.cells(), __)
         );
     }

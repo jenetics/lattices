@@ -326,7 +326,7 @@ public class DoubleMatrix2dTest {
             })
         );
 
-        final var foo = DoubleMatrix2d.of(
+        final var foo = new DoubleMatrix2d(
             new Extent2d(3, 4),
             1, 2,  3,  4,
             5, 6,  7,  8,

@@ -44,13 +44,13 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
-    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleGrid1d>
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d.OfDouble<DoubleGrid1d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid1d.Factory<DoubleGrid1d> DENSE =
+    public static final Lattice1d.Factory<DoubleGrid1d> DENSE =
         extent -> new DoubleGrid1d(
             new Structure1d(extent),
             DenseDoubleArray.ofLength(extent.cells())

@@ -17,17 +17,16 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.grid;
+package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.array.DenseObjectArray;
-import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
- * Object 1-d grid implementation.
+ * Object 1-d lattice implementation.
  *
- * @param <T> the grid element type
+ * @param <T> the lattice element type
  * @param structure The structure, which defines the <em>extent</em> of the grid
  *        and the <em>order</em> which determines the index mapping {@code N -> N}.
  * @param array The underlying {@code double[]} array.
@@ -36,22 +35,17 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  * @since 3.0
  */
-public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
-    implements Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d.OfObject<T, ObjectGrid1d<T>>
+public record ObjectLattice1d<T>(Structure1d structure, BaseArray.OfObject<T> array)
+    implements Lattice1d.OfObject<T, BaseArray.OfObject<T>>
 {
 
     /**
-     * Create a new grid view from the given lattice.
+     * Create a new lattice view from the given lattice.
      *
      * @param lattice the underlying lattice data
      */
-    public ObjectGrid1d(Lattice1d<? extends Array.OfObject<T>> lattice) {
+    public ObjectLattice1d(Lattice1d<? extends BaseArray.OfObject<T>> lattice) {
         this(lattice.structure(), lattice.array());
-    }
-
-    @Override
-    public ObjectGrid1d<T> create(Structure1d structure, Array.OfObject<T> array) {
-        return new ObjectGrid1d<>(structure, array);
     }
 
     /**
@@ -63,8 +57,8 @@ public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
      */
     @SuppressWarnings("varargs")
     @SafeVarargs
-    public static <T> Grid1d.Factory<ObjectGrid1d<T>> dense(T... __) {
-        return extent -> new ObjectGrid1d<T>(
+    public static <T> Lattice1d.Factory<ObjectLattice1d<T>> dense(T... __) {
+        return extent -> new ObjectLattice1d<T>(
             new Structure1d(extent),
             DenseObjectArray.ofLength(extent.cells(), __)
         );

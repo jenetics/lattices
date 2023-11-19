@@ -23,11 +23,14 @@ import static io.jenetics.lattices.grid.Structures.checkSquare;
 import static io.jenetics.lattices.grid.Structures.isSquare;
 import static io.jenetics.lattices.matrix.Matrices.isDiagonal;
 
+import io.jenetics.lattices.lattice.DoubleLattice1d;
 import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.matrix.DoubleMatrix2d;
 import io.jenetics.lattices.matrix.NumericalContext;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Projection2d;
 
 /**
  * Linear algebraic matrix operations.
@@ -59,10 +62,12 @@ public final class Algebra {
      * @param A the matrix for which to calculate the one-norm
      * @return the one-norm of {@code A}
      */
-    public static double norm1(DoubleMatrix2d A) {
+    public static double norm1(Lattice2d.OfDouble<?> A) {
         double max = 0;
         for (int c = A.cols(); --c >= 0;) {
-            max = Math.max(max, norm1(A.colAt(c)));
+            final var structure = Projection2d.col(c).apply(A.structure());
+            final var col = new DoubleLattice1d(structure, A.array());
+            max = Math.max(max, norm1(col));
         }
         return max;
     }
@@ -159,7 +164,7 @@ public final class Algebra {
      * @param A the matrix for which to calculate the rank
      * @return the rank for the given matrix
      */
-    public int rank(DoubleMatrix2d A) {
+    public int rank(Lattice2d.OfDouble<?> A) {
         return SingularValue.decompose(A).rank();
     }
 

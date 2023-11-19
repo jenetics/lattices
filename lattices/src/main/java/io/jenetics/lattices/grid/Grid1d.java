@@ -21,7 +21,9 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.structure.Extent1d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.View1d;
 
@@ -102,6 +104,58 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      */
     default G view(View1d view) {
         return create(view.apply(structure()), array());
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * double grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfDouble<G extends Grid1d.OfDouble<G>>
+        extends Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * int grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt<G extends Grid1d.OfInt<G>>
+        extends Lattice1d.OfInt<Array.OfInt>, Grid1d<Array.OfInt, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * long grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong<G extends Grid1d.OfLong<G>>
+        extends Lattice1d.OfLong<Array.OfLong>, Grid1d<Array.OfLong, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * object grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T, G extends Grid1d.OfObject<T, G>>
+        extends Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d<Array.OfObject<T>, G>
+    {
     }
 
 }
