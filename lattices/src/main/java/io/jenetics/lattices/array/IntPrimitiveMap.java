@@ -309,6 +309,7 @@ abstract class IntPrimitiveMap {
 
         final int hash = Integer.hashCode(key) & 0x7FFFFFFF;
         int i = hash % length;
+        //int i = (length - 1 ) & hash;
 
         // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
         int decrement = hash % (length - 2);
