@@ -36,7 +36,8 @@ public record Index1d(int value) implements Comparable<Index1d> {
     public static final Index1d ZERO = new Index1d(0);
 
     @Override
-    public int compareTo(final Index1d other) {
+    public int compareTo(Index1d other) {
         return Integer.compare(value, other.value);
     }
+
 }

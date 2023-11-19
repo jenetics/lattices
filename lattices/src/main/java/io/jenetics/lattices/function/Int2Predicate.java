@@ -38,5 +38,5 @@ public interface Int2Predicate {
      * @return {@code true} if the values are treated as equal, {@code false}
      *         otherwise
      */
-    boolean test(final int i, final int j);
+    boolean test(int i, int j);
 }

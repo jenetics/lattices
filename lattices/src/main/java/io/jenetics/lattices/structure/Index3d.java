@@ -33,7 +33,7 @@ package io.jenetics.lattices.structure;
 public record Index3d(int slice, int row, int col) {
 
     /**
-     * Index where slice, row and column is zero.
+     * Index where slice, row and column are zero.
      */
     public static final Index3d ZERO = new Index3d(0, 0, 0);
 

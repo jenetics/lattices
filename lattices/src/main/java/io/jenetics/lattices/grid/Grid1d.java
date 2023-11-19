@@ -20,21 +20,25 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
 import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Range1d;
-import io.jenetics.lattices.structure.Structural1d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure1d;
 import io.jenetics.lattices.structure.View1d;
 
 /**
- * Base interface for 1-d grids.
+ * This interface <em>structures</em> the elements into a 1-dimensional grid.
+ *
+ * @param <A> the array type used for storing the gird data
+ * @param <G> the type created by the factory
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
-    extends Structural1d, Loopable1d, Grid<A, G>
+    extends Lattice1d<A>, Self<G>
 {
 
     /**
@@ -45,14 +49,18 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure1d structure, final A array);
+    G create(Structure1d structure, A array);
 
     /**
-     * Assigns the elements of the {@code other} grid to this grid.
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
      *
-     * @param other the source of the grid elements
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
      */
-    void assign(final G other);
+    default G create(Lattice1d<? extends A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -61,10 +69,10 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent1d extent) {
+    default G like(Extent1d extent) {
         return create(
             new Structure1d(extent),
-            array().like(extent.size())
+            array().like(extent.elements())
         );
     }
 
@@ -74,13 +82,17 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
-        copy.assign(self());
+        copy.assign(this);
         return copy;
     }
 
@@ -90,19 +102,60 @@ public interface Grid1d<A extends Array<A>, G extends Grid1d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View1d view) {
+    default G view(View1d view) {
         return create(view.apply(structure()), array());
     }
 
     /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * double grid.
      *
-     * @return the looping strategy of this structural
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
      */
-    @Override
-    default Loop1d loop() {
-        return Loop1d.of(new Range1d(extent()));
+    interface OfDouble<G extends Grid1d.OfDouble<G>>
+        extends Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * int grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt<G extends Grid1d.OfInt<G>>
+        extends Lattice1d.OfInt<Array.OfInt>, Grid1d<Array.OfInt, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * long grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong<G extends Grid1d.OfLong<G>>
+        extends Lattice1d.OfLong<Array.OfLong>, Grid1d<Array.OfLong, G>
+    {
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 1-dimensional
+     * object grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T, G extends Grid1d.OfObject<T, G>>
+        extends Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d<Array.OfObject<T>, G>
+    {
     }
 
 }

@@ -23,29 +23,60 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Defines a 2-d structure, which is defined by the extent of the structure and
- * the index order of the underlying 1-d structure.
+ * the layout of the underlying 1-d structure. This is the main class for working
+ * with 2-d structures (latices/grids). The {@link View2d} and {@link Projection2d}
+ * functions are used for <em>manipulating</em> this structure object.
+ *
+ * <pre>{@code
+ * // Creating a new structure with the given extent.
+ * final var structure = new Structure2d(500, 1000);
+ * }</pre>
  *
  * @param extent the extent of the structure
- * @param order the element order
+ * @param layout the element order
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Order2d order) {
+public record Structure2d(Extent2d extent, Layout2d layout) {
 
     public Structure2d {
         requireNonNull(extent);
-        requireNonNull(order);
+        requireNonNull(layout);
     }
 
     /**
-     * Create a new structure with the given extent and the default element order.
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
      *
      * @param extent the extent of the structure
      */
-    public Structure2d(final Extent2d extent) {
-        this(extent, new Order2d(extent));
+    public Structure2d(Extent2d extent) {
+        this(
+            extent,
+            new Layout2d(
+                Index2d.ZERO,
+                new Stride2d(
+                    extent.cols()*extent.bands(),
+                    extent.bands()
+                ),
+                Band.ZERO
+            )
+        );
+    }
+
+    /**
+     * Create a new matrix structure with the given dimension and the default
+     * element order. This is the usual way of creating instances of structure
+     * objects.
+     *
+     * @param rows the number of rows
+     * @param cols the number of columns
+     */
+    public Structure2d(int rows, int cols) {
+        this(new Extent2d(rows, cols));
     }
 
 }

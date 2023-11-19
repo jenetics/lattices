@@ -36,5 +36,5 @@ public interface Int2Consumer {
      * @param i first value
      * @param j second value
      */
-    void accept(final int i, final int j);
+    void accept(int i, int j);
 }

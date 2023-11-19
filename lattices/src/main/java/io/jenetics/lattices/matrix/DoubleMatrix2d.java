@@ -25,10 +25,10 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
-import io.jenetics.lattices.grid.BaseDoubleGrid2d;
-import io.jenetics.lattices.grid.Factory2d;
+import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -49,26 +49,57 @@ import io.jenetics.lattices.structure.View2d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
+public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d.OfDouble<DoubleMatrix2d>
+{
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Factory2d<DoubleMatrix2d> DENSE = structure ->
-        new DoubleMatrix2d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Lattice2d.Factory<DoubleMatrix2d> DENSE =
+        extent -> new DoubleMatrix2d(
+            new Structure2d(extent),
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**
-     * Create a new 2-d matrix with the given {@code structure} and element
-     * {@code array}.
+     * Create a new matrix view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
+     * @param lattice the underlying lattice data
      */
-    public DoubleMatrix2d(final Structure2d structure, final DoubleArray array) {
-        super(structure, array, DoubleMatrix2d::new);
+    public DoubleMatrix2d(Lattice2d<? extends Array.OfDouble> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 2-d matrix view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 matrix.
+     * <pre>{@code
+     * final var matrix = new DoubleMatrix2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned matrix values
+     * @throws IllegalArgumentException if the desired extent of the matrix
+     *         requires fewer elements than given
+     */
+    public DoubleMatrix2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
+    }
+
+    @Override
+    public DoubleMatrix2d create(Structure2d structure, Array.OfDouble array) {
+        return new DoubleMatrix2d(structure, array);
     }
 
     /* *************************************************************************
@@ -91,7 +122,8 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
-    public DoubleMatrix1d view(final Projection2d projection) {
+    @Override
+    public DoubleMatrix1d project(Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
 
@@ -100,14 +132,14 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * column. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
-     * @see #view(Projection2d)
+     * @see #project(Projection2d)
      *
      * @param index the column index.
      * @return a new column view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= cols()}
      */
-    public DoubleMatrix1d colAt(final int index) {
-        return view(Projection2d.col(index));
+    public DoubleMatrix1d colAt(int index) {
+        return project(Projection2d.col(index));
     }
 
     /**
@@ -115,14 +147,14 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * given row. The returned view is backed by this matrix, so changes in the
      * returned view are reflected in this matrix, and vice-versa.
      *
-     * @see #view(Projection2d)
+     * @see #project(Projection2d)
      *
      * @param index the row index.
      * @return a new row view.
      * @throws IndexOutOfBoundsException if {@code index < 0 || index >= rows()}
      */
-    public DoubleMatrix1d rowAt(final int index) {
-        return view(Projection2d.row(index));
+    public DoubleMatrix1d rowAt(int index) {
+        return project(Projection2d.row(index));
     }
 
     /* *************************************************************************
@@ -152,22 +184,22 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      *         A.rows() > z.size())}.
      */
     public DoubleMatrix1d mult(
-        final DoubleMatrix1d y,
-        final DoubleMatrix1d z,
-        final double alpha,
-        final double beta,
-        final boolean transposeA
+        DoubleMatrix1d y,
+        DoubleMatrix1d z,
+        double alpha,
+        double beta,
+        boolean transposeA
     ) {
         if (transposeA) {
             return transpose().mult(y, z, alpha, beta, false);
         }
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array().like(struct.extent().size());
+            final var elems = array().like(struct.extent().elements());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
-        if (cols() != y.size() || rows() > z.size()) {
+        if (cols() != y.extent().elements() || rows() > z.extent().elements()) {
             throw new IllegalArgumentException(
                 "Incompatible args: " + extent() + ", " + y.extent() + ", " + z.extent()
             );
@@ -196,7 +228,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      *          constructed.
      * @return z, or a newly created result matrix
      */
-    public DoubleMatrix1d mult(final DoubleMatrix1d y, final DoubleMatrix1d z) {
+    public DoubleMatrix1d mult(DoubleMatrix1d y, DoubleMatrix1d z) {
         return mult(y, z, 1, (z == null ? 1 : 0), false);
     }
 
@@ -225,12 +257,12 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      *         {@code A == C || B == C}
      */
     public DoubleMatrix2d mult(
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C,
-        final double alpha,
-        final double beta,
-        final boolean transposeA,
-        final boolean transposeB
+        DoubleMatrix2d B,
+        DoubleMatrix2d C,
+        double alpha,
+        double beta,
+        boolean transposeA,
+        boolean transposeB
     ) {
         requireNonNull(B);
 
@@ -300,7 +332,7 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      *         {@code C.rows() != A.rows() || C.cols() != B.cols()} or
      *         {@code A == C || B == C}
      */
-    public DoubleMatrix2d mult(final DoubleMatrix2d B, final DoubleMatrix2d C) {
+    public DoubleMatrix2d mult(DoubleMatrix2d B, DoubleMatrix2d C) {
         return mult(B, C, 1, (C == null ? 1 : 0), false, false);
     }
 
@@ -310,15 +342,27 @@ public final class DoubleMatrix2d extends BaseDoubleGrid2d<DoubleMatrix2d> {
      * @return the sum of all cells
      */
     public double sum() {
-        if (size() == 0) {
-            return 0;
-        } else {
-            return reduce(Double::sum, DoubleUnaryOperator.identity());
-        }
+        return reduce(Double::sum, DoubleUnaryOperator.identity())
+            .orElse(0);
+    }
+
+    /**
+     * Checks whether the given matrices have the same dimension and contains
+     * the same values.
+     *
+     * @param other the second matrix to compare
+     * @return {@code true} if the two given matrices are equal, {@code false}
+     *         otherwise
+     */
+    public boolean equals(DoubleMatrix2d other) {
+        final var context = NumericalContext.get();
+
+        return extent().equals(other.extent()) &&
+            allMatch((r, c) -> context.equals(get(r, c), other.get(r, c)));
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(Object object) {
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
             equals(matrix);

@@ -20,9 +20,9 @@
 package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Range2d;
-import io.jenetics.lattices.structure.Structural2d;
+import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
 
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
-    extends Structural2d, Loopable2d, Grid<A, G>
+    extends Lattice2d<A>, Self<G>
 {
 
     /**
@@ -48,14 +48,18 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param array the grid elements
      * @return a new grid (view)
      */
-    G create(final Structure2d structure, final A array);
+    G create(Structure2d structure, A array);
 
     /**
-     * Assigns the elements of the {@code other} grid to this grid.
+     * Create a new grid (view) with the given underlying lattice structure
+     * and lattice array.
      *
-     * @param other the source of the grid elements
+     * @param lattice the underlying lattice data
+     * @return a new grid (view)
      */
-    void assign(final G other);
+    default G create(Lattice2d<? extends A> lattice) {
+        return create(lattice.structure(), lattice.array());
+    }
 
     /**
      * Creates a new grid with the given {@code extent} and the properties of
@@ -64,10 +68,10 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param extent the extent of the new grid
      * @return a new grid
      */
-    default G like(final Extent2d extent) {
+    default G like(Extent2d extent) {
         return create(
             new Structure2d(extent),
-            array().like(extent.size())
+            array().like(extent.elements())
         );
     }
 
@@ -77,10 +81,14 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @return a new grid with the same extent and properties as this grid
      */
     default G like() {
-        return like(extent());
+        return like(structure().extent());
     }
 
-    @Override
+    /**
+     * Return a copy of {@code this} grid.
+     *
+     * @return a copy of {@code this} grid
+     */
     default G copy() {
         final var copy = like();
         copy.assign(self());
@@ -93,19 +101,107 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
      * @param view the grid view transformation to apply
      * @return a new grid view
      */
-    default G view(final View2d view) {
+    default G view(View2d view) {
         return create(view.apply(structure()), array());
     }
 
+
     /**
-     * Return the default looping strategy of this structural, which can be
-     * overridden by the implementation, if desired.
+     * This interface <em>structures</em> the elements into a 2-dimensional lattice.
      *
-     * @return the looping strategy of this structural
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
      */
-    @Override
-    default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
+    interface OfDouble<G extends OfDouble<G>>
+        extends Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, G>
+    {
+
+        /**
+         * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 1-d projection from this 2-d matrix
+         */
+        default Grid1d.OfDouble<?> project(Projection2d projection) {
+            return new DoubleGrid1d(projection.apply(structure()), array());
+        }
+
     }
+
+    /**
+     * This interface <em>structures</em> the elements into a 2-dimensional
+     * int grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt<G extends Grid2d.OfInt<G>>
+        extends Lattice2d.OfInt<Array.OfInt>, Grid2d<Array.OfInt, G>
+    {
+
+        /**
+         * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 1-d projection from this 2-d matrix
+         */
+        default Grid1d.OfInt<?> project(Projection2d projection) {
+            return new IntGrid1d(projection.apply(structure()), array());
+        }
+
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 2-dimensional
+     * long grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong<G extends Grid2d.OfLong<G>>
+        extends Lattice2d.OfLong<Array.OfLong>, Grid2d<Array.OfLong, G>
+    {
+        /**
+         * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 1-d projection from this 2-d matrix
+         */
+        default Grid1d.OfLong<?> project(Projection2d projection) {
+            return new LongGrid1d(projection.apply(structure()), array());
+        }
+
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 2-dimensional
+     * object grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T, G extends Grid2d.OfObject<T, G>>
+        extends Lattice2d.OfObject<T, Array.OfObject<T>>, Grid2d<Array.OfObject<T>, G>
+    {
+        /**
+         * Return a 1-d projection from this 2-d grid. The returned 1-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 1-d projection from this 2-d matrix
+         */
+        default Grid1d.OfObject<T, ?> project(Projection2d projection) {
+            return new ObjectGrid1d<>(projection.apply(structure()), array());
+        }
+
+    }
+
 
 }

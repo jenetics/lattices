@@ -19,8 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
+import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseDoubleArray;
-import io.jenetics.lattices.array.DoubleArray;
+import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -41,32 +43,47 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  * @version 3.0
  */
-public final class DoubleGrid1d extends BaseDoubleGrid1d<DoubleGrid1d> {
+public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d.OfDouble<DoubleGrid1d>
+{
 
     /**
-     * Factory for creating dense 1-d double grids.
+     * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Factory1d<DoubleGrid1d> DENSE = structure ->
-        new DoubleGrid1d(
-            structure,
-            DenseDoubleArray.ofSize(structure.extent().size())
+    public static final Lattice1d.Factory<DoubleGrid1d> DENSE =
+        extent -> new DoubleGrid1d(
+            new Structure1d(extent),
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
     /**
-     * Create a new 1-d grid with the given {@code structure} and element
-     * {@code array}.
+     * Create a new grid view from the given lattice.
      *
-     * @param structure the matrix structure
-     * @param array the element array
-     * @throws IllegalArgumentException if the size of the given {@code array}
-     *         is not able to hold the required number of elements. It is still
-     *         possible that an {@link IndexOutOfBoundsException} is thrown when
-     *         the defined order of the grid tries to access an array index,
-     *         which is not within the bounds of the {@code array}.
-     * @throws NullPointerException if one of the arguments is {@code null}
+     * @param lattice the underlying lattice data
      */
-    public DoubleGrid1d(final Structure1d structure, final DoubleArray array) {
-        super(structure, array, DoubleGrid1d::new);
+    public DoubleGrid1d(Lattice1d<? extends Array.OfDouble> lattice) {
+        this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 1-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned grid
+     */
+    public DoubleGrid1d(double... values) {
+        this(
+            new Structure1d(new Extent1d(values.length)),
+            new DenseDoubleArray(values)
+        );
+    }
+
+    @Override
+    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
+        return new DoubleGrid1d(structure, array);
     }
 
 }

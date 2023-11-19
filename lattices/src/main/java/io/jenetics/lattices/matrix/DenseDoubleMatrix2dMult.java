@@ -34,9 +34,9 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static boolean isDense(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C
     ) {
         return
             A.array() instanceof DenseDoubleArray &&
@@ -45,11 +45,11 @@ final class DenseDoubleMatrix2dMult {
     }
 
     static void denseMult(
-        final DoubleMatrix2d A,
-        final DoubleMatrix2d B,
-        final DoubleMatrix2d C,
-        final double alpha,
-        final double beta
+        DoubleMatrix2d A,
+        DoubleMatrix2d B,
+        DoubleMatrix2d C,
+        double alpha,
+        double beta
     ) {
         final int m = A.rows();
         final int n = A.cols();
@@ -59,13 +59,13 @@ final class DenseDoubleMatrix2dMult {
         final double[] B_array = ((DenseDoubleArray)B.array()).elements();
         final double[] C_array = ((DenseDoubleArray)C.array()).elements();
 
-        final int A_colStride = A.order().stride().col();
-        final int B_colStride = B.order().stride().col();
-        final int C_colStride = C.order().stride().col();
+        final int A_col_stride = A.structure().layout().stride().col();
+        final int B_col_stride = B.structure().layout().stride().col();
+        final int C_col_stride = C.structure().layout().stride().col();
 
-        final int A_rowStride = A.order().stride().row();
-        final int B_rowStride = B.order().stride().row();
-        final int C_rowStride = C.order().stride().row();
+        final int A_row_stride = A.structure().layout().stride().row();
+        final int B_row_stride = B.structure().layout().stride().row();
+        final int C_row_stride = C.structure().layout().stride().row();
 
         /*
         A is blocked to hide memory latency
@@ -94,9 +94,9 @@ final class DenseDoubleMatrix2dMult {
         }
 
         while (--blocks >= 0) {
-            int B_j = B.order().index(0, 0);
-            int A_index = A.order().index(rr, 0);
-            int C_j = C.order().index(rr, 0);
+            int B_j = B.structure().layout().offset(0, 0);
+            int A_index = A.structure().layout().offset(rr, 0);
+            int C_j = C.structure().layout().offset(rr, 0);
             rr += m_block;
             if (blocks == 0) {
                 m_block += m - rr;
@@ -110,25 +110,25 @@ final class DenseDoubleMatrix2dMult {
                     int B_k = B_j;
                     double s = 0;
 
-                    A_k -= A_colStride;
-                    B_k -= B_rowStride;
+                    A_k -= A_col_stride;
+                    B_k -= B_row_stride;
 
                     for (int k = n%4; --k >= 0;) {
-                        s = Math.fma(A_array[A_k += A_colStride], B_array[B_k += B_rowStride], s);
+                        s = Math.fma(A_array[A_k += A_col_stride], B_array[B_k += B_row_stride], s);
                     }
                     for (int k = n/4; --k >= 0;) {
-                        s += A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride] +
-                            A_array[A_k += A_colStride] * B_array[B_k += B_rowStride];
+                        s += A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride] +
+                            A_array[A_k += A_col_stride] * B_array[B_k += B_row_stride];
                     }
 
                     C_array[C_i] = Math.fma(alpha, s,  beta*C_array[C_i]);
-                    A_i += A_rowStride;
-                    C_i += C_rowStride;
+                    A_i += A_row_stride;
+                    C_i += C_row_stride;
                 }
-                B_j += B_colStride;
-                C_j += C_colStride;
+                B_j += B_col_stride;
+                C_j += C_col_stride;
             }
         }
     }

@@ -38,11 +38,24 @@ public class DoubleGrid1dTest {
         final var structure = new Structure1d(extent);
         final var grid = new DoubleGrid1d(
             structure,
-            DenseDoubleArray.ofSize(extent.size())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
         grid.assign(87);
         grid.forEach(i -> assertThat(grid.get(i)).isEqualTo(87.0));
+    }
+
+    interface Base<T extends Base<T>> {
+    }
+
+    interface A<T extends A<T>> extends Base<T> {
+    }
+
+    interface B<T extends B<T>> extends Base<T> {
+    }
+
+    class C implements A<C>, B<C> {
+
     }
 
 }

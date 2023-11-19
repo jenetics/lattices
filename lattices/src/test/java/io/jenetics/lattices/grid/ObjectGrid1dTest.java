@@ -38,7 +38,7 @@ public class ObjectGrid1dTest {
         final var structure = new Structure1d(extent);
         final var grid = new ObjectGrid1d<String>(
             structure,
-            DenseObjectArray.ofSize(extent.size())
+            DenseObjectArray.ofLength(extent.cells())
         );
 
         grid.assign("123");

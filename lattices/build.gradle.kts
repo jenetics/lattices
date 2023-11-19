@@ -17,24 +17,27 @@
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 2.0
- * @version 2.0
+ * @since 3.0
+ * @version 3.0
  */
 plugins {
     `java-library`
     idea
     `maven-publish`
-    id("me.champeau.jmh")
+    alias(libs.plugins.jmh)
 }
+
+description = "Lattices - Library for multidimensional grids and linear algebra"
 
 extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
-    testImplementation("org.assertj:assertj-core:3.20.2")
-    testImplementation("org.apache.commons:commons-math3:3.6.1")
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
-    testImplementation("org.testng:testng:7.6.1")
-    testImplementation("colt:colt:1.2.0")
+    testImplementation(libs.colt)
+    testImplementation(libs.equalsverifier)
+    testImplementation(libs.commons.math)
+    testImplementation(libs.assertj)
+    testImplementation(libs.jblas)
+    testImplementation(libs.testng)
 }
 
 tasks.test { dependsOn(tasks.compileJmhJava) }

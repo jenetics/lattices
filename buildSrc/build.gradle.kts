@@ -1,7 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
- * Java Colt Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,11 +27,16 @@ plugins {
     `kotlin-dsl`
 }
 
-description = "Lattices - Java library for multidimensional data structures"
-
-extra["moduleName"] = "io.jenetics.lattices"
-
 repositories {
     mavenLocal()
     gradlePluginPortal()
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.jvmTarget = "17"
+}
+
+configure<JavaPluginExtension> {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

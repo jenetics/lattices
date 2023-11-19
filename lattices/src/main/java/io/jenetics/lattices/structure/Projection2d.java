@@ -19,10 +19,18 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 
 /**
  * This interface performs a projection from 2-d to 1-d.
+ *
+ * @see Projection3d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface Projection2d {
@@ -33,7 +41,31 @@ public interface Projection2d {
      * @param structure the structure to apply this projection
      * @return the projected 1-d structure
      */
-    Structure1d apply(final Structure2d structure);
+    Structure1d apply(Structure2d structure);
+
+    /**
+     * Returns a new projection function, which first applies the given view
+     * transformation and then {@code this} projection.
+     *
+     * @param view the view to apply first to a given 2-d structure
+     * @return a new projection, which applies first the given view
+     */
+    default Projection2d compose(View2d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Returns a new projection function, which applies the given view
+     * transformation after {@code this} projection.
+     *
+     * @param view the view transformation to be applied after the projection
+     * @return a new projection
+     */
+    default Projection2d andThen(View1d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Create a <em>row</em>-projection for the row with the given {@code index}.
@@ -42,7 +74,7 @@ public interface Projection2d {
      * @return a new <em>row</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection2d row(final int index) {
+    static Projection2d row(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -50,9 +82,10 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().cols()),
-                new Order1d(
-                    structure.order().index(index, 0),
-                    structure.order().stride().col()
+                new Layout1d(
+                    new Index1d(structure.layout().offset(index, 0)),
+                    new Stride1d(structure.layout().stride().col()),
+                    structure.layout().band()
                 )
             );
         };
@@ -66,7 +99,7 @@ public interface Projection2d {
      * @return a new <em>column</em>-projection
      * @throws IndexOutOfBoundsException if the given {@code index} is negative
      */
-    static Projection2d col(final int index) {
+    static Projection2d col(int index) {
         Objects.checkIndex(index, Integer.MAX_VALUE);
 
         return structure -> {
@@ -74,9 +107,10 @@ public interface Projection2d {
 
             return new Structure1d(
                 new Extent1d(structure.extent().rows()),
-                new Order1d(
-                    structure.order().index(0, index),
-                    structure.order().stride().row()
+                new Layout1d(
+                    new Index1d(structure.layout().offset(0, index)),
+                    new Stride1d(structure.layout().stride().row()),
+                    structure.layout().band()
                 )
             );
         };

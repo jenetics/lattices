@@ -120,8 +120,8 @@ public class ObjectGrid2dTest {
     public void projectionRow() {
         final var grid = grid(new Extent2d( 7, 9));
 
-        final var projection = grid.view(Projection2d.row(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(9));
+        final var projection = grid.project(Projection2d.row(3));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(9));
 
         projection.forEach(c -> {
             final var value = projection.get(c);
@@ -136,8 +136,8 @@ public class ObjectGrid2dTest {
         final var grid = grid(new Extent2d( 7, 9))
             .view(View2d.of(new Index2d(2, 2)));
 
-        final var projection = grid.view(Projection2d.row(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(7));
+        final var projection = grid.project(Projection2d.row(3));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(7));
 
         projection.forEach(c -> {
             final var value = projection.get(c);
@@ -151,8 +151,8 @@ public class ObjectGrid2dTest {
     public void projectionCol() {
         final var grid = grid(new Extent2d( 7, 9));
 
-        final var projection = grid.view(Projection2d.col(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(7));
+        final var projection = grid.project(Projection2d.col(3));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(7));
 
         projection.forEach(r -> {
             final var value = projection.get(r);
@@ -167,8 +167,8 @@ public class ObjectGrid2dTest {
         final var grid = grid(new Extent2d( 7, 9))
             .view(View2d.of(new Index2d(2, 2)));
 
-        final var projection = grid.view(Projection2d.col(3));
-        assertThat(projection.extent()).isEqualTo(new Extent1d(5));
+        final var projection = grid.project(Projection2d.col(3));
+        assertThat((Object)projection.extent()).isEqualTo(new Extent1d(5));
 
         projection.forEach(r -> {
             final var value = projection.get(r);
@@ -176,6 +176,24 @@ public class ObjectGrid2dTest {
             final var expected = "%d_%d".formatted(r + 2, 5);
             assertThat(value).isEqualTo(expected);
         });
+    }
+
+    @Test
+    public void mapAssign() {
+        final ObjectGrid2d<Integer> ints = ObjectGrid2d
+            .<Integer>dense()
+            .create(10, 15);
+
+        final ObjectGrid2d<String> strings = ObjectGrid2d
+            .<String>dense()
+            .create(10, 15);
+
+        ints.forEach((r, c) -> ints.set(r, c, r*c));
+        strings.assign(ints, Object::toString);
+
+        strings.forEach((r, c) ->
+            assertThat(strings.get(r, c)).isEqualTo("" + (r*c))
+        );
     }
 
 }

@@ -23,6 +23,13 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Functional interface for doing view transformation.
+ *
+ * @see View1d
+ * @see View3d
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
 @FunctionalInterface
 public interface View2d {
@@ -35,15 +42,16 @@ public interface View2d {
             structure.extent().cols(),
             structure.extent().rows()
         ),
-        new Order2d(
+        new Layout2d(
             new Index2d(
-                structure.order().start().col(),
-                structure.order().start().row()
+                structure.layout().start().col(),
+                structure.layout().start().row()
             ),
             new Stride2d(
-                structure.order().stride().col(),
-                structure.order().stride().row()
-            )
+                structure.layout().stride().col(),
+                structure.layout().stride().row()
+            ),
+            structure.layout().band()
         )
     );
 
@@ -53,7 +61,31 @@ public interface View2d {
      * @param structure the structure to apply the view transformation on
      * @return a new <em>view</em>-structure
      */
-    Structure2d apply(final Structure2d structure);
+    Structure2d apply(Structure2d structure);
+
+    /**
+     * Return a new view, which apply first the given {@code view} and then
+     * {@code this} view.
+     *
+     * @param view the view to be applied first
+     * @return a new <em>composed</em> view
+     */
+    default View2d compose(View2d view) {
+        requireNonNull(view);
+        return structure -> apply(view.apply(structure));
+    }
+
+    /**
+     * Return a new view, which applies the given {@code view} after {@code this}
+     * view.
+     *
+     * @param view the view to be applied after {@code this} view
+     * @return a new view
+     */
+    default View2d andThen(View2d view) {
+        requireNonNull(view);
+        return structure -> view.apply(apply(structure));
+    }
 
     /**
      * Return a transformation which creates a view of the given {@code range}.
@@ -61,19 +93,20 @@ public interface View2d {
      * @param range the range of the view
      * @return a transformation which creates a view of the given {@code range}
      */
-    static View2d of(final Range2d range) {
+    static View2d of(Range2d range) {
         requireNonNull(range);
 
         return structure -> new Structure2d(
             range.extent(),
-            new Order2d(
+            new Layout2d(
                 new Index2d(
-                    structure.order().start().row() +
-                        structure.order().stride().row()*range.start().row(),
-                    structure.order().start().col() +
-                        structure.order().stride().col()*range.start().col()
+                    structure.layout().start().row() +
+                        structure.layout().stride().row()*range.start().row(),
+                    structure.layout().start().col() +
+                        structure.layout().stride().col()*range.start().col()
                 ),
-                structure.order().stride()
+                structure.layout().stride(),
+                structure.layout().band()
             )
         );
     }
@@ -84,7 +117,7 @@ public interface View2d {
      * @param start the start of the view
      * @return a transformation which creates a view of the given {@code start}
      */
-    static View2d of(final Index2d start) {
+    static View2d of(Index2d start) {
         requireNonNull(start);
 
         return structure -> View2d
@@ -106,7 +139,7 @@ public interface View2d {
      * @param extent the extent of the view
      * @return a transformation which creates a view of the given {@code extent}
      */
-    static View2d of(final Extent2d extent) {
+    static View2d of(Extent2d extent) {
         return of(new Range2d(extent));
     }
 
@@ -116,12 +149,12 @@ public interface View2d {
      * @param stride the stride of the created view transformation
      * @return a new stride view transformation
      */
-    static View2d of(final Stride2d stride) {
+    static View2d of(Stride2d stride) {
         requireNonNull(stride);
 
         return structure -> {
             final var extent = structure.extent();
-            final var order = structure.order();
+            final var order = structure.layout();
 
             return new Structure2d(
                 new Extent2d(
@@ -132,15 +165,37 @@ public interface View2d {
                         ? (extent.cols() - 1)/stride.col() + 1
                         : 0
                 ),
-                new Order2d(
+                new Layout2d(
                     order.start(),
                     new Stride2d(
                         order.stride().row()*stride.row(),
                         order.stride().col()*stride.col()
-                    )
+                    ),
+                    structure.layout().band()
                 )
             );
         };
+    }
+
+    /**
+     * Return a transformation which creates a view onto the given
+     * {@code channel}.
+     *
+     * @param band the channel number of the returned view
+     * @return a transformation which creates a view onto the given
+     *        {@code channel}
+     */
+    static View2d of(Band band) {
+        requireNonNull(band);
+
+        return structure -> new Structure2d(
+            structure.extent(),
+            new Layout2d(
+                structure.layout().start(),
+                structure.layout().stride(),
+                band
+            )
+        );
     }
 
 }

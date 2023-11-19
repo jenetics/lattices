@@ -22,6 +22,29 @@
  * This package contains the commonly known <em>matrix</em> implementation
  * classes. The matrix classes share the same design principles as the grid
  * classes; they are mainly multidimensional view onto one-dimensional arrays.
+ * The numerical precission of the matrix implementations is controlled via the
+ * {@link io.jenetics.lattices.matrix.NumericalContext} class.
+ * <p>
+ * The default context is created with an epsilon of 10<sup>-9</sup>.
+ * The default value can be changed with defining a Java <em>property</em> on
+ * the command line.
+ * <pre>
+ *     $ java -Dio.jenetics.lattices.matrix.precision=12 ...
+ * </pre>
+ * The example above will change the epsilon of the default context object to
+ * 10<sup>-12</sup>. It is also possible to change the numerical context only
+ * for specific parts of your code. This might be useful in a testing
+ * environment. The following example shows how to do this.
+ * <pre>{@code
+ * final DoubleMatrix2d A = ...;
+ * final DoubleMatrix2d B = ...;
+ *
+ * // Executes the 'solve' operation with a different epsilon.
+ * // Other parts of the program are not effected.
+ * NumericalContext.using(new NumericalContext(0.001), () -> {
+ *     final DoubleMatrix2d X = Algebra.solve(A, B);
+ * });
+ * }</pre>
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0

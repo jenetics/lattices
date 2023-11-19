@@ -19,54 +19,104 @@
  */
 package io.jenetics.lattices.array;
 
+import static java.util.Objects.checkFromIndexSize;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
- * Implementation of a <em>dense</em> array of {@code double} values.
+ * Implementation of a <em>dense</em> array of {@code double} values. This is
+ * <em>just</em> a wrapper around the underlying {@code double[]} array and no
+ * values are copied.
  *
  * @param elements the underlying {@code double} element values
+ * @param from the index of the first array element (inclusively)
+ * @param length the length of the subarea
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record DenseDoubleArray(double[] elements) implements DoubleArray {
+public record DenseDoubleArray(double[] elements, int from, int length)
+    implements Array.OfDouble, Array.Dense<double[], DenseDoubleArray>
+{
 
+    /**
+     * Create a new <em>dense</em> double array with the given values
+     *
+     * @param elements the underlying {@code double} element values
+     * @param from the index of the first array element (inclusively)
+     * @param length the length of the subarray
+     * @throws IndexOutOfBoundsException if the given {@code from} value and
+     *         {@code length} is out of bounds
+     */
     public DenseDoubleArray {
         requireNonNull(elements);
+        checkFromIndexSize(from, length, elements.length);
+    }
+
+    /**
+     * Create a new <em>dense</em> double array with the given values
+     *
+     * @param elements the underlying {@code double} element values
+     * @param from the index of the first array element (inclusively)
+     * @throws IndexOutOfBoundsException if the given {@code from} value is out
+     *         of bounds
+     */
+    public DenseDoubleArray(double[] elements, int from) {
+        this(elements, from, elements.length - from);
+    }
+
+    /**
+     * Create a new <em>dense</em> array of {@code double} values.
+     *
+     * @param elements the underlying {@code double} element values
+     */
+    public DenseDoubleArray(double... elements) {
+        this(elements, 0, elements.length);
     }
 
     @Override
-    public double get(final int index) {
-        return elements[index];
+    public double get(int index) {
+        return elements[index + from];
     }
 
     @Override
-    public void set(final int index, final double value) {
-        elements[index] = value;
+    public void set(int index, double value) {
+        elements[index + from] = value;
     }
 
     @Override
     public int length() {
-        return elements.length;
+        return length;
     }
 
     @Override
     public DenseDoubleArray copy() {
-        return new DenseDoubleArray(elements.clone());
+        final var elems = Arrays.copyOfRange(elements, from, from + length);
+        return new DenseDoubleArray(elems);
     }
 
     @Override
-    public DoubleArray copy(final int start, final int length) {
-        final var array = Arrays.copyOfRange(elements, start, start + length);
+    public DenseDoubleArray copy(int from, int length) {
+        final var array = Arrays.copyOfRange(
+            elements,
+            from + this.from, from + this.from + length
+        );
         return new DenseDoubleArray(array);
     }
 
     @Override
-    public DoubleArray like(final int length) {
-        return ofSize(length);
+    public DenseDoubleArray like(final int length) {
+        return ofLength(length);
+    }
+
+    @Override
+    public String toString() {
+        return stream()
+            .mapToObj(Double::toString)
+            .collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**
@@ -75,13 +125,8 @@ public record DenseDoubleArray(double[] elements) implements DoubleArray {
      * @param length the length of the created array
      * @return a new dense {@code double} array with the given {@code length}
      */
-    public static DenseDoubleArray ofSize(final int length) {
+    public static DenseDoubleArray ofLength(int length) {
         return new DenseDoubleArray(new double[length]);
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(elements);
     }
 
 }

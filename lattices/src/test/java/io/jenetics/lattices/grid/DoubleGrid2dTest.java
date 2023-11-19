@@ -20,15 +20,14 @@
 package io.jenetics.lattices.grid;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.jenetics.lattices.testfuxtures.MatrixRandom.next;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.MatrixRandom;
 import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.testfuxtures.LinealgebraAsserts;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -41,7 +40,7 @@ public class DoubleGrid2dTest {
         final var structure = new Structure2d(extent);
         final var grid = new DoubleGrid2d(
             structure,
-            DenseDoubleArray.ofSize(extent.size())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
         grid.forEach((row, col) -> grid.set(row, col, row*col));
@@ -54,29 +53,26 @@ public class DoubleGrid2dTest {
         final DoubleGrid2d grid2,
         final boolean equals
     ) {
-        LinealgebraAsserts.assertEquals(grid1, grid1);
-        LinealgebraAsserts.assertEquals(grid2, grid2);
-
         if (equals) {
-            LinealgebraAsserts.assertEquals(grid1, grid2);
-            LinealgebraAsserts.assertEquals(grid2, grid1);
+            assertThat(grid1).isEqualTo(grid2);
+            assertThat(grid2).isEqualTo(grid1);
         } else {
-            LinealgebraAsserts.assertNotEquals(grid1, grid2);
-            LinealgebraAsserts.assertNotEquals(grid2, grid1);
+            assertThat(grid1).isNotEqualTo(grid2);
+            assertThat(grid2).isNotEqualTo(grid1);
         }
     }
 
     @DataProvider
     public Object[][] grids() {
         return new Object[][] {
-            { next(new Extent2d(0, 0)), next(new Extent2d(0, 0)), true },
-            { next(new Extent2d(0, 1)), next(new Extent2d(0, 1)), true },
-            { next(new Extent2d(1, 0)), next(new Extent2d(1, 0)), true },
-            { next(new Extent2d(0, 0)), next(new Extent2d(0, 10)), false },
-            { next(new Extent2d(5, 0)), next(new Extent2d(0, 0)), false },
-            { next(new Extent2d(5, 50)), next(new Extent2d(5, 50)), false },
-            { next(new Extent2d(50, 9)), next(new Extent2d(50, 9)), false },
-            { next(new Extent2d(50, 30)), next(new Extent2d(50, 9)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 1)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 1)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(1, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(1, 0)), true },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 10)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 0)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(0, 0)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 50)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(5, 50)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), false },
+            { MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 30)), MatrixRandom.nextDoubleMatrix2d(new Extent2d(50, 9)), false },
             equalGrids(new Extent2d(1, 1)),
             equalGrids(new Extent2d(1, 100)),
             equalGrids(new Extent2d(100, 1)),
@@ -85,7 +81,7 @@ public class DoubleGrid2dTest {
     }
 
     private static Object[] equalGrids(final Extent2d extent) {
-        final var matrix = next(extent);
+        final var matrix = MatrixRandom.nextDoubleMatrix2d(extent);
         return new Object[] { matrix, matrix.copy(), true };
     }
 

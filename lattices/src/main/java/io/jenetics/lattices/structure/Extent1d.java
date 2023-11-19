@@ -19,39 +19,74 @@
  */
 package io.jenetics.lattices.structure;
 
+
+import java.util.Iterator;
+
 /**
  * The extent of 1-d structures.
  *
- * @param size the number of elements, must be greater or equal zero
+ * @param elements the number of elements must be greater or equal zero
+ * @param bands the number of bands
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Extent1d(int size) implements Comparable<Extent1d> {
+public record Extent1d(int elements, int bands)
+    implements Comparable<Extent1d>, Iterable<Index1d>
+{
 
     /**
      * Create a new 1-d extent with the given size.
      *
-     * @param size the size of the extent
-     * @throws IndexOutOfBoundsException if the {@code size} is smaller than zero
+     * @param elements the size of the extent
+     * @param bands the number of bands
+     *
+     * @throws IllegalArgumentException if the {@code size} is smaller than zero
      */
     public Extent1d {
-        if (size < 0) {
-            throw new IndexOutOfBoundsException(
-                "Extent is out of bounds: [%d].".formatted(size)
+        if (elements < 0 || bands < 1 || Checks.multNotSave(elements, bands)) {
+            throw new IllegalArgumentException(
+                "Extent is out of bounds: [%d, bands=%d]."
+                    .formatted(elements, bands)
             );
         }
     }
 
+    /**
+     * Create a new 1-d extent with the given size.
+     *
+     * @param elements the number of elements
+     *
+     * @throws IllegalArgumentException if the {@code size} is smaller than zero
+     */
+    public Extent1d(int elements) {
+        this(elements, 1);
+    }
+
+    /**
+     * Return the length of the array, needed for storing all cells:
+     * {@code size()*channels}.
+     *
+     * @return the array length needed for storing all cells
+     */
+    public int cells() {
+        return elements * bands;
+    }
+
     @Override
-    public int compareTo(final Extent1d other) {
-        return Integer.compare(size, other.size);
+    public int compareTo(Extent1d other) {
+        return Integer.compare(elements, other.elements);
     }
 
     @Override
     public String toString() {
-        return "[%d]".formatted(size());
+        return "[%d, channels=%d]".formatted(elements, bands);
+    }
+
+    @Override
+    public Iterator<Index1d> iterator() {
+        return new Index1dIterator(new Range1d(this ), Stride1d.ONE) ;
     }
 
 }
