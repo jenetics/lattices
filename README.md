@@ -47,7 +47,7 @@ final var structure = new Structure2d(extent);
 final var layout = structure.layout();
 
 // Creating the array, which holds the values to be stored.
-final var values = new double[extent.length()];
+final var values = new double[extent.cells()];
 
 // Set the value 'Math.PI' at the point [20, 30];
 values[layout.offset(20, 30)] = Math.PI;
