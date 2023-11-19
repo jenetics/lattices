@@ -28,7 +28,7 @@ import java.util.HashMap;
  * @since 3.0
  * @version 3.0
  */
-public class SparseDoubleArray implements DoubleArray {
+public class SparseDoubleArray implements Array.OfDouble {
 
     private static final int DEFAULT_CAPACITY = 277;
     private static final double DEFAULT_MIN_LOAD_FACTOR = 0.2;
