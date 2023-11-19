@@ -1,4 +1,7 @@
 /*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,34 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.function;
 
 /**
+ * Represents an operation that accepts an (int, long)-valued argument and
+ * returns no result.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-plugins {
-    `java-library`
-    idea
-    `maven-publish`
-    alias(libs.plugins.jmh)
-}
+@FunctionalInterface
+public interface IntLongConsumer {
 
-description = "Lattices - Library for multidimensional grids and linear algebra"
+    /**
+     * Performs this operation on the given arguments.
+     *
+     * @param i first value
+     * @param j second value
+     */
+    void accept(int i, long j);
 
-extra["moduleName"] = "io.jenetics.lattices"
-
-dependencies {
-    testImplementation(libs.colt)
-    testImplementation(libs.equalsverifier)
-    testImplementation(libs.commons.math)
-    testImplementation(libs.assertj)
-    testImplementation(libs.jblas)
-    testImplementation(libs.testng)
-}
-
-tasks.test { dependsOn(tasks.compileJmhJava) }
-
-jmh {
-    includes.add(".*IntDoubleMapPerf.*")
 }

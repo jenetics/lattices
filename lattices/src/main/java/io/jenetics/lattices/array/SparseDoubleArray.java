@@ -30,27 +30,10 @@ import java.util.HashMap;
  */
 public class SparseDoubleArray implements Array.OfDouble {
 
-    private static final int DEFAULT_CAPACITY = 277;
-    private static final double DEFAULT_MIN_LOAD_FACTOR = 0.2;
-    private static final double DEFAULT_MAX_LOAD_FACTOR = 0.5;
-
-    private static final byte FREE = 0;
-    private static final byte FULL = 1;
-    private static final byte REMOVED = 2;
-
-    private int[] table;
-    private double[] values;
-    private byte[] state;
-    private int freeEntries;
-
     private final int length;
 
     public SparseDoubleArray(final int length) {
         this.length = length;
-
-        this.table = new int[DEFAULT_CAPACITY];
-        this.values = new double[DEFAULT_CAPACITY];
-        this.state = new byte[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -68,44 +51,6 @@ public class SparseDoubleArray implements Array.OfDouble {
 
         var foo = new HashMap<String, String>();
 
-    }
-
-    private int indexOfInsertion(final int key) {
-        final int[] tab = table;
-        final byte[] stat = state;
-        final int length = tab.length;
-
-        final int hash = Integer.hashCode(key) & 0x7FFFFFFF;
-        int i = hash % length;
-        int decrement = hash % (length - 2);
-        if (decrement == 0) {
-            decrement = 1;
-        }
-
-        while (stat[i] == FULL && tab[i] != key) {
-            i -= decrement;
-            if (i < 0) {
-                i += length;
-            }
-        }
-
-        if (stat[i] == REMOVED) {
-            int j = i;
-            while (stat[i] != FREE && (stat[i] == REMOVED || tab[i] != key)) {
-                i -= decrement;
-                if (i < 0) {
-                    i += length;
-                }
-            }
-            if (stat[i] == FREE) {
-                i = j;
-            }
-        }
-
-        if (stat[i] == FULL) {
-            return -i - 1;
-        }
-        return i;
     }
 
     @Override
