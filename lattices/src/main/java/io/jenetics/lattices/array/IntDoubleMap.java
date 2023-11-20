@@ -21,6 +21,7 @@ package io.jenetics.lattices.array;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -31,7 +32,7 @@ import io.jenetics.lattices.function.IntDoubleConsumer;
  * @since 3.0
  * @version 3.0
  */
-public class IntDoubleMap extends IntPrimitiveMap {
+final class IntDoubleMap extends IntPrimitiveMap {
 
     private static final class DoubleSentinel extends Sentinel {
         double emptyKeyValue;
@@ -80,7 +81,7 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * @param key the key the value shall be associated with.
      * @param value the value to be associated.
      */
-    public void put(int key, double value) {
+    void put(int key, double value) {
         if (key == EMPTY_KEY) {
             sentinel.hasEmptyKey = true;
             sentinel.emptyKeyValue = value;
@@ -105,7 +106,7 @@ public class IntDoubleMap extends IntPrimitiveMap {
      *
      * @param key the key to be removed from the receiver.
      */
-    public void remove(int key) {
+    void remove(int key) {
         if (key == EMPTY_KEY) {
             sentinel.hasEmptyKey = false;
         } else if (key == REMOVED_KEY) {
@@ -141,11 +142,11 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * @return the value associated with the specified key; {@code 0} if no
      * such key is present.
      */
-    public double get(int key) {
+    double get(int key) {
         return getOrDefault(key, EMPTY_VALUE);
     }
 
-    public double getOrDefault(int key, double defaultValue) {
+    double getOrDefault(int key, double defaultValue) {
         if (key == EMPTY_KEY && sentinel.hasEmptyKey) {
             return sentinel.emptyKeyValue;
         } else if (key == REMOVED_KEY && sentinel.hasRemovedKey) {
@@ -198,7 +199,7 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * @return {@code true} if this map maps one or more keys to the
      *         specified value
      */
-    public boolean containsValue(double value) {
+    boolean containsValue(double value) {
         if (sentinel.contains(value)) {
             return true;
         }
@@ -222,7 +223,7 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied. Stops iteration if the
      *        procedure returns {@code false}, otherwise continues.
      */
-    public void forEach(IntDoubleConsumer consumer) {
+    void forEach(IntDoubleConsumer consumer) {
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
         }
@@ -236,7 +237,7 @@ public class IntDoubleMap extends IntPrimitiveMap {
         }
     }
 
-    public void forEachValue(DoubleConsumer consumer) {
+    void forEachValue(DoubleConsumer consumer) {
         if (sentinel.hasEmptyKey) {
             consumer.accept(sentinel.emptyKeyValue);
         }
@@ -250,24 +251,33 @@ public class IntDoubleMap extends IntPrimitiveMap {
         }
     }
 
-    public DoubleStream values() {
+    DoubleStream values() {
+        return values(key -> true);
+    }
+
+    DoubleStream values(IntPredicate keyFilter) {
         final var builder = DoubleStream.builder();
-        if (sentinel.hasEmptyKey) {
+        if (sentinel.hasEmptyKey && keyFilter.test(EMPTY_KEY)) {
             builder.accept(sentinel.emptyKeyValue);
         }
-        if (sentinel.hasRemovedKey) {
+        if (sentinel.hasRemovedKey && keyFilter.test(REMOVED_KEY)) {
             builder.accept(sentinel.removedKeyValue);
         }
 
         return DoubleStream.concat(
             builder.build(),
             IntStream.range(0, size())
-                .filter(i -> keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY)
+                .filter(i -> {
+                    final var key = keys[i];
+                    return key != EMPTY_KEY &&
+                        key != REMOVED_KEY &&
+                        keyFilter.test(key);
+                })
                 .mapToDouble(i -> values[i])
         );
     }
 
-    public boolean trimToSize() {
+    boolean trimToSize() {
         final int newCapacity = alignCapacity(size());
         if (keys.length > newCapacity) {
             rehash(newCapacity);

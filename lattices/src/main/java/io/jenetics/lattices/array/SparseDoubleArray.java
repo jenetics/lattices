@@ -19,7 +19,7 @@
  */
 package io.jenetics.lattices.array;
 
-import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Implementation of a <em>sparse</em> array of {@code double} values.
@@ -31,6 +31,7 @@ import java.util.HashMap;
 public class SparseDoubleArray implements Array.OfDouble {
 
     private final int length;
+    private final IntDoubleMap values = new IntDoubleMap();
 
     public SparseDoubleArray(final int length) {
         this.length = length;
@@ -43,24 +44,35 @@ public class SparseDoubleArray implements Array.OfDouble {
 
     @Override
     public double get(final int index) {
-        return 0;
+        Objects.checkIndex(index, length);
+        return values.get(index);
     }
 
     @Override
     public void set(final int index, final double value) {
-
-        var foo = new HashMap<String, String>();
-
+        Objects.checkIndex(index, length);
+        if (Double.compare(value, 0) != 0) {
+            values.put(index, value);
+        }
     }
 
     @Override
     public SparseDoubleArray copy(final int start, final int length) {
-        return null;
+        Objects.checkFromIndexSize(start, length, length());
+
+        final var copy = like(length);
+        final var stop = start + length;
+        values.forEach((key, value) -> {
+            if (key >= start && key < stop) {
+                copy.values.put(key, value);
+            }
+        });
+        return copy;
     }
 
     @Override
     public SparseDoubleArray like(final int length) {
-        return null;
+        return new SparseDoubleArray(length);
     }
 
 }

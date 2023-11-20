@@ -68,7 +68,7 @@ abstract class IntPrimitiveMap {
      *
      * @return the number of key-value mappings in this map
      */
-    public int size() {
+    int size() {
         return occupiedWithData + sentinel().size();
     }
 
@@ -77,7 +77,7 @@ abstract class IntPrimitiveMap {
      *
      * @return {@code true} if this map contains no key-value mappings
      */
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return size() == 0;
     }
 
@@ -89,7 +89,7 @@ abstract class IntPrimitiveMap {
      * @return {@code true} if this map contains a mapping for the specified
      *         key
      */
-    public boolean containsKey(int key) {
+    boolean containsKey(int key) {
         if (key == EMPTY_KEY) {
             return sentinel().hasEmptyKey;
         } else if (key == REMOVED_KEY) {
@@ -103,7 +103,7 @@ abstract class IntPrimitiveMap {
      * Removes all mappings from this map (optional operation). The map will be
      * empty after this call returns.
      */
-    public void clear() {
+    void clear() {
         sentinel().clear();
         occupiedWithData = 0;
         occupiedWithSentinels = 0;
@@ -123,7 +123,7 @@ abstract class IntPrimitiveMap {
      * @param consumer the procedure to be applied. Stops iteration if the
      *        procedure returns {@code false}, otherwise continues.
      */
-    public void forEachKey(IntConsumer consumer) {
+    void forEachKey(IntConsumer consumer) {
         if (sentinel().hasEmptyKey) {
             consumer.accept(EMPTY_KEY);
         }
@@ -142,7 +142,7 @@ abstract class IntPrimitiveMap {
      *
      * @return a stream containing all the keys in this map
      */
-    public IntStream keys() {
+    IntStream keys() {
         final var builder = IntStream.builder();
         if (sentinel().hasEmptyKey) {
             builder.accept(EMPTY_KEY);
