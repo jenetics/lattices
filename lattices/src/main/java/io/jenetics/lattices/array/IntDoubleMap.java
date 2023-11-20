@@ -19,14 +19,12 @@
  */
 package io.jenetics.lattices.array;
 
-import java.util.HashMap;
 import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntDoubleConsumer;
-import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -35,80 +33,102 @@ import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
  */
 public class IntDoubleMap extends IntPrimitiveMap {
 
-    private static final double SENTINEL = 0;
+    private static final class DoubleSentinel extends Sentinel {
+        double emptyKeyValue;
+        double removedKeyValue;
 
-    /**
-     * The hash table values.
-     */
-    double[] values;
-
-    /**
-     * Constructs an empty map with the specified initial capacity and the
-     * specified minimum and maximum load factor.
-     *
-     * @param initialCapacity the initial capacity.
-     * @param minLoadFactor the minimum load factor.
-     * @param maxLoadFactor the maximum load factor.
-     * @throws IllegalArgumentException if {@code initialCapacity < 0 ||
-     *         (minLoadFactor < 0.0 || minLoadFactor >= 1.0) ||
-     *         (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) ||
-     *         (minLoadFactor >= maxLoadFactor)}
-     */
-    public IntDoubleMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
-        super(initialCapacity, minLoadFactor, maxLoadFactor);
-        values = new double[table.length];
+        boolean contains(double value) {
+            return
+                (hasEmptyKey && Double.compare(emptyKeyValue, value) == 0) ||
+                (hasRemovedKey && Double.compare(removedKeyValue, value) == 0);
+        }
     }
 
-    /**
-     * Constructs an empty map with the specified initial capacity and default
-     * load factors.
-     *
-     * @param initialCapacity the initial capacity of the map.
-     * @throws IllegalArgumentException if the initial capacity is less than
-     * zero.
-     */
-    public IntDoubleMap(int initialCapacity) {
-        this(initialCapacity, DEFAULT_MIN_LOAD_FACTOR, DEFAULT_MAX_LOAD_FACTOR);
-    }
+    private static final double EMPTY_VALUE = 0.0;
 
-    /**
-     * Constructs an empty map with default capacity and default load factors.
-     */
+    private final DoubleSentinel sentinel = new DoubleSentinel();
+
+    private double[] values;
+
     public IntDoubleMap() {
-        this(DEFAULT_CAPACITY);
+        allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
-    /**
-     * Returns {@code true} if this map maps one or more keys to the specified
-     * value. This operation will require linear time.
-     *
-     * @param value value whose presence in this map is to be tested
-     * @return {@code true} if this map maps one or more keys to the
-     *         specified value
-     */
-    public boolean containsValue(double value) {
-        return indexOfValue(value) != -1;
-    }
-
-    /**
-     * Return the index for the given value, or {@code -1} if {@code this} map
-     * doesn't contain the given value.
-     *
-     * @param value the value to be searched in the receiver.
-     * @return the index where the key is contained in the receiver, else
-     *         returns -1.
-     */
-    int indexOfValue(double value) {
-        final double[] val = values;
-        final byte[] stat = state;
-
-        for (int i = stat.length; --i >= 0; ) {
-            if (stat[i] == FULL && Double.compare(val[i], value) == 0) {
-                return i;
-            }
+    public IntDoubleMap(int capacity) {
+        if (capacity < 0) {
+            throw new IllegalArgumentException("Initial capacity cannot be less than 0.");
         }
 
-        return -1;
+        allocate(alignCapacity(capacity << 1));
+    }
+
+    @Override
+    DoubleSentinel sentinel() {
+        return sentinel;
+    }
+
+    @Override
+    void allocate(int capacity) {
+        super.allocate(capacity);
+        values = new double[capacity];
+    }
+
+    /**
+     * Associates the given key with the given value. Replaces any old
+     * {@code (key, someOtherValue)} association, if existing.
+     *
+     * @param key the key the value shall be associated with.
+     * @param value the value to be associated.
+     */
+    public void put(int key, double value) {
+        if (key == EMPTY_KEY) {
+            sentinel.hasEmptyKey = true;
+            sentinel.emptyKeyValue = value;
+        } else if (key == REMOVED_KEY) {
+            sentinel.hasRemovedKey = true;
+            sentinel.removedKeyValue = value;
+        } else {
+            final int index = probe(key);
+            final int keyAtIndex = keys[index];
+
+            if (keyAtIndex == key) {
+                values[index] = value;
+            } else {
+                addKeyValueAtIndex(key, value, index);
+            }
+        }
+    }
+
+    /**
+     * Removes the given key with its associated element from the receiver, if
+     * present.
+     *
+     * @param key the key to be removed from the receiver.
+     */
+    public void remove(int key) {
+        if (key == EMPTY_KEY) {
+            sentinel.hasEmptyKey = false;
+        } else if (key == REMOVED_KEY) {
+            sentinel.hasRemovedKey = false;
+        } else {
+            int index = probe(key);
+            if (keys[index] == key) {
+                removeKeyAtIndex(index);
+            }
+        }
+    }
+
+    private void addKeyValueAtIndex(int key, double value, int index) {
+        if (keys[index] == REMOVED_KEY) {
+            --occupiedWithSentinels;
+        }
+
+        keys[index] = key;
+        values[index] = value;
+        ++occupiedWithData;
+        if (occupiedWithData + occupiedWithSentinels > maxOccupiedWithData()) {
+            rehashAndGrow();
+        }
     }
 
     /**
@@ -122,117 +142,76 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * such key is present.
      */
     public double get(int key) {
-        return getOrDefault(key, SENTINEL);
+        return getOrDefault(key, EMPTY_VALUE);
     }
 
     public double getOrDefault(int key, double defaultValue) {
-        int i = indexOfKey(key);
-        if (i < 0) {
+        if (key == EMPTY_KEY && sentinel.hasEmptyKey) {
+            return sentinel.emptyKeyValue;
+        } else if (key == REMOVED_KEY && sentinel.hasRemovedKey) {
+            return sentinel.removedKeyValue;
+        } else if (occupiedWithSentinels == 0) {
+            return fastGetOrDefault(key, defaultValue);
+        } else {
+            return slowGetOrDefault(key, defaultValue);
+        }
+    }
+
+    private double slowGetOrDefault(int key, double defaultValue) {
+        final int index = probe(key);
+        if (keys[index] == key) {
+            return values[index];
+        } else {
             return defaultValue;
         }
-
-        return values[i];
     }
 
-    /**
-     * Associates the given key with the given value. Replaces any old
-     * {@code (key, someOtherValue)} association, if existing.
-     *
-     * @param key the key the value shall be associated with.
-     * @param value the value to be associated.
-     * @return the old value if the receiver did not already contain such a key
-     *         or 0 if the receiver did already contain such a key
-     */
-    public double put(int key, double value) {
-        int i = indexOfInsertion(key);
-        if (i < 0) {
-            i = -i - 1;
-            final double oldValue = values[i];
-            values[i] = value;
-            return oldValue;
-        }
+    private double fastGetOrDefault(int key, double defaultValue) {
+        int index = mask(key);
 
-        if (this.distinct > this.highWaterMark) {
-            final int newCapacity = chooseGrowCapacity(
-                distinct + 1,
-                minLoadFactor,
-                maxLoadFactor
-            );
-            rehash(newCapacity);
-            return put(key, value);
-        }
-
-        table[i] = key;
-        values[i] = value;
-        if (this.state[i] == FREE) {
-            --freeEntries;
-        }
-        state[i] = FULL;
-        ++distinct;
-
-        if (this.freeEntries < 1) {
-            final int newCapacity = chooseGrowCapacity(
-                distinct + 1,
-                minLoadFactor,
-                maxLoadFactor
-            );
-            rehash(newCapacity);
-        }
-
-        return SENTINEL;
-    }
-
-    /**
-     * Removes the given key with its associated element from the receiver, if
-     * present.
-     *
-     * @param key the key to be removed from the receiver.
-     * @return the old value if the receiver contained the specified key, zero
-     *         otherwise.
-     */
-    public double remove(int key) {
-        final int i = indexOfKey(key);
-        if (i <= 0) {
-            return SENTINEL;
-        }
-
-        state[i] = REMOVED;
-        distinct--;
-
-        if (distinct < lowWaterMark) {
-            final int newCapacity = chooseShrinkCapacity(
-                distinct,
-                minLoadFactor,
-                maxLoadFactor
-            );
-            rehash(newCapacity);
-        }
-
-        return values[i];
-    }
-
-    public void putAll(IntDoubleMap m) {
-    }
-
-    /**
-     * Replaces each entry's value with the result of invoking the given
-     * function on that entry until all entries have been processed, or the
-     * function throws an exception.  Exceptions thrown by the function are
-     * relayed to the caller.
-     *
-     * <p>The default implementation makes no guarantees about synchronization
-     * or atomicity properties of this method. Any implementation providing
-     * atomicity guarantees must override this method and document its
-     * concurrency properties.
-     *
-     * @param function the function to apply to each entry
-     */
-    void replaceAll(IntDoubleToDoubleFunction function) {
-        for (int i = 0; i < table.length; ++i) {
-            if (state[i] == FULL) {
-                values[i] = function.apply(table[i], values[i]);
+        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
+            final int keyAtIndex = keys[index];
+            if (keyAtIndex == key) {
+                return values[index];
+            } else if (keyAtIndex == EMPTY_KEY) {
+                return defaultValue;
+            } else {
+                index = (index + 1) & (keys.length - 1);
             }
         }
+        return slowGetOrDefault2(key, defaultValue);
+    }
+
+    private double slowGetOrDefault2(int key, double defaultValue) {
+        int index = probeTwo(key, -1);
+        if (keys[index] == key) {
+            return values[index];
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Returns {@code true} if this map maps one or more keys to the specified
+     * value. This operation will require linear time.
+     *
+     * @param value value whose presence in this map is to be tested
+     * @return {@code true} if this map maps one or more keys to the
+     *         specified value
+     */
+    public boolean containsValue(double value) {
+        if (sentinel.contains(value)) {
+            return true;
+        }
+        for (int i = 0; i < values.length; ++i) {
+            if (keys[i] != EMPTY_KEY &&
+                keys[i] != REMOVED_KEY &&
+                Double.compare(values[i], value) == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -243,88 +222,86 @@ public class IntDoubleMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied. Stops iteration if the
      *        procedure returns {@code false}, otherwise continues.
      */
-    public void forEach(final IntDoubleConsumer consumer) {
-        for (int i = table.length; i-- > 0; ) {
-            if (state[i] == FULL) {
-                consumer.accept(table[i], values[i]);
+    public void forEach(IntDoubleConsumer consumer) {
+        if (sentinel.hasEmptyKey) {
+            consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
+        }
+        if (sentinel.hasRemovedKey) {
+            consumer.accept(REMOVED_KEY, sentinel.removedKeyValue);
+        }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+                consumer.accept(keys[i], values[i]);
             }
         }
     }
 
     public void forEachValue(DoubleConsumer consumer) {
-        for (int i = 0; i < table.length; ++i) {
-            if (state[i] == FULL) {
+        if (sentinel.hasEmptyKey) {
+            consumer.accept(sentinel.emptyKeyValue);
+        }
+        if (sentinel.hasRemovedKey) {
+            consumer.accept(sentinel.removedKeyValue);
+        }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept(values[i]);
             }
         }
     }
 
     public DoubleStream values() {
-        return IntStream.range(0, table.length)
-            .filter(i -> state[i] == FULL)
-            .mapToDouble(i -> values[i]);
-    }
-
-    /**
-     * Returns the first key the given value is associated with. It is often a
-     * good idea to first check with {@link #containsValue(double)} whether
-     * there exists an association from a key to this value. Search order is
-     * guaranteed to be <i>identical</i> to the order used by method
-     * {@link #forEachKey(IntConsumer)}.
-     *
-     * @param value the value to search for.
-     * @return the first key for which holds {@code get(key) == value}; returns
-     *         {@link Integer#MIN_VALUE} if no such key exists.
-     */
-    public int keyOf(double value) {
-        int i = indexOfValue(value);
-        if (i < 0) {
-            return Integer.MIN_VALUE;
-        } else {
-            return table[i];
+        final var builder = DoubleStream.builder();
+        if (sentinel.hasEmptyKey) {
+            builder.accept(sentinel.emptyKeyValue);
         }
-    }
-
-
-    /**
-     * Rehashes the contents of the receiver into a new table with a smaller or
-     * larger capacity. This method is called automatically when the number of
-     * keys in the receiver exceeds the high watermark or falls below the low
-     * watermark.
-     */
-    @Override
-    void rehash(int newCapacity) {
-        int oldCapacity = table.length;
-
-        if (newCapacity <= this.distinct) {
-            throw new AssertionError();
+        if (sentinel.hasRemovedKey) {
+            builder.accept(sentinel.removedKeyValue);
         }
 
-        int[] oldTable = table;
-        double[] oldValues = values;
-        byte[] oldState = state;
+        return DoubleStream.concat(
+            builder.build(),
+            IntStream.range(0, size())
+                .filter(i -> keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY)
+                .mapToDouble(i -> values[i])
+        );
+    }
 
-        int[] newTable = new int[newCapacity];
-        double[] newValues = new double[newCapacity];
-        byte[] newState = new byte[newCapacity];
+    public boolean trimToSize() {
+        final int newCapacity = alignCapacity(size());
+        if (keys.length > newCapacity) {
+            rehash(newCapacity);
+            return true;
+        }
+        return false;
+    }
 
-        lowWaterMark = chooseLowWaterMark(newCapacity, minLoadFactor);
-        highWaterMark = chooseHighWaterMark(newCapacity, maxLoadFactor);
+    private void rehashAndGrow() {
+        int max = maxOccupiedWithData();
+        int newCapacity = Math.max(max, alignCapacity((occupiedWithData + 1) << 1));
+        if (occupiedWithSentinels > 0 && (max >> 1) + (max >> 2) < occupiedWithData) {
+            newCapacity <<= 1;
+        }
+        rehash(newCapacity);
+    }
 
-        table = newTable;
-        values = newValues;
-        state = newState;
-        freeEntries = newCapacity - distinct;
+    private void rehash(int newCapacity) {
+        final var oldKeys = keys;
+        final var oldValues = values;
 
-        for (int i = oldCapacity; i-- > 0; ) {
-            if (oldState[i] == FULL) {
-                int element = oldTable[i];
-                int index = indexOfInsertion(element);
-                newTable[index] = element;
-                newValues[index] = oldValues[i];
-                newState[index] = FULL;
+        allocate(newCapacity);
+        occupiedWithData = 0;
+        occupiedWithSentinels = 0;
+
+        for (int i = 0; i < oldKeys.length; ++i) {
+            if (oldKeys[i] != EMPTY_KEY && oldKeys[i] != REMOVED_KEY) {
+                put(oldKeys[i], oldValues[i]);
             }
         }
+    }
+
+    private int maxOccupiedWithData() {
+        return keys.length >> 1;
     }
 
 }

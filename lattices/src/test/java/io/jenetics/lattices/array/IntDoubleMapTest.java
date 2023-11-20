@@ -26,12 +26,10 @@ import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.array.map.IntDoubleMap;
-
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class IntDoubleHashMapTest {
+public class IntDoubleMapTest {
 
     @Test
     public void putGet() {

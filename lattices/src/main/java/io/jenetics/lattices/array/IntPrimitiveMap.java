@@ -19,139 +19,57 @@
  */
 package io.jenetics.lattices.array;
 
-import static io.jenetics.lattices.array.Primes.nextPrime;
-
+import java.util.Arrays;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
-/**
- * Extents the base-array with <em>copy</em> and <em>creation</em> capabilities.
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
 abstract class IntPrimitiveMap {
 
-    static final int DEFAULT_CAPACITY = 277;
-    static final double DEFAULT_MIN_LOAD_FACTOR = 0.2;
-    static final double DEFAULT_MAX_LOAD_FACTOR = 0.5;
+    static abstract class Sentinel {
+        boolean hasEmptyKey;
+        boolean hasRemovedKey;
 
-    static final byte FREE = 0;
-    static final byte FULL = 1;
-    static final byte REMOVED = 2;
-
-    /**
-     * The number of distinct associations in the map.
-     */
-    int distinct;
-
-    /**
-     * The table capacity c=table.length always satisfies the invariant
-     * {@code c * minLoadFactor <= s <= c * maxLoadFactor}, where
-     * {@code s=size()} is the number of associations currently contained.
-     * The term "c * minLoadFactor" is called the "lowWaterMark", "c *
-     * maxLoadFactor" is called the "highWaterMark". In other words, the table
-     * capacity (and proportionally the memory used by this class) oscillates
-     * within these constraints. The terms are precomputed and cached to avoid
-     * recalculating them each time put(..) or removeKey(...) is called.
-     */
-    int lowWaterMark;
-
-    int highWaterMark;
-
-    /**
-     * The minimum load factor for the hashtable.
-     */
-    double minLoadFactor;
-
-    /**
-     * The maximum load factor for the hashtable.
-     */
-    double maxLoadFactor;
-
-    /**
-     * The hash table keys.
-     */
-    int[] table;
-
-    /**
-     * The state of each hash table entry (FREE, FULL, REMOVED).
-     */
-    byte[] state;
-
-    /**
-     * The number of table entries in state==FREE.
-     */
-    int freeEntries;
-
-    /**
-     * Initializes the receiver. You will almost certainly need to override this
-     * method in subclasses to initialize the hash table.
-     *
-     * @param initialCapacity the initial capacity of the receiver.
-     * @param minLoadFactor the minLoadFactor of the receiver.
-     * @param maxLoadFactor the maxLoadFactor of the receiver.
-     * @throws IllegalArgumentException if {@code initialCapacity < 0 ||
-     *         (minLoadFactor < 0.0 || minLoadFactor >= 1.0) ||
-     *         (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) ||
-     *         (minLoadFactor >= maxLoadFactor)}
-     */
-    IntPrimitiveMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
-        if (initialCapacity < 0) {
-            throw new IllegalArgumentException(
-                "Initial Capacity must not be less than zero: " + initialCapacity
-            );
-        }
-        if (minLoadFactor < 0.0 || minLoadFactor >= 1.0) {
-            throw new IllegalArgumentException(
-                "Illegal minLoadFactor: " + minLoadFactor
-            );
-        }
-        if (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) {
-            throw new IllegalArgumentException(
-                "Illegal maxLoadFactor: " + maxLoadFactor
-            );
-        }
-        if (minLoadFactor >= maxLoadFactor) {
-            throw new IllegalArgumentException(
-                "Illegal minLoadFactor: " + minLoadFactor +
-                    " and maxLoadFactor: " + maxLoadFactor
-            );
+        int size() {
+            return (hasEmptyKey ? 1 : 0) + (hasRemovedKey ? 1 : 0);
         }
 
-        int capacity = initialCapacity;
-        capacity = nextPrime(capacity);
-        if (capacity == 0) {
-            capacity = 1;
+        void clear() {
+            hasEmptyKey = false;
+            hasRemovedKey = false;
         }
+    }
 
-        table = new int[capacity];
-        state = new byte[capacity];
+    static final int CACHE_LINE_SIZE = 64;
+    static final int KEY_SIZE = 4;
+    static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE/KEY_SIZE/2;
+    static final int DEFAULT_INITIAL_CAPACITY = 8;
 
-        // memory will be exhausted long before this pathological case happens, anyway.
-        this.minLoadFactor = minLoadFactor;
-        if (capacity == Primes.LARGEST_PRIME) {
-            this.maxLoadFactor = 1.0;
-        } else {
-            this.maxLoadFactor = maxLoadFactor;
-        }
+    static final int EMPTY_KEY = 0;
+    static final int REMOVED_KEY = 1;
 
-        this.distinct = 0;
-        this.freeEntries = capacity;
-        this.lowWaterMark = 0;
-        this.highWaterMark = chooseHighWaterMark(capacity, this.maxLoadFactor);
+
+    int[] keys;
+    int occupiedWithData;
+    int occupiedWithSentinels;
+
+    IntPrimitiveMap() {
+    }
+
+    abstract Sentinel sentinel();
+
+    void allocate(final int capacity) {
+        keys = new int[capacity];
     }
 
     /**
-     * Returns the number of key-value mappings in this map.  If the map
+     * Returns the number of key-value mappings in this map. If the map
      * contains more than {@link Integer#MAX_VALUE} elements, returns
      * {@link Integer#MAX_VALUE}.
      *
      * @return the number of key-value mappings in this map
      */
     public int size() {
-        return distinct;
+        return occupiedWithData + sentinel().size();
     }
 
     /**
@@ -172,100 +90,24 @@ abstract class IntPrimitiveMap {
      *         key
      */
     public boolean containsKey(int key) {
-        return indexOfKey(key) != -1;
+        if (key == EMPTY_KEY) {
+            return sentinel().hasEmptyKey;
+        } else if (key == REMOVED_KEY) {
+            return sentinel().hasRemovedKey;
+        } else {
+            return keys[probe(key)] == key;
+        }
     }
 
     /**
-     * Return the index for the given key, or {@code -1} if {@code this} map
-     * doesn't contain the given key.
-     *
-     * @param key the key to be searched in the receiver.
-     * @return the index where the key is contained in the receiver, else
-     *         returns -1.
-     */
-    int indexOfKey(int key) {
-        final int[] tab = table;
-        final byte[] stat = state;
-        final int length = tab.length;
-
-        final int hash = Integer.hashCode(key) & 0x7FFFFFFF;
-
-        int decrement = hash % (length - 2);
-        if (decrement == 0) {
-            decrement = 1;
-        }
-
-        // stop if we find a free slot, or if we find the key itself.
-        // do skip over removed slots (yes, open addressing is like that...)
-        // assertion: there is at least one FREE slot.
-        int i = hash % length;
-        while (stat[i] != FREE && (stat[i] == REMOVED || tab[i] != key)) {
-            i -= decrement;
-            if (i < 0) {
-                i += length;
-            }
-        }
-
-        if (stat[i] == FREE) {
-            return -1;
-        }
-
-        return i;
-    }
-
-    /**
-     * Removes all of the mappings from this map (optional operation).
-     * The map will be empty after this call returns.
+     * Removes all mappings from this map (optional operation). The map will be
+     * empty after this call returns.
      */
     public void clear() {
-        distinct = 0;
-        freeEntries = table.length;
-        trimToSize();
-    }
-
-    void trimToSize() {
-        final int newCapacity = nextPrime((int)(1 + 1.2 * size()));
-        if (table.length > newCapacity) {
-            rehash(newCapacity);
-        }
-    }
-
-    abstract void rehash(int newCapacity);
-
-    /**
-     * Ensures that the receiver can hold at least the specified number of
-     * associations without needing to allocate new internal memory. If
-     * necessary, allocates new internal memory and increases the capacity of
-     * the receiver.
-     * <p>
-     * This method never needs to be called; it is for performance tuning only.
-     * Calling this method before {@code put()}ing a large number of
-     * associations boosts performance, because the receiver will grow only once
-     * instead of potentially many times and hash collisions get less probable.
-     *
-     * @param minCapacity the desired minimum capacity.
-     */
-    void ensureCapacity(int minCapacity) {
-        if (table.length < minCapacity) {
-            int newCapacity = nextPrime(minCapacity);
-            rehash(newCapacity);
-        }
-    }
-
-    int chooseGrowCapacity(int size, double minLoad, double maxLoad) {
-        return nextPrime(Math.max(size + 1, (int) ((4 * size / (3 * minLoad + maxLoad)))));
-    }
-
-    int chooseHighWaterMark(int capacity, double maxLoad) {
-        return Math.min(capacity - 2, (int) (capacity * maxLoad));
-    }
-
-    int chooseLowWaterMark(int capacity, double minLoad) {
-        return (int) (capacity * minLoad);
-    }
-
-    int chooseShrinkCapacity(int size, double minLoad, double maxLoad) {
-        return nextPrime(Math.max(size + 1, (int) ((4 * size / (minLoad + 3 * maxLoad)))));
+        sentinel().clear();
+        occupiedWithData = 0;
+        occupiedWithSentinels = 0;
+        Arrays.fill(keys, EMPTY_KEY);
     }
 
     /**
@@ -282,78 +124,140 @@ abstract class IntPrimitiveMap {
      *        procedure returns {@code false}, otherwise continues.
      */
     public void forEachKey(IntConsumer consumer) {
-        for (int i = 0; i < table.length; ++i) {
-            if (state[i] == FULL) {
-                consumer.accept(table[i]);
+        if (sentinel().hasEmptyKey) {
+            consumer.accept(EMPTY_KEY);
+        }
+        if (sentinel().hasRemovedKey) {
+            consumer.accept(REMOVED_KEY);
+        }
+        for (int key : keys) {
+            if (key != EMPTY_KEY && key != REMOVED_KEY) {
+                consumer.accept(key);
             }
         }
-    }
-
-    public IntStream keys() {
-        return IntStream.range(0, table.length)
-            .filter(i -> state[i] == FULL);
     }
 
     /**
-     * @param key the key to be added to the receiver.
-     * @return the index where the key would need to be inserted, if it is not
-     * already contained. Returns -index-1 if the key is already contained at
-     * slot index. Therefore, if the returned index < 0, then it is already
-     * contained at slot -index-1. If the returned index >= 0, then it is NOT
-     * yet contained and should be inserted at slot index.
+     * Returns a stream containing all the keys in this map.
+     *
+     * @return a stream containing all the keys in this map
      */
-    int indexOfInsertion(int key) {
-        final var table = this.table;
-        final var state = this.state;
-        final var length = table.length;
-
-        final int hash = Integer.hashCode(key) & 0x7FFFFFFF;
-        int i = hash % length;
-        //int i = (length - 1 ) & hash;
-
-        // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
-        int decrement = hash % (length - 2);
-        //int decrement = (hash / length) % length;
-        if (decrement == 0) {
-            decrement = 1;
+    public IntStream keys() {
+        final var builder = IntStream.builder();
+        if (sentinel().hasEmptyKey) {
+            builder.accept(EMPTY_KEY);
+        }
+        if (sentinel().hasRemovedKey) {
+            builder.accept(REMOVED_KEY);
         }
 
-        // stop if we find a removed or free slot, or if we find the key itself
-        // do NOT skip over removed slots (yes, open addressing is like that...)
-        while (state[i] == FULL && table[i] != key) {
-            i -= decrement;
-            //hashCollisions++;
-            if (i < 0) {
-                i += length;
+        return IntStream.concat(
+            builder.build(),
+            IntStream.range(0, size())
+                .filter(i -> keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY)
+        );
+    }
+
+    void removeKeyAtIndex(int index) {
+        keys[index] = REMOVED_KEY;
+        --occupiedWithData;
+        ++occupiedWithSentinels;
+    }
+
+    int probe(int element) {
+        int index = mask(element);
+        int keyAtIndex = keys[index];
+
+        if (keyAtIndex == element || keyAtIndex == EMPTY_KEY) {
+            return index;
+        }
+
+        int removedIndex = keyAtIndex == REMOVED_KEY ? index : -1;
+        for (int i = 1; i < INITIAL_LINEAR_PROBE; i++) {
+            int nextIndex = (index + i) & (keys.length - 1);
+            keyAtIndex = keys[nextIndex];
+            if (keyAtIndex == element) {
+                return nextIndex;
+            }
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
             }
         }
 
-        if (state[i] == REMOVED) {
-            // stop if we find a free slot, or if we find the key itself.
-            // do skip over removed slots (yes, open addressing is like that...)
-            // assertion: there is at least one FREE slot.
-            int j = i;
-            while (state[i] != FREE && (state[i] == REMOVED || table[i] != key)) {
-                i -= decrement;
-                //hashCollisions++;
-                if (i < 0) {
-                    i += length;
-                }
+        return probeTwo(element, removedIndex);
+    }
+
+    int probeTwo(int element, int removedIndex) {
+        int index = spreadTwoAndMask(element);
+        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
+            int nextIndex = (index + i) & (keys.length - 1);
+            int keyAtIndex = keys[nextIndex];
+            if (keyAtIndex == element) {
+                return nextIndex;
             }
-            if (state[i] == FREE) {
-                i = j;
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
             }
         }
 
-        if (state[i] == FULL) {
-            // key already contained at slot i.
-            // return a negative number identifying the slot.
-            return -i - 1;
-        }
+        return probeThree(element, removedIndex);
+    }
 
-        // not already contained, should be inserted at slot i.
-        // return a number >= 0 identifying the slot.
-        return i;
+    private int probeThree(int element, int removedIndex) {
+        int nextIndex = mix1(element);
+        int spreadTwo = Integer.reverse(mix2(element)) | 1;
+
+        while (true) {
+            nextIndex = mask(nextIndex + spreadTwo);
+            int keyAtIndex = keys[nextIndex];
+            if (keyAtIndex == element) {
+                return nextIndex;
+            }
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
+            }
+        }
+    }
+
+    private int spreadTwoAndMask(int element) {
+        return mask(mix2(element));
+    }
+
+    int mask(int spread) {
+        return spread & (keys.length - 1);
+    }
+
+    static int alignCapacity(int capacity) {
+        return capacity > 1 ? Integer.highestOneBit(capacity - 1) << 1 : 1;
+    }
+
+    private static int mix1(int code) {
+        int code1 = code;
+        code1 ^= code1 >>> 15;
+        code1 *= 0xACAB2A4D;
+        code1 ^= code1 >>> 15;
+        code1 *= 0x5CC7DF53;
+        code1 ^= code1 >>> 12;
+        return code1;
+    }
+
+    private static int mix2(int code) {
+        int code1 = code;
+        code1 ^= code1 >>> 14;
+        code1 *= 0xBA1CCD33;
+        code1 ^= code1 >>> 13;
+        code1 *= 0x9B6296CB;
+        code1 ^= code1 >>> 12;
+        return code1;
     }
 
 }
