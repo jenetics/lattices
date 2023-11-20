@@ -21,11 +21,12 @@ package io.jenetics.lattices.array;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.random.RandomGenerator;
 
 import org.testng.annotations.Test;
+
+import io.jenetics.lattices.array.map.IntDoubleMap;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -36,7 +37,7 @@ public class IntDoubleHashMapTest {
     public void putGet() {
         Map<String, String> mapadf;
         final var random = RandomGenerator.getDefault();
-        final var map = new io.jenetics.lattices.array.map.IntDoubleHashMap();
+        final var map = new IntDoubleMap();
         //final var map = new IntDoubleMap();
         //final var map = new HashMap<Integer, Double>();
 

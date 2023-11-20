@@ -31,7 +31,7 @@ import io.jenetics.lattices.function.IntDoubleConsumer;
  * @since 3.0
  * @version 3.0
  */
-public class IntDoubleHashMap extends IntPrimitiveMap {
+public class IntDoubleMap extends IntPrimitiveMap {
 
     private static final class DoubleSentinel extends Sentinel {
         double emptyKeyValue;
@@ -50,11 +50,11 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
 
     private double[] values;
 
-    public IntDoubleHashMap() {
+    public IntDoubleMap() {
         allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
-    public IntDoubleHashMap(int capacity) {
+    public IntDoubleMap(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException("Initial capacity cannot be less than 0.");
         }
