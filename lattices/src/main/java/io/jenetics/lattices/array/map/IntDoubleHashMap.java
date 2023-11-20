@@ -1,14 +1,39 @@
+/*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Author:
+ *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
+ */
 package io.jenetics.lattices.array.map;
 
 import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntDoubleConsumer;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
+ */
 public class IntDoubleHashMap extends IntPrimitiveMap {
 
-    static final class DoubleSentinel extends Sentinel {
+    private static final class DoubleSentinel extends Sentinel {
         double emptyKeyValue;
         double removedKeyValue;
 
@@ -29,13 +54,12 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
-    public IntDoubleHashMap(int initialCapacity) {
-        if (initialCapacity < 0) {
+    public IntDoubleHashMap(int capacity) {
+        if (capacity < 0) {
             throw new IllegalArgumentException("Initial capacity cannot be less than 0.");
         }
 
-        final int capacity = smallestPowerOfTwoGreaterThan(initialCapacity << 1);
-        allocate(capacity);
+        allocate(alignCapacity(capacity << 1));
     }
 
     @Override
@@ -43,6 +67,19 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         return sentinel;
     }
 
+    @Override
+    void allocate(int capacity) {
+        super.allocate(capacity);
+        values = new double[capacity];
+    }
+
+    /**
+     * Associates the given key with the given value. Replaces any old
+     * {@code (key, someOtherValue)} association, if existing.
+     *
+     * @param key the key the value shall be associated with.
+     * @param value the value to be associated.
+     */
     public void put(int key, double value) {
         if (key == EMPTY_KEY) {
             sentinel.hasEmptyKey = true;
@@ -62,6 +99,12 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         }
     }
 
+    /**
+     * Removes the given key with its associated element from the receiver, if
+     * present.
+     *
+     * @param key the key to be removed from the receiver.
+     */
     public void remove(int key) {
         if (key == EMPTY_KEY) {
             sentinel.hasEmptyKey = false;
@@ -88,13 +131,16 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         }
     }
 
-    private void removeKeyAtIndex(int index) {
-        keys[index] = REMOVED_KEY;
-        values[index] = EMPTY_VALUE;
-        --occupiedWithData;
-        ++occupiedWithSentinels;
-    }
-
+    /**
+     * Returns the value associated with the specified key. It is often a good
+     * idea to first check with {@link #containsKey(int)} whether the given key
+     * has a value associated or not, i.e., whether there exists an association
+     * for the given key or not.
+     *
+     * @param key the key to be searched for.
+     * @return the value associated with the specified key; {@code 0} if no
+     * such key is present.
+     */
     public double get(int key) {
         return getOrDefault(key, EMPTY_VALUE);
     }
@@ -144,16 +190,14 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         return defaultValue;
     }
 
-    public boolean containsKey(int key) {
-        if (key == EMPTY_KEY) {
-            return sentinel.hasEmptyKey;
-        } else if (key == REMOVED_KEY) {
-            return sentinel.hasRemovedKey;
-        } else {
-            return keys[probe(key)] == key;
-        }
-    }
-
+    /**
+     * Returns {@code true} if this map maps one or more keys to the specified
+     * value. This operation will require linear time.
+     *
+     * @param value value whose presence in this map is to be tested
+     * @return {@code true} if this map maps one or more keys to the
+     *         specified value
+     */
     public boolean containsValue(double value) {
         if (sentinel.contains(value)) {
             return true;
@@ -170,6 +214,14 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         return false;
     }
 
+    /**
+     * Applies a procedure to each (key,value) pair of the receivers, if any.
+     * Iteration order is guaranteed to be <i>identical</i> to the order used by
+     * method {@link #forEachKey(IntConsumer)}.
+     *
+     * @param consumer the procedure to be applied. Stops iteration if the
+     *        procedure returns {@code false}, otherwise continues.
+     */
     public void forEach(IntDoubleConsumer consumer) {
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
@@ -177,7 +229,7 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         if (sentinel.hasRemovedKey) {
             consumer.accept(REMOVED_KEY, sentinel.removedKeyValue);
         }
-        for (int i = 0; i < this.keys.length; i++) {
+        for (int i = 0; i < keys.length; i++) {
             if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept(keys[i], values[i]);
             }
@@ -191,7 +243,7 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
         if (sentinel.hasRemovedKey) {
             consumer.accept(sentinel.removedKeyValue);
         }
-        for (int i = 0; i < this.keys.length; i++) {
+        for (int i = 0; i < keys.length; i++) {
             if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept(values[i]);
             }
@@ -216,7 +268,7 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
     }
 
     public boolean trimToSize() {
-        final int newCapacity = smallestPowerOfTwoGreaterThan(size());
+        final int newCapacity = alignCapacity(size());
         if (keys.length > newCapacity) {
             rehash(newCapacity);
             return true;
@@ -226,11 +278,11 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
 
     private void rehashAndGrow() {
         int max = maxOccupiedWithData();
-        int newCapacity = Math.max(max, smallestPowerOfTwoGreaterThan((occupiedWithData + 1) << 1));
+        int newCapacity = Math.max(max, alignCapacity((occupiedWithData + 1) << 1));
         if (occupiedWithSentinels > 0 && (max >> 1) + (max >> 2) < occupiedWithData) {
             newCapacity <<= 1;
         }
-        this.rehash(newCapacity);
+        rehash(newCapacity);
     }
 
     private void rehash(int newCapacity) {
@@ -246,90 +298,6 @@ public class IntDoubleHashMap extends IntPrimitiveMap {
                 put(oldKeys[i], oldValues[i]);
             }
         }
-    }
-
-    int probe(int element) {
-        int index = mask(element);
-        int keyAtIndex = keys[index];
-
-        if (keyAtIndex == element || keyAtIndex == EMPTY_KEY) {
-            return index;
-        }
-
-        int removedIndex = keyAtIndex == REMOVED_KEY ? index : -1;
-        for (int i = 1; i < INITIAL_LINEAR_PROBE; i++) {
-            int nextIndex = (index + i) & (keys.length - 1);
-            keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-
-        return probeTwo(element, removedIndex);
-    }
-
-    int probeTwo(int element, int removedIndex) {
-        int index = spreadTwoAndMask(element);
-        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
-            int nextIndex = (index + i) & (keys.length - 1);
-            int keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-
-        return probeThree(element, removedIndex);
-    }
-
-    int probeThree(int element, int removedIndex) {
-        int nextIndex = SpreadFunctions.intSpreadOne(element);
-        int spreadTwo = Integer.reverse(SpreadFunctions.intSpreadTwo(element)) | 1;
-
-        while (true) {
-            nextIndex = mask(nextIndex + spreadTwo);
-            int keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-    }
-
-    int spreadAndMask(int element) {
-        int code = SpreadFunctions.intSpreadOne(element);
-        return this.mask(code);
-    }
-
-    int spreadTwoAndMask(int element) {
-        int code = SpreadFunctions.intSpreadTwo(element);
-        return this.mask(code);
-    }
-
-    private int mask(int spread) {
-        return spread & (keys.length - 1);
-    }
-
-    @Override
-    void allocate(int capacity) {
-        super.allocate(capacity);
-        values = new double[capacity];
     }
 
     private int maxOccupiedWithData() {
