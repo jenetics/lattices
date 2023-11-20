@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices;
+package io.jenetics.lattices.array;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;

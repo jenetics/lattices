@@ -57,7 +57,9 @@ final class IntDoubleMap extends IntPrimitiveMap {
 
     public IntDoubleMap(int capacity) {
         if (capacity < 0) {
-            throw new IllegalArgumentException("Initial capacity cannot be less than 0.");
+            throw new IllegalArgumentException(
+                "Initial capacity cannot be less than 0."
+            );
         }
 
         allocate(alignCapacity(capacity << 1));

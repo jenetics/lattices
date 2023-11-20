@@ -23,6 +23,11 @@ import java.util.Arrays;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
+/**
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
+ */
 abstract class IntPrimitiveMap {
 
     static abstract class Sentinel {
@@ -46,7 +51,6 @@ abstract class IntPrimitiveMap {
 
     static final int EMPTY_KEY = 0;
     static final int REMOVED_KEY = 1;
-
 
     int[] keys;
     int occupiedWithData;
