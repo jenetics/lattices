@@ -1,25 +1,17 @@
 package io.jenetics.lattices.array.map;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
-public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //implements MutableIntDoubleMap, Externalizable, MutableIntKeysMap
-{
+public class IntDoubleHashMap extends IntPrimitiveMap {
     private static final double EMPTY_VALUE = 0.0;
-    private static final int EMPTY_KEY = 0;
-    private static final int REMOVED_KEY = 1;
     private static final int CACHE_LINE_SIZE = 64;
     private static final int KEY_SIZE = 4;
-    private static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE / KEY_SIZE / 2; /* half a cache line */
+    private static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE / KEY_SIZE / 2;
 
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
 
     private final Sentinel sentinel = new Sentinel();
 
-    private int[] keys;
     private double[] values;
     private int occupiedWithData;
     private int occupiedWithSentinels;
@@ -27,7 +19,7 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
     private boolean copyKeysOnWrite;
 
     public IntDoubleHashMap() {
-        allocateTable(DEFAULT_INITIAL_CAPACITY << 1);
+        allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
     public IntDoubleHashMap(int initialCapacity) {
@@ -36,7 +28,7 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         }
 
         final int capacity = smallestPowerOfTwoGreaterThan(initialCapacity << 1);
-        allocateTable(capacity);
+        allocate(capacity);
     }
 
     public int size() {
@@ -54,11 +46,11 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
 
     public void put(int key, double value) {
         if (key == EMPTY_KEY) {
-            sentinel.hasZeroKey = true;
-            sentinel.zeroValue = value;
+            sentinel.hasEmptyKey = true;
+            sentinel.emptyKeyValue = value;
         } else if (key == REMOVED_KEY) {
-            sentinel.hasOneKey = true;
-            sentinel.oneValue = value;
+            sentinel.hasRemovedKey = true;
+            sentinel.removedKeyValue = value;
         } else {
             final int index = probe(key);
             final int keyAtIndex = keys[index];
@@ -71,168 +63,13 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         }
     }
 
-    private static boolean isEmptyKey(int key) {
-        return key == EMPTY_KEY;
-    }
-
-    private static boolean isRemovedKey(int key) {
-        return key == REMOVED_KEY;
-    }
-
     private static boolean isNonSentinel(int key) {
-        return !isEmptyKey(key) && !isRemovedKey(key);
+        return key != EMPTY_KEY && key != REMOVED_KEY;
     }
-
-
-
-
-
-
-
-
-
-
-
 
     private int smallestPowerOfTwoGreaterThan(int n) {
         return n > 1 ? Integer.highestOneBit(n - 1) << 1 : 1;
     }
-
-//    @Override
-//    protected double getEmptyValue() {
-//        return EMPTY_VALUE;
-//    }
-//
-//    @Override
-//    protected int getTableSize() {
-//        return this.values.length;
-//    }
-//
-//    @Override
-//    protected double getValueAtIndex(int index) {
-//        return this.values[index];
-//    }
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) {
-//            return true;
-//        }
-//
-//        if (!(obj instanceof IntDoubleMap)) {
-//            return false;
-//        }
-//
-//        IntDoubleMap other = (IntDoubleMap) obj;
-//
-//        if (this.size() != other.size()) {
-//            return false;
-//        }
-//
-//        if (this.sentinel == null) {
-//            if (other.containsKey(EMPTY_KEY) || other.containsKey(REMOVED_KEY)) {
-//                return false;
-//            }
-//        } else {
-//            if (this.sentinel.containsZeroKey && (!other.containsKey(EMPTY_KEY) || Double.compare(this.sentinel.zeroValue, other.getOrThrow(EMPTY_KEY)) != 0)) {
-//                return false;
-//            }
-//
-//            if (this.sentinel.containsOneKey && (!other.containsKey(REMOVED_KEY) || Double.compare(this.sentinel.oneValue, other.getOrThrow(REMOVED_KEY)) != 0)) {
-//                return false;
-//            }
-//        }
-//        for (int i = 0; i < this.keys.length; i++) {
-//            int key = this.keys[i];
-//            if (isNonSentinel(key) && (!other.containsKey(key) || Double.compare(this.values[i], other.getOrThrow(key)) != 0)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        int result = 0;
-//
-//        if (this.sentinel != null) {
-//            if (this.sentinel.containsZeroKey) {
-//                result += EMPTY_KEY ^ (int) (Double.doubleToLongBits(this.sentinel.zeroValue) ^ Double.doubleToLongBits(this.sentinel.zeroValue) >>> 32);
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                result += REMOVED_KEY ^ (int) (Double.doubleToLongBits(this.sentinel.oneValue) ^ Double.doubleToLongBits(this.sentinel.oneValue) >>> 32);
-//            }
-//        }
-//        for (int i = 0; i < this.keys.length; i++) {
-//            if (isNonSentinel(this.keys[i])) {
-//                result += this.keys[i] ^ (int) (Double.doubleToLongBits(this.values[i]) ^ Double.doubleToLongBits(this.values[i]) >>> 32);
-//            }
-//        }
-//
-//        return result;
-//    }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder appendable = new StringBuilder();
-//
-//        appendable.append("{");
-//
-//        boolean first = true;
-//
-//        if (this.sentinel != null) {
-//            if (this.sentinel.containsZeroKey) {
-//                appendable.append(EMPTY_KEY).append("=").append(this.sentinel.zeroValue);
-//                first = false;
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                if (!first) {
-//                    appendable.append(", ");
-//                }
-//                appendable.append(REMOVED_KEY).append("=").append(this.sentinel.oneValue);
-//                first = false;
-//            }
-//        }
-//        for (int i = 0; i < this.keys.length; i++) {
-//            int key = this.keys[i];
-//            if (isNonSentinel(key)) {
-//                if (!first) {
-//                    appendable.append(", ");
-//                }
-//                appendable.append(key).append("=").append(this.values[i]);
-//                first = false;
-//            }
-//        }
-//        appendable.append("}");
-//
-//        return appendable.toString();
-//    }
-
-//    @Override
-//    public MutableDoubleIterator doubleIterator() {
-//        return new InternalDoubleIterator();
-//    }
-//
-//    @Override
-//    public <V> V injectInto(V injectedValue, ObjectDoubleToObjectFunction<? super V, ? extends V> function) {
-//        V result = injectedValue;
-//
-//        if (this.sentinel != null) {
-//            if (this.sentinel.containsZeroKey) {
-//                result = function.valueOf(result, this.sentinel.zeroValue);
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                result = function.valueOf(result, this.sentinel.oneValue);
-//            }
-//        }
-//        for (int i = 0; i < this.keys.length; i++) {
-//            if (isNonSentinel(this.keys[i])) {
-//                result = function.valueOf(result, this.values[i]);
-//            }
-//        }
-//
-//        return result;
-//    }
 
     public void clear() {
         sentinel.clear();
@@ -245,33 +82,11 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         Arrays.fill(this.values, EMPTY_VALUE);
     }
 
-//    @Override
-//    public void putAll(IntDoubleMap map) {
-//        map.forEachKeyValue(this::put);
-//    }
-
-//    @Override
-//    public void updateValues(IntDoubleToDoubleFunction function) {
-//        if (this.sentinel != null) {
-//            if (this.sentinel.containsZeroKey) {
-//                this.sentinel.zeroValue = function.valueOf(EMPTY_KEY, this.sentinel.zeroValue);
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                this.sentinel.oneValue = function.valueOf(REMOVED_KEY, this.sentinel.oneValue);
-//            }
-//        }
-//        for (int i = 0; i < this.keys.length; i++) {
-//            if (isNonSentinel(this.keys[i])) {
-//                this.values[i] = function.valueOf(this.keys[i], this.values[i]);
-//            }
-//        }
-//    }
-
     public void remove(int key) {
         if (key == EMPTY_KEY) {
-            sentinel.hasZeroKey = false;
+            sentinel.hasEmptyKey = false;
         } else if (key == REMOVED_KEY) {
-            sentinel.hasOneKey = false;
+            sentinel.hasRemovedKey = false;
         } else {
             int index = probe(key);
             if (keys[index] == key) {
@@ -279,251 +94,6 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
             }
         }
     }
-
-//    @Override
-//    public double removeKeyIfAbsent(int key, double value) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null || !this.sentinel.containsZeroKey) {
-//                return value;
-//            }
-//            double oldValue = this.sentinel.zeroValue;
-//            this.removeEmptyKey();
-//            return oldValue;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null || !this.sentinel.containsOneKey) {
-//                return value;
-//            }
-//            double oldValue = this.sentinel.oneValue;
-//            this.removeRemovedKey();
-//            return oldValue;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            double oldValue = this.values[index];
-//            this.removeKeyAtIndex(index);
-//            return oldValue;
-//        }
-//        return value;
-//    }
-
-//    @Override
-//    public double getIfAbsentPut(int key, double value) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsZeroKey) {
-//                return this.sentinel.zeroValue;
-//            }
-//            this.addEmptyKeyValue(value);
-//            return value;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                return this.sentinel.oneValue;
-//            }
-//            this.addRemovedKeyValue(value);
-//            return value;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            return this.values[index];
-//        }
-//        this.addKeyValueAtIndex(key, value, index);
-//        return value;
-//    }
-
-//    @Override
-//    public double getAndPut(int key, double putValue, double defaultValue) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//            } else if (this.sentinel.containsZeroKey) {
-//                double existingValue = this.sentinel.zeroValue;
-//                this.sentinel.zeroValue = putValue;
-//                return existingValue;
-//            }
-//            this.addEmptyKeyValue(putValue);
-//            return defaultValue;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//            } else if (this.sentinel.containsOneKey) {
-//                double existingValue = this.sentinel.oneValue;
-//                this.sentinel.oneValue = putValue;
-//                return existingValue;
-//            }
-//            this.addRemovedKeyValue(putValue);
-//            return defaultValue;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            double existingValue = this.values[index];
-//            this.values[index] = putValue;
-//            return existingValue;
-//        }
-//        this.addKeyValueAtIndex(key, putValue, index);
-//        return defaultValue;
-//    }
-
-//    @Override
-//    public double getIfAbsentPut(int key, DoubleFunction0 function) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.value();
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsZeroKey) {
-//                return this.sentinel.zeroValue;
-//            }
-//            double value = function.value();
-//            this.addEmptyKeyValue(value);
-//            return value;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.value();
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                return this.sentinel.oneValue;
-//            }
-//            double value = function.value();
-//            this.addRemovedKeyValue(value);
-//            return value;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            return this.values[index];
-//        }
-//        double value = function.value();
-//        this.addKeyValueAtIndex(key, value, index);
-//        return value;
-//    }
-
-//    @Override
-//    public <P> double getIfAbsentPutWith(int key, DoubleFunction<? super P> function, P parameter) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.doubleValueOf(parameter);
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsZeroKey) {
-//                return this.sentinel.zeroValue;
-//            }
-//            double value = function.doubleValueOf(parameter);
-//            this.addEmptyKeyValue(value);
-//            return value;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.doubleValueOf(parameter);
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                return this.sentinel.oneValue;
-//            }
-//            double value = function.doubleValueOf(parameter);
-//            this.addRemovedKeyValue(value);
-//            return value;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            return this.values[index];
-//        }
-//        double value = function.doubleValueOf(parameter);
-//        this.addKeyValueAtIndex(key, value, index);
-//        return value;
-//    }
-
-//    @Override
-//    public double getIfAbsentPutWithKey(int key, IntToDoubleFunction function) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.valueOf(key);
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsZeroKey) {
-//                return this.sentinel.zeroValue;
-//            }
-//            double value = function.valueOf(key);
-//            this.addEmptyKeyValue(value);
-//            return value;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                double value = function.valueOf(key);
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(value);
-//                return value;
-//            }
-//            if (this.sentinel.containsOneKey) {
-//                return this.sentinel.oneValue;
-//            }
-//            double value = function.valueOf(key);
-//            this.addRemovedKeyValue(value);
-//            return value;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            return this.values[index];
-//        }
-//        double value = function.valueOf(key);
-//        this.addKeyValueAtIndex(key, value, index);
-//        return value;
-//    }
-
-//    @Override
-//    public double addToValue(int key, double toBeAdded) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(toBeAdded);
-//            } else if (this.sentinel.containsZeroKey) {
-//                this.sentinel.zeroValue += toBeAdded;
-//            } else {
-//                this.addEmptyKeyValue(toBeAdded);
-//            }
-//            return this.sentinel.zeroValue;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(toBeAdded);
-//            } else if (this.sentinel.containsOneKey) {
-//                this.sentinel.oneValue += toBeAdded;
-//            } else {
-//                this.addRemovedKeyValue(toBeAdded);
-//            }
-//            return this.sentinel.oneValue;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            this.values[index] += toBeAdded;
-//            return this.values[index];
-//        }
-//        this.addKeyValueAtIndex(key, toBeAdded, index);
-//        return toBeAdded;
-//    }
 
     private void addKeyValueAtIndex(int key, double value, int index) {
         if (keys[index] == REMOVED_KEY) {
@@ -557,41 +127,6 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         this.copyKeysOnWrite = false;
     }
 
-//    @Override
-//    public double updateValue(int key, double initialValueIfAbsent, DoubleToDoubleFunction function) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
-//            } else if (this.sentinel.containsZeroKey) {
-//                this.sentinel.zeroValue = function.valueOf(this.sentinel.zeroValue);
-//            } else {
-//                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
-//            }
-//            return this.sentinel.zeroValue;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null) {
-//                this.sentinel = new SentinelValues();
-//                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
-//            } else if (this.sentinel.containsOneKey) {
-//                this.sentinel.oneValue = function.valueOf(this.sentinel.oneValue);
-//            } else {
-//                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
-//            }
-//            return this.sentinel.oneValue;
-//        }
-//        int index = this.probe(key);
-//        if (this.keys[index] == key) {
-//            this.values[index] = function.valueOf(this.values[index]);
-//            return this.values[index];
-//        }
-//        double value = function.valueOf(initialValueIfAbsent);
-//        this.addKeyValueAtIndex(key, value, index);
-//        return value;
-//    }
-
-
     public double get(int key) {
         return getOrDefault(key, EMPTY_VALUE);
     }
@@ -608,15 +143,15 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
 
     private double getForSentinel(int key, double ifAbsent) {
         if (key == EMPTY_KEY) {
-            if (!sentinel.hasZeroKey) {
+            if (!sentinel.hasEmptyKey) {
                 return ifAbsent;
             }
-            return this.sentinel.zeroValue;
+            return this.sentinel.emptyKeyValue;
         }
-        if (!sentinel.hasOneKey) {
+        if (!sentinel.hasRemovedKey) {
             return ifAbsent;
         }
-        return this.sentinel.oneValue;
+        return this.sentinel.removedKeyValue;
     }
 
     private double slowGetIfAbsent(int key, double ifAbsent) {
@@ -651,34 +186,30 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         return ifAbsent;
     }
 
-//    public double getOrThrow(int key) {
-//        if (isEmptyKey(key)) {
-//            if (this.sentinel == null || !this.sentinel.containsZeroKey) {
-//                throw new IllegalStateException("Key " + key + " not present.");
-//            }
-//            return this.sentinel.zeroValue;
-//        }
-//        if (isRemovedKey(key)) {
-//            if (this.sentinel == null || !this.sentinel.containsOneKey) {
-//                throw new IllegalStateException("Key " + key + " not present.");
-//            }
-//            return this.sentinel.oneValue;
-//        }
-//        int index = this.probe(key);
-//        if (isNonSentinel(this.keys[index])) {
-//            return this.values[index];
-//        }
-//        throw new IllegalStateException("Key " + key + " not present.");
-//    }
-
     public boolean containsKey(int key) {
         if (key == EMPTY_KEY) {
-            return sentinel.hasZeroKey;
+            return sentinel.hasEmptyKey;
         }
         if (key == REMOVED_KEY) {
-            return sentinel.hasOneKey;
+            return sentinel.hasRemovedKey;
         }
         return keys[probe(key)] == key;
+    }
+
+    public boolean containsValue(double value) {
+        if (sentinel.contains(value)) {
+            return true;
+        }
+        for (int i = 0; i < values.length; ++i) {
+            if (keys[i] != EMPTY_KEY &&
+                keys[i] != REMOVED_KEY &&
+                Double.compare(values[i], value) == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 //    @Override
@@ -835,7 +366,7 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         int oldLength = this.keys.length;
         int[] old = this.keys;
         double[] oldValues = this.values;
-        this.allocateTable(newCapacity);
+        this.allocate(newCapacity);
         this.occupiedWithData = 0;
         this.occupiedWithSentinels = 0;
 
@@ -876,8 +407,8 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
     int probeTwo(int element, int removedIndex) {
         int index = this.spreadTwoAndMask(element);
         for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
-            int nextIndex = (index + i) & (this.keys.length - 1);
-            int keyAtIndex = this.keys[nextIndex];
+            int nextIndex = (index + i) & (keys.length - 1);
+            int keyAtIndex = keys[nextIndex];
             if (keyAtIndex == element) {
                 return nextIndex;
             }
@@ -897,8 +428,8 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         int spreadTwo = Integer.reverse(SpreadFunctions.intSpreadTwo(element)) | 1;
 
         while (true) {
-            nextIndex = this.mask(nextIndex + spreadTwo);
-            int keyAtIndex = this.keys[nextIndex];
+            nextIndex = mask(nextIndex + spreadTwo);
+            int keyAtIndex = keys[nextIndex];
             if (keyAtIndex == element) {
                 return nextIndex;
             }
@@ -926,11 +457,11 @@ public class IntDoubleHashMap //extends AbstractMutableDoubleValuesMap //impleme
         return spread & (keys.length - 1);
     }
 
-    protected void allocateTable(int sizeToAllocate) {
-        keys = new int[sizeToAllocate];
-        values = new double[sizeToAllocate];
+    @Override
+    void allocate(int capacity) {
+        super.allocate(capacity);
+        values = new double[capacity];
     }
-
 
     private int maxOccupiedWithData() {
         return this.keys.length >> 1;
