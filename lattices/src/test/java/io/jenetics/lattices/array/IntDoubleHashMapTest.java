@@ -52,9 +52,6 @@ public class IntDoubleHashMapTest {
             assertThat(map.get(key)).isEqualTo(value);
             //assertThat(map.keyOf(value)).isEqualTo(key);
             assertThat(map.containsKey(key)).isTrue();
-            if (!map.containsValue(value)) {
-                System.out.println("ASDFADF");
-            }
             assertThat(map.containsValue(value))
                 .withFailMessage("Value: " + value + ", Key: " + key)
                 .isTrue();
