@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.random.RandomGenerator;
 
+import org.eclipse.collections.impl.map.mutable.primitive.IntDoubleHashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -35,8 +36,8 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import io.jenetics.lattices.array.IntDoubleMap;
 
-@Warmup(iterations = 2)
-@Measurement(iterations = 3)
+@Warmup(iterations = 1)
+@Measurement(iterations = 1)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -73,6 +74,16 @@ public class IntDoubleMapPerf {
     @Benchmark
     public Object hashMapPut(Data data) {
         final var map = new HashMap<Integer, Double>();
+        for (int i = 0; i < data.keys.length; ++i) {
+            map.put(data.keys[i], data.values[i]);
+        }
+
+        return map;
+    }
+
+    @Benchmark
+    public Object eclipseMapPut(Data data) {
+        final var map = new IntDoubleHashMap();
         for (int i = 0; i < data.keys.length; ++i) {
             map.put(data.keys[i], data.values[i]);
         }
