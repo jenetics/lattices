@@ -55,7 +55,7 @@ public class SparseIntArray implements Array.OfInt, Array.Sparse {
     @Override
     public void set(final int index, final int value) {
         Objects.checkIndex(index, length);
-        if (value == 0) {
+        if (value != 0) {
             values.put(index, value);
         }
     }

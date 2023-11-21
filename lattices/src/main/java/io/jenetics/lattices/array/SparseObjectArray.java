@@ -22,8 +22,8 @@ package io.jenetics.lattices.array;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import io.jenetics.lattices.function.IntLongConsumer;
-import io.jenetics.lattices.map.IntLongMap;
+import io.jenetics.lattices.function.IntObjectConsumer;
+import io.jenetics.lattices.map.IntObjectMap;
 
 /**
  * Implementation of a <em>sparse</em> array of {@code long} values.
@@ -32,12 +32,12 @@ import io.jenetics.lattices.map.IntLongMap;
  * @since 3.0
  * @version 3.0
  */
-public class SparseLongArray implements Array.OfLong, Array.Sparse {
+public class SparseObjectArray<T> implements Array.OfObject<T>, Array.Sparse {
 
     private final int length;
-    private final IntLongMap values = new IntLongMap();
+    private final IntObjectMap<T> values = new IntObjectMap<>();
 
-    public SparseLongArray(final int length) {
+    public SparseObjectArray(final int length) {
         this.length = length;
     }
 
@@ -47,15 +47,15 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
     }
 
     @Override
-    public long get(final int index) {
+    public T get(final int index) {
         Objects.checkIndex(index, length);
         return values.get(index);
     }
 
     @Override
-    public void set(final int index, final long value) {
+    public void set(final int index, final T value) {
         Objects.checkIndex(index, length);
-        if (value != 0) {
+        if (value == null) {
             values.put(index, value);
         }
     }
@@ -65,7 +65,7 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
      *
      * @param consumer the procedure to be applied
      */
-    public void forEach(IntLongConsumer consumer) {
+    public void forEach(IntObjectConsumer<T> consumer) {
         values.forEach(consumer);
     }
 
@@ -75,7 +75,7 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
     }
 
     @Override
-    public SparseLongArray copy(final int start, final int length) {
+    public SparseObjectArray<T> copy(final int start, final int length) {
         Objects.checkFromIndexSize(start, length, length());
 
         final var copy = like(length);
@@ -89,8 +89,8 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
     }
 
     @Override
-    public SparseLongArray like(final int length) {
-        return new SparseLongArray(length);
+    public SparseObjectArray<T> like(final int length) {
+        return new SparseObjectArray<>(length);
     }
 
 }
