@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntObjectConsumer;
+import io.jenetics.lattices.function.IntObjectToObjectFunction;
 import io.jenetics.lattices.map.IntObjectMap;
 
 /**
@@ -65,8 +66,17 @@ public class SparseObjectArray<T> implements Array.OfObject<T>, Array.Sparse {
      *
      * @param consumer the procedure to be applied
      */
-    public void forEach(IntObjectConsumer<T> consumer) {
+    public void forEach(IntObjectConsumer<? super T> consumer) {
         values.forEach(consumer);
+    }
+
+    /**
+     * Update all map values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    public void update(IntObjectToObjectFunction<T> fn) {
+        values.update(fn);
     }
 
     @Override

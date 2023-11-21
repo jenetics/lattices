@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntLongConsumer;
+import io.jenetics.lattices.function.IntLongToLongFunction;
 import io.jenetics.lattices.map.IntLongMap;
 
 /**
@@ -67,6 +68,15 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
      */
     public void forEach(IntLongConsumer consumer) {
         values.forEach(consumer);
+    }
+
+    /**
+     * Update all array values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    public void update(IntLongToLongFunction fn) {
+        values.update(fn);
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import io.jenetics.lattices.function.IntObjectConsumer;
+import io.jenetics.lattices.function.IntObjectToObjectFunction;
 
 /**
  * Maps {@code int} keys to values of type {@code T}.
@@ -203,7 +204,9 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     @SuppressWarnings("unchecked")
-    public void forEach(IntObjectConsumer<T> consumer) {
+    public void forEach(IntObjectConsumer<? super T> consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
         }
@@ -225,7 +228,9 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     @SuppressWarnings("unchecked")
-    public void forEachValue(Consumer<T> consumer) {
+    public void forEachValue(Consumer<? super T> consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(sentinel.emptyKeyValue);
         }
@@ -235,6 +240,43 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
         for (int i = 0; i < keys.length; i++) {
             if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept((T)values[i]);
+            }
+        }
+    }
+
+    /**
+     * Update all map values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    @SuppressWarnings("unchecked")
+    public void update(IntObjectToObjectFunction<T> fn) {
+        requireNonNull(fn);
+
+        if (sentinel.hasEmptyKey) {
+            final var value = fn.apply(EMPTY_KEY, sentinel.emptyKeyValue);
+            if (!Objects.equals(value, EMPTY_VALUE)) {
+                sentinel.emptyKeyValue = value;
+            } else {
+                sentinel.hasEmptyKey = false;
+            }
+        }
+        if (sentinel.hasRemovedKey) {
+            final var value = fn.apply(REMOVED_KEY, sentinel.removedKeyValue);
+            if (!Objects.equals(value, EMPTY_VALUE)) {
+                sentinel.removedKeyValue = value;
+            } else {
+                sentinel.hasRemovedKey = false;
+            }
+        }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+                final var value = fn.apply(keys[i], (T)values[i]);
+                if (!Objects.equals(value, EMPTY_VALUE)) {
+                    values[i] = value;
+                } else {
+                    remove(keys[i]);
+                }
             }
         }
     }

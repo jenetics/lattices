@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntDoubleConsumer;
+import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
 import io.jenetics.lattices.map.IntDoubleMap;
 
 /**
@@ -67,6 +68,15 @@ public class SparseDoubleArray implements Array.OfDouble, Array.Sparse {
      */
     public void forEach(IntDoubleConsumer consumer) {
         values.forEach(consumer);
+    }
+
+    /**
+     * Update all array values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    public void update(IntDoubleToDoubleFunction fn) {
+        values.update(fn);
     }
 
     @Override

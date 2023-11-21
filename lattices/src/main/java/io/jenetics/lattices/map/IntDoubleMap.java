@@ -28,6 +28,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.IntDoubleConsumer;
+import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
 
 /**
  * Maps {@code int} keys to {@code double} values.
@@ -198,6 +199,8 @@ public final class IntDoubleMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     public void forEach(IntDoubleConsumer consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
         }
@@ -219,6 +222,8 @@ public final class IntDoubleMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     public void forEachValue(DoubleConsumer consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(sentinel.emptyKeyValue);
         }
@@ -228,6 +233,42 @@ public final class IntDoubleMap extends IntPrimitiveMap {
         for (int i = 0; i < keys.length; i++) {
             if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept(values[i]);
+            }
+        }
+    }
+
+    /**
+     * Update all map values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    public void update(IntDoubleToDoubleFunction fn) {
+        requireNonNull(fn);
+
+        if (sentinel.hasEmptyKey) {
+            final var value = fn.apply(EMPTY_KEY, sentinel.emptyKeyValue);
+            if (Double.compare(value, EMPTY_VALUE) != 0) {
+                sentinel.emptyKeyValue = value;
+            } else {
+                sentinel.hasEmptyKey = false;
+            }
+        }
+        if (sentinel.hasRemovedKey) {
+            final var value = fn.apply(REMOVED_KEY, sentinel.removedKeyValue);
+            if (Double.compare(value, EMPTY_VALUE) != 0) {
+                sentinel.removedKeyValue = value;
+            } else {
+                sentinel.hasRemovedKey = false;
+            }
+        }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+                final var value = fn.apply(keys[i], values[i]);
+                if (Double.compare(value, EMPTY_VALUE) != 0) {
+                    values[i] = value;
+                } else {
+                    remove(keys[i]);
+                }
             }
         }
     }

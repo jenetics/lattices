@@ -27,7 +27,9 @@ import java.util.function.LongConsumer;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import io.jenetics.lattices.function.IntIntToIntFunction;
 import io.jenetics.lattices.function.IntLongConsumer;
+import io.jenetics.lattices.function.IntLongToLongFunction;
 
 /**
  * Maps {@code int} keys to {@code long} values.
@@ -198,6 +200,8 @@ public final class IntLongMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     public void forEach(IntLongConsumer consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
         }
@@ -219,6 +223,8 @@ public final class IntLongMap extends IntPrimitiveMap {
      * @param consumer the procedure to be applied
      */
     public void forEachValue(LongConsumer consumer) {
+        requireNonNull(consumer);
+
         if (sentinel.hasEmptyKey) {
             consumer.accept(sentinel.emptyKeyValue);
         }
@@ -228,6 +234,42 @@ public final class IntLongMap extends IntPrimitiveMap {
         for (int i = 0; i < keys.length; i++) {
             if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
                 consumer.accept(values[i]);
+            }
+        }
+    }
+
+    /**
+     * Update all map values using the given function {@code fn}.
+     *
+     * @param fn the update function
+     */
+    public void update(IntLongToLongFunction fn) {
+        requireNonNull(fn);
+
+        if (sentinel.hasEmptyKey) {
+            final var value = fn.apply(EMPTY_KEY, sentinel.emptyKeyValue);
+            if (value != EMPTY_VALUE) {
+                sentinel.emptyKeyValue = value;
+            } else {
+                sentinel.hasEmptyKey = false;
+            }
+        }
+        if (sentinel.hasRemovedKey) {
+            final var value = fn.apply(REMOVED_KEY, sentinel.removedKeyValue);
+            if (value != EMPTY_VALUE) {
+                sentinel.removedKeyValue = value;
+            } else {
+                sentinel.hasRemovedKey = false;
+            }
+        }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+                final var value = fn.apply(keys[i], values[i]);
+                if (value != EMPTY_VALUE) {
+                    values[i] = value;
+                } else {
+                    remove(keys[i]);
+                }
             }
         }
     }
