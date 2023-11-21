@@ -20,6 +20,7 @@
 package io.jenetics.lattices.array;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Implementation of a <em>sparse</em> array of {@code double} values.
@@ -28,7 +29,7 @@ import java.util.Objects;
  * @since 3.0
  * @version 3.0
  */
-public class SparseDoubleArray implements Array.OfDouble {
+public class SparseDoubleArray implements Array.OfDouble, Array.Sparse {
 
     private final int length;
     private final IntDoubleMap values = new IntDoubleMap();
@@ -54,6 +55,11 @@ public class SparseDoubleArray implements Array.OfDouble {
         if (Double.compare(value, 0) != 0) {
             values.put(index, value);
         }
+    }
+
+    @Override
+    public IntStream indexes() {
+        return values.keys();
     }
 
     @Override

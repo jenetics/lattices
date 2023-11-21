@@ -24,12 +24,19 @@ import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
 /**
+ * Abstract implementation of {@code Int[double|int|long]Map} classes. It
+ * contains mostly the key hashing code.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
 abstract class IntPrimitiveMap {
 
+    /**
+     * Some keys are reserved values. In such cases, the mapped values are stored
+     * in this class as <em>side</em> car.
+     */
     static abstract class Sentinel {
         boolean hasEmptyKey;
         boolean hasRemovedKey;
@@ -104,6 +111,31 @@ abstract class IntPrimitiveMap {
     }
 
     /**
+     * Removes the given key with its associated element from the receiver, if
+     * present.
+     *
+     * @param key the key to be removed from the receiver.
+     */
+    void remove(int key) {
+        if (key == EMPTY_KEY) {
+            sentinel().hasEmptyKey = false;
+        } else if (key == REMOVED_KEY) {
+            sentinel().hasRemovedKey = false;
+        } else {
+            int index = probe(key);
+            if (keys[index] == key) {
+                removeKeyAtIndex(index);
+            }
+        }
+    }
+
+    private void removeKeyAtIndex(int index) {
+        keys[index] = REMOVED_KEY;
+        --occupiedWithData;
+        ++occupiedWithSentinels;
+    }
+
+    /**
      * Removes all mappings from this map (optional operation). The map will be
      * empty after this call returns.
      */
@@ -157,16 +189,12 @@ abstract class IntPrimitiveMap {
 
         return IntStream.concat(
             builder.build(),
-            IntStream.range(0, size())
-                .filter(i -> keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY)
+            Arrays.stream(keys)
+                .filter(key -> key != EMPTY_KEY && key != REMOVED_KEY)
         );
     }
 
-    void removeKeyAtIndex(int index) {
-        keys[index] = REMOVED_KEY;
-        --occupiedWithData;
-        ++occupiedWithSentinels;
-    }
+
 
     int probe(int element) {
         int index = mask(element);

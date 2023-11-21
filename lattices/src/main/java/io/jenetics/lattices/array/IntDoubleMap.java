@@ -51,11 +51,11 @@ final class IntDoubleMap extends IntPrimitiveMap {
 
     private double[] values;
 
-    public IntDoubleMap() {
+    IntDoubleMap() {
         allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
-    public IntDoubleMap(int capacity) {
+    IntDoubleMap(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException(
                 "Initial capacity cannot be less than 0."
@@ -98,25 +98,6 @@ final class IntDoubleMap extends IntPrimitiveMap {
                 values[index] = value;
             } else {
                 addKeyValueAtIndex(key, value, index);
-            }
-        }
-    }
-
-    /**
-     * Removes the given key with its associated element from the receiver, if
-     * present.
-     *
-     * @param key the key to be removed from the receiver.
-     */
-    void remove(int key) {
-        if (key == EMPTY_KEY) {
-            sentinel.hasEmptyKey = false;
-        } else if (key == REMOVED_KEY) {
-            sentinel.hasRemovedKey = false;
-        } else {
-            int index = probe(key);
-            if (keys[index] == key) {
-                removeKeyAtIndex(index);
             }
         }
     }
