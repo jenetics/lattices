@@ -21,6 +21,7 @@ package io.jenetics.lattices.lattice;
 
 import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.array.DenseLongArray;
+import io.jenetics.lattices.array.SparseLongArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -55,6 +56,15 @@ public record LongLattice2d(Structure2d structure, BaseArray.OfLong array)
         extent -> new LongLattice2d(
             new Structure2d(extent),
             DenseLongArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> lattice instances.
+     */
+    public static final Lattice2d.Factory<LongLattice2d> SPARSE =
+        extent -> new LongLattice2d(
+            new Structure2d(extent),
+            new SparseLongArray(extent.cells())
         );
 
     /**

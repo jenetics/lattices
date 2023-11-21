@@ -25,6 +25,15 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.IntDoubleConsumer;
+import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
+import io.jenetics.lattices.function.IntIntToIntFunction;
+import io.jenetics.lattices.function.IntLongConsumer;
+import io.jenetics.lattices.function.IntLongToLongFunction;
+import io.jenetics.lattices.function.IntObjectConsumer;
+import io.jenetics.lattices.function.IntObjectToObjectFunction;
+
 /**
  * Base interface of all array implementations. An array is a container of
  * elements, which can be accessed by an <em>index</em> and has a fixed
@@ -70,6 +79,28 @@ public interface BaseArray {
          *        {@code index > length()}
          */
         void set(int index, double value);
+
+        /**
+         * Applies a procedure to each (index, value) pair of the receivers.
+         *
+         * @param consumer the procedure to be applied
+         */
+        default void forEach(IntDoubleConsumer consumer) {
+            for (int i = 0; i < length(); ++i) {
+                consumer.accept(i, get(i));
+            }
+        }
+
+        /**
+         * Update all array values using the given function {@code fn}.
+         *
+         * @param fn the update function
+         */
+        default void update(IntDoubleToDoubleFunction fn) {
+            for (int i = 0; i < length(); ++i) {
+                set(i, fn.apply(i, get(i)));
+            }
+        }
 
         /**
          * Return a double stream from the given array.
@@ -139,6 +170,28 @@ public interface BaseArray {
         void set(int index, int value);
 
         /**
+         * Applies a procedure to each (index, value) pair of the receivers.
+         *
+         * @param consumer the procedure to be applied
+         */
+        default void forEach(Int2Consumer consumer) {
+            for (int i = 0; i < length(); ++i) {
+                consumer.accept(i, get(i));
+            }
+        }
+
+        /**
+         * Update all array values using the given function {@code fn}.
+         *
+         * @param fn the update function
+         */
+        default void update(IntIntToIntFunction fn) {
+            for (int i = 0; i < length(); ++i) {
+                set(i, fn.apply(i, get(i)));
+            }
+        }
+
+        /**
          * Return an int stream from the given array.
          *
          * @return an int stream from the given array
@@ -204,6 +257,28 @@ public interface BaseArray {
          *        {@code index > length()}
          */
         void set(int index, long value);
+
+        /**
+         * Applies a procedure to each (index, value) pair of the receivers.
+         *
+         * @param consumer the procedure to be applied
+         */
+        default void forEach(IntLongConsumer consumer) {
+            for (int i = 0; i < length(); ++i) {
+                consumer.accept(i, get(i));
+            }
+        }
+
+        /**
+         * Update all array values using the given function {@code fn}.
+         *
+         * @param fn the update function
+         */
+        default void update(IntLongToLongFunction fn) {
+            for (int i = 0; i < length(); ++i) {
+                set(i, fn.apply(i, get(i)));
+            }
+        }
 
         /**
          * Return {@code long}  stream from the given array.
@@ -273,6 +348,28 @@ public interface BaseArray {
          *        {@code index > length()}
          */
         void set(int index, T value);
+
+        /**
+         * Applies a procedure to each (index, value) pair of the receivers.
+         *
+         * @param consumer the procedure to be applied
+         */
+        default void forEach(IntObjectConsumer<? super T> consumer) {
+            for (int i = 0; i < length(); ++i) {
+                consumer.accept(i, get(i));
+            }
+        }
+
+        /**
+         * Update all map values using the given function {@code fn}.
+         *
+         * @param fn the update function
+         */
+        default void update(IntObjectToObjectFunction<T> fn) {
+            for (int i = 0; i < length(); ++i) {
+                set(i, fn.apply(i, get(i)));
+            }
+        }
 
         /**
          * Return a double stream from the given array.

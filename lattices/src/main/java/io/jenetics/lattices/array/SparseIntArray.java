@@ -61,20 +61,12 @@ public class SparseIntArray implements Array.OfInt, Array.Sparse {
         }
     }
 
-    /**
-     * Applies a procedure to each (index, value) pair of the receivers.
-     *
-     * @param consumer the procedure to be applied
-     */
+    @Override
     public void forEach(Int2Consumer consumer) {
         values.forEach(consumer);
     }
 
-    /**
-     * Update all array values using the given function {@code fn}.
-     *
-     * @param fn the update function
-     */
+    @Override
     public void update(IntIntToIntFunction fn) {
         values.update(fn);
     }

@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseIntArray;
+import io.jenetics.lattices.array.SparseIntArray;
 import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -51,10 +52,19 @@ public record IntGrid2d(Structure2d structure, Array.OfInt array)
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid2d.Factory<IntGrid2d> DENSE =
+    public static final Lattice2d.Factory<IntGrid2d> DENSE =
         extent -> new IntGrid2d(
             new Structure2d(extent),
             DenseIntArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice2d.Factory<IntGrid2d> SPARSE =
+        extent -> new IntGrid2d(
+            new Structure2d(extent),
+            new SparseIntArray(extent.cells())
         );
 
     /**
