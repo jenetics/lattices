@@ -17,18 +17,24 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.function;
 
 /**
+ * Function which takes an (int, object) tuple and returns a long value.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
+ * @version 3.0
  */
-module io.jenetics.lattices {
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.lattice;
-    exports io.jenetics.lattices.map;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.linalg;
-    exports io.jenetics.lattices.structure;
+@FunctionalInterface
+public interface IntObjectToObjectFunction<T> {
+
+    /**
+     * Performs the function.
+     *
+     * @param i the first argument
+     * @param j the second argument
+     * @return the function value
+     */
+    T apply(int i, T j);
 }

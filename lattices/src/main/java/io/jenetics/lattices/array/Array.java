@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.array;
 
+import java.util.stream.IntStream;
+
 import io.jenetics.lattices.grid.Self;
 
 /**
@@ -31,6 +33,12 @@ import io.jenetics.lattices.grid.Self;
 public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
 
     /**
+     * Tagging interface for the available array flavors.
+     */
+    sealed interface Flavor {
+    }
+
+    /**
      * Mixin interface of <em>dense</em> array implementations. This interface
      * defines a lightweight wrapper for the underlying <em>dense</em>Java array
      * of type {@code JAVA_ARRAY}.
@@ -39,7 +47,9 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
      *        {@code int[]} or {@code Object[]}
      * @param <D> the implementation type of the dense array wrapper
      */
-    interface Dense<JAVA_ARRAY, D extends Dense<JAVA_ARRAY, D>> {
+    non-sealed interface Dense<JAVA_ARRAY, D extends Dense<JAVA_ARRAY, D>>
+        extends Flavor
+    {
 
         /**
          * Return the underlying <em>native</em> Java array.
@@ -87,6 +97,19 @@ public interface Array<A extends Array<A>> extends BaseArray, Self<A> {
                 length
             );
         }
+    }
+
+    /**
+     * Mixin interface of <em>sparse</em> array implementations.
+     */
+    non-sealed interface Sparse extends Flavor {
+
+        /**
+         * Return a stream of occupied array indexes.
+         *
+         * @return a stream of occupied array indexes
+         */
+        IntStream indexes();
     }
 
     /**

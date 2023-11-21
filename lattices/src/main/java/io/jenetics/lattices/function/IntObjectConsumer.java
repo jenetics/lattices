@@ -17,18 +17,25 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
+package io.jenetics.lattices.function;
 
 /**
+ * Represents an operation that accepts an (int, long)-valued argument and
+ * returns no result.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
+ * @version 3.0
  */
-module io.jenetics.lattices {
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.lattice;
-    exports io.jenetics.lattices.map;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.linalg;
-    exports io.jenetics.lattices.structure;
+@FunctionalInterface
+public interface IntObjectConsumer<T> {
+
+    /**
+     * Performs this operation on the given arguments.
+     *
+     * @param i first value
+     * @param j second value
+     */
+    void accept(int i, T j);
+
 }

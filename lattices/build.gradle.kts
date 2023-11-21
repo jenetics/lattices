@@ -38,10 +38,12 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(libs.jblas)
     testImplementation(libs.testng)
+
+    jmhImplementation(libs.eclipse.collections)
 }
 
 tasks.test { dependsOn(tasks.compileJmhJava) }
 
 jmh {
-    includes.add(".*DenseDoubleMatrix2dPerf.*")
+    includes.add(".*IntDoubleMapPerf.*")
 }
