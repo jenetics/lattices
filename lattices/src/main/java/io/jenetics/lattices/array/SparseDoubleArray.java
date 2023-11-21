@@ -22,6 +22,8 @@ package io.jenetics.lattices.array;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import io.jenetics.lattices.map.IntDoubleMap;
+
 /**
  * Implementation of a <em>sparse</em> array of {@code double} values.
  *

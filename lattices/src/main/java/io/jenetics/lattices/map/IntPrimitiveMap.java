@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.map;
 
 import java.util.Arrays;
 import java.util.function.IntConsumer;
@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
  * @since 3.0
  * @version 3.0
  */
-abstract class IntPrimitiveMap {
+public abstract class IntPrimitiveMap {
 
     /**
      * Some keys are reserved values. In such cases, the mapped values are stored
@@ -72,6 +72,75 @@ abstract class IntPrimitiveMap {
         keys = new int[capacity];
     }
 
+    int indexOf(int key) {
+        int index = mask(key);
+        int keyAtIndex = keys[index];
+
+        if (keyAtIndex == key || keyAtIndex == EMPTY_KEY) {
+            return index;
+        }
+
+        int removedIndex = keyAtIndex == REMOVED_KEY ? index : -1;
+
+        for (int i = 1; i < INITIAL_LINEAR_PROBE; i++) {
+            int nextIndex = (index + i) & (keys.length - 1);
+            keyAtIndex = keys[nextIndex];
+
+            if (keyAtIndex == key) {
+                return nextIndex;
+            }
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
+            }
+        }
+
+        return indexOf_2(key, removedIndex);
+    }
+
+    int indexOf_2(int key, int removedIndex) {
+        int index = mask(mix2(key));
+
+        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
+            int nextIndex = (index + i) & (keys.length - 1);
+            int keyAtIndex = keys[nextIndex];
+
+            if (keyAtIndex == key) {
+                return nextIndex;
+            }
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
+            }
+        }
+
+        int nextIndex = mix1(key);
+        int spread2 = Integer.reverse(mix2(key)) | 1;
+
+        while (true) {
+            nextIndex = mask(nextIndex + spread2);
+            int keyAtIndex = keys[nextIndex];
+
+            if (keyAtIndex == key) {
+                return nextIndex;
+            }
+            if (keyAtIndex == EMPTY_KEY) {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+                removedIndex = nextIndex;
+            }
+        }
+    }
+
+    int mask(int spread) {
+        return spread & (keys.length - 1);
+    }
+
     /**
      * Returns the number of key-value mappings in this map. If the map
      * contains more than {@link Integer#MAX_VALUE} elements, returns
@@ -79,7 +148,7 @@ abstract class IntPrimitiveMap {
      *
      * @return the number of key-value mappings in this map
      */
-    int size() {
+    public int size() {
         return occupiedWithData + sentinel().size();
     }
 
@@ -88,7 +157,7 @@ abstract class IntPrimitiveMap {
      *
      * @return {@code true} if this map contains no key-value mappings
      */
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return size() == 0;
     }
 
@@ -100,13 +169,13 @@ abstract class IntPrimitiveMap {
      * @return {@code true} if this map contains a mapping for the specified
      *         key
      */
-    boolean containsKey(int key) {
+    public boolean containsKey(int key) {
         if (key == EMPTY_KEY) {
             return sentinel().hasEmptyKey;
         } else if (key == REMOVED_KEY) {
             return sentinel().hasRemovedKey;
         } else {
-            return keys[probe(key)] == key;
+            return keys[indexOf(key)] == key;
         }
     }
 
@@ -116,13 +185,13 @@ abstract class IntPrimitiveMap {
      *
      * @param key the key to be removed from the receiver.
      */
-    void remove(int key) {
+    public void remove(int key) {
         if (key == EMPTY_KEY) {
             sentinel().hasEmptyKey = false;
         } else if (key == REMOVED_KEY) {
             sentinel().hasRemovedKey = false;
         } else {
-            int index = probe(key);
+            int index = indexOf(key);
             if (keys[index] == key) {
                 removeKeyAtIndex(index);
             }
@@ -135,11 +204,49 @@ abstract class IntPrimitiveMap {
         ++occupiedWithSentinels;
     }
 
+    void addKeyAtIndex(int key, int index) {
+        if (keys[index] == REMOVED_KEY) {
+            --occupiedWithSentinels;
+        }
+
+        keys[index] = key;
+        ++occupiedWithData;
+        if (occupiedWithData + occupiedWithSentinels > maxOccupiedWithData()) {
+            rehashAndGrow();
+        }
+    }
+
+    /**
+     * Trims the map to optimize for the new size.
+     *
+     * @return {@code true} if the map has been trimmed and rehashed,
+     *         {@code false} otherwise
+     */
+    public boolean trim() {
+        final int newCapacity = alignCapacity(size());
+        if (keys.length > newCapacity) {
+            rehash(newCapacity);
+            return true;
+        }
+        return false;
+    }
+
+    private void rehashAndGrow() {
+        int max = maxOccupiedWithData();
+        int newCapacity = Math.max(max, alignCapacity((occupiedWithData + 1) << 1));
+        if (occupiedWithSentinels > 0 && (max >> 1) + (max >> 2) < occupiedWithData) {
+            newCapacity <<= 1;
+        }
+        rehash(newCapacity);
+    }
+
+    abstract void rehash(int newCapacity);
+
     /**
      * Removes all mappings from this map (optional operation). The map will be
      * empty after this call returns.
      */
-    void clear() {
+    public void clear() {
         sentinel().clear();
         occupiedWithData = 0;
         occupiedWithSentinels = 0;
@@ -147,19 +254,11 @@ abstract class IntPrimitiveMap {
     }
 
     /**
-     * Applies a procedure to each key of the receiver, if any. Note: Iterates
-     * over the keys in no particular order. Subclasses can define a particular
-     * order, for example, "sorted by key". All methods which <i>can</i> be
-     * expressed in terms of this method (most methods can) <i>must
-     * guarantee</i> to use the <i>same</i> order defined by this method, even
-     * if it is no particular order. This is necessary so that, for example,
-     * methods {@code keys} and {@code values} will yield association pairs,
-     * not two uncorrelated lists.
+     * Applies a procedure to each key of the receiver.
      *
-     * @param consumer the procedure to be applied. Stops iteration if the
-     *        procedure returns {@code false}, otherwise continues.
+     * @param consumer the procedure to be applied
      */
-    void forEachKey(IntConsumer consumer) {
+    public void forEachKey(IntConsumer consumer) {
         if (sentinel().hasEmptyKey) {
             consumer.accept(EMPTY_KEY);
         }
@@ -178,7 +277,7 @@ abstract class IntPrimitiveMap {
      *
      * @return a stream containing all the keys in this map
      */
-    IntStream keys() {
+    public IntStream keys() {
         final var builder = IntStream.builder();
         if (sentinel().hasEmptyKey) {
             builder.accept(EMPTY_KEY);
@@ -192,80 +291,6 @@ abstract class IntPrimitiveMap {
             Arrays.stream(keys)
                 .filter(key -> key != EMPTY_KEY && key != REMOVED_KEY)
         );
-    }
-
-
-
-    int probe(int element) {
-        int index = mask(element);
-        int keyAtIndex = keys[index];
-
-        if (keyAtIndex == element || keyAtIndex == EMPTY_KEY) {
-            return index;
-        }
-
-        int removedIndex = keyAtIndex == REMOVED_KEY ? index : -1;
-        for (int i = 1; i < INITIAL_LINEAR_PROBE; i++) {
-            int nextIndex = (index + i) & (keys.length - 1);
-            keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-
-        return probeTwo(element, removedIndex);
-    }
-
-    int probeTwo(int element, int removedIndex) {
-        int index = spreadTwoAndMask(element);
-        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
-            int nextIndex = (index + i) & (keys.length - 1);
-            int keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-
-        return probeThree(element, removedIndex);
-    }
-
-    private int probeThree(int element, int removedIndex) {
-        int nextIndex = mix1(element);
-        int spreadTwo = Integer.reverse(mix2(element)) | 1;
-
-        while (true) {
-            nextIndex = mask(nextIndex + spreadTwo);
-            int keyAtIndex = keys[nextIndex];
-            if (keyAtIndex == element) {
-                return nextIndex;
-            }
-            if (keyAtIndex == EMPTY_KEY) {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
-                removedIndex = nextIndex;
-            }
-        }
-    }
-
-    private int spreadTwoAndMask(int element) {
-        return mask(mix2(element));
-    }
-
-    int mask(int spread) {
-        return spread & (keys.length - 1);
     }
 
     static int alignCapacity(int capacity) {
@@ -290,6 +315,10 @@ abstract class IntPrimitiveMap {
         code1 *= 0x9B6296CB;
         code1 ^= code1 >>> 12;
         return code1;
+    }
+
+    int maxOccupiedWithData() {
+        return keys.length >> 1;
     }
 
 }

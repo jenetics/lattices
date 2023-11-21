@@ -34,7 +34,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import io.jenetics.lattices.array.IntDoubleMap;
+import io.jenetics.lattices.map.IntDoubleMap;
 
 @Warmup(iterations = 1)
 @Measurement(iterations = 1)

@@ -19,16 +19,11 @@
  */
 
 /**
+ * This package contains selected map implementations for primitives types.
+ * These maps are used to implement sparse arrays.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
+ * @version 3.0
  */
-module io.jenetics.lattices {
-    exports io.jenetics.lattices.array;
-    exports io.jenetics.lattices.function;
-    exports io.jenetics.lattices.grid;
-    exports io.jenetics.lattices.lattice;
-    exports io.jenetics.lattices.map;
-    exports io.jenetics.lattices.matrix;
-    exports io.jenetics.lattices.matrix.linalg;
-    exports io.jenetics.lattices.structure;
-}
+package io.jenetics.lattices.map;

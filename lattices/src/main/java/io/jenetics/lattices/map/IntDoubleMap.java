@@ -17,7 +17,9 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.map;
+
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
@@ -28,11 +30,13 @@ import java.util.stream.IntStream;
 import io.jenetics.lattices.function.IntDoubleConsumer;
 
 /**
+ * Maps {@code int} keys to {@code double} values.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-final class IntDoubleMap extends IntPrimitiveMap {
+public final class IntDoubleMap extends IntPrimitiveMap {
 
     private static final class DoubleSentinel extends Sentinel {
         double emptyKeyValue;
@@ -51,11 +55,21 @@ final class IntDoubleMap extends IntPrimitiveMap {
 
     private double[] values;
 
-    IntDoubleMap() {
+    /**
+     * Create a new map with default capacity.
+     */
+    public IntDoubleMap() {
         allocate(DEFAULT_INITIAL_CAPACITY << 1);
     }
 
-    IntDoubleMap(int capacity) {
+    /**
+     * Create a new map with the desired {@code capacity}.
+     *
+     * @param capacity the desired capacity
+     * @throws IllegalArgumentException if the given capacity is smaller then
+     *         zero
+     */
+    public IntDoubleMap(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException(
                 "Initial capacity cannot be less than 0."
@@ -83,7 +97,7 @@ final class IntDoubleMap extends IntPrimitiveMap {
      * @param key the key the value shall be associated with.
      * @param value the value to be associated.
      */
-    void put(int key, double value) {
+    public void put(int key, double value) {
         if (key == EMPTY_KEY) {
             sentinel.hasEmptyKey = true;
             sentinel.emptyKeyValue = value;
@@ -91,27 +105,50 @@ final class IntDoubleMap extends IntPrimitiveMap {
             sentinel.hasRemovedKey = true;
             sentinel.removedKeyValue = value;
         } else {
-            final int index = probe(key);
+            final int index = indexOf(key);
             final int keyAtIndex = keys[index];
 
-            if (keyAtIndex == key) {
-                values[index] = value;
-            } else {
-                addKeyValueAtIndex(key, value, index);
+            values[index] = value;
+            if (keyAtIndex != key) {
+                addKeyAtIndex(key, index);
             }
         }
     }
 
-    private void addKeyValueAtIndex(int key, double value, int index) {
-        if (keys[index] == REMOVED_KEY) {
-            --occupiedWithSentinels;
-        }
+    /**
+     * Returns the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key.
+     *
+     * @param key the key whose associated value is to be returned
+     * @param defaultValue the default mapping of the key
+     * @return the value to which the specified key is mapped, or
+     *         {@code defaultValue} if this map contains no mapping for the key.
+     */
+    public double getOrDefault(int key, double defaultValue) {
+        if (key == EMPTY_KEY && sentinel.hasEmptyKey) {
+            return sentinel.emptyKeyValue;
+        } else if (key == REMOVED_KEY && sentinel.hasRemovedKey) {
+            return sentinel.removedKeyValue;
+        } else if (occupiedWithSentinels == 0) {
+            int index = mask(key);
 
-        keys[index] = key;
-        values[index] = value;
-        ++occupiedWithData;
-        if (occupiedWithData + occupiedWithSentinels > maxOccupiedWithData()) {
-            rehashAndGrow();
+            for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
+                final int keyAtIndex = keys[index];
+
+                if (keyAtIndex == key) {
+                    return values[index];
+                } else if (keyAtIndex == EMPTY_KEY) {
+                    return defaultValue;
+                } else {
+                    index = (index + 1) & (keys.length - 1);
+                }
+            }
+
+            index = indexOf_2(key, -1);
+            return keys[index] == key ? values[index] : defaultValue;
+        } else {
+            final int index = indexOf(key);
+            return keys[index] == key ? values[index] : defaultValue;
         }
     }
 
@@ -125,53 +162,8 @@ final class IntDoubleMap extends IntPrimitiveMap {
      * @return the value associated with the specified key; {@code 0} if no
      * such key is present.
      */
-    double get(int key) {
+    public double get(int key) {
         return getOrDefault(key, EMPTY_VALUE);
-    }
-
-    double getOrDefault(int key, double defaultValue) {
-        if (key == EMPTY_KEY && sentinel.hasEmptyKey) {
-            return sentinel.emptyKeyValue;
-        } else if (key == REMOVED_KEY && sentinel.hasRemovedKey) {
-            return sentinel.removedKeyValue;
-        } else if (occupiedWithSentinels == 0) {
-            return fastGetOrDefault(key, defaultValue);
-        } else {
-            return slowGetOrDefault(key, defaultValue);
-        }
-    }
-
-    private double slowGetOrDefault(int key, double defaultValue) {
-        final int index = probe(key);
-        if (keys[index] == key) {
-            return values[index];
-        } else {
-            return defaultValue;
-        }
-    }
-
-    private double fastGetOrDefault(int key, double defaultValue) {
-        int index = mask(key);
-
-        for (int i = 0; i < INITIAL_LINEAR_PROBE; ++i) {
-            final int keyAtIndex = keys[index];
-            if (keyAtIndex == key) {
-                return values[index];
-            } else if (keyAtIndex == EMPTY_KEY) {
-                return defaultValue;
-            } else {
-                index = (index + 1) & (keys.length - 1);
-            }
-        }
-        return slowGetOrDefault2(key, defaultValue);
-    }
-
-    private double slowGetOrDefault2(int key, double defaultValue) {
-        int index = probeTwo(key, -1);
-        if (keys[index] == key) {
-            return values[index];
-        }
-        return defaultValue;
     }
 
     /**
@@ -182,7 +174,7 @@ final class IntDoubleMap extends IntPrimitiveMap {
      * @return {@code true} if this map maps one or more keys to the
      *         specified value
      */
-    boolean containsValue(double value) {
+    public boolean containsValue(double value) {
         if (sentinel.contains(value)) {
             return true;
         }
@@ -203,10 +195,9 @@ final class IntDoubleMap extends IntPrimitiveMap {
      * Iteration order is guaranteed to be <i>identical</i> to the order used by
      * method {@link #forEachKey(IntConsumer)}.
      *
-     * @param consumer the procedure to be applied. Stops iteration if the
-     *        procedure returns {@code false}, otherwise continues.
+     * @param consumer the procedure to be applied
      */
-    void forEach(IntDoubleConsumer consumer) {
+    public void forEach(IntDoubleConsumer consumer) {
         if (sentinel.hasEmptyKey) {
             consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
         }
@@ -220,7 +211,14 @@ final class IntDoubleMap extends IntPrimitiveMap {
         }
     }
 
-    void forEachValue(DoubleConsumer consumer) {
+    /**
+     * Applies a procedure to each value of the receivers, if any. Iteration
+     * order is guaranteed to be <i>identical</i> to the order used by
+     * method {@link #forEachKey(IntConsumer)}.
+     *
+     * @param consumer the procedure to be applied
+     */
+    public void forEachValue(DoubleConsumer consumer) {
         if (sentinel.hasEmptyKey) {
             consumer.accept(sentinel.emptyKeyValue);
         }
@@ -234,11 +232,25 @@ final class IntDoubleMap extends IntPrimitiveMap {
         }
     }
 
-    DoubleStream values() {
+    /**
+     * Return all map values.
+     *
+     * @return all map values
+     */
+    public DoubleStream values() {
         return values(key -> true);
     }
 
-    DoubleStream values(IntPredicate keyFilter) {
+    /**
+     * Return all map values where its key matches the given {@code keyFilter}
+     * predicate.
+     *
+     * @param keyFilter the value key filter
+     * @return the filtered map values
+     */
+    public DoubleStream values(IntPredicate keyFilter) {
+        requireNonNull(keyFilter);
+
         final var builder = DoubleStream.builder();
         if (sentinel.hasEmptyKey && keyFilter.test(EMPTY_KEY)) {
             builder.accept(sentinel.emptyKeyValue);
@@ -260,25 +272,8 @@ final class IntDoubleMap extends IntPrimitiveMap {
         );
     }
 
-    boolean trimToSize() {
-        final int newCapacity = alignCapacity(size());
-        if (keys.length > newCapacity) {
-            rehash(newCapacity);
-            return true;
-        }
-        return false;
-    }
-
-    private void rehashAndGrow() {
-        int max = maxOccupiedWithData();
-        int newCapacity = Math.max(max, alignCapacity((occupiedWithData + 1) << 1));
-        if (occupiedWithSentinels > 0 && (max >> 1) + (max >> 2) < occupiedWithData) {
-            newCapacity <<= 1;
-        }
-        rehash(newCapacity);
-    }
-
-    private void rehash(int newCapacity) {
+    @Override
+    void rehash(int newCapacity) {
         final var oldKeys = keys;
         final var oldValues = values;
 
@@ -291,10 +286,6 @@ final class IntDoubleMap extends IntPrimitiveMap {
                 put(oldKeys[i], oldValues[i]);
             }
         }
-    }
-
-    private int maxOccupiedWithData() {
-        return keys.length >> 1;
     }
 
 }

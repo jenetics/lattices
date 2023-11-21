@@ -1,4 +1,4 @@
-package io.jenetics.lattices.array;
+package io.jenetics.lattices.map;
 
 public final class Utils {
     private Utils() {
