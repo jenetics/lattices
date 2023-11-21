@@ -61,20 +61,12 @@ public class SparseLongArray implements Array.OfLong, Array.Sparse {
         }
     }
 
-    /**
-     * Applies a procedure to each (index, value) pair of the receivers.
-     *
-     * @param consumer the procedure to be applied
-     */
+    @Override
     public void forEach(IntLongConsumer consumer) {
         values.forEach(consumer);
     }
 
-    /**
-     * Update all array values using the given function {@code fn}.
-     *
-     * @param fn the update function
-     */
+    @Override
     public void update(IntLongToLongFunction fn) {
         values.update(fn);
     }

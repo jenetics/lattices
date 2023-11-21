@@ -21,6 +21,7 @@ package io.jenetics.lattices.grid;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
 import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
@@ -54,6 +55,15 @@ public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
         extent -> new DoubleGrid1d(
             new Structure1d(extent),
             DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice1d.Factory<DoubleGrid1d> SPARSE =
+        extent -> new DoubleGrid1d(
+            new Structure1d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**

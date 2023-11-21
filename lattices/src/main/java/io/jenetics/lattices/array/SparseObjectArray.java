@@ -61,20 +61,12 @@ public class SparseObjectArray<T> implements Array.OfObject<T>, Array.Sparse {
         }
     }
 
-    /**
-     * Applies a procedure to each (index, value) pair of the receivers.
-     *
-     * @param consumer the procedure to be applied
-     */
+    @Override
     public void forEach(IntObjectConsumer<? super T> consumer) {
         values.forEach(consumer);
     }
 
-    /**
-     * Update all map values using the given function {@code fn}.
-     *
-     * @param fn the update function
-     */
+    @Override
     public void update(IntObjectToObjectFunction<T> fn) {
         values.update(fn);
     }

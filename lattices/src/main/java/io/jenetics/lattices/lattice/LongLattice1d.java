@@ -19,9 +19,9 @@
  */
 package io.jenetics.lattices.lattice;
 
-import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.array.DenseLongArray;
+import io.jenetics.lattices.array.SparseLongArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -55,6 +55,15 @@ public record LongLattice1d(Structure1d structure, BaseArray.OfLong array)
         extent -> new LongLattice1d(
             new Structure1d(extent),
             new DenseLongArray(new long[extent.elements()])
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> lattice instances.
+     */
+    public static final Lattice1d.Factory<LongLattice1d> SPARSE =
+        extent -> new LongLattice1d(
+            new Structure1d(extent),
+            new SparseLongArray(extent.cells())
         );
 
     /**
