@@ -22,6 +22,7 @@ package io.jenetics.lattices.array;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import io.jenetics.lattices.function.IntDoubleConsumer;
 import io.jenetics.lattices.map.IntDoubleMap;
 
 /**
@@ -57,6 +58,15 @@ public class SparseDoubleArray implements Array.OfDouble, Array.Sparse {
         if (Double.compare(value, 0) != 0) {
             values.put(index, value);
         }
+    }
+
+    /**
+     * Applies a procedure to each (index, value) pair of the receivers.
+     *
+     * @param consumer the procedure to be applied
+     */
+    public void forEach(IntDoubleConsumer consumer) {
+        values.forEach(consumer);
     }
 
     @Override

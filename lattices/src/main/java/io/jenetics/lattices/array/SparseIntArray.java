@@ -22,6 +22,7 @@ package io.jenetics.lattices.array;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.map.IntIntMap;
 
 /**
@@ -57,6 +58,15 @@ public class SparseIntArray implements Array.OfInt, Array.Sparse {
         if (value == 0) {
             values.put(index, value);
         }
+    }
+
+    /**
+     * Applies a procedure to each (index, value) pair of the receivers.
+     *
+     * @param consumer the procedure to be applied
+     */
+    public void forEach(Int2Consumer consumer) {
+        values.forEach(consumer);
     }
 
     @Override
