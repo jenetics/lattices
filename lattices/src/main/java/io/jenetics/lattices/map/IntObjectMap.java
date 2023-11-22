@@ -311,7 +311,7 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
 
         return Stream.concat(
             builder.build(),
-            IntStream.range(0, size())
+            IntStream.range(0, keys.length)
                 .filter(i -> {
                     final var key = keys[i];
                     return key != EMPTY_KEY &&

@@ -24,21 +24,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.function.IntPredicate;
 import java.util.random.RandomGenerator;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class IntDoubleMapTest {
+public class IntLongMapTest {
 
     private static final int ENTRIES = 100;
     private static final int MIN_KEY = 10_000_000;
     private static final int MAX_KEY = 100_000_000;
-    private static final double MIN_VALUE = 10;
-    private static final double MAX_VALUE = 10_000;
+    private static final long MIN_VALUE = 10;
+    private static final long MAX_VALUE = 10_000;
 
     private static final int[] KEYS = RandomGenerator.getDefault()
         .ints(MIN_KEY, MAX_KEY)
@@ -46,13 +46,13 @@ public class IntDoubleMapTest {
         .limit(ENTRIES)
         .toArray();
 
-    private static final double[] VALUES = RandomGenerator.getDefault()
-        .doubles(MIN_VALUE, MAX_VALUE)
+    private static final long[] VALUES = RandomGenerator.getDefault()
+        .longs(MIN_VALUE, MAX_VALUE)
         .limit(ENTRIES)
         .toArray();
 
-    static IntDoubleMap newMap(int[] keys, double[] values) {
-        final var map = new IntDoubleMap();
+    static IntLongMap newMap(int[] keys, long[] values) {
+        final var map = new IntLongMap();
         for (int i = 0; i < keys.length; ++i) {
             map.put(keys[i], values[i]);
         }
@@ -163,7 +163,7 @@ public class IntDoubleMapTest {
         map.forEachValue(values::add);
 
         assertThat(values).containsExactlyInAnyOrderElementsOf(
-            DoubleStream.of(VALUES).boxed().toList()
+            LongStream.of(VALUES).boxed().toList()
         );
     }
 
@@ -199,7 +199,7 @@ public class IntDoubleMapTest {
         final IntPredicate filter = k -> k%2 == 0;
         final var expected = IntStream.of(KEYS)
             .filter(filter)
-            .mapToDouble(map::get)
+            .mapToLong(map::get)
             .toArray();
 
         assertThat(map.values(filter).toArray())

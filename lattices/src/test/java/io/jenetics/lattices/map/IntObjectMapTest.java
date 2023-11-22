@@ -24,15 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.function.IntPredicate;
 import java.util.random.RandomGenerator;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class IntDoubleMapTest {
+public class IntObjectMapTest {
 
     private static final int ENTRIES = 100;
     private static final int MIN_KEY = 10_000_000;
@@ -46,13 +46,14 @@ public class IntDoubleMapTest {
         .limit(ENTRIES)
         .toArray();
 
-    private static final double[] VALUES = RandomGenerator.getDefault()
+    private static final Double[] VALUES = RandomGenerator.getDefault()
         .doubles(MIN_VALUE, MAX_VALUE)
         .limit(ENTRIES)
-        .toArray();
+        .boxed()
+        .toArray(Double[]::new);
 
-    static IntDoubleMap newMap(int[] keys, double[] values) {
-        final var map = new IntDoubleMap();
+    static IntObjectMap<Double> newMap(int[] keys, Double[] values) {
+        final var map = new IntObjectMap<Double>();
         for (int i = 0; i < keys.length; ++i) {
             map.put(keys[i], values[i]);
         }
@@ -85,7 +86,7 @@ public class IntDoubleMapTest {
         final var map = newMap(new int[0], null);
         assertThat(map.isEmpty()).isTrue();
 
-        map.put(1, 1);
+        map.put(1, 1.0);
         assertThat(map.isEmpty()).isFalse();
     }
 
@@ -163,7 +164,7 @@ public class IntDoubleMapTest {
         map.forEachValue(values::add);
 
         assertThat(values).containsExactlyInAnyOrderElementsOf(
-            DoubleStream.of(VALUES).boxed().toList()
+            Stream.of(VALUES).toList()
         );
     }
 
@@ -179,10 +180,10 @@ public class IntDoubleMapTest {
     @Test
     public void update() {
         final var map = newMap(KEYS, VALUES);
-        map.update((k, v) -> k*3);
+        map.update((k, v) -> k*3.0);
 
         for (var key : KEYS) {
-            assertThat(map.get(key)).isEqualTo(key*3);
+            assertThat(map.get(key)).isEqualTo(key*3.0);
         }
     }
 
@@ -199,7 +200,7 @@ public class IntDoubleMapTest {
         final IntPredicate filter = k -> k%2 == 0;
         final var expected = IntStream.of(KEYS)
             .filter(filter)
-            .mapToDouble(map::get)
+            .mapToObj(map::get)
             .toArray();
 
         assertThat(map.values(filter).toArray())
