@@ -27,7 +27,6 @@ import java.util.function.LongConsumer;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import io.jenetics.lattices.function.IntIntToIntFunction;
 import io.jenetics.lattices.function.IntLongConsumer;
 import io.jenetics.lattices.function.IntLongToLongFunction;
 

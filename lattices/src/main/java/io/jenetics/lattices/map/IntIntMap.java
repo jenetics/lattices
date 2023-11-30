@@ -26,7 +26,6 @@ import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.Int2Consumer;
-import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
 import io.jenetics.lattices.function.IntIntToIntFunction;
 
 /**

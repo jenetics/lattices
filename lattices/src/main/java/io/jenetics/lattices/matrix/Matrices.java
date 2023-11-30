@@ -21,7 +21,6 @@ package io.jenetics.lattices.matrix;
 
 import static io.jenetics.lattices.grid.Structures.checkSquare;
 
-import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.lattice.Lattice2d;
 
 /**

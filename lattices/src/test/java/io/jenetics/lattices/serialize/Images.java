@@ -1,8 +1,6 @@
 package io.jenetics.lattices.serialize;
 
-import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
-import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
