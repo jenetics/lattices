@@ -38,6 +38,9 @@ public abstract class IntPrimitiveMap {
      * in this class as <em>side</em> car.
      */
     static abstract class Sentinel {
+        static final int EMPTY_KEY = 0;
+        static final int REMOVED_KEY = 1;
+
         boolean hasEmptyKey;
         boolean hasRemovedKey;
 
@@ -55,9 +58,6 @@ public abstract class IntPrimitiveMap {
     static final int KEY_SIZE = 4;
     static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE/KEY_SIZE/2;
     static final int DEFAULT_INITIAL_CAPACITY = 8;
-
-    static final int EMPTY_KEY = 0;
-    static final int REMOVED_KEY = 1;
 
     int[] keys;
     int occupiedWithData;

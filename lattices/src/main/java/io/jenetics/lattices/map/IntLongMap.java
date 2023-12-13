@@ -99,10 +99,10 @@ public final class IntLongMap extends IntPrimitiveMap {
      * @param value the value to be associated.
      */
     public void put(int key, long value) {
-        if (key == EMPTY_KEY) {
+        if (key == Sentinel.EMPTY_KEY) {
             sentinel.hasEmptyKey = true;
             sentinel.emptyKeyValue = value;
-        } else if (key == REMOVED_KEY) {
+        } else if (key == Sentinel.REMOVED_KEY) {
             sentinel.hasRemovedKey = true;
             sentinel.removedKeyValue = value;
         } else {
@@ -126,9 +126,9 @@ public final class IntLongMap extends IntPrimitiveMap {
      *         {@code defaultValue} if this map contains no mapping for the key.
      */
     public long getOrDefault(int key, long defaultValue) {
-        if (key == EMPTY_KEY && sentinel.hasEmptyKey) {
+        if (key == Sentinel.EMPTY_KEY && sentinel.hasEmptyKey) {
             return sentinel.emptyKeyValue;
-        } else if (key == REMOVED_KEY && sentinel.hasRemovedKey) {
+        } else if (key == Sentinel.REMOVED_KEY && sentinel.hasRemovedKey) {
             return sentinel.removedKeyValue;
         } else if (occupiedWithSentinels == 0) {
             int index = mask(key);
@@ -138,7 +138,7 @@ public final class IntLongMap extends IntPrimitiveMap {
 
                 if (keyAtIndex == key) {
                     return values[index];
-                } else if (keyAtIndex == EMPTY_KEY) {
+                } else if (keyAtIndex == Sentinel.EMPTY_KEY) {
                     return defaultValue;
                 } else {
                     index = (index + 1) & (keys.length - 1);
@@ -180,8 +180,8 @@ public final class IntLongMap extends IntPrimitiveMap {
             return true;
         }
         for (int i = 0; i < values.length; ++i) {
-            if (keys[i] != EMPTY_KEY &&
-                keys[i] != REMOVED_KEY &&
+            if (keys[i] != Sentinel.EMPTY_KEY &&
+                keys[i] != Sentinel.REMOVED_KEY &&
                 Double.compare(values[i], value) == 0)
             {
                 return true;
@@ -202,13 +202,13 @@ public final class IntLongMap extends IntPrimitiveMap {
         requireNonNull(consumer);
 
         if (sentinel.hasEmptyKey) {
-            consumer.accept(EMPTY_KEY, sentinel.emptyKeyValue);
+            consumer.accept(Sentinel.EMPTY_KEY, sentinel.emptyKeyValue);
         }
         if (sentinel.hasRemovedKey) {
-            consumer.accept(REMOVED_KEY, sentinel.removedKeyValue);
+            consumer.accept(Sentinel.REMOVED_KEY, sentinel.removedKeyValue);
         }
         for (int i = 0; i < keys.length; i++) {
-            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+            if (keys[i] != Sentinel.EMPTY_KEY && keys[i] != Sentinel.REMOVED_KEY) {
                 consumer.accept(keys[i], values[i]);
             }
         }
@@ -231,7 +231,7 @@ public final class IntLongMap extends IntPrimitiveMap {
             consumer.accept(sentinel.removedKeyValue);
         }
         for (int i = 0; i < keys.length; i++) {
-            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+            if (keys[i] != Sentinel.EMPTY_KEY && keys[i] != Sentinel.REMOVED_KEY) {
                 consumer.accept(values[i]);
             }
         }
@@ -246,7 +246,7 @@ public final class IntLongMap extends IntPrimitiveMap {
         requireNonNull(fn);
 
         if (sentinel.hasEmptyKey) {
-            final var value = fn.apply(EMPTY_KEY, sentinel.emptyKeyValue);
+            final var value = fn.apply(Sentinel.EMPTY_KEY, sentinel.emptyKeyValue);
             if (value != EMPTY_VALUE) {
                 sentinel.emptyKeyValue = value;
             } else {
@@ -254,7 +254,7 @@ public final class IntLongMap extends IntPrimitiveMap {
             }
         }
         if (sentinel.hasRemovedKey) {
-            final var value = fn.apply(REMOVED_KEY, sentinel.removedKeyValue);
+            final var value = fn.apply(Sentinel.REMOVED_KEY, sentinel.removedKeyValue);
             if (value != EMPTY_VALUE) {
                 sentinel.removedKeyValue = value;
             } else {
@@ -262,7 +262,7 @@ public final class IntLongMap extends IntPrimitiveMap {
             }
         }
         for (int i = 0; i < keys.length; i++) {
-            if (keys[i] != EMPTY_KEY && keys[i] != REMOVED_KEY) {
+            if (keys[i] != Sentinel.EMPTY_KEY && keys[i] != Sentinel.REMOVED_KEY) {
                 final var value = fn.apply(keys[i], values[i]);
                 if (value != EMPTY_VALUE) {
                     values[i] = value;
@@ -293,10 +293,10 @@ public final class IntLongMap extends IntPrimitiveMap {
         requireNonNull(keyFilter);
 
         final var builder = LongStream.builder();
-        if (sentinel.hasEmptyKey && keyFilter.test(EMPTY_KEY)) {
+        if (sentinel.hasEmptyKey && keyFilter.test(Sentinel.EMPTY_KEY)) {
             builder.accept(sentinel.emptyKeyValue);
         }
-        if (sentinel.hasRemovedKey && keyFilter.test(REMOVED_KEY)) {
+        if (sentinel.hasRemovedKey && keyFilter.test(Sentinel.REMOVED_KEY)) {
             builder.accept(sentinel.removedKeyValue);
         }
 
@@ -305,8 +305,8 @@ public final class IntLongMap extends IntPrimitiveMap {
             IntStream.range(0, keys.length)
                 .filter(i -> {
                     final var key = keys[i];
-                    return key != EMPTY_KEY &&
-                        key != REMOVED_KEY &&
+                    return key != Sentinel.EMPTY_KEY &&
+                        key != Sentinel.REMOVED_KEY &&
                         keyFilter.test(key);
                 })
                 .mapToLong(i -> values[i])
@@ -323,7 +323,7 @@ public final class IntLongMap extends IntPrimitiveMap {
         occupiedWithSentinels = 0;
 
         for (int i = 0; i < oldKeys.length; ++i) {
-            if (oldKeys[i] != EMPTY_KEY && oldKeys[i] != REMOVED_KEY) {
+            if (oldKeys[i] != Sentinel.EMPTY_KEY && oldKeys[i] != Sentinel.REMOVED_KEY) {
                 put(oldKeys[i], oldValues[i]);
             }
         }
