@@ -34,7 +34,7 @@ import java.util.Iterator;
  * @since 3.0
  */
 public record Extent3d(int slices, int rows, int cols, int bands)
-    implements Iterable<Index3d>
+    implements Extent, Iterable<Index3d>
 {
 
     /**
@@ -45,7 +45,7 @@ public record Extent3d(int slices, int rows, int cols, int bands)
      * @param cols the number of columns must be greater or equal zero
      * @param bands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code slices*rows*cols*channels > Integer.MAX_VALUE}
+     *         zero or {@code slices*rows*cols*bands > Integer.MAX_VALUE}
      */
     public Extent3d {
         if (slices < 0 || rows < 0 || cols < 0 || bands < 1 ||
@@ -76,18 +76,9 @@ public record Extent3d(int slices, int rows, int cols, int bands)
      *
      * @return the number of elements
      */
+    @Override
     public int elements() {
         return slices*rows*cols;
-    }
-
-    /**
-     * Return the length of the array, needed for storing all cells:
-     * {@code size()*channels}.
-     *
-     * @return the array length needed for storing all cells
-     */
-    public int cells() {
-        return elements()*bands;
     }
 
     @Override

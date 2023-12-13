@@ -33,7 +33,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Extent1d(int elements, int bands)
-    implements Comparable<Extent1d>, Iterable<Index1d>
+    implements Extent, Comparable<Extent1d>, Iterable<Index1d>
 {
 
     /**
@@ -62,16 +62,6 @@ public record Extent1d(int elements, int bands)
      */
     public Extent1d(int elements) {
         this(elements, 1);
-    }
-
-    /**
-     * Return the length of the array, needed for storing all cells:
-     * {@code size()*channels}.
-     *
-     * @return the array length needed for storing all cells
-     */
-    public int cells() {
-        return elements * bands;
     }
 
     @Override

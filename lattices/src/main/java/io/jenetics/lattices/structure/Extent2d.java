@@ -33,7 +33,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Extent2d(int rows, int cols, int bands)
-    implements Iterable<Index2d>
+    implements Extent, Iterable<Index2d>
 {
 
     /**
@@ -43,7 +43,7 @@ public record Extent2d(int rows, int cols, int bands)
      * @param cols the number of cols
      * @param bands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
+     *         zero or {@code rows*cols*bands > Integer.MAX_VALUE}
      */
     public Extent2d {
         if (rows < 0 || cols < 0 || bands < 1 ||
@@ -73,18 +73,9 @@ public record Extent2d(int rows, int cols, int bands)
      *
      * @return the number of elements
      */
+    @Override
     public int elements() {
         return rows*cols;
-    }
-
-    /**
-     * Return the length of the array, needed for storing all cells:
-     * {@code size()*channels}.
-     *
-     * @return the array length needed for storing all cells
-     */
-    public int cells() {
-        return elements()*bands;
     }
 
     @Override
