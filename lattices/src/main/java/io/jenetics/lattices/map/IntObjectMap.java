@@ -46,6 +46,16 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
         T emptyKeyValue;
         T removedKeyValue;
 
+        void setEmptyKeyValue(T value) {
+            hasEmptyKey = true;
+            emptyKeyValue = value;
+        }
+
+        void setRemovedKeyValue(T value) {
+            hasRemovedKey = true;
+            removedKeyValue = value;
+        }
+
         boolean contains(T value) {
             return
                 (hasEmptyKey && Objects.equals(emptyKeyValue, value)) ||
@@ -102,19 +112,17 @@ public final class IntObjectMap<T> extends IntPrimitiveMap {
      * @param value the value to be associated.
      */
     public void put(int key, T value) {
-        if (key == Sentinel.EMPTY_KEY) {
-            sentinel.hasEmptyKey = true;
-            sentinel.emptyKeyValue = value;
-        } else if (key == Sentinel.REMOVED_KEY) {
-            sentinel.hasRemovedKey = true;
-            sentinel.removedKeyValue = value;
-        } else {
-            final int index = indexOf(key);
-            final int keyAtIndex = keys[index];
+        switch (key) {
+            case Sentinel.EMPTY_KEY -> sentinel.setEmptyKeyValue(value);
+            case Sentinel.REMOVED_KEY -> sentinel.setRemovedKeyValue(value);
+            default -> {
+                final int index = indexOf(key);
+                final int keyAtIndex = keys[index];
 
-            values[index] = value;
-            if (keyAtIndex != key) {
-                addKeyAtIndex(key, index);
+                values[index] = value;
+                if (keyAtIndex != key) {
+                    addKeyAtIndex(key, index);
+                }
             }
         }
     }

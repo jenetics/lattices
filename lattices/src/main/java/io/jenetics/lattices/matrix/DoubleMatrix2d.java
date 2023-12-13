@@ -27,7 +27,9 @@ import java.util.function.DoubleUnaryOperator;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
 import io.jenetics.lattices.grid.Grid2d;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
@@ -60,6 +62,15 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         extent -> new DoubleMatrix2d(
             new Structure2d(extent),
             DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> 2-d double matrices.
+     */
+    public static final Lattice2d.Factory<DoubleMatrix2d> SPARSE =
+        extent -> new DoubleMatrix2d(
+            new Structure2d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -184,8 +195,8 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      *         A.rows() > z.size())}.
      */
     public DoubleMatrix1d mult(
-        DoubleMatrix1d y,
-        DoubleMatrix1d z,
+        Lattice1d.OfDouble<? extends Array.OfDouble> y,
+        Lattice1d.OfDouble<? extends Array.OfDouble> z,
         double alpha,
         double beta,
         boolean transposeA
@@ -195,7 +206,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         }
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array().like(struct.extent().elements());
+            final var elems = array().like(struct.extent().cells());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
@@ -213,14 +224,17 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
             z.set(r, Math.fma(alpha, s, beta*z.get(r)));
         }
 
-        return z;
+        return switch (z) {
+            case DoubleMatrix1d m -> m;
+            default -> new DoubleMatrix1d(z);
+        };
     }
 
     /**
      * Linear algebraic matrix-vector multiplication; {@code z = A * y};
      * Equivalent to {@code return A.mult(y, z, 1, 0);}
      *
-     * @see #mult(DoubleMatrix1d, DoubleMatrix1d, double, double, boolean)
+     * @see #mult(Lattice1d.OfDouble, Lattice1d.OfDouble, double, double, boolean)
      *
      * @param y the source vector.
      * @param z the vector where results are to be stored. Set this parameter to
@@ -228,7 +242,10 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      *          constructed.
      * @return z, or a newly created result matrix
      */
-    public DoubleMatrix1d mult(DoubleMatrix1d y, DoubleMatrix1d z) {
+    public DoubleMatrix1d mult(
+        Lattice1d.OfDouble<? extends Array.OfDouble> y,
+        Lattice1d.OfDouble<? extends Array.OfDouble> z
+    ) {
         return mult(y, z, 1, (z == null ? 1 : 0), false);
     }
 

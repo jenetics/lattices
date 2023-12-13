@@ -76,11 +76,11 @@ public abstract class IntPrimitiveMap {
         int index = mask(key);
         int keyAtIndex = keys[index];
 
-        if (keyAtIndex == key || keyAtIndex == EMPTY_KEY) {
+        if (keyAtIndex == key || keyAtIndex == Sentinel.EMPTY_KEY) {
             return index;
         }
 
-        int removedIndex = keyAtIndex == REMOVED_KEY ? index : -1;
+        int removedIndex = keyAtIndex == Sentinel.REMOVED_KEY ? index : -1;
 
         for (int i = 1; i < INITIAL_LINEAR_PROBE; i++) {
             int nextIndex = (index + i) & (keys.length - 1);
@@ -89,10 +89,10 @@ public abstract class IntPrimitiveMap {
             if (keyAtIndex == key) {
                 return nextIndex;
             }
-            if (keyAtIndex == EMPTY_KEY) {
+            if (keyAtIndex == Sentinel.EMPTY_KEY) {
                 return removedIndex == -1 ? nextIndex : removedIndex;
             }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+            if (keyAtIndex == Sentinel.REMOVED_KEY && removedIndex == -1) {
                 removedIndex = nextIndex;
             }
         }
@@ -110,10 +110,10 @@ public abstract class IntPrimitiveMap {
             if (keyAtIndex == key) {
                 return nextIndex;
             }
-            if (keyAtIndex == EMPTY_KEY) {
+            if (keyAtIndex == Sentinel.EMPTY_KEY) {
                 return removedIndex == -1 ? nextIndex : removedIndex;
             }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+            if (keyAtIndex == Sentinel.REMOVED_KEY && removedIndex == -1) {
                 removedIndex = nextIndex;
             }
         }
@@ -128,10 +128,10 @@ public abstract class IntPrimitiveMap {
             if (keyAtIndex == key) {
                 return nextIndex;
             }
-            if (keyAtIndex == EMPTY_KEY) {
+            if (keyAtIndex == Sentinel.EMPTY_KEY) {
                 return removedIndex == -1 ? nextIndex : removedIndex;
             }
-            if (keyAtIndex == REMOVED_KEY && removedIndex == -1) {
+            if (keyAtIndex == Sentinel.REMOVED_KEY && removedIndex == -1) {
                 removedIndex = nextIndex;
             }
         }
@@ -170,13 +170,11 @@ public abstract class IntPrimitiveMap {
      *         key
      */
     public boolean containsKey(int key) {
-        if (key == EMPTY_KEY) {
-            return sentinel().hasEmptyKey;
-        } else if (key == REMOVED_KEY) {
-            return sentinel().hasRemovedKey;
-        } else {
-            return keys[indexOf(key)] == key;
-        }
+        return switch (key) {
+            case Sentinel.EMPTY_KEY -> sentinel().hasEmptyKey;
+            case Sentinel.REMOVED_KEY -> sentinel().hasRemovedKey;
+            default -> keys[indexOf(key)] == key;
+        };
     }
 
     /**
@@ -186,26 +184,26 @@ public abstract class IntPrimitiveMap {
      * @param key the key to be removed from the receiver.
      */
     public void remove(int key) {
-        if (key == EMPTY_KEY) {
-            sentinel().hasEmptyKey = false;
-        } else if (key == REMOVED_KEY) {
-            sentinel().hasRemovedKey = false;
-        } else {
-            int index = indexOf(key);
-            if (keys[index] == key) {
-                removeKeyAtIndex(index);
+        switch (key) {
+            case Sentinel.EMPTY_KEY -> sentinel().hasEmptyKey = false;
+            case Sentinel.REMOVED_KEY -> sentinel().hasRemovedKey = false;
+            default -> {
+                int index = indexOf(key);
+                if (keys[index] == key) {
+                    removeKeyAtIndex(index);
+                }
             }
         }
     }
 
     private void removeKeyAtIndex(int index) {
-        keys[index] = REMOVED_KEY;
+        keys[index] = Sentinel.REMOVED_KEY;
         --occupiedWithData;
         ++occupiedWithSentinels;
     }
 
     void addKeyAtIndex(int key, int index) {
-        if (keys[index] == REMOVED_KEY) {
+        if (keys[index] == Sentinel.REMOVED_KEY) {
             --occupiedWithSentinels;
         }
 
@@ -250,7 +248,7 @@ public abstract class IntPrimitiveMap {
         sentinel().clear();
         occupiedWithData = 0;
         occupiedWithSentinels = 0;
-        Arrays.fill(keys, EMPTY_KEY);
+        Arrays.fill(keys, Sentinel.EMPTY_KEY);
     }
 
     /**
@@ -260,13 +258,13 @@ public abstract class IntPrimitiveMap {
      */
     public void forEachKey(IntConsumer consumer) {
         if (sentinel().hasEmptyKey) {
-            consumer.accept(EMPTY_KEY);
+            consumer.accept(Sentinel.EMPTY_KEY);
         }
         if (sentinel().hasRemovedKey) {
-            consumer.accept(REMOVED_KEY);
+            consumer.accept(Sentinel.REMOVED_KEY);
         }
         for (int key : keys) {
-            if (key != EMPTY_KEY && key != REMOVED_KEY) {
+            if (key != Sentinel.EMPTY_KEY && key != Sentinel.REMOVED_KEY) {
                 consumer.accept(key);
             }
         }
@@ -280,16 +278,16 @@ public abstract class IntPrimitiveMap {
     public IntStream keys() {
         final var builder = IntStream.builder();
         if (sentinel().hasEmptyKey) {
-            builder.accept(EMPTY_KEY);
+            builder.accept(Sentinel.EMPTY_KEY);
         }
         if (sentinel().hasRemovedKey) {
-            builder.accept(REMOVED_KEY);
+            builder.accept(Sentinel.REMOVED_KEY);
         }
 
         return IntStream.concat(
             builder.build(),
             Arrays.stream(keys)
-                .filter(key -> key != EMPTY_KEY && key != REMOVED_KEY)
+                .filter(key -> key != Sentinel.EMPTY_KEY && key != Sentinel.REMOVED_KEY)
         );
     }
 

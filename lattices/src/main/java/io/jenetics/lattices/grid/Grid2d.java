@@ -71,7 +71,7 @@ public interface Grid2d<A extends Array<A>, G extends Grid2d<A, G>>
     default G like(Extent2d extent) {
         return create(
             new Structure2d(extent),
-            array().like(extent.elements())
+            array().like(extent.cells())
         );
     }
 

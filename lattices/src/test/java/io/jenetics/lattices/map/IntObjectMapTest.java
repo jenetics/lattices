@@ -190,7 +190,8 @@ public class IntObjectMapTest {
     @Test
     public void values() {
         final var map = newMap(KEYS, VALUES);
-        assertThat(map.values().toArray()).containsExactlyInAnyOrder(VALUES);
+        assertThat(map.values().toArray(Double[]::new))
+            .containsExactlyInAnyOrder(VALUES);
     }
 
     @Test

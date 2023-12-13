@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 
 import io.jenetics.lattices.array.Array;
 import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
 import io.jenetics.lattices.grid.Grid1d;
 import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
@@ -55,6 +56,15 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
         extent -> new DoubleMatrix1d(
             new Structure1d(extent),
             DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating sparse 1-d double matrices.
+     */
+    public static final Lattice1d.Factory<DoubleMatrix1d> SPARSE =
+        extent -> new DoubleMatrix1d(
+            new Structure1d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -101,7 +111,7 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      * @param length the number of cells to be considered
      * @return the sum of products, start if {@code from < 0 || length < 0}
      */
-    public double dotProduct(DoubleMatrix1d y, int from, int length) {
+    public double dotProduct(Lattice1d.OfDouble<?> y, int from, int length) {
         if (from < 0 || length <= 0) {
             return 0;
         }
@@ -123,7 +133,7 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      * @param y the second vector
      * @return the sum of products
      */
-    public double dotProduct(DoubleMatrix1d y) {
+    public double dotProduct(Lattice1d.OfDouble<?> y) {
         return dotProduct(y, 0, extent().elements());
     }
 
