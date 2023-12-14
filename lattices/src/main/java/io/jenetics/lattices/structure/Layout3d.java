@@ -41,13 +41,23 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record Layout3d(Index3d start, Stride3d stride, Band band)
-    implements Mapper3d
+    implements Layout, Mapper3d
 {
 
     public Layout3d {
         requireNonNull(start);
         requireNonNull(stride);
         requireNonNull(band);
+    }
+
+    /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensions() {
+        return 3;
     }
 
     @Override
@@ -57,6 +67,17 @@ public record Layout3d(Index3d start, Stride3d stride, Band band)
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
             band.value();
+    }
+
+    @Override
+    public int offset(int... index) {
+        if (index.length != dimensions()) {
+            throw new IllegalArgumentException(
+                "Index elements must match dimensionality: %d != %d."
+                    .formatted(index.length, dimensions())
+            );
+        }
+        return offset(index[2], index[1], index[0]);
     }
 
     @Override

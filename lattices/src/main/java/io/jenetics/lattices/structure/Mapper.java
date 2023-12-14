@@ -20,44 +20,29 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Represents a 3-d index.
- *
- * @param row the row index
- * @param col the column index
- * @param slice the slice index
+ * Mapper for {@code index -> offset} and {@code offset -> index} mapping.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index3d(int slice, int row, int col) implements Index {
+public interface Mapper extends Dimensionality {
 
     /**
-     * Index where slice, row and column are zero.
-     */
-    public static final Index3d ZERO = new Index3d(0, 0, 0);
-
-    /**
-     * Return the number of dimensions; always 3.
+     * Return the position of the element with the given relative {@code rank}
+     * within the (virtual or non-virtual) internal n-d array.
      *
-     * @return 3
+     * @param index the index of the element.
+     * @return the (linearized) index of the given {@code index}
      */
-    @Override
-    public int dimensions() {
-        return 3;
-    }
+    int offset(int... index);
 
-    @Override
-    public int at(int dimension) {
-        return switch (dimension) {
-            case 0 -> col;
-            case 1 -> row;
-            case 2 -> slice;
-            default -> throw new IndexOutOfBoundsException(
-                "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
-            );
-        };
-    }
+    /**
+     * Calculates the index for the given {@code offset}.
+     *
+     * @param offset the offset for which to calculate the index
+     * @return the index for the given {@code offset}
+     */
+    Index index(int offset);
 
 }

@@ -28,12 +28,33 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Index1d(int value) implements Comparable<Index1d> {
+public record Index1d(int value) implements Index, Comparable<Index1d> {
 
     /**
      * Zero index.
      */
     public static final Index1d ZERO = new Index1d(0);
+
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensions() {
+        return 1;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> value;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensions(), dimension)
+            );
+        };
+    }
 
     @Override
     public int compareTo(Index1d other) {

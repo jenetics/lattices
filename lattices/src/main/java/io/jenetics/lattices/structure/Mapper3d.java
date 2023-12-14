@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Mapper3d {
+public interface Mapper3d extends Mapper {
 
     /**
      * Return the position of the given coordinate within the (virtual or
@@ -59,6 +59,7 @@ public interface Mapper3d {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
+    @Override
     Index3d index(int offset);
 
 }

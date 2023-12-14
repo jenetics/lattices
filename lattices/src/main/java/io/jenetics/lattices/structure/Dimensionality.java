@@ -20,44 +20,19 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Represents a 3-d index.
- *
- * @param row the row index
- * @param col the column index
- * @param slice the slice index
+ * Mixin interface for classes with multidimensional traits.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index3d(int slice, int row, int col) implements Index {
+public interface Dimensionality {
 
     /**
-     * Index where slice, row and column are zero.
-     */
-    public static final Index3d ZERO = new Index3d(0, 0, 0);
-
-    /**
-     * Return the number of dimensions; always 3.
+     * Return the number of dimensions.
      *
-     * @return 3
+     * @return the number of dimensions
      */
-    @Override
-    public int dimensions() {
-        return 3;
-    }
-
-    @Override
-    public int at(int dimension) {
-        return switch (dimension) {
-            case 0 -> col;
-            case 1 -> row;
-            case 2 -> slice;
-            default -> throw new IndexOutOfBoundsException(
-                "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
-            );
-        };
-    }
+    int dimensions();
 
 }

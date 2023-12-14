@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Mapper1d {
+public interface Mapper1d extends Mapper {
 
     /**
      * Return the position of the element with the given relative {@code rank}
@@ -56,6 +56,7 @@ public interface Mapper1d {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
+    @Override
     Index1d index(int offset);
 
 }

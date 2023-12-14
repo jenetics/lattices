@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure3d(Extent3d extent, Layout3d layout) {
+public record Structure3d(Extent3d extent, Layout3d layout) implements Structure {
 
     public Structure3d {
         requireNonNull(extent);
@@ -79,6 +79,16 @@ public record Structure3d(Extent3d extent, Layout3d layout) {
      */
     public Structure3d(int slices, int rows, int cols) {
         this(new Extent3d(slices, rows, cols));
+    }
+
+    /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensions() {
+        return 3;
     }
 
 }

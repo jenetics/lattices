@@ -20,44 +20,35 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Represents a 3-d index.
- *
- * @param row the row index
- * @param col the column index
- * @param slice the slice index
+ * Interface for objects with dimensionality.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public record Index3d(int slice, int row, int col) implements Index {
+public interface Dimensional extends Dimensionality{
 
     /**
-     * Index where slice, row and column are zero.
-     */
-    public static final Index3d ZERO = new Index3d(0, 0, 0);
-
-    /**
-     * Return the number of dimensions; always 3.
+     * Return the extent of the given {@code dimension}.
      *
-     * @return 3
+     * @param dimension the dimension (coordinate) index
+     * @return the extent of the given {@code dimension} (coordinate)
+     * @throws IndexOutOfBoundsException if the given {@code dimension} is out
+     *         of the valid range
      */
-    @Override
-    public int dimensions() {
-        return 3;
-    }
+    int at(int dimension);
 
-    @Override
-    public int at(int dimension) {
-        return switch (dimension) {
-            case 0 -> col;
-            case 1 -> row;
-            case 2 -> slice;
-            default -> throw new IndexOutOfBoundsException(
-                "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
-            );
-        };
+    /**
+     * Return the coordinate values as {@code int[]} array.
+     *
+     * @return a new {@code int[]} array with the dimensional components
+     */
+    default int[] toArray() {
+        final var result = new int[dimensions()];
+        for (int i = dimensions(); --i >= 0;) {
+            result[i] = at(i);
+        }
+        return result;
     }
 
 }

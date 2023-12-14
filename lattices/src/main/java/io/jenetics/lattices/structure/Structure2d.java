@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure2d(Extent2d extent, Layout2d layout) {
+public record Structure2d(Extent2d extent, Layout2d layout) implements Structure {
 
     public Structure2d {
         requireNonNull(extent);
@@ -77,6 +77,16 @@ public record Structure2d(Extent2d extent, Layout2d layout) {
      */
     public Structure2d(int rows, int cols) {
         this(new Extent2d(rows, cols));
+    }
+
+    /**
+     * Return the number of dimensions; always 2.
+     *
+     * @return 2
+     */
+    @Override
+    public int dimensions() {
+        return 2;
     }
 
 }

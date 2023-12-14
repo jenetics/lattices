@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Mapper2d {
+public interface Mapper2d extends Mapper {
 
     /**
      * Return the position of the given coordinate within the (virtual or
@@ -57,6 +57,7 @@ public interface Mapper2d {
      * @param offset the offset for which to calculate the index
      * @return the index for the given {@code offset}
      */
+    @Override
     Index2d index(int offset);
 
 }

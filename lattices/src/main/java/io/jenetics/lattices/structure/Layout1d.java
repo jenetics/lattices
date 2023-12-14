@@ -41,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record Layout1d(Index1d start, Stride1d stride, Band band)
-    implements Mapper1d
+    implements Layout, Mapper1d
 {
 
     public Layout1d {
@@ -50,9 +50,30 @@ public record Layout1d(Index1d start, Stride1d stride, Band band)
         requireNonNull(band);
     }
 
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensions() {
+        return 1;
+    }
+
     @Override
     public int offset(int index) {
         return start.value() + index*stride.value() + band.value();
+    }
+
+    @Override
+    public int offset(int... index) {
+        if (index.length != dimensions()) {
+            throw new IllegalArgumentException(
+                "Index elements must match dimensionality: %d != %d."
+                    .formatted(index.length, dimensions())
+            );
+        }
+        return offset(index[0]);
     }
 
     @Override

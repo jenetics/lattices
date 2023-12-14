@@ -34,7 +34,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Range1d(Index1d start, Extent1d extent)
-    implements Iterable<Index1d>
+    implements Range, Iterable<Index1d>
 {
 
     public Range1d {
@@ -74,6 +74,16 @@ public record Range1d(Index1d start, Extent1d extent)
      */
     public Range1d(Extent1d extent) {
         this(Index1d.ZERO, extent);
+    }
+
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensions() {
+        return 1;
     }
 
     @Override

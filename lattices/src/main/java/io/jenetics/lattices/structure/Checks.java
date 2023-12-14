@@ -60,6 +60,19 @@ final class Checks {
         }
     }
 
+    static boolean multNotSave(int value, int... values) {
+        int factor = value;
+        for (int j : values) {
+            if (multNotSave(factor, j)) {
+                return true;
+            } else {
+                factor *= j;
+            }
+        }
+
+        return false;
+    }
+
     static void checkIndex(int value, Extent1d extent) {
         if (value < 0 || value >= extent.elements()) {
             throw new IndexOutOfBoundsException(

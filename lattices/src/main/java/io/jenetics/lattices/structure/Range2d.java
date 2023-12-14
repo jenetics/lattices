@@ -34,7 +34,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Range2d(Index2d start, Extent2d extent)
-    implements Iterable<Index2d>
+    implements Range, Iterable<Index2d>
 {
 
     public Range2d {
@@ -67,6 +67,16 @@ public record Range2d(Index2d start, Extent2d extent)
      */
     public Range2d(final Extent2d extent) {
         this(Index2d.ZERO, extent);
+    }
+
+    /**
+     * Return the number of dimensions; always 2.
+     *
+     * @return 2
+     */
+    @Override
+    public int dimensions() {
+        return 2;
     }
 
     @Override

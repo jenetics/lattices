@@ -41,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  * @version 3.0
  */
 public record Layout2d(Index2d start, Stride2d stride, Band band)
-    implements Mapper2d
+    implements Layout, Mapper2d
 {
 
     public Layout2d {
@@ -50,12 +50,33 @@ public record Layout2d(Index2d start, Stride2d stride, Band band)
         requireNonNull(band);
     }
 
+    /**
+     * Return the number of dimensions; always 2.
+     *
+     * @return 2
+     */
+    @Override
+    public int dimensions() {
+        return 2;
+    }
+
     @Override
     public int offset(int row, int col) {
         return
             start.row() + row*stride.row() +
             start.col() + col*stride.col() +
             band.value();
+    }
+
+    @Override
+    public int offset(int... index) {
+        if (index.length != dimensions()) {
+            throw new IllegalArgumentException(
+                "Index elements must match dimensionality: %d != %d."
+                    .formatted(index.length, dimensions())
+            );
+        }
+        return offset(index[1], index[0]);
     }
 
     @Override

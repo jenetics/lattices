@@ -19,6 +19,10 @@
  */
 package io.jenetics.lattices.structure;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.IntStream;
+
 /**
  * Base interface for extents.
  *
@@ -26,14 +30,20 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Extent {
+public interface Extent extends Dimensional {
 
     /**
      * Return the number of elements this extent contains.
      *
      * @return the number of elements
      */
-    int elements();
+    default int elements() {
+        int elements = 1;
+        for (int i = dimensions(); --i >= 0;) {
+            elements *= at(i);
+        }
+        return elements;
+    }
 
     /**
      * Return the number of bands
@@ -50,6 +60,81 @@ public interface Extent {
      */
     default int cells() {
         return elements()*bands();
+    }
+
+    /**
+     * Create a new extent from the given extent values and bands.
+     *
+     * @param extents the extent values
+     * @param bands the number of bands
+     * @return a new extent object
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code mult(extents)*bands > Integer.MAX_VALUE}
+     */
+    static Extent of(int[] extents, int bands) {
+        record ExtentNd(int[] extents, int bands) implements Extent {
+            ExtentNd {
+                if (extents.length == 0) {
+                    throw new IllegalArgumentException(
+                        "Dimensionality must not be zero."
+                    );
+                }
+                if (IntStream.of(extents).anyMatch(i -> i < 0) ||
+                    bands < 1 ||
+                    Checks.multNotSave(bands, extents))
+                {
+                    throw new IllegalArgumentException(
+                        "Extent is out of bounds: [%s, bands=%d]."
+                            .formatted(Arrays.toString(extents), bands)
+                    );
+                }
+            }
+            @Override
+            public int dimensions() {
+                return extents.length;
+            }
+            @Override
+            public int at(int dimension) {
+                return extents[dimension];
+            }
+            @Override
+            public int[] toArray() {
+                return extents.clone();
+            }
+            @Override
+            public int hashCode() {
+                return Objects.hash(Arrays.hashCode(extents), bands);
+            }
+            @Override
+            public boolean equals(Object obj) {
+                return obj instanceof ExtentNd ext &&
+                    bands == ext.bands &&
+                    Arrays.equals(extents, ext.extents);
+            }
+            @Override
+            public String toString() {
+                return Arrays.toString(extents);
+            }
+        }
+
+        return switch (extents.length) {
+            case 1 -> new Extent1d(extents[0], bands);
+            case 2 -> new Extent2d(extents[0], extents[1], bands);
+            case 3 -> new Extent3d(extents[0], extents[1], extents[2], bands);
+            default -> new ExtentNd(extents, bands);
+        };
+    }
+
+    /**
+     * Create a new extent from the given extent values and bands.
+     *
+     * @param extents the extent values
+     * @return a new extent object
+     * @throws IllegalArgumentException if one of the arguments is smaller than
+     *         zero or {@code mult(extents) > Integer.MAX_VALUE}
+     */
+    static Extent of(int... extents) {
+        return of(extents, 1);
     }
 
 }

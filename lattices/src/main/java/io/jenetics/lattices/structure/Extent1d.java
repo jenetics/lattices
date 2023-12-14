@@ -19,7 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-
 import java.util.Iterator;
 
 /**
@@ -62,6 +61,27 @@ public record Extent1d(int elements, int bands)
      */
     public Extent1d(int elements) {
         this(elements, 1);
+    }
+
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensions() {
+        return 1;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> elements;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensions(), dimension)
+            );
+        };
     }
 
     @Override

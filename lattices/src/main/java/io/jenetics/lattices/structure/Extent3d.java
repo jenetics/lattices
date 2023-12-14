@@ -72,6 +72,29 @@ public record Extent3d(int slices, int rows, int cols, int bands)
     }
 
     /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensions() {
+        return 3;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> cols;
+            case 1 -> rows;
+            case 2 -> slices;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensions(), dimension)
+            );
+        };
+    }
+
+    /**
      * The number of elements.
      *
      * @return the number of elements
