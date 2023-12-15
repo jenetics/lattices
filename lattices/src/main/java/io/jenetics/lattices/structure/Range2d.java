@@ -22,6 +22,7 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -81,7 +82,35 @@ public record Range2d(Index2d start, Extent2d extent)
 
     @Override
     public Iterator<Index2d> iterator() {
-        return new Index2dIterator(this);
+        return new Iterator<>() {
+            private int rowCursor = start.row();
+            private int colCursor = start.col();
+
+            @Override
+            public boolean hasNext() {
+                return
+                    rowCursor < start.row() + extent.rows() &&
+                    colCursor < start.col() + extent.cols();
+            }
+
+            @Override
+            public Index2d next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final int r = rowCursor;
+                final int c = colCursor;
+
+                colCursor = c + 1;
+                if (colCursor >= start.col() + extent.cols()) {
+                    colCursor = start.col();
+                    rowCursor = r + 1;
+                }
+
+                return new Index2d(r, c);
+            }
+        };
     }
 
     @Override

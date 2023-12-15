@@ -96,7 +96,7 @@ public record Extent1d(int elements, int bands)
 
     @Override
     public Iterator<Index1d> iterator() {
-        return new Index1dIterator(new Range1d(this ), Stride1d.ONE) ;
+        return new Range1d(this ).iterator();
     }
 
 }

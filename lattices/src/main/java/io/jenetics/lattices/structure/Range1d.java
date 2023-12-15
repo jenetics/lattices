@@ -22,6 +22,7 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -88,7 +89,25 @@ public record Range1d(Index1d start, Extent1d extent)
 
     @Override
     public Iterator<Index1d> iterator() {
-        return new Index1dIterator(this, Stride1d.ONE);
+        return new Iterator<>() {
+            private int cursor = start.value();
+
+            @Override
+            public boolean hasNext() {
+                return cursor < start.value() + extent.elements();
+            }
+
+            @Override
+            public Index1d next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final int i = cursor;
+                cursor = i + 1;
+                return new Index1d(i);
+            }
+        };
     }
 
     @Override

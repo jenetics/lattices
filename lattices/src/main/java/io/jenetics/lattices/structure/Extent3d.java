@@ -106,7 +106,7 @@ public record Extent3d(int slices, int rows, int cols, int bands)
 
     @Override
     public Iterator<Index3d> iterator() {
-        return new Index3dIterator(new Range3d(this));
+        return new Range3d(this).iterator();
     }
 
     @Override

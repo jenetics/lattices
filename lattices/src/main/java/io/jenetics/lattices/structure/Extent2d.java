@@ -102,7 +102,7 @@ public record Extent2d(int rows, int cols, int bands)
 
     @Override
     public Iterator<Index2d> iterator() {
-        return new Index2dIterator(new Range2d(this));
+        return new Range2d(this).iterator();
     }
 
     @Override

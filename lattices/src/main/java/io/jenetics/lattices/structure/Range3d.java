@@ -22,6 +22,7 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -82,7 +83,44 @@ public record Range3d(Index3d start, Extent3d extent)
 
     @Override
     public Iterator<Index3d> iterator() {
-        return new Index3dIterator(this);
+        return new Iterator<>() {
+            private int sliceCursor = start.slice();
+            private int rowCursor = start.row();
+            private int colCursor = start.col();
+
+            @Override
+            public boolean hasNext() {
+                return
+                    sliceCursor < start.slice() + extent.slices() &&
+                    rowCursor < start.row() + extent.rows() &&
+                    colCursor < start.col() + extent.cols();
+            }
+
+            @Override
+            public Index3d next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final int s = sliceCursor;
+                final int r = rowCursor;
+                final int c = colCursor;
+
+                colCursor = c + 1;
+                if (colCursor >= start.col() + extent.cols()) {
+                    colCursor = start.col();
+                    rowCursor = r + 1;
+
+                    if (rowCursor >= start.row() + extent.rows()) {
+                        colCursor = start.col();
+                        rowCursor = start.row();
+                        sliceCursor = s + 1;
+                    }
+                }
+
+                return new Index3d(s, r, c);
+            }
+        };
     }
 
     @Override
