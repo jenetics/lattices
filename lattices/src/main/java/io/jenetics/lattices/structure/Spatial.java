@@ -20,16 +20,16 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Mixin interface for objects with discrete spatial properties.
+ * Mixin interface for objects with spatial properties.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface DiscreteSpatial extends Dimensional {
+public interface Spatial extends Dimensional {
 
     /**
-     * Return the discrete value for the given {@code dimension}.
+     * Return the value for the given {@code dimension}.
      *
      * @param dimension the dimension (coordinate) value
      * @return the value of the given {@code dimension} (coordinate)

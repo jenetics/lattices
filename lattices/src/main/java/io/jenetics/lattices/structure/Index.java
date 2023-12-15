@@ -28,7 +28,7 @@ import java.util.Arrays;
  * @since 3.0
  * @version 3.0
  */
-public interface Index extends DiscreteSpatial {
+public interface Index extends Spatial {
 
     /**
      * Create a new index object from the given index values. The values for the
