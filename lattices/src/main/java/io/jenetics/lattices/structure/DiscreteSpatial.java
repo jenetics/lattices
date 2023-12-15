@@ -44,8 +44,8 @@ public interface DiscreteSpatial extends Dimensional {
      * @return a new {@code int[]} array with the dimensional components
      */
     default int[] toArray() {
-        final var result = new int[dimensions()];
-        for (int i = dimensions(); --i >= 0;) {
+        final var result = new int[dimensionality()];
+        for (int i = dimensionality(); --i >= 0;) {
             result[i] = at(i);
         }
         return result;

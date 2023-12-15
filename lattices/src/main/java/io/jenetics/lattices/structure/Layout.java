@@ -54,17 +54,17 @@ public interface Layout extends Dimensional, Mapper {
 
     @Override
     default int offset(int... index) {
-        assert dimensions() == start().dimensions();
-        assert dimensions() == stride().dimensions();
-        if (index.length != dimensions()) {
+        assert dimensionality() == start().dimensionality();
+        assert dimensionality() == stride().dimensionality();
+        if (index.length != dimensionality()) {
             throw new IllegalArgumentException(
                 "Index elements must match dimensionality: %d != %d."
-                    .formatted(index.length, dimensions())
+                    .formatted(index.length, dimensionality())
             );
         }
 
         int offset = band().value();
-        for (int i = start().dimensions(); --i >= 0;) {
+        for (int i = start().dimensionality(); --i >= 0;) {
             offset += start().at(i) + index[i]*start().at(i);
         }
         return offset;
@@ -72,16 +72,16 @@ public interface Layout extends Dimensional, Mapper {
 
     @Override
     default Index index(int offset) {
-        assert dimensions() == start().dimensions();
-        assert dimensions() == stride().dimensions();
+        assert dimensionality() == start().dimensionality();
+        assert dimensionality() == stride().dimensionality();
 
         int start = offset - band().value();
-        for (int i = start().dimensions(); --i >= 0;) {
+        for (int i = start().dimensionality(); --i >= 0;) {
             start -= start().at(i);
         }
 
-        final var index = new int[start().dimensions()];
-        for (int i = start().dimensions(); --i >= 0;) {
+        final var index = new int[start().dimensionality()];
+        for (int i = start().dimensionality(); --i >= 0;) {
             index[i] = start/stride().at(i);
             start -= index[i]*stride().at(i);
         }
@@ -103,16 +103,16 @@ public interface Layout extends Dimensional, Mapper {
         {
             LayoutNd {
                 requireNonNull(band);
-                if (start.dimensions() != stride.dimensions()) {
+                if (start.dimensionality() != stride.dimensionality()) {
                     throw new IllegalArgumentException(
                         "start.dimensions != stride.dimensions: %d != %d."
-                            .formatted(start.dimensions(), stride.dimensions())
+                            .formatted(start.dimensionality(), stride.dimensionality())
                     );
                 }
             }
             @Override
-            public int dimensions() {
-                return start.dimensions();
+            public int dimensionality() {
+                return start.dimensionality();
             }
         }
 

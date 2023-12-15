@@ -56,7 +56,7 @@ public record Stride1d(int value) implements Stride {
      * @return 1
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 1;
     }
 
@@ -66,7 +66,7 @@ public record Stride1d(int value) implements Stride {
             case 0 -> value;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

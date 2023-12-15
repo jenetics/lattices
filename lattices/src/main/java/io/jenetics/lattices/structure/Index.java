@@ -49,7 +49,7 @@ public interface Index extends DiscreteSpatial {
                 }
             }
             @Override
-            public int dimensions() {
+            public int dimensionality() {
                 return indexes.length;
             }
             @Override

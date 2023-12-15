@@ -39,7 +39,7 @@ public interface Extent extends DiscreteSpatial {
      */
     default int elements() {
         int elements = 1;
-        for (int i = dimensions(); --i >= 0;) {
+        for (int i = dimensionality(); --i >= 0;) {
             elements *= at(i);
         }
         return elements;
@@ -90,7 +90,7 @@ public interface Extent extends DiscreteSpatial {
                 }
             }
             @Override
-            public int dimensions() {
+            public int dimensionality() {
                 return extents.length;
             }
             @Override

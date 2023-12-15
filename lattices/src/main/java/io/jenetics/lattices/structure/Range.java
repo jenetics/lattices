@@ -52,16 +52,16 @@ public interface Range extends Dimensional {
     static Range of(Index start, Extent extent) {
         record RangeNd(Index start, Extent extent) implements Range {
             RangeNd {
-                if (start.dimensions() != extent.dimensions()) {
+                if (start.dimensionality() != extent.dimensionality()) {
                     throw new IllegalArgumentException(
                         "start.dimensions != extent.dimensions: %d != %d."
-                            .formatted(start.dimensions(), extent.dimensions())
+                            .formatted(start.dimensionality(), extent.dimensionality())
                     );
                 }
             }
             @Override
-            public int dimensions() {
-                return start.dimensions();
+            public int dimensionality() {
+                return start.dimensionality();
             }
         }
 

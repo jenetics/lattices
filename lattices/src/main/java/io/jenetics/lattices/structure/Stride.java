@@ -56,7 +56,7 @@ public interface Stride extends DiscreteSpatial {
                 }
             }
             @Override
-            public int dimensions() {
+            public int dimensionality() {
                 return strides.length;
             }
             @Override

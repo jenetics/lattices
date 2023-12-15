@@ -81,7 +81,7 @@ public record Structure1d(Extent1d extent, Layout1d layout) implements Structure
      * @return 1
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 1;
     }
 

@@ -69,7 +69,7 @@ public record Extent1d(int elements, int bands)
      * @return 1
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 1;
     }
 
@@ -79,7 +79,7 @@ public record Extent1d(int elements, int bands)
             case 0 -> elements;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

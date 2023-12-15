@@ -52,16 +52,16 @@ public interface Structure extends Dimensional {
     static Structure of(Extent extent, Layout layout) {
         record StructureNd(Extent extent, Layout layout) implements Structure {
             StructureNd {
-                if (extent.dimensions() != layout.dimensions()) {
+                if (extent.dimensionality() != layout.dimensionality()) {
                     throw new IllegalArgumentException(
                         "extent.dimensions != layout.dimensions: %d != %d."
-                            .formatted(extent.dimensions(), layout.dimensions())
+                            .formatted(extent.dimensionality(), layout.dimensionality())
                     );
                 }
             }
             @Override
-            public int dimensions() {
-                return extent.dimensions();
+            public int dimensionality() {
+                return extent.dimensionality();
             }
         }
 
@@ -95,21 +95,21 @@ public interface Structure extends Dimensional {
             return new Structure3d(ext);
         }
 
-        final var strides = new int[extent.dimensions()];
-        for (int i = 0; i < extent.dimensions() - 1; ++i) {
+        final var strides = new int[extent.dimensionality()];
+        for (int i = 0; i < extent.dimensionality() - 1; ++i) {
             int stride = 1;
-            for (int j = extent.dimensions() - i - 1; --j >= 0;) {
+            for (int j = extent.dimensionality() - i - 1; --j >= 0;) {
                 stride *= extent.at(j);
             }
             stride *= extent.bands();
-            strides[extent.dimensions() - i - 1] = stride;
+            strides[extent.dimensionality() - i - 1] = stride;
         }
-        strides[extent.dimensions() - 1] = extent.bands();
+        strides[extent.dimensionality() - 1] = extent.bands();
 
         return Structure.of(
             extent,
             Layout.of(
-                Index.of(new int[extent.dimensions()]),
+                Index.of(new int[extent.dimensionality()]),
                 Stride.of(strides),
                 Band.ZERO
             )

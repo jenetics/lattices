@@ -85,7 +85,7 @@ public record Structure2d(Extent2d extent, Layout2d layout) implements Structure
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 

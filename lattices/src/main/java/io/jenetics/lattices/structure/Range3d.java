@@ -76,7 +76,7 @@ public record Range3d(Index3d start, Extent3d extent)
      * @return 3
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 3;
     }
 

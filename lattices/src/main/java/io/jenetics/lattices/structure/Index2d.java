@@ -42,7 +42,7 @@ public record Index2d(int row, int col) implements Index {
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 
@@ -53,7 +53,7 @@ public record Index2d(int row, int col) implements Index {
             case 1 -> row;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

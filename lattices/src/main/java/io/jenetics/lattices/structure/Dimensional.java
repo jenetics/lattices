@@ -33,6 +33,6 @@ public interface Dimensional {
      *
      * @return the number of dimensions
      */
-    int dimensions();
+    int dimensionality();
 
 }

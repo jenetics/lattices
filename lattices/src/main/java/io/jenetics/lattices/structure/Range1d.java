@@ -82,7 +82,7 @@ public record Range1d(Index1d start, Extent1d extent)
      * @return 1
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 1;
     }
 

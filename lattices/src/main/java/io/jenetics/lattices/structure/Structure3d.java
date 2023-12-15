@@ -87,7 +87,7 @@ public record Structure3d(Extent3d extent, Layout3d layout) implements Structure
      * @return 3
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 3;
     }
 

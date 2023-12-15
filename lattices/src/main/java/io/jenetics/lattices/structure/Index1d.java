@@ -41,7 +41,7 @@ public record Index1d(int value) implements Index, Comparable<Index1d> {
      * @return 1
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 1;
     }
 
@@ -51,7 +51,7 @@ public record Index1d(int value) implements Index, Comparable<Index1d> {
             case 0 -> value;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

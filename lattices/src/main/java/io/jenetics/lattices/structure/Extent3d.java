@@ -77,7 +77,7 @@ public record Extent3d(int slices, int rows, int cols, int bands)
      * @return 3
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 3;
     }
 
@@ -89,7 +89,7 @@ public record Extent3d(int slices, int rows, int cols, int bands)
             case 2 -> slices;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

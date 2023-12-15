@@ -74,7 +74,7 @@ public record Extent2d(int rows, int cols, int bands)
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 
@@ -85,7 +85,7 @@ public record Extent2d(int rows, int cols, int bands)
             case 1 -> rows;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

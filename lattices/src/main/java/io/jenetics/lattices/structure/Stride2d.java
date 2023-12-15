@@ -53,7 +53,7 @@ public record Stride2d(int row, int col) implements Stride {
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 
@@ -64,7 +64,7 @@ public record Stride2d(int row, int col) implements Stride {
             case 1 -> row;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

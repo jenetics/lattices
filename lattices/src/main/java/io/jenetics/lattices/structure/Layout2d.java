@@ -56,7 +56,7 @@ public record Layout2d(Index2d start, Stride2d stride, Band band)
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 
@@ -70,10 +70,10 @@ public record Layout2d(Index2d start, Stride2d stride, Band band)
 
     @Override
     public int offset(int... index) {
-        if (index.length != dimensions()) {
+        if (index.length != dimensionality()) {
             throw new IllegalArgumentException(
                 "Index elements must match dimensionality: %d != %d."
-                    .formatted(index.length, dimensions())
+                    .formatted(index.length, dimensionality())
             );
         }
         return offset(index[1], index[0]);

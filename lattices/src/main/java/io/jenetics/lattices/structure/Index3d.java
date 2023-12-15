@@ -43,7 +43,7 @@ public record Index3d(int slice, int row, int col) implements Index {
      * @return 3
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 3;
     }
 
@@ -55,7 +55,7 @@ public record Index3d(int slice, int row, int col) implements Index {
             case 2 -> slice;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
-                    .formatted(dimensions(), dimension)
+                    .formatted(dimensionality(), dimension)
             );
         };
     }

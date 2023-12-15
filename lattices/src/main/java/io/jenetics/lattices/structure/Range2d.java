@@ -75,7 +75,7 @@ public record Range2d(Index2d start, Extent2d extent)
      * @return 2
      */
     @Override
-    public int dimensions() {
+    public int dimensionality() {
         return 2;
     }
 
