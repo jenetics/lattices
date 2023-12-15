@@ -54,7 +54,7 @@ public interface Structure extends Dimensional {
             StructureNd {
                 if (extent.dimensionality() != layout.dimensionality()) {
                     throw new IllegalArgumentException(
-                        "extent.dimensions != layout.dimensions: %d != %d."
+                        "extent.dimensionality != layout.dimensionality: %d != %d."
                             .formatted(extent.dimensionality(), layout.dimensionality())
                     );
                 }

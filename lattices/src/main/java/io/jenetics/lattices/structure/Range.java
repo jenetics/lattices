@@ -54,7 +54,7 @@ public interface Range extends Dimensional {
             RangeNd {
                 if (start.dimensionality() != extent.dimensionality()) {
                     throw new IllegalArgumentException(
-                        "start.dimensions != extent.dimensions: %d != %d."
+                        "start.dimensionality != extent.dimensionality: %d != %d."
                             .formatted(start.dimensionality(), extent.dimensionality())
                     );
                 }

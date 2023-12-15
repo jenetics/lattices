@@ -105,7 +105,7 @@ public interface Layout extends Dimensional, Mapper {
                 requireNonNull(band);
                 if (start.dimensionality() != stride.dimensionality()) {
                     throw new IllegalArgumentException(
-                        "start.dimensions != stride.dimensions: %d != %d."
+                        "start.dimensionality != stride.dimensionality: %d != %d."
                             .formatted(start.dimensionality(), stride.dimensionality())
                     );
                 }
