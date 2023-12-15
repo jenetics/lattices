@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
  * @since 3.0
  * @version 3.0
  */
-public interface Extent extends Dimensional {
+public interface Extent extends DiscreteSpatial {
 
     /**
      * Return the number of elements this extent contains.

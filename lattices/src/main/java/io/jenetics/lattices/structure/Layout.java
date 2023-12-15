@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public interface Layout extends Dimensionality, Mapper {
+public interface Layout extends Dimensional, Mapper {
 
     /**
      * The index of the first element.

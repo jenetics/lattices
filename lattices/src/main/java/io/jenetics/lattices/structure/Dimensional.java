@@ -20,35 +20,19 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Interface for objects with dimensionality.
+ * Mixin interface for classes which have or possesses dimensions.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Dimensional extends Dimensionality{
+public interface Dimensional {
 
     /**
-     * Return the extent of the given {@code dimension}.
+     * Return the number of dimensions.
      *
-     * @param dimension the dimension (coordinate) index
-     * @return the extent of the given {@code dimension} (coordinate)
-     * @throws IndexOutOfBoundsException if the given {@code dimension} is out
-     *         of the valid range
+     * @return the number of dimensions
      */
-    int at(int dimension);
-
-    /**
-     * Return the coordinate values as {@code int[]} array.
-     *
-     * @return a new {@code int[]} array with the dimensional components
-     */
-    default int[] toArray() {
-        final var result = new int[dimensions()];
-        for (int i = dimensions(); --i >= 0;) {
-            result[i] = at(i);
-        }
-        return result;
-    }
+    int dimensions();
 
 }

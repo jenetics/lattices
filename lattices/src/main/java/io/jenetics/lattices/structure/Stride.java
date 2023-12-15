@@ -28,7 +28,7 @@ import java.util.Arrays;
  * @since 3.0
  * @version 3.0
  */
-public interface Stride extends Dimensional {
+public interface Stride extends DiscreteSpatial {
 
     /**
      * Create a new stride object from the given stride values. The values for

@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Range extends Dimensionality {
+public interface Range extends Dimensional {
 
     /**
      * The start index of the range.

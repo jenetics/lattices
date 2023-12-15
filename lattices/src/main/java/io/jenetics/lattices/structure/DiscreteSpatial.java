@@ -20,19 +20,35 @@
 package io.jenetics.lattices.structure;
 
 /**
- * Mixin interface for classes with multidimensional traits.
+ * Mixin interface for objects with discrete spatial properties.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Dimensionality {
+public interface DiscreteSpatial extends Dimensional {
 
     /**
-     * Return the number of dimensions.
+     * Return the discrete value for the given {@code dimension}.
      *
-     * @return the number of dimensions
+     * @param dimension the dimension (coordinate) value
+     * @return the value of the given {@code dimension} (coordinate)
+     * @throws IndexOutOfBoundsException if the given {@code dimension} is out
+     *         of the valid range
      */
-    int dimensions();
+    int at(int dimension);
+
+    /**
+     * Return the spatial values as {@code int[]} array.
+     *
+     * @return a new {@code int[]} array with the dimensional components
+     */
+    default int[] toArray() {
+        final var result = new int[dimensions()];
+        for (int i = dimensions(); --i >= 0;) {
+            result[i] = at(i);
+        }
+        return result;
+    }
 
 }

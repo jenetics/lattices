@@ -26,7 +26,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public interface Structure extends Dimensionality {
+public interface Structure extends Dimensional {
 
     /**
      * The extent of the structure.
