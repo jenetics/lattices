@@ -31,7 +31,7 @@ import java.util.function.Function;
  * {@snippet lang=java:
  * final var range = Range.of(Extent.of(2, 2, 2));
  *
- * final var it = new IndexIterator.LowMajorForward(range);
+ * final var it = new IndexIterator.Forward.LowMajor(range);
  * while (it.hasNext()) {
  *     System.out.println(Arrays.toString(it.next()));
  * }
@@ -63,284 +63,307 @@ public sealed abstract class IndexIterator implements Iterator<int[]> {
     }
 
     /**
-     * Forward iterator, where the lower indexes are increased after the higher
-     * indexes.
-     * {@snippet lang=java:
-     * final var range = Range.of(Extent.of(2, 2, 2));
-     *
-     * final var it = new IndexIterator.LowMajorForward(range);
-     * while (it.hasNext()) {
-     *     System.out.println(Arrays.toString(it.next()));
-     * }
-     *
-     * // Produced output.
-     * // > [0, 0, 0]
-     * // > [0, 0, 1]
-     * // > [0, 1, 0]
-     * // > [0, 1, 1]
-     * // > [1, 0, 0]
-     * // > [1, 0, 1]
-     * // > [1, 1, 0]
-     * // > [1, 1, 1]
-     * }
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
+     * Forward iterator implementations are increasing the index values during
+     * the iteration.
      */
-    public static final class LowMajorForward extends IndexIterator {
+    public static abstract sealed class Forward extends IndexIterator {
+        private Forward(int[] start, int[] end, int[] cursor) {
+            super(start, end, cursor);
+        }
 
         /**
-         * Create a new index iterator for the given range.
+         * Forward iterator, where the lower indexes are increased after the higher
+         * indexes.
+         * {@snippet lang=java:
+         * final var range = Range.of(Extent.of(2, 2, 2));
          *
-         * @param range the index range the iterator is iterating
+         * final var it = new IndexIterator.Forward.LowMajor(range);
+         * while (it.hasNext()) {
+         *     System.out.println(Arrays.toString(it.next()));
+         * }
+         *
+         * // Produced output.
+         * // > [0, 0, 0]
+         * // > [0, 0, 1]
+         * // > [0, 1, 0]
+         * // > [0, 1, 1]
+         * // > [1, 0, 0]
+         * // > [1, 0, 1]
+         * // > [1, 1, 0]
+         * // > [1, 1, 1]
+         * }
+         *
+         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+         * @since 3.0
+         * @version 3.0
          */
-        public LowMajorForward(Range range) {
-            super(
-                range.start().toArray(),
-                range.end().toArray(),
-                range.start().toArray()
-            );
-        }
+        public static final class LowMajor extends Forward {
 
-        @Override
-        public boolean hasNext() {
-            return cursor[0] < end[0];
-        }
-
-        @Override
-        public int[] next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
+            /**
+             * Create a new index iterator for the given range.
+             *
+             * @param range the index range the iterator is iterating
+             */
+            public LowMajor(Range range) {
+                super(
+                    range.start().toArray(),
+                    range.end().toArray(),
+                    range.start().toArray()
+                );
             }
 
-            final var next = cursor.clone();
+            @Override
+            public boolean hasNext() {
+                return cursor[0] < end[0];
+            }
 
-            for (int i = start.length; --i >= 0;) {
-                cursor[i] = next[i] + 1;
-
-                if (cursor[i] >= end[i] && i > 0) {
-                    for (int j = start.length; --j >= i;) {
-                        cursor[j] = start[i];
-                    }
-                } else {
-                    break;
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
+
+                final var next = cursor.clone();
+
+                for (int i = start.length; --i >= 0;) {
+                    cursor[i] = next[i] + 1;
+
+                    if (cursor[i] >= end[i] && i > 0) {
+                        for (int j = start.length; --j >= i;) {
+                            cursor[j] = start[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
+        }
+
+        /**
+         * Forward iterator, where the higher indexes are increased after the lower
+         * indexes.
+         * {@snippet lang=java:
+         * final var range = Range.of(Extent.of(2, 2, 2));
+         *
+         * final var it = new IndexIterator.Forward.HighMajor(range);
+         * while (it.hasNext()) {
+         *     System.out.println(Arrays.toString(it.next()));
+         * }
+         *
+         * // Produced output.
+         * // > [0, 0, 0]
+         * // > [1, 0, 0]
+         * // > [0, 1, 0]
+         * // > [1, 1, 0]
+         * // > [0, 0, 1]
+         * // > [1, 0, 1]
+         * // > [0, 1, 1]
+         * // > [1, 1, 1]
+         * }
+         *
+         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+         * @since 3.0
+         * @version 3.0
+         */
+        public static final class HighMajor extends Forward {
+
+            /**
+             * Create a new index iterator for the given range.
+             *
+             * @param range the index range the iterator is iterating
+             */
+            public HighMajor(Range range) {
+                super(
+                    range.start().toArray(),
+                    range.end().toArray(),
+                    range.start().toArray()
+                );
             }
 
-            return next;
+            @Override
+            public boolean hasNext() {
+                return cursor[start.length - 1] < end[start.length - 1];
+            }
+
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = cursor.clone();
+
+                for (int i = 0; i < start.length; ++i) {
+                    cursor[i] = next[i] + 1;
+
+                    if (cursor[i] >= end[i] && i < start.length - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            cursor[j] = start[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
         }
+
     }
 
     /**
-     * Backward iterator, where the lower indexes are decreased after the higher
-     * indexes.
-     * {@snippet lang=java:
-     * final var range = Range.of(Extent.of(2, 2, 2));
-     *
-     * final var it = new IndexIterator.LowMajorBackward(range);
-     * while (it.hasNext()) {
-     *     System.out.println(Arrays.toString(it.next()));
-     * }
-     *
-     * // Produced output.
-     * // > [1, 1, 1]
-     * // > [1, 1, 0]
-     * // > [1, 0, 1]
-     * // > [1, 0, 0]
-     * // > [0, 1, 1]
-     * // > [0, 1, 0]
-     * // > [0, 0, 1]
-     * // > [0, 0, 0]
-     * }
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
+     * Backward iterator implementations are decreasing the index values during
+     * the iteration.
      */
-    public static final class LowMajorBackward extends IndexIterator {
+    public static abstract sealed class Backward extends IndexIterator {
+        private Backward(int[] start, int[] end, int[] cursor) {
+            super(start, end, cursor);
+        }
 
         /**
-         * Create a new index iterator for the given range.
+         * Backward iterator, where the lower indexes are decreased after the higher
+         * indexes.
+         * {@snippet lang=java:
+         * final var range = Range.of(Extent.of(2, 2, 2));
          *
-         * @param range the index range the iterator is iterating
+         * final var it = new IndexIterator.Backward.LowMajor(range);
+         * while (it.hasNext()) {
+         *     System.out.println(Arrays.toString(it.next()));
+         * }
+         *
+         * // Produced output.
+         * // > [1, 1, 1]
+         * // > [1, 1, 0]
+         * // > [1, 0, 1]
+         * // > [1, 0, 0]
+         * // > [0, 1, 1]
+         * // > [0, 1, 0]
+         * // > [0, 0, 1]
+         * // > [0, 0, 0]
+         * }
+         *
+         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+         * @since 3.0
+         * @version 3.0
          */
-        public LowMajorBackward(Range range) {
-            super(
-                range.start().toArray(),
-                dec(range.end().toArray()),
-                dec(range.end().toArray())
-            );
-        }
+        public static final class LowMajor extends Backward {
 
-        @Override
-        public boolean hasNext() {
-            return cursor[0] >= start[0];
-        }
-
-        @Override
-        public int[] next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
+            /**
+             * Create a new index iterator for the given range.
+             *
+             * @param range the index range the iterator is iterating
+             */
+            public LowMajor(Range range) {
+                super(
+                    range.start().toArray(),
+                    dec(range.end().toArray()),
+                    dec(range.end().toArray())
+                );
             }
 
-            final var next = cursor.clone();
+            @Override
+            public boolean hasNext() {
+                return cursor[0] >= start[0];
+            }
 
-            for (int i = start.length; --i >= 0;) {
-                cursor[i] = next[i] - 1;
-
-                if (cursor[i] < start[i] && i > 0) {
-                    for (int j = start.length; --j >= i;) {
-                        cursor[j] = end[i];
-                    }
-                } else {
-                    break;
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
+
+                final var next = cursor.clone();
+
+                for (int i = start.length; --i >= 0;) {
+                    cursor[i] = next[i] - 1;
+
+                    if (cursor[i] < start[i] && i > 0) {
+                        for (int j = start.length; --j >= i;) {
+                            cursor[j] = end[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
             }
-
-            return next;
         }
-    }
-
-    /**
-     * Forward iterator, where the higher indexes are increased after the lower
-     * indexes.
-     * {@snippet lang=java:
-     * final var range = Range.of(Extent.of(2, 2, 2));
-     *
-     * final var it = new IndexIterator.HighMajorForward(range);
-     * while (it.hasNext()) {
-     *     System.out.println(Arrays.toString(it.next()));
-     * }
-     *
-     * // Produced output.
-     * // > [0, 0, 0]
-     * // > [1, 0, 0]
-     * // > [0, 1, 0]
-     * // > [1, 1, 0]
-     * // > [0, 0, 1]
-     * // > [1, 0, 1]
-     * // > [0, 1, 1]
-     * // > [1, 1, 1]
-     * }
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
-     */
-    public static final class HighMajorForward extends IndexIterator {
 
         /**
-         * Create a new index iterator for the given range.
+         * Backward iterator, where the higher indexes are decreased after the lower
+         * indexes.
+         * {@snippet lang=java:
+         * final var range = Range.of(Extent.of(2, 2, 2));
          *
-         * @param range the index range the iterator is iterating
+         * final var it = new IndexIterator.Backward.HighMajor(range);
+         * while (it.hasNext()) {
+         *     System.out.println(Arrays.toString(it.next()));
+         * }
+         *
+         * // Produced output.
+         * // > [1, 1, 1]
+         * // > [0, 1, 1]
+         * // > [1, 0, 1]
+         * // > [0, 0, 1]
+         * // > [1, 1, 0]
+         * // > [0, 1, 0]
+         * // > [1, 0, 0]
+         * // > [0, 0, 0]
+         * }
+         *
+         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+         * @since 3.0
+         * @version 3.0
          */
-        public HighMajorForward(Range range) {
-            super(
-                range.start().toArray(),
-                range.end().toArray(),
-                range.start().toArray()
-            );
-        }
+        public static final class HighMajor extends Backward {
 
-        @Override
-        public boolean hasNext() {
-            return cursor[start.length - 1] < end[start.length - 1];
-        }
-
-        @Override
-        public int[] next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
+            /**
+             * Create a new index iterator for the given range.
+             *
+             * @param range the index range the iterator is iterating
+             */
+            public HighMajor(Range range) {
+                super(
+                    range.start().toArray(),
+                    dec(range.end().toArray()),
+                    dec(range.end().toArray())
+                );
             }
 
-            final var next = cursor.clone();
+            @Override
+            public boolean hasNext() {
+                return cursor[start.length - 1] >= start[start.length - 1];
+            }
 
-            for (int i = 0; i < start.length; ++i) {
-                cursor[i] = next[i] + 1;
-
-                if (cursor[i] >= end[i] && i < start.length - 1) {
-                    for (int j = 0; j <= i; ++j) {
-                        cursor[j] = start[i];
-                    }
-                } else {
-                    break;
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
-            }
 
-            return next;
+                final var next = cursor.clone();
+
+                for (int i = 0; i < start.length; ++i) {
+                    cursor[i] = next[i] - 1;
+
+                    if (cursor[i] < start[i] && i < start.length - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            cursor[j] = end[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
         }
+
     }
 
-    /**
-     * Backward iterator, where the higher indexes are decreased after the lower
-     * indexes.
-     * {@snippet lang=java:
-     * final var range = Range.of(Extent.of(2, 2, 2));
-     *
-     * final var it = new IndexIterator.HighMajorBackward(range);
-     * while (it.hasNext()) {
-     *     System.out.println(Arrays.toString(it.next()));
-     * }
-     *
-     * // Produced output.
-     * // > [1, 1, 1]
-     * // > [0, 1, 1]
-     * // > [1, 0, 1]
-     * // > [0, 0, 1]
-     * // > [1, 1, 0]
-     * // > [0, 1, 0]
-     * // > [1, 0, 0]
-     * // > [0, 0, 0]
-     * }
-     *
-     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-     * @since 3.0
-     * @version 3.0
-     */
-    public static final class HighMajorBackward extends IndexIterator {
-
-        /**
-         * Create a new index iterator for the given range.
-         *
-         * @param range the index range the iterator is iterating
-         */
-        public HighMajorBackward(Range range) {
-            super(
-                range.start().toArray(),
-                dec(range.end().toArray()),
-                dec(range.end().toArray())
-            );
-        }
-
-        @Override
-        public boolean hasNext() {
-            return cursor[start.length - 1] >= start[start.length - 1];
-        }
-
-        @Override
-        public int[] next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-
-            final var next = cursor.clone();
-
-            for (int i = 0; i < start.length; ++i) {
-                cursor[i] = next[i] - 1;
-
-                if (cursor[i] < start[i] && i < start.length - 1) {
-                    for (int j = 0; j <= i; ++j) {
-                        cursor[j] = end[i];
-                    }
-                } else {
-                    break;
-                }
-            }
-
-            return next;
-        }
-    }
 
     private static int[] dec(int[] array) {
         for (int i = 0; i < array.length; ++i) {

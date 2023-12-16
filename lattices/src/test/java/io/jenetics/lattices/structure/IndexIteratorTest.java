@@ -32,7 +32,7 @@ public class IndexIteratorTest {
     public void lowMajorForward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.LowMajorForward(range);
+        final var it = new IndexIterator.Forward.LowMajor(range);
         while (it.hasNext()) {
             System.out.println(Arrays.toString(it.next()));
         }
@@ -42,7 +42,7 @@ public class IndexIteratorTest {
     public void lowMajorBackward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.LowMajorBackward(range);
+        final var it = new IndexIterator.Backward.LowMajor(range);
         while (it.hasNext()) {
             System.out.println(Arrays.toString(it.next()));
         }
@@ -52,7 +52,7 @@ public class IndexIteratorTest {
     public void highMajorForward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.HighMajorForward(range);
+        final var it = new IndexIterator.Forward.HighMajor(range);
         while (it.hasNext()) {
             System.out.println(Arrays.toString(it.next()));
         }
@@ -62,7 +62,7 @@ public class IndexIteratorTest {
     public void highMajorBackward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.HighMajorBackward(range);
+        final var it = new IndexIterator.Backward.HighMajor(range);
         while (it.hasNext()) {
             System.out.println(Arrays.toString(it.next()));
         }

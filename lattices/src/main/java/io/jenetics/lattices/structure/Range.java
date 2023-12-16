@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import io.jenetics.lattices.structure.IndexIterator.LowMajorForward;
+import io.jenetics.lattices.structure.IndexIterator.Forward;
 import io.jenetics.lattices.structure.IndexIterator.MappedIterator;
 
 /**
@@ -71,7 +71,7 @@ public interface Range extends Dimensional {
      * @return an index iterator for the given {@code range}
      */
     static Iterator<Index> iterator(Range range) {
-        return new MappedIterator<>(new LowMajorForward(range), Index::of);
+        return new MappedIterator<>(new Forward.LowMajor(range), Index::of);
     }
 
     /**
