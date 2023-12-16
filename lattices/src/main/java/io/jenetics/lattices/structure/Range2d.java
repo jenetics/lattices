@@ -85,12 +85,13 @@ public record Range2d(Index2d start, Extent2d extent)
     @Override
     public Iterator<Index2d> iterator() {
         return new Iterator<>() {
+            private final int limit = start.row() + extent.rows();
             private int rowCursor = start.row();
             private int colCursor = start.col();
 
             @Override
             public boolean hasNext() {
-                return rowCursor < start.row() + extent.rows();
+                return rowCursor < limit;
             }
 
             @Override
@@ -99,16 +100,16 @@ public record Range2d(Index2d start, Extent2d extent)
                     throw new NoSuchElementException();
                 }
 
-                final int r = rowCursor;
-                final int c = colCursor;
+                final int nextRow = rowCursor;
+                final int nextCol = colCursor;
 
-                colCursor = c + 1;
+                colCursor = nextCol + 1;
                 if (colCursor >= start.col() + extent.cols()) {
                     colCursor = start.col();
-                    rowCursor = r + 1;
+                    rowCursor = nextRow + 1;
                 }
 
-                return new Index2d(r, c);
+                return new Index2d(nextRow, nextCol);
             }
         };
     }

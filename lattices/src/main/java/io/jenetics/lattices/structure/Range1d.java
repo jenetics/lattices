@@ -92,11 +92,12 @@ public record Range1d(Index1d start, Extent1d extent)
     @Override
     public Iterator<Index1d> iterator() {
         return new Iterator<>() {
+            private final int limit = start.value() + extent.elements();
             private int cursor = start.value();
 
             @Override
             public boolean hasNext() {
-                return cursor < start.value() + extent.elements();
+                return cursor < limit;
             }
 
             @Override
@@ -105,9 +106,10 @@ public record Range1d(Index1d start, Extent1d extent)
                     throw new NoSuchElementException();
                 }
 
-                final int i = cursor;
-                cursor = i + 1;
-                return new Index1d(i);
+                final int next = cursor;
+                cursor = next + 1;
+
+                return new Index1d(next);
             }
         };
     }

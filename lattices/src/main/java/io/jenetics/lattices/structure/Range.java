@@ -22,9 +22,11 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import io.jenetics.lattices.structure.IndexIterator.LowMajorForward;
+import io.jenetics.lattices.structure.IndexIterator.MappedIterator;
 
 /**
  * Defines a range by its start index and extent.
@@ -43,6 +45,19 @@ public interface Range extends Dimensional {
     Index start();
 
     /**
+     * Return the end index of the range (exclusively).
+     *
+     * @return the end index of the range (exclusively)
+     */
+    default Index end() {
+        final var end = start().toArray();
+        for (int i = 0; i < end.length; ++i) {
+            end[i] += extent().at(i);
+        }
+        return Index.of(end);
+    }
+
+    /**
      * The extent of the range.
      *
      * @return the extent of the range
@@ -56,83 +71,7 @@ public interface Range extends Dimensional {
      * @return an index iterator for the given {@code range}
      */
     static Iterator<Index> iterator(Range range) {
-        requireNonNull(range);
-
-        abstract class IndexIterator implements Iterator<Index> {
-            final int dims = range.dimensionality();
-            final int[] cursors = range.start().toArray();
-            final int[] limits = limits(range);
-
-            private static int[] limits(Range range) {
-                final var limits = range.start().toArray();
-                for (int i = range.dimensionality(); --i >= 0;) {
-                    limits[i] += range.extent().at(i);
-                }
-                return limits;
-            }
-        }
-
-        final class LowMajorIndexIterator extends IndexIterator {
-            @Override
-            public boolean hasNext() {
-                return cursors[0] < limits[0];
-            }
-
-            @Override
-            public Index next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                final var next = cursors.clone();
-
-                for (int i = dims; --i >= 0;) {
-                    cursors[i] = next[i] + 1;
-
-                    if (cursors[i] >= limits[i] && i != 0) {
-                        for (int j = dims; --j >= i;) {
-                            cursors[j] = range.start().at(j);
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                return Index.of(next);
-            }
-        }
-
-        final class HighMajorIndexIterator extends IndexIterator {
-            @Override
-            public boolean hasNext() {
-                return cursors[dims - 1] < limits[dims - 1];
-            }
-
-            @Override
-            public Index next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                final var next = cursors.clone();
-
-                for (int i = 0; i < dims; ++i) {
-                    cursors[i] = next[i] + 1;
-
-                    if (cursors[i] >= limits[i] && i < dims - 1) {
-                        for (int j = 0; j <= i; ++j) {
-                            cursors[j] = range.start().at(j);
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                return Index.of(next);
-            }
-        }
-
-        return new LowMajorIndexIterator();
+        return new MappedIterator<>(new LowMajorForward(range), Index::of);
     }
 
     /**

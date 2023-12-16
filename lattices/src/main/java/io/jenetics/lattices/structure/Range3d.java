@@ -86,13 +86,14 @@ public record Range3d(Index3d start, Extent3d extent)
     @Override
     public Iterator<Index3d> iterator() {
         return new Iterator<>() {
+            private final int limit = start.slice() + extent.slices();
             private int sliceCursor = start.slice();
             private int rowCursor = start.row();
             private int colCursor = start.col();
 
             @Override
             public boolean hasNext() {
-                return sliceCursor < start.slice() + extent.slices();
+                return sliceCursor < limit;
             }
 
             @Override
@@ -101,24 +102,24 @@ public record Range3d(Index3d start, Extent3d extent)
                     throw new NoSuchElementException();
                 }
 
-                final int s = sliceCursor;
-                final int r = rowCursor;
-                final int c = colCursor;
+                final int nextSlice = sliceCursor;
+                final int nextRow = rowCursor;
+                final int nextCol = colCursor;
 
-                colCursor = c + 1;
+                colCursor = nextCol + 1;
                 if (colCursor >= start.col() + extent.cols()) {
                     colCursor = start.col();
 
-                    rowCursor = r + 1;
+                    rowCursor = nextRow + 1;
                     if (rowCursor >= start.row() + extent.rows()) {
                         colCursor = start.col();
                         rowCursor = start.row();
 
-                        sliceCursor = s + 1;
+                        sliceCursor = nextSlice + 1;
                     }
                 }
 
-                return new Index3d(s, r, c);
+                return new Index3d(nextSlice, nextRow, nextCol);
             }
         };
     }
