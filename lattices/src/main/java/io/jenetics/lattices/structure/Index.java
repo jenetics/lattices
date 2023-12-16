@@ -31,10 +31,7 @@ import java.util.Arrays;
 public interface Index extends Spatial {
 
     /**
-     * Create a new index object from the given index values. The values for the
-     * index coordinates are given in <em>reverse</em> order:
-     * {@code [x4, x3, x2, x1, x0]}. This conforms with the usual way to access
-     * <em>matrix</em> elements; {@code [row, col]}.
+     * Create a new index object from the given index values.
      *
      * @param indexes the index values
      * @return a new index object with the given values

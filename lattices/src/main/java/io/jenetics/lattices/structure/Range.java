@@ -58,9 +58,10 @@ public interface Range extends Dimensional {
     static Iterator<Index> iterator(Range range) {
         requireNonNull(range);
 
-        return new Iterator<>() {
-            private final int[] cursors = range.start().toArray();
-            private final int[] limits = limits(range);
+        abstract class IndexIterator implements Iterator<Index> {
+            final int dims = range.dimensionality();
+            final int[] cursors = range.start().toArray();
+            final int[] limits = limits(range);
 
             private static int[] limits(Range range) {
                 final var limits = range.start().toArray();
@@ -69,7 +70,9 @@ public interface Range extends Dimensional {
                 }
                 return limits;
             }
+        }
 
+        final class LowMajorIndexIterator extends IndexIterator {
             @Override
             public boolean hasNext() {
                 return cursors[0] < limits[0];
@@ -83,11 +86,11 @@ public interface Range extends Dimensional {
 
                 final var next = cursors.clone();
 
-                for (int i = range.dimensionality(); --i >= 0;) {
+                for (int i = dims; --i >= 0;) {
                     cursors[i] = next[i] + 1;
 
                     if (cursors[i] >= limits[i] && i != 0) {
-                        for (int j = range.dimensionality(); --j >= i;) {
+                        for (int j = dims; --j >= i;) {
                             cursors[j] = range.start().at(j);
                         }
                     } else {
@@ -97,7 +100,39 @@ public interface Range extends Dimensional {
 
                 return Index.of(next);
             }
-        };
+        }
+
+        final class HighMajorIndexIterator extends IndexIterator {
+            @Override
+            public boolean hasNext() {
+                return cursors[dims - 1] < limits[dims - 1];
+            }
+
+            @Override
+            public Index next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = cursors.clone();
+
+                for (int i = 0; i < dims; ++i) {
+                    cursors[i] = next[i] + 1;
+
+                    if (cursors[i] >= limits[i] && i < dims - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            cursors[j] = range.start().at(j);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return Index.of(next);
+            }
+        }
+
+        return new LowMajorIndexIterator();
     }
 
     /**

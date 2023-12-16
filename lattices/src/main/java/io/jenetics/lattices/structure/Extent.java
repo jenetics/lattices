@@ -135,7 +135,8 @@ public interface Extent extends Spatial {
             }
             @Override
             public String toString() {
-                return Arrays.toString(extents);
+                return "[extent=%s, bands=%d]"
+                    .formatted(Arrays.toString(extents), bands);
             }
         }
 
@@ -156,7 +157,7 @@ public interface Extent extends Spatial {
      *         zero or {@code mult(extents) > Integer.MAX_VALUE}
      */
     static Extent of(int... extents) {
-        return of(extents, 1);
+        return Extent.of(extents, 1);
     }
 
 }

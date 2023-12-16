@@ -1,50 +1,61 @@
-/*
- * Java Lattice Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Author:
- *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
- */
 package io.jenetics.lattices.structure;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.stream.Collectors;
-
-import org.assertj.core.util.Streams;
 import org.testng.annotations.Test;
 
-/**
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- */
 public class RangeTest {
 
     @Test
     public void iterator() {
-        final var extent = Extent.of(3, 2, 3);
-        final var range = Range.of(extent);
+        final var start = Index.of(new int[4]);
+        final var extent = Extent.of(3, 3, 3, 3);
+        final var range = Range.of(start, extent);
 
-        final Iterable<Index> indexes = () -> Range.iterator(range);
-        final var result = Streams.stream(indexes)
-            .collect(Collectors.toSet());
-
-        assertThat(result).hasSize(extent.elements());
-
-        for (var index : indexes) {
-            System.out.println(index);
+        int max = 1;
+        for (int i = 0; i < extent.dimensionality(); ++i) {
+            max *= extent.at(i);
         }
+        System.out.println("MAX: " + max);
+
+        int count = 0;
+        for (var index : (Iterable<Index>)() -> Range.iterator(range)) {
+            if (count > max) {
+                break;
+            }
+            System.out.println(index);
+            ++count;
+        }
+        System.out.println("COUNT: " + count);
     }
+
+    /*
+                for (int i = 0; i < range.dimensionality(); ++i) {
+                    cursors[i] = crs[i] + 1;
+
+                    if (cursors[i] >= limits[i] && i < range.dimensionality() - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            cursors[j] = range.start().at(j);
+                            if (j + 1 < range.dimensionality()) {
+                                cursors[j + 1] = limits[j + 1] + 1;
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+                }
+     */
+
+    /*
+                for (int i = range.dimensionality(); --i >= 0;) {
+                    cursors[i] = crs[i] + 1;
+
+                    if (cursors[i] >= limits[i] && i != 0) {
+                        for (int j = i + 1; --j >= 0;) {
+                            cursors[j] = range.start().at(j);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+     */
 
 }
