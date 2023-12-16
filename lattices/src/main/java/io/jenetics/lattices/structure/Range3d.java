@@ -23,6 +23,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -90,10 +92,7 @@ public record Range3d(Index3d start, Extent3d extent)
 
             @Override
             public boolean hasNext() {
-                return
-                    sliceCursor < start.slice() + extent.slices() &&
-                    rowCursor < start.row() + extent.rows() &&
-                    colCursor < start.col() + extent.cols();
+                return sliceCursor < start.slice() + extent.slices();
             }
 
             @Override
@@ -109,11 +108,12 @@ public record Range3d(Index3d start, Extent3d extent)
                 colCursor = c + 1;
                 if (colCursor >= start.col() + extent.cols()) {
                     colCursor = start.col();
-                    rowCursor = r + 1;
 
+                    rowCursor = r + 1;
                     if (rowCursor >= start.row() + extent.rows()) {
                         colCursor = start.col();
                         rowCursor = start.row();
+
                         sliceCursor = s + 1;
                     }
                 }
@@ -121,6 +121,15 @@ public record Range3d(Index3d start, Extent3d extent)
                 return new Index3d(s, r, c);
             }
         };
+    }
+
+    /**
+     * Return a new index stream from {@code this} range.
+     *
+     * @return a new index stream from {@code this} range
+     */
+    public Stream<Index3d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override

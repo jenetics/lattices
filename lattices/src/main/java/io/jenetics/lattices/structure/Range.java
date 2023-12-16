@@ -19,6 +19,13 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 /**
  * Defines a range by its start index and extent.
  *
@@ -41,6 +48,78 @@ public interface Range extends Dimensional {
      * @return the extent of the range
      */
     Extent extent();
+
+    /**
+     * Return an index iterator for the given {@code range}.
+     *
+     * @param range the range used for creating the iterator
+     * @return an index iterator for the given {@code range}
+     */
+    static Iterator<Index> iterator(Range range) {
+        requireNonNull(range);
+
+        return new Iterator<>() {
+            private final int[] cursors = range.start().toArray();
+            private final int[] limits = limits(range);
+
+            private static int[] limits(Range range) {
+                final var limits = range.start().toArray();
+                for (int i = range.dimensionality(); --i >= 0;) {
+                    limits[i] += range.extent().at(i);
+                }
+                return limits;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return cursors[0] < limits[0];
+            }
+
+            @Override
+            public Index next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = cursors.clone();
+
+                for (int i = range.dimensionality(); --i >= 0;) {
+                    cursors[i] = next[i] + 1;
+
+                    if (cursors[i] >= limits[i] && i != 0) {
+                        for (int j = range.dimensionality(); --j >= i;) {
+                            cursors[j] = range.start().at(j);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return Index.of(next);
+            }
+        };
+    }
+
+    /**
+     * Return an index iterable for the given {@code range}.
+     *
+     * @param range the range used for creating the iterable
+     * @return an index iterable for the given {@code range}
+     */
+    static Iterable<Index> iterable(Range range) {
+        requireNonNull(range);
+        return () -> iterator(range);
+    }
+
+    /**
+     * Return an index stream for the given {@code range}.
+     *
+     * @param range the range used for creating the stream
+     * @return an index stream for the given {@code range}
+     */
+    static Stream<Index> indexes(Range range) {
+        return StreamSupport.stream(iterable(range).spliterator(), false);
+    }
 
     /**
      * Create a new range, defined by the start index and the extent.
@@ -76,6 +155,16 @@ public interface Range extends Dimensional {
         }
 
         return new RangeNd(start, extent);
+    }
+
+    /**
+     * Create a new range, defined by the extent.
+     *
+     * @param extent the extent of the range
+     * @return a new range, defined by the extent
+     */
+    static Range of(Extent extent) {
+        return Range.of(Index.of(new int[extent.dimensionality()]), extent);
     }
 
 }

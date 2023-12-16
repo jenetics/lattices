@@ -23,6 +23,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -88,9 +90,7 @@ public record Range2d(Index2d start, Extent2d extent)
 
             @Override
             public boolean hasNext() {
-                return
-                    rowCursor < start.row() + extent.rows() &&
-                    colCursor < start.col() + extent.cols();
+                return rowCursor < start.row() + extent.rows();
             }
 
             @Override
@@ -111,6 +111,15 @@ public record Range2d(Index2d start, Extent2d extent)
                 return new Index2d(r, c);
             }
         };
+    }
+
+    /**
+     * Return a new index stream from {@code this} range.
+     *
+     * @return a new index stream from {@code this} range
+     */
+    public Stream<Index2d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override

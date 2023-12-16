@@ -19,43 +19,26 @@
  */
 package io.jenetics.lattices.structure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.testng.annotations.Test;
+
 /**
- * Represents a 2-d index.
- *
- * @param row the row index
- * @param col the column index
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
  */
-public record Index2d(int row, int col) implements Index {
+public class SpatialTest {
 
-    /**
-     * Index where row and column are zero.
-     */
-    public static final Index2d ZERO = new Index2d(0, 0);
+    @Test
+    public void toArray() {
+        final int slice = 6, row = 87, col = 32;
+        final var index = new Index3d(slice, row, col);
+        final var array = index.toArray();
 
-    /**
-     * Return the number of dimensions; always 2.
-     *
-     * @return 2
-     */
-    @Override
-    public int dimensionality() {
-        return 2;
-    }
-
-    @Override
-    public int at(int dimension) {
-        return switch (dimension) {
-            case 0 -> row;
-            case 1 -> col;
-            default -> throw new IndexOutOfBoundsException(
-                "Dimension out of range [0..%d): %d."
-                    .formatted(dimensionality(), dimension)
-            );
-        };
+        assertThat(array).hasSize(3);
+        assertThat(array[0]).isEqualTo(slice);
+        assertThat(array[1]).isEqualTo(row);
+        assertThat(array[2]).isEqualTo(col);
+        assertThat(Index.of(array)).isEqualTo(index);
     }
 
 }

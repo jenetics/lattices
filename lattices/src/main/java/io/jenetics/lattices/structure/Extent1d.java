@@ -20,6 +20,8 @@
 package io.jenetics.lattices.structure;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The extent of 1-d structures.
@@ -97,6 +99,15 @@ public record Extent1d(int elements, int bands)
     @Override
     public Iterator<Index1d> iterator() {
         return new Range1d(this ).iterator();
+    }
+
+    /**
+     * Return a new index stream from {@code this} extent.
+     *
+     * @return a new index stream from {@code this} extent
+     */
+    public Stream<Index1d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
 }

@@ -60,8 +60,8 @@ public record Stride2d(int row, int col) implements Stride {
     @Override
     public int at(int dimension) {
         return switch (dimension) {
-            case 0 -> col;
-            case 1 -> row;
+            case 0 -> row;
+            case 1 -> col;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
                     .formatted(dimensionality(), dimension)

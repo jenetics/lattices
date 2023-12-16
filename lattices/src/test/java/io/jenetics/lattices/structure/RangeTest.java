@@ -19,43 +19,32 @@
  */
 package io.jenetics.lattices.structure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.stream.Collectors;
+
+import org.assertj.core.util.Streams;
+import org.testng.annotations.Test;
+
 /**
- * Represents a 2-d index.
- *
- * @param row the row index
- * @param col the column index
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
  */
-public record Index2d(int row, int col) implements Index {
+public class RangeTest {
 
-    /**
-     * Index where row and column are zero.
-     */
-    public static final Index2d ZERO = new Index2d(0, 0);
+    @Test
+    public void iterator() {
+        final var extent = Extent.of(3, 2, 3);
+        final var range = Range.of(extent);
 
-    /**
-     * Return the number of dimensions; always 2.
-     *
-     * @return 2
-     */
-    @Override
-    public int dimensionality() {
-        return 2;
-    }
+        final Iterable<Index> indexes = () -> Range.iterator(range);
+        final var result = Streams.stream(indexes)
+            .collect(Collectors.toSet());
 
-    @Override
-    public int at(int dimension) {
-        return switch (dimension) {
-            case 0 -> row;
-            case 1 -> col;
-            default -> throw new IndexOutOfBoundsException(
-                "Dimension out of range [0..%d): %d."
-                    .formatted(dimensionality(), dimension)
-            );
-        };
+        assertThat(result).hasSize(extent.elements());
+
+        for (var index : indexes) {
+            System.out.println(index);
+        }
     }
 
 }

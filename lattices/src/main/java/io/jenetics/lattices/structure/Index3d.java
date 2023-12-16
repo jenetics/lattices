@@ -50,9 +50,9 @@ public record Index3d(int slice, int row, int col) implements Index {
     @Override
     public int at(int dimension) {
         return switch (dimension) {
-            case 0 -> col;
+            case 0 -> slice;
             case 1 -> row;
-            case 2 -> slice;
+            case 2 -> col;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
                     .formatted(dimensionality(), dimension)

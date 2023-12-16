@@ -20,6 +20,8 @@
 package io.jenetics.lattices.structure;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The extent of 2-d structures.
@@ -81,8 +83,8 @@ public record Extent2d(int rows, int cols, int bands)
     @Override
     public int at(int dimension) {
         return switch (dimension) {
-            case 0 -> cols;
-            case 1 -> rows;
+            case 0 -> rows;
+            case 1 -> cols;
             default -> throw new IndexOutOfBoundsException(
                 "Dimension out of range [0..%d): %d."
                     .formatted(dimensionality(), dimension)
@@ -103,6 +105,15 @@ public record Extent2d(int rows, int cols, int bands)
     @Override
     public Iterator<Index2d> iterator() {
         return new Range2d(this).iterator();
+    }
+
+    /**
+     * Return a new index stream from {@code this} extent.
+     *
+     * @return a new index stream from {@code this} extent
+     */
+    public Stream<Index2d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override

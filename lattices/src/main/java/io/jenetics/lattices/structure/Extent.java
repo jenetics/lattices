@@ -20,8 +20,10 @@
 package io.jenetics.lattices.structure;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Base interface for extents.
@@ -60,6 +62,26 @@ public interface Extent extends Spatial {
      */
     default int cells() {
         return elements()*bands();
+    }
+
+    /**
+     * Return an index iterator for the given {@code extent}.
+     *
+     * @param extent the extent used for creating the iterator
+     * @return an index iterator for the given {@code extent}
+     */
+    static Iterator<Index> iterator(Extent extent) {
+        return Range.iterator(Range.of(extent));
+    }
+
+    /**
+     * Return an index stream for the given {@code extent}.
+     *
+     * @param extent the extent used for creating the stream
+     * @return an index stream for the given {@code extent}
+     */
+    static Stream<Index> indexes(Extent extent) {
+        return Range.indexes(Range.of(extent));
     }
 
     /**

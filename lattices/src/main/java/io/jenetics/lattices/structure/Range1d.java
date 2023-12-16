@@ -23,6 +23,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -108,6 +110,15 @@ public record Range1d(Index1d start, Extent1d extent)
                 return new Index1d(i);
             }
         };
+    }
+
+    /**
+     * Return a new index stream from {@code this} range.
+     *
+     * @return a new index stream from {@code this} range
+     */
+    public Stream<Index1d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override
