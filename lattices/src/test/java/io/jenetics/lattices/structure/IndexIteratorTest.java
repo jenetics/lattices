@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Arrays;
 
 import org.testng.annotations.Test;
@@ -33,8 +35,11 @@ public class IndexIteratorTest {
         final var range = Range.of(Extent.of(2, 2, 2));
 
         final var it = new IndexIterator.Forward.LowMajor(range);
+        final var it2 = IdxIterator.LowMajor.forward(range);
         while (it.hasNext()) {
-            System.out.println(Arrays.toString(it.next()));
+            final var idx = it.next();
+            assertThat(it2.next()).isEqualTo(idx);
+            System.out.println(Arrays.toString(idx));
         }
     }
 
@@ -43,8 +48,11 @@ public class IndexIteratorTest {
         final var range = Range.of(Extent.of(2, 2, 2));
 
         final var it = new IndexIterator.Backward.LowMajor(range);
+        final var it2 = IdxIterator.LowMajor.backward(range);
         while (it.hasNext()) {
-            System.out.println(Arrays.toString(it.next()));
+            final var idx = it.next();
+            assertThat(it2.next()).isEqualTo(idx);
+            System.out.println(Arrays.toString(idx));
         }
     }
 
@@ -53,8 +61,11 @@ public class IndexIteratorTest {
         final var range = Range.of(Extent.of(2, 2, 2));
 
         final var it = new IndexIterator.Forward.HighMajor(range);
+        final var it2 = IdxIterator.HighMajor.forward(range);
         while (it.hasNext()) {
-            System.out.println(Arrays.toString(it.next()));
+            final var idx = it.next();
+            assertThat(it2.next()).isEqualTo(idx);
+            System.out.println(Arrays.toString(idx));
         }
     }
 
@@ -63,8 +74,11 @@ public class IndexIteratorTest {
         final var range = Range.of(Extent.of(2, 2, 2));
 
         final var it = new IndexIterator.Backward.HighMajor(range);
+        final var it2 = IdxIterator.HighMajor.backward(range);
         while (it.hasNext()) {
-            System.out.println(Arrays.toString(it.next()));
+            final var idx = it.next();
+            assertThat(it2.next()).isEqualTo(idx);
+            System.out.println(Arrays.toString(idx));
         }
     }
 
