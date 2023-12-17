@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
  * final var range = Range.of(Extent.of(2, 2, 2));
  * final var it = IndexIterator.LowMajor.forward(range);
  * while (it.hasNext()) {
- *     System.out.println(Arrays.toString(it.next()));
+ *     System.out.println(it.next());
  * }
  *
  * // Produced output.
@@ -50,7 +50,7 @@ import java.util.NoSuchElementException;
  * @since 3.0
  * @version 3.0
  */
-public sealed interface IndexIterator extends Iterator<int[]> {
+public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
 
     /**
      * Forward iterators starts iterating with the start indexes (inclusively)
@@ -66,6 +66,9 @@ public sealed interface IndexIterator extends Iterator<int[]> {
      * [1, 1, 0]
      * [1, 1, 1]
      * </pre>
+     *
+     * @see LowMajor#forward(Range)
+     * @see HighMajor#forward(Range)
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -88,6 +91,9 @@ public sealed interface IndexIterator extends Iterator<int[]> {
      * [0, 0, 1]
      * [0, 0, 0]
      * </pre>
+     *
+     * @see LowMajor#backward(Range)
+     * @see HighMajor#backward(Range)
      *
      * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
      * @since 3.0
@@ -136,7 +142,7 @@ public sealed interface IndexIterator extends Iterator<int[]> {
             }
 
             @Override
-            public int[] next() {
+            public Index next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -155,7 +161,12 @@ public sealed interface IndexIterator extends Iterator<int[]> {
                     }
                 }
 
-                return next;
+                return Index.of(next);
+            }
+
+            @Override
+            public int dimensionality() {
+                return state.start.length;
             }
         }
 
@@ -172,7 +183,7 @@ public sealed interface IndexIterator extends Iterator<int[]> {
             }
 
             @Override
-            public int[] next() {
+            public Index next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -191,7 +202,12 @@ public sealed interface IndexIterator extends Iterator<int[]> {
                     }
                 }
 
-                return next;
+                return Index.of(next);
+            }
+
+            @Override
+            public int dimensionality() {
+                return state.start.length;
             }
         }
 
@@ -267,7 +283,7 @@ public sealed interface IndexIterator extends Iterator<int[]> {
             }
 
             @Override
-            public int[] next() {
+            public Index next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -286,7 +302,12 @@ public sealed interface IndexIterator extends Iterator<int[]> {
                     }
                 }
 
-                return next;
+                return Index.of(next);
+            }
+
+            @Override
+            public int dimensionality() {
+                return state.start.length;
             }
         }
 
@@ -305,7 +326,7 @@ public sealed interface IndexIterator extends Iterator<int[]> {
             }
 
             @Override
-            public int[] next() {
+            public Index next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -324,7 +345,12 @@ public sealed interface IndexIterator extends Iterator<int[]> {
                     }
                 }
 
-                return next;
+                return Index.of(next);
+            }
+
+            @Override
+            public int dimensionality() {
+                return state.start.length;
             }
         }
 

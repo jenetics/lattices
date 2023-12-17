@@ -25,8 +25,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import io.jenetics.lattices.structure.IndexIterator.Forward;
-import io.jenetics.lattices.structure.IndexIterator.MappedIterator;
+import io.jenetics.lattices.structure.IndexIterator.LowMajor;
 
 /**
  * Defines a range by its start index and extent.
@@ -71,7 +70,7 @@ public interface Range extends Dimensional {
      * @return an index iterator for the given {@code range}
      */
     static Iterator<Index> iterator(Range range) {
-        return new MappedIterator<>(new Forward.LowMajor(range), Index::of);
+        return LowMajor.forward(range);
     }
 
     /**

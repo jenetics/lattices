@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import java.util.Arrays;
-
 import org.testng.annotations.Test;
 
 /**
@@ -35,7 +33,7 @@ public class IndexIteratorTest {
         final var it = IndexIterator.LowMajor.forward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            System.out.println(Arrays.toString(idx));
+            System.out.println(idx);
         }
     }
 
@@ -46,7 +44,7 @@ public class IndexIteratorTest {
         final var it = IndexIterator.LowMajor.backward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            System.out.println(Arrays.toString(idx));
+            System.out.println(idx);
         }
     }
 
@@ -57,7 +55,7 @@ public class IndexIteratorTest {
         final var it = IndexIterator.HighMajor.forward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            System.out.println(Arrays.toString(idx));
+            System.out.println(idx);
         }
     }
 
@@ -68,7 +66,7 @@ public class IndexIteratorTest {
         final var it = IndexIterator.HighMajor.backward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            System.out.println(Arrays.toString(idx));
+            System.out.println(idx);
         }
     }
 
