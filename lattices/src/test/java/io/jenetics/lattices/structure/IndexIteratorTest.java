@@ -19,8 +19,6 @@
  */
 package io.jenetics.lattices.structure;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Arrays;
 
 import org.testng.annotations.Test;
@@ -34,11 +32,9 @@ public class IndexIteratorTest {
     public void lowMajorForward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.Forward.LowMajor(range);
-        final var it2 = IdxIterator.LowMajor.forward(range);
+        final var it = IndexIterator.LowMajor.forward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            assertThat(it2.next()).isEqualTo(idx);
             System.out.println(Arrays.toString(idx));
         }
     }
@@ -47,11 +43,9 @@ public class IndexIteratorTest {
     public void lowMajorBackward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.Backward.LowMajor(range);
-        final var it2 = IdxIterator.LowMajor.backward(range);
+        final var it = IndexIterator.LowMajor.backward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            assertThat(it2.next()).isEqualTo(idx);
             System.out.println(Arrays.toString(idx));
         }
     }
@@ -60,11 +54,9 @@ public class IndexIteratorTest {
     public void highMajorForward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.Forward.HighMajor(range);
-        final var it2 = IdxIterator.HighMajor.forward(range);
+        final var it = IndexIterator.HighMajor.forward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            assertThat(it2.next()).isEqualTo(idx);
             System.out.println(Arrays.toString(idx));
         }
     }
@@ -73,11 +65,9 @@ public class IndexIteratorTest {
     public void highMajorBackward() {
         final var range = Range.of(Extent.of(2, 2, 2));
 
-        final var it = new IndexIterator.Backward.HighMajor(range);
-        final var it2 = IdxIterator.HighMajor.backward(range);
+        final var it = IndexIterator.HighMajor.backward(range);
         while (it.hasNext()) {
             final var idx = it.next();
-            assertThat(it2.next()).isEqualTo(idx);
             System.out.println(Arrays.toString(idx));
         }
     }

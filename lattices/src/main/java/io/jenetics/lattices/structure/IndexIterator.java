@@ -19,19 +19,15 @@
  */
 package io.jenetics.lattices.structure;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 
 /**
- * Index iterator class. It allows iterating indexes in different orders. The
+ * Index iterator interface. It allows iterating indexes in different orders. The
  * following example shows how to do this.
  * {@snippet lang=java:
  * final var range = Range.of(Extent.of(2, 2, 2));
- *
- * final var it = new IndexIterator.Forward.LowMajor(range);
+ * final var it = IndexIterator.LowMajor.forward(range);
  * while (it.hasNext()) {
  *     System.out.println(Arrays.toString(it.next()));
  * }
@@ -47,225 +43,96 @@ import java.util.function.Function;
  * // > [1, 1, 1]
  * }
  *
+ * Implementations of this interface allow to iterate <em>forward</em> and
+ * <em>backward</em> ond in <em>low-major</em> and <em>high-major</em> order.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public sealed abstract class IndexIterator implements Iterator<int[]> {
-    final int[] start;
-    final int[] end;
-    final int[] cursor;
+public sealed interface IndexIterator extends Iterator<int[]> {
 
-    private IndexIterator(int[] start, int[] end, int[] cursor) {
-        this.start = start;
-        this.end = end;
-        this.cursor = cursor;
+    /**
+     * Forward iterators starts iterating with the start indexes (inclusively)
+     * and increases the index values.
+     *
+     * <pre>
+     * [0, 0, 0]
+     * [0, 0, 1]
+     * [0, 1, 0]
+     * [0, 1, 1]
+     * [1, 0, 0]
+     * [1, 0, 1]
+     * [1, 1, 0]
+     * [1, 1, 1]
+     * </pre>
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    sealed interface Forward extends IndexIterator {
     }
 
     /**
-     * Forward iterator implementations are increasing the index values during
-     * the iteration.
+     * Backward iterators starts iterating with the end indexes (exclusively)
+     * and decreases the index values.
+     *
+     * <pre>
+     * [1, 1, 1]
+     * [1, 1, 0]
+     * [1, 0, 1]
+     * [1, 0, 0]
+     * [0, 1, 1]
+     * [0, 1, 0]
+     * [0, 0, 1]
+     * [0, 0, 0]
+     * </pre>
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
      */
-    public static abstract sealed class Forward extends IndexIterator {
-        private Forward(int[] start, int[] end, int[] cursor) {
-            super(start, end, cursor);
-        }
-
-        /**
-         * Forward iterator, where the lower indexes are increased after the higher
-         * indexes.
-         * {@snippet lang=java:
-         * final var range = Range.of(Extent.of(2, 2, 2));
-         *
-         * final var it = new IndexIterator.Forward.LowMajor(range);
-         * while (it.hasNext()) {
-         *     System.out.println(Arrays.toString(it.next()));
-         * }
-         *
-         * // Produced output.
-         * // > [0, 0, 0]
-         * // > [0, 0, 1]
-         * // > [0, 1, 0]
-         * // > [0, 1, 1]
-         * // > [1, 0, 0]
-         * // > [1, 0, 1]
-         * // > [1, 1, 0]
-         * // > [1, 1, 1]
-         * }
-         *
-         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-         * @since 3.0
-         * @version 3.0
-         */
-        public static final class LowMajor extends Forward {
-
-            /**
-             * Create a new index iterator for the given range.
-             *
-             * @param range the index range the iterator is iterating
-             */
-            public LowMajor(Range range) {
-                super(
-                    range.start().toArray(),
-                    range.end().toArray(),
-                    range.start().toArray()
-                );
-            }
-
-            @Override
-            public boolean hasNext() {
-                return cursor[0] < end[0];
-            }
-
-            @Override
-            public int[] next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                final var next = cursor.clone();
-
-                for (int i = start.length; --i >= 0;) {
-                    cursor[i] = next[i] + 1;
-
-                    if (cursor[i] >= end[i] && i > 0) {
-                        for (int j = start.length; --j >= i;) {
-                            cursor[j] = start[i];
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                return next;
-            }
-        }
-
-        /**
-         * Forward iterator, where the higher indexes are increased after the lower
-         * indexes.
-         * {@snippet lang=java:
-         * final var range = Range.of(Extent.of(2, 2, 2));
-         *
-         * final var it = new IndexIterator.Forward.HighMajor(range);
-         * while (it.hasNext()) {
-         *     System.out.println(Arrays.toString(it.next()));
-         * }
-         *
-         * // Produced output.
-         * // > [0, 0, 0]
-         * // > [1, 0, 0]
-         * // > [0, 1, 0]
-         * // > [1, 1, 0]
-         * // > [0, 0, 1]
-         * // > [1, 0, 1]
-         * // > [0, 1, 1]
-         * // > [1, 1, 1]
-         * }
-         *
-         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-         * @since 3.0
-         * @version 3.0
-         */
-        public static final class HighMajor extends Forward {
-
-            /**
-             * Create a new index iterator for the given range.
-             *
-             * @param range the index range the iterator is iterating
-             */
-            public HighMajor(Range range) {
-                super(
-                    range.start().toArray(),
-                    range.end().toArray(),
-                    range.start().toArray()
-                );
-            }
-
-            @Override
-            public boolean hasNext() {
-                return cursor[start.length - 1] < end[start.length - 1];
-            }
-
-            @Override
-            public int[] next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                final var next = cursor.clone();
-
-                for (int i = 0; i < start.length; ++i) {
-                    cursor[i] = next[i] + 1;
-
-                    if (cursor[i] >= end[i] && i < start.length - 1) {
-                        for (int j = 0; j <= i; ++j) {
-                            cursor[j] = start[i];
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                return next;
-            }
-        }
-
+    sealed interface Backward extends IndexIterator {
     }
 
     /**
-     * Backward iterator implementations are decreasing the index values during
-     * the iteration.
+     * Low-major iterators increases (or decreases) the higher indexes before
+     * the lower indexes.
+     *
+     * <pre>
+     * [0, 0, 0]
+     * [0, 0, 1]
+     * [0, 1, 0]
+     * [0, 1, 1]
+     * [1, 0, 0]
+     * [1, 0, 1]
+     * [1, 1, 0]
+     * [1, 1, 1]
+     * </pre>
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
      */
-    public static abstract sealed class Backward extends IndexIterator {
-        private Backward(int[] start, int[] end, int[] cursor) {
-            super(start, end, cursor);
+    abstract sealed class LowMajor implements IndexIterator {
+
+        record IndexState(int[] start, int[] end, int[] cursor) {
         }
 
-        /**
-         * Backward iterator, where the lower indexes are decreased after the higher
-         * indexes.
-         * {@snippet lang=java:
-         * final var range = Range.of(Extent.of(2, 2, 2));
-         *
-         * final var it = new IndexIterator.Backward.LowMajor(range);
-         * while (it.hasNext()) {
-         *     System.out.println(Arrays.toString(it.next()));
-         * }
-         *
-         * // Produced output.
-         * // > [1, 1, 1]
-         * // > [1, 1, 0]
-         * // > [1, 0, 1]
-         * // > [1, 0, 0]
-         * // > [0, 1, 1]
-         * // > [0, 1, 0]
-         * // > [0, 0, 1]
-         * // > [0, 0, 0]
-         * }
-         *
-         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-         * @since 3.0
-         * @version 3.0
-         */
-        public static final class LowMajor extends Backward {
+        private LowMajor() {
+        }
 
-            /**
-             * Create a new index iterator for the given range.
-             *
-             * @param range the index range the iterator is iterating
-             */
-            public LowMajor(Range range) {
-                super(
-                    range.start().toArray(),
-                    dec(range.end().toArray()),
-                    dec(range.end().toArray())
-                );
+        private static final class LowMajorForward extends LowMajor implements Forward {
+            private final IndexState state;
+
+            private LowMajorForward(IndexState state) {
+                this.state = state;
             }
 
             @Override
             public boolean hasNext() {
-                return cursor[0] >= start[0];
+                return state.cursor[0] < state.end[0];
             }
 
             @Override
@@ -274,14 +141,50 @@ public sealed abstract class IndexIterator implements Iterator<int[]> {
                     throw new NoSuchElementException();
                 }
 
-                final var next = cursor.clone();
+                final var next = state.cursor.clone();
 
-                for (int i = start.length; --i >= 0;) {
-                    cursor[i] = next[i] - 1;
+                for (int i = state.start.length; --i >= 0;) {
+                    state.cursor[i] = next[i] + 1;
 
-                    if (cursor[i] < start[i] && i > 0) {
-                        for (int j = start.length; --j >= i;) {
-                            cursor[j] = end[i];
+                    if (state.cursor[i] >= state.end[i] && i > 0) {
+                        for (int j = state.start.length; --j >= i;) {
+                            state.cursor[j] = state.start[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
+        }
+
+        private static final class LowMajorBackward extends LowMajor implements Backward {
+            private final IndexState state;
+
+            private LowMajorBackward(IndexState state) {
+                this.state = state;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return state.cursor[0] >= state.start[0];
+            }
+
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = state.cursor.clone();
+
+                for (int i = state.start.length; --i >= 0;) {
+                    state.cursor[i] = next[i] - 1;
+
+                    if (state.cursor[i] < state.start[i] && i > 0) {
+                        for (int j = state.start.length; --j >= i;) {
+                            state.cursor[j] = state.end[i];
                         }
                     } else {
                         break;
@@ -293,111 +196,176 @@ public sealed abstract class IndexIterator implements Iterator<int[]> {
         }
 
         /**
-         * Backward iterator, where the higher indexes are decreased after the lower
-         * indexes.
-         * {@snippet lang=java:
-         * final var range = Range.of(Extent.of(2, 2, 2));
+         * Create a new low-major forward iterator from the given {@code range}.
          *
-         * final var it = new IndexIterator.Backward.HighMajor(range);
-         * while (it.hasNext()) {
-         *     System.out.println(Arrays.toString(it.next()));
-         * }
-         *
-         * // Produced output.
-         * // > [1, 1, 1]
-         * // > [0, 1, 1]
-         * // > [1, 0, 1]
-         * // > [0, 0, 1]
-         * // > [1, 1, 0]
-         * // > [0, 1, 0]
-         * // > [1, 0, 0]
-         * // > [0, 0, 0]
-         * }
-         *
-         * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
-         * @since 3.0
-         * @version 3.0
+         * @param range the iteration range
+         * @return a new low-major forward iterator from the given {@code range}
+         * @param <I> the iterator <em>union</em> type
          */
-        public static final class HighMajor extends Backward {
-
-            /**
-             * Create a new index iterator for the given range.
-             *
-             * @param range the index range the iterator is iterating
-             */
-            public HighMajor(Range range) {
-                super(
-                    range.start().toArray(),
-                    dec(range.end().toArray()),
-                    dec(range.end().toArray())
-                );
-            }
-
-            @Override
-            public boolean hasNext() {
-                return cursor[start.length - 1] >= start[start.length - 1];
-            }
-
-            @Override
-            public int[] next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                final var next = cursor.clone();
-
-                for (int i = 0; i < start.length; ++i) {
-                    cursor[i] = next[i] - 1;
-
-                    if (cursor[i] < start[i] && i < start.length - 1) {
-                        for (int j = 0; j <= i; ++j) {
-                            cursor[j] = end[i];
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                return next;
-            }
+        @SuppressWarnings("unchecked")
+        public static <I extends LowMajor & Forward> I forward(Range range) {
+            return (I)new LowMajorForward(new IndexState(
+                range.start().toArray(),
+                range.end().toArray(),
+                range.start().toArray()
+            ));
         }
 
+        /**
+         * Create a new low-major backward iterator from the given {@code range}.
+         *
+         * @param range the iteration range
+         * @return a new low-major backward iterator from the given {@code range}
+         * @param <I> the iterator <em>union</em> type
+         */
+        @SuppressWarnings("unchecked")
+        public static <I extends LowMajor & Backward> I backward(Range range) {
+            return (I)new LowMajorBackward(new IndexState(
+                range.start().toArray(),
+                dec(range.end().toArray()),
+                dec(range.end().toArray())
+            ));
+        }
     }
 
+    /**
+     * High-major iterators increases (or decreases) the lower indexes before
+     * the higher indexes.
+     *
+     * <pre>
+     * [0, 0, 0]
+     * [1, 0, 0]
+     * [0, 1, 0]
+     * [1, 1, 0]
+     * [0, 0, 1]
+     * [1, 0, 1]
+     * [0, 1, 1]
+     * [1, 1, 1]
+     * </pre>
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    abstract sealed class HighMajor implements IndexIterator {
+
+        private HighMajor() {
+        }
+
+        private static final class HighMajorForward extends HighMajor implements Forward {
+            private final LowMajor.IndexState state;
+
+            private HighMajorForward(LowMajor.IndexState state) {
+                this.state = state;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return
+                    state.cursor[state.start.length - 1] <
+                    state.end[state.start.length - 1];
+            }
+
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = state.cursor.clone();
+
+                for (int i = 0; i < state.start.length; ++i) {
+                    state.cursor[i] = next[i] + 1;
+
+                    if (state.cursor[i] >= state.end[i] && i < state.start.length - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            state.cursor[j] = state.start[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
+        }
+
+        private static final class HighMajorBackward extends HighMajor implements Backward {
+            private final LowMajor.IndexState state;
+
+            private HighMajorBackward(LowMajor.IndexState state) {
+                this.state = state;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return
+                    state.cursor[state.start.length - 1] >=
+                    state.start[state.start.length - 1];
+            }
+
+            @Override
+            public int[] next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final var next = state.cursor.clone();
+
+                for (int i = 0; i < state.start.length; ++i) {
+                    state.cursor[i] = next[i] - 1;
+
+                    if (state.cursor[i] < state.start[i] && i < state.start.length - 1) {
+                        for (int j = 0; j <= i; ++j) {
+                            state.cursor[j] = state.end[i];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                return next;
+            }
+        }
+
+        /**
+         * Create a new high-major forward iterator from the given {@code range}.
+         *
+         * @param range the iteration range
+         * @return a new high-major forward iterator from the given {@code range}
+         * @param <I> the iterator <em>union</em> type
+         */
+        @SuppressWarnings("unchecked")
+        public static <I extends HighMajor & Forward> I forward(Range range) {
+            return (I)new HighMajorForward(new LowMajor.IndexState(
+                range.start().toArray(),
+                range.end().toArray(),
+                range.start().toArray()
+            ));
+        }
+
+        /**
+         * Create a new high-major backward iterator from the given {@code range}.
+         *
+         * @param range the iteration range
+         * @return a new high-major backward iterator from the given {@code range}
+         * @param <I> the iterator <em>union</em> type
+         */
+        @SuppressWarnings("unchecked")
+        public static <I extends HighMajor & Backward> I backward(Range range) {
+            return (I)new HighMajorBackward(new LowMajor.IndexState(
+                range.start().toArray(),
+                dec(range.end().toArray()),
+                dec(range.end().toArray())
+            ));
+        }
+    }
 
     private static int[] dec(int[] array) {
         for (int i = 0; i < array.length; ++i) {
             --array[i];
         }
         return array;
-    }
-
-    /**
-     * Iterator, which maps an index array to an arbitrary object.
-     *
-     * @param <T> the mapped type
-     */
-    static final class MappedIterator<T> implements Iterator<T> {
-        private final Iterator<int[]> iterator;
-        private final Function<? super int[], ? extends T> mapper;
-
-        MappedIterator(
-            Iterator<int[]> iterator,
-            Function<? super int[], ? extends T> mapper
-        ) {
-            this.iterator = requireNonNull(iterator);
-            this.mapper = requireNonNull(mapper);
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
-
-        @Override
-        public T next() {
-            return mapper.apply(iterator.next());
-        }
     }
 
 }
