@@ -19,6 +19,14 @@
  */
 package io.jenetics.lattices.structure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -26,48 +34,81 @@ import org.testng.annotations.Test;
  */
 public class IndexIteratorTest {
 
-    @Test
-    public void lowMajorForward() {
-        final var range = Range.of(Extent.of(2, 2, 2));
+    @Test(dataProvider = "ranges")
+    public void iteratorElements(Range range) {
+        assertThat(count(IndexIterator.LowMajor.forward(range)))
+            .isEqualTo(range.extent().elements());
 
-        final var it = IndexIterator.LowMajor.forward(range);
-        while (it.hasNext()) {
-            final var idx = it.next();
-            System.out.println(idx);
-        }
+        assertThat(count(IndexIterator.LowMajor.backward(range)))
+            .isEqualTo(range.extent().elements());
+
+        assertThat(count(IndexIterator.HighMajor.forward(range)))
+            .isEqualTo(range.extent().elements());
+
+        assertThat(count(IndexIterator.HighMajor.backward(range)))
+            .isEqualTo(range.extent().elements());
     }
 
-    @Test
-    public void lowMajorBackward() {
-        final var range = Range.of(Extent.of(2, 2, 2));
-
-        final var it = IndexIterator.LowMajor.backward(range);
+    private static int count(Iterator<Index> it) {
+        final var elements = new HashSet<>();
         while (it.hasNext()) {
-            final var idx = it.next();
-            System.out.println(idx);
+            final var element = it.next();
+            elements.add(element);
         }
+        return elements.size();
     }
 
-    @Test
-    public void highMajorForward() {
-        final var range = Range.of(Extent.of(2, 2, 2));
+    @Test(dataProvider = "ranges")
+    public void iteratorOrder(Range range) {
+        final var lowMajorForward = elements(IndexIterator.LowMajor.forward(range));
+        final var lowMajorBackward = elements(IndexIterator.LowMajor.backward(range));
+        final var highMajorForward = elements(IndexIterator.HighMajor.forward(range));
+        final var highMajorBackward = elements(IndexIterator.HighMajor.backward(range));
 
-        final var it = IndexIterator.HighMajor.forward(range);
-        while (it.hasNext()) {
-            final var idx = it.next();
-            System.out.println(idx);
+        // Check order between forward and backward
+        if (range.extent().elements() > 1) {
+            assertThat(lowMajorForward).isNotEqualTo(lowMajorBackward);
+            assertThat(highMajorForward).isNotEqualTo(highMajorBackward);
         }
+        assertThat(lowMajorForward.reversed()).isEqualTo(lowMajorBackward);
+        assertThat(highMajorForward.reversed()).isEqualTo(highMajorBackward);
     }
 
-    @Test
-    public void highMajorBackward() {
-        final var range = Range.of(Extent.of(2, 2, 2));
-
-        final var it = IndexIterator.HighMajor.backward(range);
+    private static List<Index> elements(Iterator<Index> it) {
+        final var list = new ArrayList<Index>();
         while (it.hasNext()) {
-            final var idx = it.next();
-            System.out.println(idx);
+            list.add(it.next());
         }
+        return list;
+    }
+
+    @DataProvider
+    public Object[][] ranges() {
+        return new Object[][] {
+            { Range.of(Extent.of(1)) },
+            { Range.of(Extent.of(5)) },
+            { Range.of(Extent.of(17)) },
+
+            { Range.of(Extent.of(1, 1)) },
+            { Range.of(Extent.of(5, 6)) },
+            { Range.of(Extent.of(7, 6)) },
+
+            { Range.of(Extent.of(1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7)) },
+            { Range.of(Extent.of(7, 6, 10)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9)) },
+            { Range.of(Extent.of(7, 6, 10, 9)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9, 17)) },
+            { Range.of(Extent.of(7, 6, 10, 9, 3)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9, 17, 11)) },
+            { Range.of(Extent.of(7, 6, 10, 9, 3, 7)) }
+        };
     }
 
 }

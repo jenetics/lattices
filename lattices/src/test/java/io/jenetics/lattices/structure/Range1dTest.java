@@ -26,27 +26,27 @@ import org.testng.annotations.Test;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class RangeTest {
+public class Range1dTest {
 
     @Test
     public void iterator() {
-        final var extent = Extent.of(10, 34, 43, 43);
-        final var range = Range.of(extent);
-        final var it = Range.iterator(range);
+        final var extent = new Extent1d(432);
+        final var range = new Range1d(extent);
+        final var it = range.iterator();
 
         assertThat(it).isInstanceOf(IndexIterator.Forward.class);
         assertThat(it).isInstanceOf(IndexIterator.LowMajor.class);
         while (it.hasNext()) {
-            final Index index = it.next();
+            final Index1d index = it.next();
             assertThat(index).isNotNull();
         }
     }
 
     @Test
     public void indexes() {
-        final var extent = Extent.of(10, 34, 43, 43);
-        final var range = Range.of(extent);
-        assertThat(Range.indexes(range).count()).isEqualTo(extent.elements());
+        final var extent = new Extent1d(432);
+        final var range = new Range1d(extent);
+        assertThat(range.indexes().count()).isEqualTo(extent.elements());
     }
 
 }

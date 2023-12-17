@@ -22,7 +22,6 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -84,6 +83,10 @@ public record Range2d(Index2d start, Extent2d extent)
 
     @Override
     public Iterator<Index2d> iterator() {
+        @SuppressWarnings("unchecked")
+        final var it = (Iterator<Index2d>)(Object)Range.iterator(this);
+        return it;
+        /*
         return new Iterator<>() {
             private final int limit = start.row() + extent.rows();
             private int rowCursor = start.row();
@@ -112,6 +115,7 @@ public record Range2d(Index2d start, Extent2d extent)
                 return new Index2d(nextRow, nextCol);
             }
         };
+         */
     }
 
     /**

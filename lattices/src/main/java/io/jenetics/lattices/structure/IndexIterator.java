@@ -201,7 +201,7 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
 
                     if (state.cursor[i] < state.start[i] && i > 0) {
                         for (int j = state.start.length; --j >= i;) {
-                            state.cursor[j] = state.end[i];
+                            state.cursor[j] = state.end[j];
                         }
                     } else {
                         break;
@@ -222,11 +222,9 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
          *
          * @param range the iteration range
          * @return a new low-major forward iterator from the given {@code range}
-         * @param <I> the iterator <em>union</em> type
          */
-        @SuppressWarnings("unchecked")
-        public static <I extends LowMajor & Forward> I forward(Range range) {
-            return (I)new LowMajorForward(new IndexState(
+        public static LowMajor forward(Range range) {
+            return new LowMajorForward(new IndexState(
                 range.start().toArray(),
                 range.end().toArray(),
                 range.start().toArray()
@@ -238,11 +236,9 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
          *
          * @param range the iteration range
          * @return a new low-major backward iterator from the given {@code range}
-         * @param <I> the iterator <em>union</em> type
          */
-        @SuppressWarnings("unchecked")
-        public static <I extends LowMajor & Backward> I backward(Range range) {
-            return (I)new LowMajorBackward(new IndexState(
+        public static LowMajor backward(Range range) {
+            return new LowMajorBackward(new IndexState(
                 range.start().toArray(),
                 dec(range.end().toArray()),
                 dec(range.end().toArray())
@@ -350,7 +346,7 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
 
                     if (state.cursor[i] < state.start[i] && i < state.start.length - 1) {
                         for (int j = 0; j <= i; ++j) {
-                            state.cursor[j] = state.end[i];
+                            state.cursor[j] = state.end[j];
                         }
                     } else {
                         break;
@@ -371,11 +367,9 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
          *
          * @param range the iteration range
          * @return a new high-major forward iterator from the given {@code range}
-         * @param <I> the iterator <em>union</em> type
          */
-        @SuppressWarnings("unchecked")
-        public static <I extends HighMajor & Forward> I forward(Range range) {
-            return (I)new HighMajorForward(new LowMajor.IndexState(
+        public static HighMajor forward(Range range) {
+            return new HighMajorForward(new LowMajor.IndexState(
                 range.start().toArray(),
                 range.end().toArray(),
                 range.start().toArray()
@@ -387,11 +381,9 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
          *
          * @param range the iteration range
          * @return a new high-major backward iterator from the given {@code range}
-         * @param <I> the iterator <em>union</em> type
          */
-        @SuppressWarnings("unchecked")
-        public static <I extends HighMajor & Backward> I backward(Range range) {
-            return (I)new HighMajorBackward(new LowMajor.IndexState(
+        public static HighMajor backward(Range range) {
+            return new HighMajorBackward(new LowMajor.IndexState(
                 range.start().toArray(),
                 dec(range.end().toArray()),
                 dec(range.end().toArray())

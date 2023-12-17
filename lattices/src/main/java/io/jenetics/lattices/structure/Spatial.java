@@ -51,13 +51,13 @@ public interface Spatial extends Dimensional {
         return result;
     }
 
-    private static int[] revert(int[] array) {
-        for (int i = 0; i < array.length/2; ++i) {
-            var temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
-        return array;
-    }
+//    private static int[] revert(int[] array) {
+//        for (int i = 0; i < array.length/2; ++i) {
+//            var temp = array[i];
+//            array[i] = array[array.length - 1 - i];
+//            array[array.length - 1 - i] = temp;
+//        }
+//        return array;
+//    }
 
 }

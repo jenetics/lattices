@@ -22,7 +22,6 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -91,6 +90,10 @@ public record Range1d(Index1d start, Extent1d extent)
 
     @Override
     public Iterator<Index1d> iterator() {
+        @SuppressWarnings("unchecked")
+        final var it = (Iterator<Index1d>)(Object)Range.iterator(this);
+        return it;
+        /*
         return new Iterator<>() {
             private final int limit = start.value() + extent.elements();
             private int cursor = start.value();
@@ -112,6 +115,7 @@ public record Range1d(Index1d start, Extent1d extent)
                 return new Index1d(next);
             }
         };
+         */
     }
 
     /**
