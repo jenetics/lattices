@@ -129,7 +129,10 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
         private LowMajor() {
         }
 
-        private static final class LowMajorForward extends LowMajor implements Forward {
+        private static final class LowMajorForward
+            extends LowMajor
+            implements Forward
+        {
             private final IndexState state;
 
             private LowMajorForward(IndexState state) {
@@ -170,7 +173,10 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
             }
         }
 
-        private static final class LowMajorBackward extends LowMajor implements Backward {
+        private static final class LowMajorBackward
+            extends LowMajor
+            implements Backward
+        {
             private final IndexState state;
 
             private LowMajorBackward(IndexState state) {
@@ -268,7 +274,10 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
         private HighMajor() {
         }
 
-        private static final class HighMajorForward extends HighMajor implements Forward {
+        private static final class HighMajorForward
+            extends HighMajor
+            implements Forward
+        {
             private final LowMajor.IndexState state;
 
             private HighMajorForward(LowMajor.IndexState state) {
@@ -311,7 +320,10 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
             }
         }
 
-        private static final class HighMajorBackward extends HighMajor implements Backward {
+        private static final class HighMajorBackward
+            extends HighMajor
+            implements Backward
+        {
             private final LowMajor.IndexState state;
 
             private HighMajorBackward(LowMajor.IndexState state) {
