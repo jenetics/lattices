@@ -76,6 +76,10 @@ public interface Stride extends Spatial {
                 return obj instanceof StrideNd str &&
                     Arrays.equals(strides, str.strides);
             }
+            @Override
+            public String toString() {
+                return "Stride" + Arrays.toString(strides);
+            }
         }
 
         return switch (strides.length) {

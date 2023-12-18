@@ -68,7 +68,7 @@ public interface Index extends Spatial {
             }
             @Override
             public String toString() {
-                return Arrays.toString(indexes);
+                return "Index" + Arrays.toString(indexes);
             }
         }
 

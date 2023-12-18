@@ -21,6 +21,7 @@ package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -28,10 +29,8 @@ import org.testng.annotations.Test;
  */
 public class RangeTest {
 
-    @Test
-    public void iterator() {
-        final var extent = Extent.of(10, 34, 43, 43);
-        final var range = Range.of(extent);
+    @Test(dataProvider = "ranges")
+    public void iterator(Range range) {
         final var it = Range.iterator(range);
 
         assertThat(it).isInstanceOf(IndexIterator.Forward.class);
@@ -42,11 +41,39 @@ public class RangeTest {
         }
     }
 
-    @Test
-    public void indexes() {
-        final var extent = Extent.of(10, 34, 43, 43);
-        final var range = Range.of(extent);
-        assertThat(Range.indexes(range).count()).isEqualTo(extent.elements());
+    @Test(dataProvider = "ranges")
+    public void indexes(Range range) {
+        assertThat(Range.indexes(range).count())
+            .isEqualTo(range.extent().elements());
+    }
+
+    @DataProvider
+    public Object[][] ranges() {
+        return new Object[][] {
+            { Range.of(Extent.of(1)) },
+            { Range.of(Extent.of(5)) },
+            { Range.of(Extent.of(17)) },
+
+            { Range.of(Extent.of(1, 1)) },
+            { Range.of(Extent.of(5, 6)) },
+            { Range.of(Extent.of(7, 6)) },
+
+            { Range.of(Extent.of(1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7)) },
+            { Range.of(Extent.of(7, 6, 10)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9)) },
+            { Range.of(Extent.of(7, 6, 10, 9)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9, 17)) },
+            { Range.of(Extent.of(7, 6, 10, 9, 3)) },
+
+            { Range.of(Extent.of(1, 1, 1, 1, 1, 1)) },
+            { Range.of(Extent.of(5, 6, 7, 9, 17, 11)) },
+            { Range.of(Extent.of(7, 6, 10, 9, 3, 7)) }
+        };
     }
 
 }

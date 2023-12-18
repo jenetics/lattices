@@ -77,7 +77,7 @@ public record Layout3d(Index3d start, Stride3d stride, Band band)
                     .formatted(index.length, dimensionality())
             );
         }
-        return offset(index[2], index[1], index[0]);
+        return offset(index[0], index[1], index[2]);
     }
 
     @Override

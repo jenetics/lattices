@@ -135,7 +135,7 @@ public interface Extent extends Spatial {
             }
             @Override
             public String toString() {
-                return "[extent=%s, bands=%d]"
+                return "Extent[extent=%s, bands=%d]"
                     .formatted(Arrays.toString(extents), bands);
             }
         }

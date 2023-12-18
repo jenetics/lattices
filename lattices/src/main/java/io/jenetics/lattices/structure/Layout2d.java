@@ -76,7 +76,7 @@ public record Layout2d(Index2d start, Stride2d stride, Band band)
                     .formatted(index.length, dimensionality())
             );
         }
-        return offset(index[1], index[0]);
+        return offset(index[0], index[1]);
     }
 
     @Override

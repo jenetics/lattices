@@ -98,11 +98,12 @@ public interface Structure extends Dimensional {
         final var strides = new int[extent.dimensionality()];
         for (int i = 0; i < extent.dimensionality() - 1; ++i) {
             int stride = 1;
-            for (int j = extent.dimensionality() - i - 1; --j >= 0;) {
+
+            for (int j = i + 1; j < extent.dimensionality(); ++j) {
                 stride *= extent.at(j);
             }
             stride *= extent.bands();
-            strides[extent.dimensionality() - i - 1] = stride;
+            strides[i] = stride;
         }
         strides[extent.dimensionality() - 1] = extent.bands();
 

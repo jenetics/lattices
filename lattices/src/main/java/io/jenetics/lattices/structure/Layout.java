@@ -64,8 +64,8 @@ public interface Layout extends Dimensional, Mapper {
         }
 
         int offset = band().value();
-        for (int i = start().dimensionality(); --i >= 0;) {
-            offset += start().at(i) + index[i]*start().at(i);
+        for (int i = 0; i < dimensionality(); ++i) {
+            offset += start().at(i) + index[i]*stride().at(i);
         }
         return offset;
     }
@@ -81,7 +81,7 @@ public interface Layout extends Dimensional, Mapper {
         }
 
         final var index = new int[start().dimensionality()];
-        for (int i = start().dimensionality(); --i >= 0;) {
+        for (int i = 0; i < dimensionality(); ++i) {
             index[i] = start/stride().at(i);
             start -= index[i]*stride().at(i);
         }
