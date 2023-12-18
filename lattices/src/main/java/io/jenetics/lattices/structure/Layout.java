@@ -76,11 +76,11 @@ public interface Layout extends Dimensional, Mapper {
         assert dimensionality() == stride().dimensionality();
 
         int start = offset - band().value();
-        for (int i = start().dimensionality(); --i >= 0;) {
+        for (int i = dimensionality(); --i >= 0;) {
             start -= start().at(i);
         }
 
-        final var index = new int[start().dimensionality()];
+        final var index = new int[dimensionality()];
         for (int i = 0; i < dimensionality(); ++i) {
             index[i] = start/stride().at(i);
             start -= index[i]*stride().at(i);

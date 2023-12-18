@@ -19,6 +19,8 @@
  */
 package io.jenetics.lattices.structure;
 
+import static java.lang.System.arraycopy;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -150,21 +152,19 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
                     throw new NoSuchElementException();
                 }
 
-                final var next = state.cursor.clone();
+                final var next = Index.of(state.cursor.clone());
 
                 for (int i = state.start.length; --i >= 0;) {
-                    state.cursor[i] = next[i] + 1;
+                    ++state.cursor[i];
 
                     if (state.cursor[i] >= state.end[i] && i > 0) {
-                        for (int j = state.start.length; --j >= i;) {
-                            state.cursor[j] = state.start[i];
-                        }
+                        arraycopy(state.start, i, state.cursor, i, state.start.length - i);
                     } else {
                         break;
                     }
                 }
 
-                return Index.of(next);
+                return next;
             }
 
             @Override
@@ -194,21 +194,19 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
                     throw new NoSuchElementException();
                 }
 
-                final var next = state.cursor.clone();
+                final var next = Index.of(state.cursor.clone());
 
                 for (int i = state.start.length; --i >= 0;) {
-                    state.cursor[i] = next[i] - 1;
+                    --state.cursor[i];
 
                     if (state.cursor[i] < state.start[i] && i > 0) {
-                        for (int j = state.start.length; --j >= i;) {
-                            state.cursor[j] = state.end[j];
-                        }
+                        arraycopy(state.end, i, state.cursor, i, state.end.length - i);
                     } else {
                         break;
                     }
                 }
 
-                return Index.of(next);
+                return next;
             }
 
             @Override
@@ -293,21 +291,19 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
                     throw new NoSuchElementException();
                 }
 
-                final var next = state.cursor.clone();
+                final var next = Index.of(state.cursor.clone());
 
                 for (int i = 0; i < state.start.length; ++i) {
-                    state.cursor[i] = next[i] + 1;
+                    ++state.cursor[i];
 
                     if (state.cursor[i] >= state.end[i] && i < state.start.length - 1) {
-                        for (int j = 0; j <= i; ++j) {
-                            state.cursor[j] = state.start[i];
-                        }
+                        arraycopy(state.start, 0, state.cursor, 0, i + 1);
                     } else {
                         break;
                     }
                 }
 
-                return Index.of(next);
+                return next;
             }
 
             @Override
@@ -339,21 +335,19 @@ public sealed interface IndexIterator extends Iterator<Index>, Dimensional {
                     throw new NoSuchElementException();
                 }
 
-                final var next = state.cursor.clone();
+                final var next = Index.of(state.cursor.clone());
 
                 for (int i = 0; i < state.start.length; ++i) {
-                    state.cursor[i] = next[i] - 1;
+                    --state.cursor[i];
 
                     if (state.cursor[i] < state.start[i] && i < state.start.length - 1) {
-                        for (int j = 0; j <= i; ++j) {
-                            state.cursor[j] = state.end[j];
-                        }
+                        arraycopy(state.end, 0, state.cursor, 0, i + 1);
                     } else {
                         break;
                     }
                 }
 
-                return Index.of(next);
+                return next;
             }
 
             @Override
