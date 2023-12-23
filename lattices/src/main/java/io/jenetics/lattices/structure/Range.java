@@ -22,6 +22,7 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -62,6 +63,10 @@ public interface Range extends Dimensional {
      * @return the extent of the range
      */
     Extent extent();
+
+    default List<Range> partition(int... parts) {
+        return List.of();
+    }
 
     /**
      * Return an index iterator for the given {@code range}.

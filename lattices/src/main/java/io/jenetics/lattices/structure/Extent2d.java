@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
  * @version 3.0
  */
 public record Extent2d(int rows, int cols, int bands)
-    implements Extent, Iterable<Index2d>
+    implements Extent, IndexIterable<Index2d>
 {
 
     /**
