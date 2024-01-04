@@ -39,6 +39,9 @@ import java.util.function.UnaryOperator;
 
 import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.IndexIterable;
+import io.jenetics.lattices.structure.IndexIterator;
+import io.jenetics.lattices.structure.Range;
 import io.jenetics.lattices.structure.Structure2d;
 
 /**
@@ -333,6 +336,13 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
             checkSameExtent(extent(), source.extent());
 
             final var layout = source.structure().layout();
+            var loop = IndexIterable.of(
+                Range.of(structure().extent()),
+                IndexIterator.LowMajor::forward
+            );
+
+            loop.forEach(index -> set(index.at(0), index.at(1), 4));
+
             forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 

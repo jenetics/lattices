@@ -37,6 +37,8 @@ public interface Mapper extends Dimensional {
      */
     int offset(int... index);
 
+    //int offset(Index index);
+
     /**
      * Calculates the index for the given {@code offset}.
      *

@@ -21,7 +21,6 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -74,7 +73,7 @@ public interface Range extends Dimensional {
      * @param range the range used for creating the iterator
      * @return an index iterator for the given {@code range}
      */
-    static Iterator<Index> iterator(Range range) {
+    static IndexIterator iterator(Range range) {
         return LowMajor.forward(range);
     }
 
@@ -84,7 +83,7 @@ public interface Range extends Dimensional {
      * @param range the range used for creating the iterable
      * @return an index iterable for the given {@code range}
      */
-    static Iterable<Index> iterable(Range range) {
+    static IndexIterable iterable(Range range) {
         requireNonNull(range);
         return () -> iterator(range);
     }

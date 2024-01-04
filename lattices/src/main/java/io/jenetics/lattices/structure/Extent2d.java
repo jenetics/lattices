@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
  * @version 3.0
  */
 public record Extent2d(int rows, int cols, int bands)
-    implements Extent, IndexIterable<Index2d>
+    implements Extent, IndexIterable
 {
 
     /**
@@ -103,7 +103,7 @@ public record Extent2d(int rows, int cols, int bands)
     }
 
     @Override
-    public Iterator<Index2d> iterator() {
+    public IndexIterator iterator() {
         return new Range2d(this).iterator();
     }
 
