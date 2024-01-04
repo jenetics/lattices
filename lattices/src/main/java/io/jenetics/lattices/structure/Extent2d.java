@@ -104,7 +104,8 @@ public record Extent2d(int rows, int cols, int bands)
 
     @Override
     public IndexIterator iterator() {
-        return new Range2d(this).iterator();
+        //return new Range2d(this).iterator();
+        return null;
     }
 
     /**
@@ -112,8 +113,8 @@ public record Extent2d(int rows, int cols, int bands)
      *
      * @return a new index stream from {@code this} extent
      */
-    public Stream<Index2d> indexes() {
-        return StreamSupport.stream(spliterator(), false);
+    public Stream<Index> indexes() {
+        return null; //StreamSupport.stream(spliterator(), false);
     }
 
     @Override
