@@ -1,3 +1,22 @@
+/*
+ * Java Lattice Library (@__identifier__@).
+ * Copyright (c) @__year__@ Franz Wilhelmstötter
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Author:
+ *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
+ */
 package io.jenetics.lattices.structure;
 
 import static java.lang.System.arraycopy;
@@ -7,9 +26,13 @@ import java.util.NoSuchElementException;
 
 /**
  * Low-level functionality for index iteration.
+ *
+ * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+ * @since 3.0
+ * @version 3.0
  */
-public final class IterationSupport {
-    private IterationSupport() {
+public final class IndexIterationSupport {
+    private IndexIterationSupport() {
     }
 
     public static Iterable<int[]> forward(Range range, Precedence precedence) {
@@ -22,7 +45,7 @@ public final class IterationSupport {
     }
 
     public static Iterable<int[]> forward(Range range) {
-        return forward(range, Precedence.regular(range.dimensionality()));
+        return forward(range, Precedence.natural(range.dimensionality()));
     }
 
     public static Iterable<int[]> backward(Range range, Precedence precedence) {
@@ -35,7 +58,7 @@ public final class IterationSupport {
     }
 
     public static Iterable<int[]> backward(Range range) {
-        return backward(range, Precedence.regular(range.dimensionality()));
+        return backward(range, Precedence.natural(range.dimensionality()));
     }
 
 
@@ -51,7 +74,7 @@ public final class IterationSupport {
 
         final int[] next;
 
-        IndexIterator(int[] start, int[] end, int[] order, int[] cursor) {
+        private IndexIterator(int[] start, int[] end, int[] order, int[] cursor) {
             if (start.length != end.length ||
                 start.length != order.length ||
                 start.length != cursor.length)
@@ -69,7 +92,7 @@ public final class IterationSupport {
     }
 
     private static final class Forward extends IndexIterator {
-        Forward(int[] start, int[] end, int[] order, int[] cursor) {
+        private Forward(int[] start, int[] end, int[] order, int[] cursor) {
             super(start, end, order, cursor);
         }
 
@@ -104,7 +127,7 @@ public final class IterationSupport {
     }
 
     private static final class Backward extends IndexIterator {
-        Backward(int[] start, int[] end, int[] order, int[] cursor) {
+        private Backward(int[] start, int[] end, int[] order, int[] cursor) {
             super(start, end, order, cursor);
         }
 

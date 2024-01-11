@@ -30,7 +30,7 @@ public class PrecedenceTest {
 
     @Test
     public void compare() {
-        final var regular = Precedence.regular(4);
+        final var regular = Precedence.natural(4);
         final var reverse = Precedence.reverse(4);
 
         final var a = new int[] {5, 2, 4, 1};

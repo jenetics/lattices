@@ -26,12 +26,12 @@ import org.testng.annotations.Test;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class IterationSupportTest {
+public class IndexIterationSupportTest {
 
     @Test
     public void iterate() {
         final var range = Range.of(Extent.of(3, 3, 3));
-        for (var index : IterationSupport.backward(range)) {
+        for (var index : IndexIterationSupport.backward(range)) {
             System.out.println(Arrays.toString(index));
         }
     }
