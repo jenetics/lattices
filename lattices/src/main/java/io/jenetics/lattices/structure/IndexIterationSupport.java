@@ -26,6 +26,30 @@ import java.util.NoSuchElementException;
 
 /**
  * Low-level functionality for index iteration.
+ * {@snippet lang=java:
+ * final var range = Range.of(Extent.of(2, 2, 2));
+ * final var indexes = IndexIterationSupport.forward(
+ *     range,
+ *     Precedence.natural(range.dimensionality())
+ * );
+ * for (int[] index : indexes) {
+ *     System.out.println(Arrays.toString(index));
+ * }
+ *
+ * // Produced output.
+ * // > [0, 0, 0]
+ * // > [0, 0, 1]
+ * // > [0, 1, 0]
+ * // > [0, 1, 1]
+ * // > [1, 0, 0]
+ * // > [1, 0, 1]
+ * // > [1, 1, 0]
+ * // > [1, 1, 1]
+ * }
+ * The example above shows how to do a <em>forward</em> iteration if an
+ * {@code int[]} array in <em>natural</em> order ({@link Precedence}).
+ *
+ * @see Precedence
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
@@ -44,10 +68,6 @@ public final class IndexIterationSupport {
         );
     }
 
-    public static Iterable<int[]> forward(Range range) {
-        return forward(range, Precedence.natural(range.dimensionality()));
-    }
-
     public static Iterable<int[]> backward(Range range, Precedence precedence) {
         return () -> new Backward(
             range.start().toArray(),
@@ -55,10 +75,6 @@ public final class IndexIterationSupport {
             precedence.order(),
             dec(range.end().toArray())
         );
-    }
-
-    public static Iterable<int[]> backward(Range range) {
-        return backward(range, Precedence.natural(range.dimensionality()));
     }
 
 

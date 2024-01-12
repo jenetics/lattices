@@ -21,6 +21,7 @@ package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -28,16 +29,30 @@ import org.testng.annotations.Test;
  */
 public class PrecedenceTest {
 
-    @Test
-    public void compare() {
-        final var regular = Precedence.natural(4);
-        final var reverse = Precedence.reverse(4);
+    @Test(dataProvider = "values")
+    public void compare(int[] a, int[] b, int result) {
+        final var regular = Precedence.natural(a.length);
 
-        final var a = new int[] {5, 2, 4, 1};
-        final var b = new int[] {4, 3, 4, 1};
+        assertThat(regular.compare(a, b)).isEqualTo(result);
+        assertThat(regular.compare(b, a)).isEqualTo(-result);
+        assertThat(regular.compare(a, a)).isZero();
+        assertThat(regular.compare(b, b)).isZero();
+    }
 
-        assertThat(regular.compare(a, b)).isNegative();
-        assertThat(reverse.compare(a, b)).isPositive();
+    @DataProvider
+    public Object[][] values() {
+        return new Object[][] {
+            {i(1, 2, 3, 4, 5), i(2, 2, 3, 4, 5), -1},
+            {i(1, 2, 3, 4, 5), i(1, 3, 3, 4, 5), -1},
+            {i(1, 2, 3, 4, 5), i(1, 2, 4, 4, 5), -1},
+            {i(1, 2, 3, 4, 5), i(1, 2, 3, 5, 5), -1},
+            {i(1, 2, 3, 4, 5), i(1, 2, 3, 4, 6), -1},
+            {i(1, 2, 3, 40, 5), i(1, 2, 3, 4, 6), -1}
+        };
+    }
+
+    private static int[] i(int... values) {
+        return values;
     }
 
 }
