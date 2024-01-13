@@ -21,6 +21,7 @@ package io.jenetics.lattices.lattice;
 
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
+import io.jenetics.lattices.structure.Loop2d;
 
 /**
  * Defines the looping strategy of a 2-d grid.

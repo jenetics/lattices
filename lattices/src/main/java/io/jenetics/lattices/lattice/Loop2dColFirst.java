@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Loop2d;
 import io.jenetics.lattices.structure.Range2d;
 
 /**

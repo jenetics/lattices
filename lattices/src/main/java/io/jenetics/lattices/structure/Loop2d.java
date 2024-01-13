@@ -19,14 +19,27 @@
  */
 package io.jenetics.lattices.structure;
 
-import java.util.function.Predicate;
+import static java.util.Objects.requireNonNull;
+
+import io.jenetics.lattices.function.Int2Consumer;
+import io.jenetics.lattices.function.Int2Predicate;
+import io.jenetics.lattices.lattice.Loop2dRowFirst;
 
 /**
+ * Looping strategies for 2-d structures.
+ *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loopable<T> extends Iterable<T> {
+public interface Loop2d {
+
+    /**
+     * Performs an action for each position of {@code this} dimension.
+     *
+     * @param action an action to perform on the positions
+     */
+    void forEach(Int2Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -38,7 +51,7 @@ public interface Loopable<T> extends Iterable<T> {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(Predicate<? super T> predicate);
+    boolean anyMatch(Int2Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -53,7 +66,7 @@ public interface Loopable<T> extends Iterable<T> {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(Predicate<? super T> predicate);
+    boolean allMatch(Int2Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -66,6 +79,27 @@ public interface Loopable<T> extends Iterable<T> {
      *         provided predicate, or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(Predicate<? super T> predicate);
+    boolean nonMatch(Int2Predicate predicate);
+
+    /**
+     * Return a <em>default</em> loop implementation with the given {@code range}.
+     *
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
+     */
+    static Loop2d of(Range2d range) {
+        requireNonNull(range);
+        return new Loop2dRowFirst(range);
+    }
+
+    /**
+     * Return a <em>default</em> loop implementation with the given {@code extent}.
+     *
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
+     */
+    static Loop2d of(Extent2d extent) {
+        return of(new Range2d(extent));
+    }
 
 }

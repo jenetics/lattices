@@ -45,5 +45,5 @@ dependencies {
 tasks.test { dependsOn(tasks.compileJmhJava) }
 
 jmh {
-    includes.add(".*IntDoubleMapPerf.*")
+    includes.add(".*IndexCursorPerf.*")
 }

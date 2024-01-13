@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.Loop2d;
 import io.jenetics.lattices.structure.Range2d;
 
 /**
@@ -12,7 +13,7 @@ import io.jenetics.lattices.structure.Range2d;
  *
  * @param range the range which defines the boundaries of the loop
  */
-record Loop2dRowFirst(Range2d range) implements Loop2d {
+public record Loop2dRowFirst(Range2d range) implements Loop2d {
 
     /**
      * Row-major implementation of the loop strategy

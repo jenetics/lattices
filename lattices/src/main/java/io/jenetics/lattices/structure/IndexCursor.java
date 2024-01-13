@@ -24,6 +24,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -66,13 +68,11 @@ public abstract class IndexCursor implements Dimensional {
     final int[] cursor;
 
     private IndexCursor(int[] start, int[] end, int[] order, int[] cursor) {
-        if (start.length != end.length ||
-            start.length != order.length ||
-            start.length != cursor.length ||
-            start.length == 0)
-        {
-            throw new IllegalArgumentException();
-        }
+        assert
+            start.length == end.length &&
+            start.length == order.length &&
+            start.length == cursor.length &&
+            start.length > 0;
 
         this.start = start;
         this.end = end;
@@ -120,12 +120,17 @@ public abstract class IndexCursor implements Dimensional {
      * @throws NullPointerException if one of the parameters is {@code null}
      */
     public static IndexCursor forward(Range range, Precedence precedence) {
-        return new Forward(
-            range.start().toArray(),
-            range.end().toArray(),
-            precedence.order(),
-            range.start().toArray()
-        );
+        final var start = range.start().toArray();
+        final var end = range.end().toArray();
+        final var order = precedence.order();
+        final var cursor =  range.start().toArray();
+
+        return switch (range.dimensionality()) {
+            case 1 -> new Forward1d(start, end, order, cursor);
+            case 2 -> new Forward2d(start, end, order, cursor);
+            case 3 -> new Forward3d(start, end, order, cursor);
+            default -> new Forward(start, end, order, cursor);
+        };
     }
 
     /**
@@ -137,12 +142,23 @@ public abstract class IndexCursor implements Dimensional {
      * @throws NullPointerException if one of the parameters is {@code null}
      */
     public static IndexCursor backward(Range range, Precedence precedence) {
-        return new Backward(
-            range.start().toArray(),
-            dec(range.end().toArray()),
-            precedence.order(),
-            dec(range.end().toArray())
-        );
+        final var start = range.start().toArray();
+        final var end = dec(range.end().toArray());
+        final var order = precedence.order();
+        final var cursor =  dec(range.end().toArray());
+
+        return switch (range.dimensionality()) {
+            case 2 -> new Backward2d(start, end, order, cursor);
+            case 3 -> new Backward3d(start, end, order, cursor);
+            default -> new Backward(start, end, order, cursor);
+        };
+    }
+
+    private static int[] dec(int[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            --array[i];
+        }
+        return array;
     }
 
     /**
@@ -166,6 +182,11 @@ public abstract class IndexCursor implements Dimensional {
     public static Iterable<int[]> iterable(Supplier<IndexCursor> cursor) {
         requireNonNull(cursor);
         return () -> new IndexIterator(cursor.get());
+    }
+
+    public static Loopable<int[]> loopable(Supplier<IndexCursor> cursor) {
+        requireNonNull(cursor);
+        return new IndexLoopable(cursor);
     }
 
     /* *************************************************************************
@@ -196,6 +217,127 @@ public abstract class IndexCursor implements Dimensional {
                         }
                     } else {
                         break;
+                    }
+                }
+            }
+
+            return hasNext;
+        }
+    }
+
+    private static final class Forward1d extends IndexCursor {
+        private final int end0;
+
+        private int cursor0;
+
+        private Forward1d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            end0 = end[0];
+            cursor0 = cursor[0];
+        }
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor0 < end0;
+
+            if (hasNext) {
+                index[0] = cursor0;
+                ++cursor0;
+            }
+
+            return hasNext;
+        }
+    }
+
+    private static final class Forward2d extends IndexCursor {
+        private final int order0;
+        private final int order1;
+        private final int start0;
+        private final int end0;
+        private final int end1;
+
+        private int cursor0;
+        private int cursor1;
+
+        private Forward2d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            order0 = order[0];
+            order1 = order[1];
+            start0 = start[order0];
+            end0 = end[order0];
+            end1 = end[order1];
+            cursor0 = cursor[order0];
+            cursor1 = cursor[order1];
+        }
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor1 < end1;
+
+            if (hasNext) {
+                index[order0] = cursor0;
+                index[order1] = cursor1;
+
+                ++cursor0;
+                if (cursor0 >= end0) {
+                    cursor0 = start0;
+                    ++cursor1;
+                }
+            }
+
+            return hasNext;
+        }
+    }
+
+    private static final class Forward3d extends IndexCursor {
+        private final int order0;
+        private final int order1;
+        private final int order2;
+        private final int start0;
+        private final int start1;
+        private final int end0;
+        private final int end1;
+        private final int end2;
+
+        private int cursor0;
+        private int cursor1;
+        private int cursor2;
+
+        private Forward3d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            order0 = order[0];
+            order1 = order[1];
+            order2 = order[2];
+            start0 = start[order0];
+            start1 = start[order1];
+            end0 = end[order0];
+            end1 = end[order1];
+            end2 = end[order2];
+            cursor0 = cursor[order0];
+            cursor1 = cursor[order1];
+            cursor2 = cursor[order2];
+        }
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor2 < end2;
+
+            if (hasNext) {
+                index[order0] = cursor0;
+                index[order1] = cursor1;
+                index[order2] = cursor2;
+
+                ++cursor0;
+                if (cursor0 >= end0) {
+                    cursor0 = start0;
+                    ++cursor1;
+
+                    if (cursor1 >= end1) {
+                        cursor1 = start1;
+                        ++cursor2;
                     }
                 }
             }
@@ -236,11 +378,125 @@ public abstract class IndexCursor implements Dimensional {
         }
     }
 
-    private static int[] dec(int[] array) {
-        for (int i = 0; i < array.length; ++i) {
-            --array[i];
+    private static final class Backward1d extends IndexCursor {
+        private final int start0;
+
+        private int cursor0;
+
+        private Backward1d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            start0 = start[0];
+            cursor0 = cursor[0];
         }
-        return array;
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor0 >= start0;
+
+            if (hasNext) {
+                index[0] = cursor0;
+                --cursor0;
+            }
+
+            return hasNext;
+        }
+    }
+
+    private static final class Backward2d extends IndexCursor {
+        private final int order0;
+        private final int order1;
+        private final int start0;
+        private final int start1;
+        private final int end0;
+
+        private int cursor0;
+        private int cursor1;
+
+        private Backward2d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            order0 = order[0];
+            order1 = order[1];
+            start0 = start[order0];
+            start1 = start[order1];
+            end0 = end[order0];
+            cursor0 = cursor[order0];
+            cursor1 = cursor[order1];
+        }
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor1 >= start1;
+
+            if (hasNext) {
+                index[order0] = cursor0;
+                index[order1] = cursor1;
+
+                --cursor0;
+                if (cursor0 < start0) {
+                    cursor0 = end0;
+                    --cursor1;
+                }
+            }
+
+            return hasNext;
+        }
+    }
+
+    private static final class Backward3d extends IndexCursor {
+        private final int order0;
+        private final int order1;
+        private final int order2;
+        private final int start0;
+        private final int start1;
+        private final int start2;
+        private final int end0;
+        private final int end1;
+
+        private int cursor0;
+        private int cursor1;
+        private int cursor2;
+
+        private Backward3d(int[] start, int[] end, int[] order, int[] cursor) {
+            super(start, end, order, cursor);
+
+            order0 = order[0];
+            order1 = order[1];
+            order2 = order[2];
+            start0 = start[order0];
+            start1 = start[order1];
+            start2 = start[order2];
+            end0 = end[order0];
+            end1 = end[order1];
+            cursor0 = cursor[order0];
+            cursor1 = cursor[order1];
+            cursor2 = cursor[order2];
+        }
+
+        @Override
+        public boolean next(int[] index) {
+            final boolean hasNext = cursor2 >= start2;
+
+            if (hasNext) {
+                index[order0] = cursor0;
+                index[order1] = cursor1;
+                index[order2] = cursor2;
+
+                --cursor0;
+                if (cursor0 < start0) {
+                    cursor0 = end0;
+                    --cursor1;
+
+                    if (cursor1 < start1) {
+                        cursor1 = end1;
+                        --cursor2;
+                    }
+                }
+            }
+
+            return hasNext;
+        }
     }
 
     private static final class IndexIterator implements Iterator<int[]> {
@@ -272,6 +528,73 @@ public abstract class IndexCursor implements Dimensional {
 
             needNext = true;
             return index.clone();
+        }
+    }
+
+    private static final class IndexLoopable implements Loopable<int[]> {
+
+        private final Supplier<IndexCursor> cursor;
+
+        private IndexLoopable(Supplier<IndexCursor> cursor) {
+            this.cursor = cursor;
+        }
+
+        @Override
+        public Iterator<int[]> iterator() {
+            return new IndexIterator(cursor.get());
+        }
+
+        @Override
+        public void forEach(Consumer<? super int[]> action) {
+            requireNonNull(action);
+
+            final var indexes = cursor.get();
+            final var index = new int[indexes.dimensionality()];
+            while (indexes.next(index)) {
+                action.accept(index);
+            }
+        }
+
+        @Override
+        public boolean anyMatch(Predicate<? super int[]> predicate) {
+            requireNonNull(predicate);
+
+            final var indexes = cursor.get();
+            final var index = new int[indexes.dimensionality()];
+            while (indexes.next(index)) {
+                if (predicate.test(index)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean allMatch(Predicate<? super int[]> predicate) {
+            requireNonNull(predicate);
+
+            final var indexes = cursor.get();
+            final var index = new int[indexes.dimensionality()];
+            while (indexes.next(index)) {
+                if (!predicate.test(index)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean nonMatch(Predicate<? super int[]> predicate) {
+            requireNonNull(predicate);
+
+            final var indexes = cursor.get();
+            final var index = new int[indexes.dimensionality()];
+            while (indexes.next(index)) {
+                if (predicate.test(index)) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

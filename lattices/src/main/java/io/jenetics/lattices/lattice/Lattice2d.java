@@ -39,6 +39,7 @@ import java.util.function.UnaryOperator;
 
 import io.jenetics.lattices.array.BaseArray;
 import io.jenetics.lattices.structure.Extent2d;
+import io.jenetics.lattices.structure.IndexCursor;
 import io.jenetics.lattices.structure.IndexIterable;
 import io.jenetics.lattices.structure.IndexIterator;
 import io.jenetics.lattices.structure.Range;

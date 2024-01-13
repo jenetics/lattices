@@ -1,39 +1,9 @@
-/*
- * Java Lattice Library (@__identifier__@).
- * Copyright (c) @__year__@ Franz Wilhelmstötter
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Author:
- *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
- */
-package io.jenetics.lattices.lattice;
-
-import static java.util.Objects.requireNonNull;
+package io.jenetics.lattices.structure;
 
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
-import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.Range2d;
 
-/**
- * Looping strategies for 2-d structures.
- *
- * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
- */
-public interface Loop2d {
+public interface Loopable2d {
 
     /**
      * Performs an action for each position of {@code this} dimension.
@@ -81,26 +51,5 @@ public interface Loop2d {
      *         {@code false}
      */
     boolean nonMatch(Int2Predicate predicate);
-
-    /**
-     * Return a <em>default</em> loop implementation with the given {@code range}.
-     *
-     * @param range the loop range
-     * @return a default loop for the given {@code range}
-     */
-    static Loop2d of(Range2d range) {
-        requireNonNull(range);
-        return new Loop2dRowFirst(range);
-    }
-
-    /**
-     * Return a <em>default</em> loop implementation with the given {@code extent}.
-     *
-     * @param extent the loop range
-     * @return a default loop for the given {@code extent}
-     */
-    static Loop2d of(Extent2d extent) {
-        return of(new Range2d(extent));
-    }
 
 }
