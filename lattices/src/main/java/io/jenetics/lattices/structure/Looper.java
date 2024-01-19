@@ -461,6 +461,13 @@ abstract sealed class Looper implements Loop1d, Loop2d, Loop3d {
     }
 
     static Looper forward(Range range, Precedence precedence) {
+        if (range.dimensionality() != precedence.length()) {
+            throw new IllegalArgumentException(
+                "Dimensionality of range and precedence doesn't match: %d != %d."
+                    .formatted(range.dimensionality(), precedence.length())
+            );
+        }
+
         return new Looper.Forward(
             precedence.sort(range.start().toArray()),
             precedence.sort(range.end().toArray()),
@@ -469,6 +476,13 @@ abstract sealed class Looper implements Loop1d, Loop2d, Loop3d {
     }
 
     static Looper backward(Range range, Precedence precedence) {
+        if (range.dimensionality() != precedence.length()) {
+            throw new IllegalArgumentException(
+                "Dimensionality of range and precedence doesn't match: %d != %d."
+                    .formatted(range.dimensionality(), precedence.length())
+            );
+        }
+
         return new Looper.Backward(
             precedence.sort(range.start().toArray()),
             precedence.sort(range.end().toArray()),
