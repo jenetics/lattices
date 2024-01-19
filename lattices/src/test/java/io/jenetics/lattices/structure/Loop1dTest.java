@@ -65,7 +65,7 @@ public class Loop1dTest {
     public Object[][] loops() {
         return new Object[][] {
             {
-                Loop1d.of(new Extent1d(11)),
+                Loop1d.forward(new Extent1d(11)),
                 new Result(0, 10, 11)
             }
             /*

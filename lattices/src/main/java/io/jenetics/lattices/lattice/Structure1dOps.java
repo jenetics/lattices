@@ -39,7 +39,7 @@ interface Structure1dOps extends Structured1d, Loopable1d {
      */
     @Override
     default Loop1d loop() {
-        return Loop1d.of(new Range1d(extent()));
+        return Loop1d.forward(new Range1d(extent()));
     }
 
 }

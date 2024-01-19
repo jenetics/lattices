@@ -81,24 +81,45 @@ public interface Loop1d {
     boolean nonMatch(IntPredicate predicate);
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code range}.
+     * Return a <em>forward</em> loop implementation with the given {@code range}.
      *
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop1d of(Range1d range) {
+    static Loop1d forward(Range1d range) {
         requireNonNull(range);
         return Looper.forward(range, Precedence.reverse(range.dimensionality()));
     }
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code extent}.
+     * Return a <em>forward</em> loop implementation with the given {@code extent}.
      *
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop1d of(Extent1d extent) {
-        return of(new Range1d(extent));
+    static Loop1d forward(Extent1d extent) {
+        return forward(new Range1d(extent));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code range}.
+     *
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
+     */
+    static Loop1d backward(Range1d range) {
+        requireNonNull(range);
+        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code extent}.
+     *
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
+     */
+    static Loop1d backward(Extent1d extent) {
+        return forward(new Range1d(extent));
     }
 
 }

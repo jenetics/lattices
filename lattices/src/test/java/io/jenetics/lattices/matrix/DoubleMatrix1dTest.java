@@ -51,7 +51,7 @@ public class DoubleMatrix1dTest {
         if (range != null) {
             final var copy = matrix.view(View1d.of(range)).copy();
 
-            Loop1d.of(range).forEach(i -> {
+            Loop1d.forward(range).forEach(i -> {
                 final var j = i - range.start().value();
 
                 assertThat(copy.get(j))
@@ -84,7 +84,7 @@ public class DoubleMatrix1dTest {
         if (range != null) {
             final var copy = matrix.view(View1d.of(range));
 
-            Loop1d.of(range).forEach(i -> {
+            Loop1d.forward(range).forEach(i -> {
                 final var j = i - range.start().value();
 
                 assertThat(copy.get(j))

@@ -83,7 +83,7 @@ public final class Precedence implements Comparator<int[]> {
     public int compare(int[] a, int[] b) {
         if (a.length != length() || b.length != length()) {
             throw new IllegalArgumentException(
-                "The given arrays must have a length of %d, but got %d and %d"
+                "The given arrays must have a length of %d, but got %d and %d."
                     .formatted(length(), a.length, b.length)
             );
         }

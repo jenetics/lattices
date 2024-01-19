@@ -39,7 +39,7 @@ interface Structure2dOps extends Structured2d, Loopable2d {
      */
     @Override
     default Loop2d loop() {
-        return Loop2d.of(new Range2d(extent()));
+        return Loop2d.forward(new Range2d(extent()));
     }
 
 }

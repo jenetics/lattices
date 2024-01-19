@@ -39,7 +39,7 @@ interface Structure3dOps extends Structured3d, Loopable3d {
      */
     @Override
     default Loop3d loop() {
-        return Loop3d.of(new Range3d(extent()));
+        return Loop3d.forward(new Range3d(extent()));
     }
 
 }

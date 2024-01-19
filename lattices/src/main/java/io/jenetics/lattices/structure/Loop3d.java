@@ -81,24 +81,45 @@ public interface Loop3d {
     boolean nonMatch(Int3Predicate predicate);
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code range}.
+     * Return a <em>forward</em> loop implementation with the given {@code range}.
      *
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop3d of(Range3d range) {
+    static Loop3d forward(Range3d range) {
         requireNonNull(range);
         return Looper.forward(range, Precedence.reverse(range.dimensionality()));
     }
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code extent}.
+     * Return a <em>forward</em> loop implementation with the given {@code extent}.
      *
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop3d of(Extent3d extent) {
-        return of(new Range3d(extent));
+    static Loop3d forward(Extent3d extent) {
+        return forward(new Range3d(extent));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code range}.
+     *
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
+     */
+    static Loop3d backward(Range3d range) {
+        requireNonNull(range);
+        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code extent}.
+     *
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
+     */
+    static Loop3d backward(Extent3d extent) {
+        return forward(new Range3d(extent));
     }
 
 }

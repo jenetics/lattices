@@ -81,24 +81,45 @@ public interface Loop2d {
     boolean nonMatch(Int2Predicate predicate);
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code range}.
+     * Return a <em>forward</em> loop implementation with the given {@code range}.
      *
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop2d of(Range2d range) {
+    static Loop2d forward(Range2d range) {
         requireNonNull(range);
         return Looper.forward(range, Precedence.reverse(range.dimensionality()));
     }
 
     /**
-     * Return a <em>default</em> loop implementation with the given {@code extent}.
+     * Return a <em>forward</em> loop implementation with the given {@code extent}.
      *
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop2d of(Extent2d extent) {
-        return of(new Range2d(extent));
+    static Loop2d forward(Extent2d extent) {
+        return forward(new Range2d(extent));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code range}.
+     *
+     * @param range the loop range
+     * @return a default loop for the given {@code range}
+     */
+    static Loop2d backward(Range2d range) {
+        requireNonNull(range);
+        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
+    }
+
+    /**
+     * Return a <em>backward</em> loop implementation with the given {@code extent}.
+     *
+     * @param extent the loop range
+     * @return a default loop for the given {@code extent}
+     */
+    static Loop2d backward(Extent2d extent) {
+        return forward(new Range2d(extent));
     }
 
 }
