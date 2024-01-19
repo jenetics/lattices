@@ -26,7 +26,7 @@ import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.Int2Consumer;
-import io.jenetics.lattices.function.IntIntToIntFunction;
+import io.jenetics.lattices.function.Int2ToIntFunction;
 
 /**
  * Maps {@code int} keys to {@code int} values.
@@ -248,7 +248,7 @@ public final class IntIntMap extends IntPrimitiveMap {
      *
      * @param fn the update function
      */
-    public void update(IntIntToIntFunction fn) {
+    public void update(Int2ToIntFunction fn) {
         requireNonNull(fn);
 
         if (sentinel.hasEmptyKey) {

@@ -17,24 +17,31 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.function;
+package io.jenetics.lattices.structure;
+
+import java.util.Arrays;
 
 /**
- * Function which takes an (int, int) tuple and returns an int value.
- *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
- * @since 3.0
- * @version 3.0
  */
-@FunctionalInterface
-public interface IntIntToIntFunction {
+record IntArray(int... values) {
 
-    /**
-     * Performs the function.
-     *
-     * @param i the first argument
-     * @param j the second argument
-     * @return the function value
-     */
-    int apply(int i, int j);
+    IntArray {
+        values = values.clone();
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(values);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof IntArray array && Arrays.equals(values, array.values);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(values);
+    }
 }

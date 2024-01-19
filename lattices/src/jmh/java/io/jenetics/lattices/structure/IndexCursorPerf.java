@@ -20,7 +20,7 @@
 package io.jenetics.lattices.structure;
 
 import static io.jenetics.lattices.structure.IndexCursor.forward;
-import static io.jenetics.lattices.structure.IndexCursor.iterable;
+import static io.jenetics.lattices.structure.IndexCursor.loopable;
 import static io.jenetics.lattices.structure.Precedence.natural;
 
 import java.util.concurrent.TimeUnit;
@@ -62,7 +62,7 @@ public class IndexCursorPerf {
     @Benchmark
     public Object iterator() {
         final var range = Range.of(Extent.of(size, size, size));
-        final var indexes = iterable(() -> forward(range, natural(range.dimensionality())));
+        final var indexes = loopable(() -> forward(range, natural(range.dimensionality())));
 
         int result = 0;
         for (var index : indexes) {

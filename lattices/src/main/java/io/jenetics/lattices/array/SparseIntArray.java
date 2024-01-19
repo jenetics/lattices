@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import io.jenetics.lattices.function.Int2Consumer;
-import io.jenetics.lattices.function.IntIntToIntFunction;
+import io.jenetics.lattices.function.Int2ToIntFunction;
 import io.jenetics.lattices.map.IntIntMap;
 
 /**
@@ -67,7 +67,7 @@ public class SparseIntArray implements Array.OfInt, Array.Sparse {
     }
 
     @Override
-    public void update(IntIntToIntFunction fn) {
+    public void update(Int2ToIntFunction fn) {
         values.update(fn);
     }
 

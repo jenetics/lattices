@@ -163,30 +163,29 @@ public abstract class IndexCursor implements Dimensional {
 
     /**
      * Return an index {@link Iterable} from the given {@code cursor} (supplier).
-     * {@snippet lang=java:
-     * final var indexes = IndexCursor.iterable(() ->
+     * {@snippet lang = java:
+     * final var indexes = IndexCursor.loopable(() ->
      *     IndexCursor.forward(
      *         range,
      *         Precedence.natural(range.dimensionality())
      *     )
      * );
+     *
+     * // Classical advanced for-loop.
      * for (int[] index : indexes) {
      *     System.out.println(Arrays.toString(index));
      * }
-     * }
+     *
+     * // Functional loop style.
+     * indexes.forEach(index -> System.out.println(Arrays.toString(index)));
+     *}
      *
      * @param cursor the cursor (supplier) to create the iterable from
      * @return a new iterable from the given {@code cursor}
      * @throws NullPointerException if the given parameter is {@code null}
      */
-    public static Iterable<int[]> iterable(Supplier<IndexCursor> cursor) {
-        requireNonNull(cursor);
-        return () -> new IndexIterator(cursor.get());
-    }
-
     public static Loopable<int[]> loopable(Supplier<IndexCursor> cursor) {
-        requireNonNull(cursor);
-        return new IndexLoopable(cursor);
+        return new IndexLoopable(requireNonNull(cursor));
     }
 
     /* *************************************************************************

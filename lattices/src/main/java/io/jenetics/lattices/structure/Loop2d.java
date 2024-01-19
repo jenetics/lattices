@@ -102,4 +102,33 @@ public interface Loop2d {
         return of(new Range2d(extent));
     }
 
+    static Loop2d forward(Range2d range, Precedence precedence) {
+        final class Loop implements Loop2d {
+            private final ForEach forEach = ForEach.forward(range, precedence);
+
+            @Override
+            public void forEach(Int2Consumer action) {
+                requireNonNull(action);
+                forEach.apply(action);
+            }
+
+            @Override
+            public boolean anyMatch(Int2Predicate predicate) {
+                return false;
+            }
+
+            @Override
+            public boolean allMatch(Int2Predicate predicate) {
+                return false;
+            }
+
+            @Override
+            public boolean nonMatch(Int2Predicate predicate) {
+                return false;
+            }
+        }
+
+        return new Loop();
+    }
+
 }

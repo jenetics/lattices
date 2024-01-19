@@ -71,6 +71,13 @@ public record Range2d(Index2d start, Extent2d extent)
         this(Index2d.ZERO, extent);
     }
 
+    public Index2d end() {
+        return new Index2d(
+            start.row() + extent.rows(),
+            start.col() + extent.cols()
+        );
+    }
+
     /**
      * Return the number of dimensions; always 2.
      *

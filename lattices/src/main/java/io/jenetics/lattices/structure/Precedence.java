@@ -67,6 +67,18 @@ public final class Precedence implements Comparator<int[]> {
         return order.clone();
     }
 
+    int[] sort(int... values) {
+        if (values.length != order.length) {
+            throw new IllegalArgumentException();
+        }
+
+        final var sorted = new int[values.length];
+        for (int i = 0; i < order.length; ++i) {
+            sorted[i] = values[order[i]];
+        }
+        return sorted;
+    }
+
     @Override
     public int compare(int[] a, int[] b) {
         if (a.length != length() || b.length != length()) {

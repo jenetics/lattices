@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.IntDoubleConsumer;
 import io.jenetics.lattices.function.IntDoubleToDoubleFunction;
-import io.jenetics.lattices.function.IntIntToIntFunction;
+import io.jenetics.lattices.function.Int2ToIntFunction;
 import io.jenetics.lattices.function.IntLongConsumer;
 import io.jenetics.lattices.function.IntLongToLongFunction;
 import io.jenetics.lattices.function.IntObjectConsumer;
@@ -185,7 +185,7 @@ public interface BaseArray {
          *
          * @param fn the update function
          */
-        default void update(IntIntToIntFunction fn) {
+        default void update(Int2ToIntFunction fn) {
             for (int i = 0; i < length(); ++i) {
                 set(i, fn.apply(i, get(i)));
             }

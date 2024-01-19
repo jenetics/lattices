@@ -22,9 +22,10 @@ package io.jenetics.lattices.structure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.structure.IndexCursor.backward;
 import static io.jenetics.lattices.structure.IndexCursor.forward;
-import static io.jenetics.lattices.structure.IndexCursor.iterable;
+import static io.jenetics.lattices.structure.IndexCursor.loopable;
 import static io.jenetics.lattices.structure.Precedence.natural;
 import static io.jenetics.lattices.structure.Precedence.reverse;
+import static io.jenetics.lattices.structure.TestRanges.RANGES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,29 +41,10 @@ import org.testng.annotations.Test;
  */
 public class IndexCursorTest {
 
-    record IntArray(int[] values) {
-        IntArray {
-            values = values.clone();
-        }
-        @Override
-        public int hashCode() {
-            return Arrays.hashCode(values);
-        }
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof IntArray array &&
-                Arrays.equals(values, array.values);
-        }
-        @Override
-        public String toString() {
-            return Arrays.toString(values);
-        }
-    }
-
     @Test
     public void simpleIteration() {
         final var range = Range.of(Index.of(1, 2, 3), Extent.of(3, 3, 3));
-        final var indexes = iterable(() -> forward(range, natural(range.dimensionality())));
+        final var indexes = loopable(() -> forward(range, natural(range.dimensionality())));
         for (var index : indexes) {
             System.out.println(Arrays.toString(index));
         }
@@ -70,16 +52,16 @@ public class IndexCursorTest {
 
     @Test(dataProvider = "ranges")
     public void iterableTest(Range range) {
-        var indexes = iterable(() -> forward(range, natural(range.dimensionality())));
+        var indexes = loopable(() -> forward(range, natural(range.dimensionality())));
         assertThat(count(indexes.iterator())).isEqualTo(range.extent().elements());
 
-        indexes = iterable(() -> backward(range, natural(range.dimensionality())));
+        indexes = loopable(() -> backward(range, natural(range.dimensionality())));
         assertThat(count(indexes.iterator())).isEqualTo(range.extent().elements());
 
-        indexes = iterable(() -> forward(range, reverse(range.dimensionality())));
+        indexes = loopable(() -> forward(range, reverse(range.dimensionality())));
         assertThat(count(indexes.iterator())).isEqualTo(range.extent().elements());
 
-        indexes = iterable(() -> backward(range, reverse(range.dimensionality())));
+        indexes = loopable(() -> backward(range, reverse(range.dimensionality())));
         assertThat(count(indexes.iterator())).isEqualTo(range.extent().elements());
     }
 
@@ -93,16 +75,16 @@ public class IndexCursorTest {
 
     @Test(dataProvider = "ranges")
     public void iteratorOrder(Range range) {
-        var indexes = iterable(() -> forward(range, reverse(range.dimensionality())));
+        var indexes = loopable(() -> forward(range, reverse(range.dimensionality())));
         final var lowMajorForward = elements(indexes.iterator());
 
-        indexes = iterable(() -> backward(range, reverse(range.dimensionality())));
+        indexes = loopable(() -> backward(range, reverse(range.dimensionality())));
         final var lowMajorBackward = elements(indexes.iterator());
 
-        indexes = iterable(() -> forward(range, natural(range.dimensionality())));
+        indexes = loopable(() -> forward(range, natural(range.dimensionality())));
         final var highMajorForward = elements(indexes.iterator());
 
-        indexes = iterable(() -> backward(range, natural(range.dimensionality())));
+        indexes = loopable(() -> backward(range, natural(range.dimensionality())));
         final var highMajorBackward = elements(indexes.iterator());
 
         // Check order between forward and backward
@@ -126,49 +108,7 @@ public class IndexCursorTest {
 
     @DataProvider
     public Object[][] ranges() {
-        return new Object[][] {
-            { Range.of(Index.of(0), Extent.of(1)) },
-            { Range.of(Index.of(0), Extent.of(5)) },
-            { Range.of(Index.of(0), Extent.of(17)) },
-            { Range.of(Index.of(1), Extent.of(1)) },
-            { Range.of(Index.of(2), Extent.of(5)) },
-            { Range.of(Index.of(3), Extent.of(17)) },
-
-            { Range.of(Index.of(0, 0), Extent.of(1, 1)) },
-            { Range.of(Index.of(0, 0), Extent.of(5, 6)) },
-            { Range.of(Index.of(0, 0), Extent.of(7, 6)) },
-            { Range.of(Index.of(1, 2), Extent.of(1, 1)) },
-            { Range.of(Index.of(1, 2), Extent.of(5, 6)) },
-            { Range.of(Index.of(1, 2), Extent.of(7, 6)) },
-
-            { Range.of(Index.of(0, 0, 0), Extent.of(1, 1, 1)) },
-            { Range.of(Index.of(0, 0, 0), Extent.of(5, 6, 7)) },
-            { Range.of(Index.of(0, 0, 0), Extent.of(7, 6, 10)) },
-            { Range.of(Index.of(1, 2, 3), Extent.of(1, 1, 1)) },
-            { Range.of(Index.of(1, 2, 3), Extent.of(5, 6, 7)) },
-            { Range.of(Index.of(1, 2, 3), Extent.of(7, 6, 10)) },
-
-            { Range.of(Index.of(0, 0, 0, 0), Extent.of(1, 1, 1, 1)) },
-            { Range.of(Index.of(0, 0, 0, 0), Extent.of(5, 6, 7, 9)) },
-            { Range.of(Index.of(0, 0, 0, 0), Extent.of(7, 6, 10, 9)) },
-            { Range.of(Index.of(1, 2, 3, 4), Extent.of(1, 1, 1, 1)) },
-            { Range.of(Index.of(1, 2, 3, 4), Extent.of(5, 6, 7, 9)) },
-            { Range.of(Index.of(1, 2, 3, 4), Extent.of(7, 6, 10, 9)) },
-
-            { Range.of(Index.of(0, 0, 0, 0, 0), Extent.of(1, 1, 1, 1, 1)) },
-            { Range.of(Index.of(0, 0, 0, 0, 0), Extent.of(5, 6, 7, 9, 17)) },
-            { Range.of(Index.of(0, 0, 0, 0, 0), Extent.of(7, 6, 10, 9, 3)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5), Extent.of(1, 1, 1, 1, 1)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5), Extent.of(5, 6, 7, 9, 17)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5), Extent.of(7, 6, 10, 9, 3)) },
-
-            { Range.of(Index.of(0, 0, 0, 0, 0, 0), Extent.of(1, 1, 1, 1, 1, 1)) },
-            { Range.of(Index.of(0, 0, 0, 0, 0, 0), Extent.of(5, 6, 7, 9, 17, 11)) },
-            { Range.of(Index.of(0, 0, 0, 0, 0, 0), Extent.of(7, 6, 10, 9, 3, 7)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5, 6), Extent.of(1, 1, 1, 1, 1, 1)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5, 6), Extent.of(5, 6, 7, 9, 17, 11)) },
-            { Range.of(Index.of(1, 2, 3, 4, 5, 6), Extent.of(7, 6, 10, 9, 3, 7)) }
-        };
+        return RANGES;
     }
 
 }

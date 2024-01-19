@@ -38,8 +38,9 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.UnaryOperator;
 
 import io.jenetics.lattices.array.BaseArray;
+import io.jenetics.lattices.function.Int2DoubleToDoubleFunction;
+import io.jenetics.lattices.function.Int2ToDoubleFunction;
 import io.jenetics.lattices.structure.Extent2d;
-import io.jenetics.lattices.structure.IndexCursor;
 import io.jenetics.lattices.structure.IndexIterable;
 import io.jenetics.lattices.structure.IndexIterator;
 import io.jenetics.lattices.structure.Range;
@@ -119,6 +120,22 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
             array().set(structure().layout().offset(row, col), value);
         }
 
+        default void map(Int2DoubleToDoubleFunction fn) {
+            for (int r = 0, n = rows(); r < n; ++r) {
+                for (int c = 0, m = cols(); c < m; ++c) {
+                    set(r, c, fn.apply(r, c, get(r, c)));
+                }
+            }
+        }
+
+        default void assign(Int2ToDoubleFunction fn) {
+            for (int r = 0, n = rows(); r < n; ++r) {
+                for (int c = 0, m = cols(); c < m; ++c) {
+                    set(r, c, fn.apply(r, c));
+                }
+            }
+        }
+
         /**
          * Replaces all cell values of the receiver with the values of another
          * matrix. Both matrices must have the same number of rows and columns.
@@ -135,8 +152,12 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
             }
             checkSameExtent(extent(), source.extent());
 
+            final var array = source.array();
             final var layout = source.structure().layout();
-            forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
+            assign((r, c) -> array.get(layout.offset(r, c)));
+
+
+            //forEach((r, c) -> set(r, c, source.array().get(layout.offset(r, c))));
         }
 
         /**
@@ -146,7 +167,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *
          * @implNote
          * The {@code source} are copied and subsequent chances to the {@code source}
-         * are not reflected in the matrix, and vice-versa
+         * are not reflected in the matrix, and vice versa
          *
          * @param source the values to be filled into the cells.
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
