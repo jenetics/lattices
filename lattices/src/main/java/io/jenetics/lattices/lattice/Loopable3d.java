@@ -21,6 +21,7 @@ package io.jenetics.lattices.lattice;
 
 import io.jenetics.lattices.function.Int3Consumer;
 import io.jenetics.lattices.function.Int3Predicate;
+import io.jenetics.lattices.structure.Loop3d;
 
 /**
  * Defines the looping strategy of a 3-d grid.

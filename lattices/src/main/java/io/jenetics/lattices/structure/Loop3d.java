@@ -17,31 +17,28 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-
-import io.jenetics.lattices.structure.Extent1d;
-import io.jenetics.lattices.structure.Range1d;
+import io.jenetics.lattices.function.Int3Consumer;
+import io.jenetics.lattices.function.Int3Predicate;
 
 /**
- * Looping strategies for 1-d structures.
+ * Looping strategies for 3-d structures.
  *
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  * @since 3.0
  * @version 3.0
  */
-public interface Loop1d {
+public interface Loop3d {
 
     /**
      * Performs an action for each position of {@code this} dimension.
      *
      * @param action an action to perform on the positions
      */
-    void forEach(IntConsumer action);
+    void forEach(Int3Consumer action);
 
     /**
      * Returns whether any position of this dimension match the provided
@@ -53,7 +50,7 @@ public interface Loop1d {
      * @return {@code true} if any position of the dimension match the
      *         provided predicate, otherwise {@code false}
      */
-    boolean anyMatch(IntPredicate predicate);
+    boolean anyMatch(Int3Predicate predicate);
 
     /**
      * Returns whether all positions of {@code this} dimension match the
@@ -68,7 +65,7 @@ public interface Loop1d {
      *         the provided {@code predicate} or the dimension is empty,
      *         otherwise {@code false}
      */
-    boolean allMatch(IntPredicate predicate);
+    boolean allMatch(Int3Predicate predicate);
 
     /**
      * Returns whether no position of this dimension match the provided
@@ -78,10 +75,10 @@ public interface Loop1d {
      *
      * @param predicate predicate to apply to positions of this dimension
      * @return {@code true} if either no position of the dimension match the
-     *         provided predicate or the dimension is empty, otherwise
+     *         provided predicate, or the dimension is empty, otherwise
      *         {@code false}
      */
-    boolean nonMatch(IntPredicate predicate);
+    boolean nonMatch(Int3Predicate predicate);
 
     /**
      * Return a <em>default</em> loop implementation with the given {@code range}.
@@ -89,9 +86,9 @@ public interface Loop1d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop1d of(Range1d range) {
+    static Loop3d of(Range3d range) {
         requireNonNull(range);
-        return new Loop1dForward(range);
+        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
     }
 
     /**
@@ -100,8 +97,8 @@ public interface Loop1d {
      * @param extent the loop range
      * @return a default loop for the given {@code extent}
      */
-    static Loop1d of(Extent1d extent) {
-        return of(new Range1d(extent));
+    static Loop3d of(Extent3d extent) {
+        return of(new Range3d(extent));
     }
 
 }

@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.lattice;
 
+import io.jenetics.lattices.structure.Loop3d;
 import io.jenetics.lattices.structure.Range3d;
 
 /**

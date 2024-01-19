@@ -22,6 +22,8 @@ package io.jenetics.lattices.lattice;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
+import io.jenetics.lattices.structure.Loop1d;
+
 /**
  * Defines the looping strategy of a 1-d grid.
  *

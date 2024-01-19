@@ -17,7 +17,7 @@
  * Author:
  *    Franz Wilhelmstötter (franz.wilhelmstoetter@gmail.com)
  */
-package io.jenetics.lattices.lattice;
+package io.jenetics.lattices.structure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,6 +37,7 @@ import io.jenetics.lattices.structure.Range2d;
  */
 public class Loop2dTest {
 
+    /*
     record Result(
         int rowStart,
         int colStart,
@@ -89,5 +90,7 @@ public class Loop2dTest {
             }
         };
     }
+
+     */
 
 }

@@ -19,6 +19,7 @@
  */
 package io.jenetics.lattices.lattice;
 
+import io.jenetics.lattices.structure.Loop1d;
 import io.jenetics.lattices.structure.Range1d;
 
 /**

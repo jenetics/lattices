@@ -23,7 +23,6 @@ import static java.util.Objects.requireNonNull;
 
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
-import io.jenetics.lattices.lattice.Loop2dRowFirst;
 
 /**
  * Looping strategies for 2-d structures.
@@ -89,7 +88,7 @@ public interface Loop2d {
      */
     static Loop2d of(Range2d range) {
         requireNonNull(range);
-        return new Loop2dRowFirst(range);
+        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
     }
 
     /**
@@ -100,35 +99,6 @@ public interface Loop2d {
      */
     static Loop2d of(Extent2d extent) {
         return of(new Range2d(extent));
-    }
-
-    static Loop2d forward(Range2d range, Precedence precedence) {
-        final class Loop implements Loop2d {
-            private final ForEach forEach = ForEach.forward(range, precedence);
-
-            @Override
-            public void forEach(Int2Consumer action) {
-                requireNonNull(action);
-                forEach.apply(action);
-            }
-
-            @Override
-            public boolean anyMatch(Int2Predicate predicate) {
-                return false;
-            }
-
-            @Override
-            public boolean allMatch(Int2Predicate predicate) {
-                return false;
-            }
-
-            @Override
-            public boolean nonMatch(Int2Predicate predicate) {
-                return false;
-            }
-        }
-
-        return new Loop();
     }
 
 }

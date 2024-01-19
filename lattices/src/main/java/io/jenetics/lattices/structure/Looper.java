@@ -26,8 +26,6 @@ import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
 import io.jenetics.lattices.function.Int3Consumer;
 import io.jenetics.lattices.function.Int3Predicate;
-import io.jenetics.lattices.lattice.Loop1d;
-import io.jenetics.lattices.lattice.Loop3d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -460,6 +458,22 @@ abstract sealed class Looper implements Loop1d, Loop2d, Loop3d {
 
             return true;
         }
+    }
+
+    static Looper forward(Range range, Precedence precedence) {
+        return new Looper.Forward(
+            precedence.sort(range.start().toArray()),
+            precedence.sort(range.end().toArray()),
+            precedence.order()
+        );
+    }
+
+    static Looper backward(Range range, Precedence precedence) {
+        return new Looper.Backward(
+            precedence.sort(range.start().toArray()),
+            precedence.sort(range.end().toArray()),
+            precedence.order()
+        );
     }
 
 }
