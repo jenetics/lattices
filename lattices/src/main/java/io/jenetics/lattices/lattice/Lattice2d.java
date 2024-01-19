@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -43,6 +44,9 @@ import io.jenetics.lattices.function.Int2ToDoubleFunction;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.IndexIterable;
 import io.jenetics.lattices.structure.IndexIterator;
+import io.jenetics.lattices.structure.Loop2d;
+import io.jenetics.lattices.structure.Loopable2d;
+import io.jenetics.lattices.structure.Precedence;
 import io.jenetics.lattices.structure.Range;
 import io.jenetics.lattices.structure.Structure2d;
 
@@ -58,6 +62,11 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
+
+    /**
+     * The default loopable strategy used for 2-d lattices.
+     */
+    Loopable2d DEFAULT_LOOPABLE = Loopable2d.forward(Precedence::reverse);
 
     /**
      * Return the lattice structure.
@@ -82,6 +91,10 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
      * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
      */
     void assign(Lattice2d<? extends A> source);
+
+    default Loop2d loop() {
+        return DEFAULT_LOOPABLE.in(extent());
+    }
 
 
     /**
@@ -121,19 +134,25 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
         }
 
         default void map(Int2DoubleToDoubleFunction fn) {
-            for (int r = 0, n = rows(); r < n; ++r) {
-                for (int c = 0, m = cols(); c < m; ++c) {
-                    set(r, c, fn.apply(r, c, get(r, c)));
-                }
-            }
+            loop().forEach((r, c) -> set(r, c, fn.apply(r, c, get(r, c))));
         }
 
         default void assign(Int2ToDoubleFunction fn) {
-            for (int r = 0, n = rows(); r < n; ++r) {
-                for (int c = 0, m = cols(); c < m; ++c) {
-                    set(r, c, fn.apply(r, c));
-                }
-            }
+            loop().forEach((r, c) -> set(r, c, fn.apply(r, c)));
+        }
+
+        default OfDouble<A> apply(
+            Loopable2d loopable,
+            BiConsumer<? super OfDouble<?>, ? super Loop2d> operation
+        ) {
+            operation.accept(this, loopable.in(extent()));
+            return this;
+        }
+
+        default OfDouble<A>
+        apply(BiConsumer<? super OfDouble<?>, ? super Loop2d> operation) {
+            operation.accept(this, loop());
+            return this;
         }
 
         /**
@@ -173,24 +192,27 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @throws IllegalArgumentException if {@code !extent().equals(source.extent())}
          */
         default void assign(double[][] source) {
-            if (source.length != rows()) {
+            if (source.length != structure().extent().rows()) {
                 throw new IllegalArgumentException(
                     "Values must have the same number of rows: " +
                         source.length + " != " + rows()
                 );
             }
 
-            for (int r = rows(); --r >= 0;) {
+            final var rows = structure().extent().rows();
+            final var cols = structure().extent().cols();
+
+            for (int r = rows; --r >= 0;) {
                 final var row = source[r];
 
-                if (row.length != cols()) {
+                if (row.length != cols) {
                     throw new IllegalArgumentException(
                         "Values must have the same number of columns: " +
-                            row.length + " != " + cols()
+                            row.length + " != " + cols
                     );
                 }
 
-                for (int c = cols(); --c >= 0;) {
+                for (int c = cols; --c >= 0;) {
                     set(r, c, row[c]);
                 }
             }
@@ -202,7 +224,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          * @param source the value to be filled into the cells
          */
         default void assign(double source) {
-            forEach((r, c) -> set(r, c, source));
+            loop().forEach((r, c) -> set(r, c, source));
         }
 
         /**
@@ -217,9 +239,9 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          */
         default void assign(OfDouble<?> y, DoubleBinaryOperator f) {
             requireNonNull(f);
-            checkSameExtent(extent(), y.extent());
+            checkSameExtent(structure().extent(), y.structure().extent());
 
-            forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
+            loop().forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c), y.get(r, c))));
         }
 
         /**
@@ -230,7 +252,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          */
         default void assign(DoubleUnaryOperator f) {
             requireNonNull(f);
-            forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
+            loop().forEach((r, c) -> set(r, c, f.applyAsDouble(get(r, c))));
         }
 
         /**
@@ -241,7 +263,7 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
         default void swap(OfDouble<?> other) {
             checkSameExtent(extent(), other.extent());
 
-            forEach((r, c) -> {
+            loop().forEach((r, c) -> {
                 final var tmp = get(r, c);
                 set(r, c, other.get(r, c));
                 other.set(r, c, tmp);
@@ -275,14 +297,17 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
             requireNonNull(reducer);
             requireNonNull(f);
 
-            if (extent().elements() == 0) {
+            if (structure().extent().elements() == 0) {
                 return OptionalDouble.empty();
             }
 
-            double a = f.applyAsDouble(get(rows() - 1, cols() - 1));
+            final var rows = structure().extent().rows();
+            final var cols = structure().extent().cols();
+
+            double a = f.applyAsDouble(get(rows - 1, cols - 1));
             int d = 1;
-            for (int r = rows(); --r >= 0;) {
-                for (int c = cols() - d; --c >= 0;) {
+            for (int r = rows; --r >= 0;) {
+                for (int c = cols - d; --c >= 0;) {
                     a = reducer.applyAsDouble(a, f.applyAsDouble(get(r, c)));
                 }
                 d = 0;
@@ -299,8 +324,8 @@ public interface Lattice2d<A extends BaseArray> extends Structure2dOps {
          *         otherwise
          */
         default boolean equals(OfDouble<?> other) {
-            return extent().equals(other.extent()) &&
-                allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
+            return structure().extent().equals(other.structure().extent()) &&
+                loop().allMatch((r, c) -> Double.compare(get(r, c), other.get(r, c)) == 0);
         }
 
     }

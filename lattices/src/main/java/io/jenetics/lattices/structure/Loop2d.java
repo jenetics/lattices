@@ -21,6 +21,8 @@ package io.jenetics.lattices.structure;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.IntFunction;
+
 import io.jenetics.lattices.function.Int2Consumer;
 import io.jenetics.lattices.function.Int2Predicate;
 
@@ -86,9 +88,9 @@ public interface Loop2d {
      * @param range the loop range
      * @return a default loop for the given {@code range}
      */
-    static Loop2d forward(Range2d range) {
+    static Loop2d forward(Range2d range, IntFunction<Precedence> precedence) {
         requireNonNull(range);
-        return Looper.forward(range, Precedence.reverse(range.dimensionality()));
+        return Looper.forward(range, precedence.apply(range.dimensionality()));
     }
 
     /**
@@ -98,7 +100,7 @@ public interface Loop2d {
      * @return a default loop for the given {@code extent}
      */
     static Loop2d forward(Extent2d extent) {
-        return forward(new Range2d(extent));
+        return forward(new Range2d(extent), Precedence::reverse);
     }
 
     /**
@@ -119,7 +121,7 @@ public interface Loop2d {
      * @return a default loop for the given {@code extent}
      */
     static Loop2d backward(Extent2d extent) {
-        return forward(new Range2d(extent));
+        return forward(new Range2d(extent), Precedence::reverse);
     }
 
 }

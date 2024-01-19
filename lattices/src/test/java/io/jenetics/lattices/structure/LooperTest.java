@@ -22,7 +22,6 @@ package io.jenetics.lattices.structure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.jenetics.lattices.structure.IndexCursor.forward;
 import static io.jenetics.lattices.structure.IndexCursor.loopable;
-import static io.jenetics.lattices.structure.Precedence.natural;
 import static io.jenetics.lattices.structure.Precedence.reverse;
 
 import java.util.ArrayList;
@@ -32,15 +31,15 @@ import org.testng.annotations.Test;
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
  */
-public class ForEachTest {
+public class LooperTest {
 
     @Test
     public void simpleIteration() {
         final var range = Range.of(Index.of(1, 2, 3), Extent.of(2, 2, 2));
 
         final var forEachIndexes = new ArrayList<>();
-        final ForEach forEach = ForEach.forward(range, reverse(range.dimensionality()));
-        forEach.apply((a, b, c) -> {
+        final Looper loop = Looper.forward(range, reverse(range.dimensionality()));
+        loop.forEach((a, b, c) -> {
             forEachIndexes.add(new IntArray(a, b, c));
         });
 
