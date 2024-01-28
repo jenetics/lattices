@@ -20,6 +20,8 @@
 package io.jenetics.lattices.structure;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The extent of 2-d structures.
@@ -33,7 +35,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Extent2d(int rows, int cols, int bands)
-    implements Iterable<Index2d>
+    implements Extent, IndexIterable
 {
 
     /**
@@ -43,7 +45,7 @@ public record Extent2d(int rows, int cols, int bands)
      * @param cols the number of cols
      * @param bands the number of bands
      * @throws IllegalArgumentException if one of the arguments is smaller than
-     *         zero or {@code rows*cols*channels > Integer.MAX_VALUE}
+     *         zero or {@code rows*cols*bands > Integer.MAX_VALUE}
      */
     public Extent2d {
         if (rows < 0 || cols < 0 || bands < 1 ||
@@ -69,27 +71,50 @@ public record Extent2d(int rows, int cols, int bands)
     }
 
     /**
+     * Return the number of dimensions; always 2.
+     *
+     * @return 2
+     */
+    @Override
+    public int dimensionality() {
+        return 2;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> rows;
+            case 1 -> cols;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
+    }
+
+    /**
      * The number of elements.
      *
      * @return the number of elements
      */
+    @Override
     public int elements() {
         return rows*cols;
     }
 
-    /**
-     * Return the length of the array, needed for storing all cells:
-     * {@code size()*channels}.
-     *
-     * @return the array length needed for storing all cells
-     */
-    public int cells() {
-        return elements()*bands;
+    @Override
+    public IndexIterator iterator() {
+        //return new Range2d(this).iterator();
+        return null;
     }
 
-    @Override
-    public Iterator<Index2d> iterator() {
-        return new Index2dIterator(new Range2d(this));
+    /**
+     * Return a new index stream from {@code this} extent.
+     *
+     * @return a new index stream from {@code this} extent
+     */
+    public Stream<Index> indexes() {
+        return null; //StreamSupport.stream(spliterator(), false);
     }
 
     @Override

@@ -19,8 +19,9 @@
  */
 package io.jenetics.lattices.structure;
 
-
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The extent of 1-d structures.
@@ -33,7 +34,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Extent1d(int elements, int bands)
-    implements Comparable<Extent1d>, Iterable<Index1d>
+    implements Extent, Comparable<Extent1d>, Iterable<Index1d>
 {
 
     /**
@@ -65,13 +66,24 @@ public record Extent1d(int elements, int bands)
     }
 
     /**
-     * Return the length of the array, needed for storing all cells:
-     * {@code size()*channels}.
+     * Return the number of dimensions; always 1.
      *
-     * @return the array length needed for storing all cells
+     * @return 1
      */
-    public int cells() {
-        return elements * bands;
+    @Override
+    public int dimensionality() {
+        return 1;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> elements;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
     }
 
     @Override
@@ -86,7 +98,16 @@ public record Extent1d(int elements, int bands)
 
     @Override
     public Iterator<Index1d> iterator() {
-        return new Index1dIterator(new Range1d(this ), Stride1d.ONE) ;
+        return new Range1d(this ).iterator();
+    }
+
+    /**
+     * Return a new index stream from {@code this} extent.
+     *
+     * @return a new index stream from {@code this} extent
+     */
+    public Stream<Index1d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
 }

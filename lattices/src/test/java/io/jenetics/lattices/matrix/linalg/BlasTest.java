@@ -33,18 +33,18 @@ import java.util.stream.Stream;
 import org.assertj.core.util.DoubleComparator;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.DoubleGrid1d;
-import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.matrix.DoubleMatrix1d;
-import io.jenetics.lattices.matrix.DoubleMatrix2d;
-import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.Colts;
 import io.jenetics.lattices.DoubleGrid1dComparator;
 import io.jenetics.lattices.DoubleGrid2dComparator;
 import io.jenetics.lattices.DoubleMatrix1dComparator;
 import io.jenetics.lattices.DoubleMatrix2dComparator;
 import io.jenetics.lattices.MatrixRandom;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.grid.DoubleGrid1d;
+import io.jenetics.lattices.grid.DoubleGrid2d;
+import io.jenetics.lattices.matrix.DoubleMatrix1d;
+import io.jenetics.lattices.matrix.DoubleMatrix2d;
+import io.jenetics.lattices.structure.Extent1d;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>

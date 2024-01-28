@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseIntArray;
-import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseIntArray;
+import io.jenetics.lattices.array.SparseIntArray;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -44,16 +45,25 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record IntGrid1d(Structure1d structure, Array.OfInt array)
-    implements Lattice1d.OfInt<Array.OfInt>, Grid1d<Array.OfInt, IntGrid1d>
+    implements Lattice1d.OfInt<Array.OfInt>, Grid1d.OfInt<IntGrid1d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid1d.Factory<IntGrid1d> DENSE =
+    public static final Lattice1d.Factory<IntGrid1d> DENSE =
         extent -> new IntGrid1d(
             new Structure1d(extent),
-            DenseIntArray.ofSize(extent.cells())
+            DenseIntArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice1d.Factory<IntGrid1d> SPARSE =
+        extent -> new IntGrid1d(
+            new Structure1d(extent),
+            new SparseIntArray(extent.cells())
         );
 
     /**
@@ -65,26 +75,25 @@ public record IntGrid1d(Structure1d structure, Array.OfInt array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public IntGrid1d create(Structure1d structure, Array.OfInt array) {
-        return new IntGrid1d(structure, array);
-    }
-
     /**
-     * Return a 1-d grid view of the given input {@code values}.
+     * Create a 1-d grid view of the given input {@code values}.
      *
      * @implSpec
      * The given input data is <b>not</b> copied, the returned object is a
      * <em>view</em> onto the given input data.
      *
      * @param values the returned grid
-     * @return a grid view of the given input data
      */
-    public static IntGrid1d of(int... values) {
-        return new IntGrid1d(
+    public IntGrid1d(int... values) {
+        this(
             new Structure1d(new Extent1d(values.length)),
             new DenseIntArray(values)
         );
+    }
+
+    @Override
+    public IntGrid1d create(Structure1d structure, Array.OfInt array) {
+        return new IntGrid1d(structure, array);
     }
 
 }

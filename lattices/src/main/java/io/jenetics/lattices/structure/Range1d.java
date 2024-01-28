@@ -22,6 +22,8 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -34,7 +36,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Range1d(Index1d start, Extent1d extent)
-    implements Iterable<Index1d>
+    implements Range, Iterable<Index1d>
 {
 
     public Range1d {
@@ -76,9 +78,53 @@ public record Range1d(Index1d start, Extent1d extent)
         this(Index1d.ZERO, extent);
     }
 
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensionality() {
+        return 1;
+    }
+
     @Override
     public Iterator<Index1d> iterator() {
-        return new Index1dIterator(this, Stride1d.ONE);
+        @SuppressWarnings("unchecked")
+        final var it = (Iterator<Index1d>)(Object)Range.iterator(this);
+        return it;
+        /*
+        return new Iterator<>() {
+            private final int limit = start.value() + extent.elements();
+            private int cursor = start.value();
+
+            @Override
+            public boolean hasNext() {
+                return cursor < limit;
+            }
+
+            @Override
+            public Index1d next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final int next = cursor;
+                cursor = next + 1;
+
+                return new Index1d(next);
+            }
+        };
+         */
+    }
+
+    /**
+     * Return a new index stream from {@code this} range.
+     *
+     * @return a new index stream from {@code this} range
+     */
+    public Stream<Index1d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override

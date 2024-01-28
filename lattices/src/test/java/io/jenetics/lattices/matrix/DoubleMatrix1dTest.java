@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.lattice.Loop1d;
+import io.jenetics.lattices.MatrixRandom;
+import io.jenetics.lattices.structure.Loop1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Index1d;
 import io.jenetics.lattices.structure.Range1d;
 import io.jenetics.lattices.structure.View1d;
-import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -51,7 +51,7 @@ public class DoubleMatrix1dTest {
         if (range != null) {
             final var copy = matrix.view(View1d.of(range)).copy();
 
-            Loop1d.of(range).forEach(i -> {
+            Loop1d.forward(range).forEach(i -> {
                 final var j = i - range.start().value();
 
                 assertThat(copy.get(j))
@@ -84,7 +84,7 @@ public class DoubleMatrix1dTest {
         if (range != null) {
             final var copy = matrix.view(View1d.of(range));
 
-            Loop1d.of(range).forEach(i -> {
+            Loop1d.forward(range).forEach(i -> {
                 final var j = i - range.start().value();
 
                 assertThat(copy.get(j))

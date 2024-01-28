@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseLongArray;
+import io.jenetics.lattices.array.SparseLongArray;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -46,16 +47,25 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record LongGrid3d(Structure3d structure, Array.OfLong array)
-    implements Lattice3d.OfLong<Array.OfLong>, Grid3d<Array.OfLong, LongGrid3d>
+    implements Lattice3d.OfLong<Array.OfLong>, Grid3d.OfLong<LongGrid3d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid3d.Factory<LongGrid3d> DENSE =
+    public static final Lattice3d.Factory<LongGrid3d> DENSE =
         extent -> new LongGrid3d(
             new Structure3d(extent),
-            DenseLongArray.ofSize(extent.cells())
+            DenseLongArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice3d.Factory<LongGrid3d> SPARSE =
+        extent -> new LongGrid3d(
+            new Structure3d(extent),
+            new SparseLongArray(extent.cells())
         );
 
     /**
@@ -65,6 +75,22 @@ public record LongGrid3d(Structure3d structure, Array.OfLong array)
      */
     public LongGrid3d(Lattice3d<? extends Array.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 3-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public LongGrid3d (Extent3d extent, long... values) {
+        this(new Structure3d(extent), new DenseLongArray(values));
     }
 
     @Override
@@ -81,13 +107,6 @@ public record LongGrid3d(Structure3d structure, Array.OfLong array)
      */
     public LongGrid2d project(final Projection3d projection) {
         return new LongGrid2d(projection.apply(structure()), array());
-    }
-
-    public static LongGrid3d of(Extent3d extent, long... values) {
-        return new LongGrid3d(
-            new Structure3d(extent),
-            new DenseLongArray(values)
-        );
     }
 
 }

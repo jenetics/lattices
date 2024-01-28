@@ -19,9 +19,9 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseObjectArray;
-import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseObjectArray;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Structure1d;
 
 /**
@@ -37,7 +37,7 @@ import io.jenetics.lattices.structure.Structure1d;
  * @since 3.0
  */
 public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
-    implements Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d<Array.OfObject<T>, ObjectGrid1d<T>>
+    implements Lattice1d.OfObject<T, Array.OfObject<T>>, Grid1d.OfObject<T, ObjectGrid1d<T>>
 {
 
     /**
@@ -66,7 +66,7 @@ public record ObjectGrid1d<T>(Structure1d structure, Array.OfObject<T> array)
     public static <T> Grid1d.Factory<ObjectGrid1d<T>> dense(T... __) {
         return extent -> new ObjectGrid1d<T>(
             new Structure1d(extent),
-            DenseObjectArray.ofSize(extent.cells(), __)
+            DenseObjectArray.ofLength(extent.cells(), __)
         );
     }
 

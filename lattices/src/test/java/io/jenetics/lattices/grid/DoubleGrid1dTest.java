@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -38,7 +38,7 @@ public class DoubleGrid1dTest {
         final var structure = new Structure1d(extent);
         final var grid = new DoubleGrid1d(
             structure,
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
         grid.assign(87);

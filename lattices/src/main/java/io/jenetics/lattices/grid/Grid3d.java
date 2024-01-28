@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
+import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
 import io.jenetics.lattices.structure.View3d;
 
@@ -70,7 +71,7 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
     default G like(Extent3d extent) {
         return create(
             new Structure3d(extent),
-            array().like(extent.elements())
+            array().like(extent.cells())
         );
     }
 
@@ -102,6 +103,103 @@ public interface Grid3d<A extends Array<A>, G extends Grid3d<A, G>>
      */
     default G view(View3d view) {
         return create(view.apply(structure()), array());
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 3-dimensional lattice.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfDouble<G extends Grid3d.OfDouble<G>>
+        extends Lattice3d.OfDouble<Array.OfDouble>, Grid3d<Array.OfDouble, G>
+    {
+
+        /**
+         * Return a 2-d projection from this 3-d grid. The returned 3-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 2-d projection from this 3-d grid
+         */
+        default Grid2d.OfDouble<?> project(Projection3d projection) {
+            return new DoubleGrid2d(projection.apply(structure()), array());
+        }
+
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 3-dimensional
+     * int grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfInt<G extends Grid3d.OfInt<G>>
+        extends Lattice3d.OfInt<Array.OfInt>, Grid3d<Array.OfInt, G>
+    {
+
+        /**
+         * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 2-d projection from this 3-d grid
+         */
+        default Grid2d.OfInt<?> project(Projection3d projection) {
+            return new IntGrid2d(projection.apply(structure()), array());
+        }
+
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 3-dimensional
+     * long grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfLong<G extends Grid3d.OfLong<G>>
+        extends Lattice3d.OfLong<Array.OfLong>, Grid3d<Array.OfLong, G>
+    {
+        /**
+         * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 2-d projection from this 3-d grid
+         */
+        default Grid2d.OfLong<?> project(Projection3d projection) {
+            return new LongGrid2d(projection.apply(structure()), array());
+        }
+
+    }
+
+    /**
+     * This interface <em>structures</em> the elements into a 3-dimensional
+     * object grid.
+     *
+     * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
+     * @since 3.0
+     * @version 3.0
+     */
+    interface OfObject<T, G extends Grid3d.OfObject<T, G>>
+        extends Lattice3d.OfObject<T, Array.OfObject<T>>, Grid3d<Array.OfObject<T>, G>
+    {
+        /**
+         * Return a 2-d projection from this 3-d grid. The returned 2-d grid is
+         * a view onto this grid {@link #array()}.
+         *
+         * @param projection the projection to apply
+         * @return a 2-d projection from this 3-d matrix
+         */
+        default Grid2d.OfObject<T, ?> project(Projection3d projection) {
+            return new ObjectGrid2d<>(projection.apply(structure()), array());
+        }
+
     }
 
 }

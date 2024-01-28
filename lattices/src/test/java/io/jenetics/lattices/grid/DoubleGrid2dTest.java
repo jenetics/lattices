@@ -24,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
+import io.jenetics.lattices.MatrixRandom;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Structure2d;
-import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -40,7 +40,7 @@ public class DoubleGrid2dTest {
         final var structure = new Structure2d(extent);
         final var grid = new DoubleGrid2d(
             structure,
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
         );
 
         grid.forEach((row, col) -> grid.set(row, col, row*col));

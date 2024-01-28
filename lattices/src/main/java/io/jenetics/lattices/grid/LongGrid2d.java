@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.lattice.Lattice2d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseLongArray;
+import io.jenetics.lattices.array.SparseLongArray;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -46,16 +47,25 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public record LongGrid2d(Structure2d structure, Array.OfLong array)
-    implements Lattice2d.OfLong<Array.OfLong>, Grid2d<Array.OfLong, LongGrid2d>
+    implements Lattice2d.OfLong<Array.OfLong>, Grid2d.OfLong<LongGrid2d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid2d.Factory<LongGrid2d> DENSE =
+    public static final Lattice2d.Factory<LongGrid2d> DENSE =
         extent -> new LongGrid2d(
             new Structure2d(extent),
-            DenseLongArray.ofSize(extent.cells())
+            DenseLongArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice2d.Factory<LongGrid2d> SPARSE =
+        extent -> new LongGrid2d(
+            new Structure2d(extent),
+            new SparseLongArray(extent.cells())
         );
 
     /**
@@ -65,6 +75,32 @@ public record LongGrid2d(Structure2d structure, Array.OfLong array)
      */
     public LongGrid2d(Lattice2d<? extends Array.OfLong> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 2-d grid view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 grid.
+     * <pre>{@code
+     * final var grid = new LongGrid2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public LongGrid2d(Extent2d extent, long... values) {
+        this(new Structure2d(extent), new DenseLongArray(values));
     }
 
     @Override
@@ -82,37 +118,5 @@ public record LongGrid2d(Structure2d structure, Array.OfLong array)
     public LongGrid1d project(Projection2d projection) {
         return new LongGrid1d(projection.apply(structure()), array());
     }
-
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
-     * that the values are given in row-major order. The following example shows
-     * how to create a <em>dense</em> 3x4 grid.
-     * <pre>{@code
-     * final var grid = LongGrid2d.of(
-     *     new Extent2d(3, 4),
-     *     1, 2,  3,  4,
-     *     5, 6,  7,  8,
-     *     9, 10, 11, 12
-     * );
-     * }</pre>
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <b>view</b> onto the given input data.
-     *
-     * @param extent the extent of the given values
-     * @param values the returned grid values
-     * @return a grid view of the given input data
-     * @throws IllegalArgumentException if the desired extent of the grid
-     *         requires fewer elements than given
-     */
-    public static LongGrid2d of(Extent2d extent, long... values) {
-        return new LongGrid2d(
-            new Structure2d(extent),
-            new DenseLongArray(values)
-        );
-    }
-
 
 }

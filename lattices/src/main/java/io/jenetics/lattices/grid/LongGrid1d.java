@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseLongArray;
-import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseLongArray;
+import io.jenetics.lattices.array.SparseLongArray;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -45,16 +46,25 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record LongGrid1d(Structure1d structure, Array.OfLong array)
-    implements Lattice1d.OfLong<Array.OfLong>, Grid1d<Array.OfLong, LongGrid1d>
+    implements Lattice1d.OfLong<Array.OfLong>, Grid1d.OfLong<LongGrid1d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid1d.Factory<LongGrid1d> DENSE =
+    public static final Lattice1d.Factory<LongGrid1d> DENSE =
         extent -> new LongGrid1d(
             new Structure1d(extent),
             new DenseLongArray(new long[extent.elements()])
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice1d.Factory<LongGrid1d> SPARSE =
+        extent -> new LongGrid1d(
+            new Structure1d(extent),
+            new SparseLongArray(extent.cells())
         );
 
     /**
@@ -66,26 +76,25 @@ public record LongGrid1d(Structure1d structure, Array.OfLong array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public LongGrid1d create(Structure1d structure, Array.OfLong array) {
-        return new LongGrid1d(structure, array);
-    }
-
     /**
-     * Return a 1-d grid view of the given input {@code values}.
+     * Create a 1-d grid view of the given input {@code values}.
      *
      * @implSpec
      * The given input data is <b>not</b> copied, the returned object is a
      * <em>view</em> onto the given input data.
      *
      * @param values the returned grid
-     * @return a grid view of the given input data
      */
-    public static LongGrid1d of(long... values) {
-        return new LongGrid1d(
+    public LongGrid1d(long... values) {
+        this(
             new Structure1d(new Extent1d(values.length)),
             new DenseLongArray(values)
         );
+    }
+
+    @Override
+    public LongGrid1d create(Structure1d structure, Array.OfLong array) {
+        return new LongGrid1d(structure, array);
     }
 
 }

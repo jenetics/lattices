@@ -24,7 +24,7 @@ plugins {
     `java-library`
     idea
     `maven-publish`
-    id("me.champeau.jmh")
+    alias(libs.plugins.jmh)
 }
 
 description = "Lattices - Library for multidimensional grids and linear algebra"
@@ -32,16 +32,18 @@ description = "Lattices - Library for multidimensional grids and linear algebra"
 extra["moduleName"] = "io.jenetics.lattices"
 
 dependencies {
-    testImplementation("colt:colt:1.2.0")
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.7.2")
-    testImplementation("org.apache.commons:commons-math3:3.6.1")
-    testImplementation("org.assertj:assertj-core:3.20.2")
-    testImplementation("org.jblas:jblas:1.2.5")
-    testImplementation("org.testng:testng:7.7.1")
+    testImplementation(libs.colt)
+    testImplementation(libs.equalsverifier)
+    testImplementation(libs.commons.math)
+    testImplementation(libs.assertj)
+    testImplementation(libs.jblas)
+    testImplementation(libs.testng)
+
+    jmhImplementation(libs.eclipse.collections)
 }
 
 tasks.test { dependsOn(tasks.compileJmhJava) }
 
 jmh {
-    includes.add(".*DenseDoubleMatrix2dPerf.*")
+    includes.add(".*IndexCursorPerf.*")
 }

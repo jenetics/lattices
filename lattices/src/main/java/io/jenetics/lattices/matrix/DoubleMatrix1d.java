@@ -24,10 +24,11 @@ import static java.lang.Math.min;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
 import io.jenetics.lattices.grid.Grid1d;
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -45,16 +46,25 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
-    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleMatrix1d>
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d.OfDouble<DoubleMatrix1d>
 {
 
     /**
      * Factory for creating dense 1-d double matrices.
      */
-    public static final Grid1d.Factory<DoubleMatrix1d> DENSE =
+    public static final Lattice1d.Factory<DoubleMatrix1d> DENSE =
         extent -> new DoubleMatrix1d(
             new Structure1d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating sparse 1-d double matrices.
+     */
+    public static final Lattice1d.Factory<DoubleMatrix1d> SPARSE =
+        extent -> new DoubleMatrix1d(
+            new Structure1d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -64,6 +74,22 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      */
     public DoubleMatrix1d(Lattice1d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 1-d matrix view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <em>view</em> onto the given input data.
+     *
+     * @param values the returned matrix
+     */
+    public DoubleMatrix1d(double... values) {
+        this(
+            new Structure1d(new Extent1d(values.length)),
+            new DenseDoubleArray(values)
+        );
     }
 
     @Override
@@ -85,7 +111,7 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      * @param length the number of cells to be considered
      * @return the sum of products, start if {@code from < 0 || length < 0}
      */
-    public double dotProduct(DoubleMatrix1d y, int from, int length) {
+    public double dotProduct(Lattice1d.OfDouble<?> y, int from, int length) {
         if (from < 0 || length <= 0) {
             return 0;
         }
@@ -107,7 +133,7 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
      * @param y the second vector
      * @return the sum of products
      */
-    public double dotProduct(DoubleMatrix1d y) {
+    public double dotProduct(Lattice1d.OfDouble<?> y) {
         return dotProduct(y, 0, extent().elements());
     }
 
@@ -176,23 +202,6 @@ public record DoubleMatrix1d(Structure1d structure, Array.OfDouble array)
         return object == this ||
             object instanceof DoubleMatrix1d matrix &&
             equals(matrix);
-    }
-
-    /**
-     * Return a 1-d matrix view of the given input {@code values}.
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <em>view</em> onto the given input data.
-     *
-     * @param values the returned matrix
-     * @return a matrix view of the given input data
-     */
-    public static DoubleMatrix1d of(double... values) {
-        return new DoubleMatrix1d(
-            new Structure1d(new Extent1d(values.length)),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

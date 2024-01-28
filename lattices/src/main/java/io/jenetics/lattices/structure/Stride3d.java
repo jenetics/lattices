@@ -30,7 +30,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Stride3d(int slice, int row, int col) {
+public record Stride3d(int slice, int row, int col) implements Stride {
 
     /**
      * Create a new 3-d stride.
@@ -44,9 +44,33 @@ public record Stride3d(int slice, int row, int col) {
     public Stride3d {
         if (slice < 1 || row < 1 || col < 1) {
             throw new IndexOutOfBoundsException(
-                "Stride must be positive: [%d, %d, %d].".formatted(slice, row, col)
+                "Stride must be positive: [%d, %d, %d]."
+                    .formatted(slice, row, col)
             );
         }
+    }
+
+    /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensionality() {
+        return 3;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> slice;
+            case 1 -> row;
+            case 2 -> col;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
     }
 
 }

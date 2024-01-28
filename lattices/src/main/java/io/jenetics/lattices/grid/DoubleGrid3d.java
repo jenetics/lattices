@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Lattice3d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
+import io.jenetics.lattices.lattice.Lattice3d;
 import io.jenetics.lattices.structure.Extent3d;
 import io.jenetics.lattices.structure.Projection3d;
 import io.jenetics.lattices.structure.Structure3d;
@@ -45,16 +46,25 @@ import io.jenetics.lattices.structure.Structure3d;
  * @version 3.0
  */
 public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
-    implements Lattice3d.OfDouble<Array.OfDouble>, Grid3d<Array.OfDouble, DoubleGrid3d>
+    implements Lattice3d.OfDouble<Array.OfDouble>, Grid3d.OfDouble<DoubleGrid3d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid3d.Factory<DoubleGrid3d> DENSE =
+    public static final Lattice3d.Factory<DoubleGrid3d> DENSE =
         extent -> new DoubleGrid3d(
             new Structure3d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice3d.Factory<DoubleGrid3d> SPARSE =
+        extent -> new DoubleGrid3d(
+            new Structure3d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -64,6 +74,22 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
      */
     public DoubleGrid3d(Lattice3d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 3-d grid view of the given input {@code values}.
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public DoubleGrid3d(Extent3d extent, double... values) {
+        this(new Structure3d(extent), new DenseDoubleArray(values));
     }
 
     @Override
@@ -80,13 +106,6 @@ public record DoubleGrid3d(Structure3d structure, Array.OfDouble array)
      */
     public DoubleGrid2d project(Projection3d projection) {
         return new DoubleGrid2d(projection.apply(structure()), array());
-    }
-
-    public static DoubleGrid3d of(Extent3d extent, double... values) {
-        return new DoubleGrid3d(
-            new Structure3d(extent),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

@@ -28,7 +28,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Stride1d(int value) {
+public record Stride1d(int value) implements Stride {
 
     /**
      * A stride instance with stride one.
@@ -48,6 +48,27 @@ public record Stride1d(int value) {
                 "Stride must be positive: [%d].".formatted(value)
             );
         }
+    }
+
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensionality() {
+        return 1;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> value;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
     }
 
 }

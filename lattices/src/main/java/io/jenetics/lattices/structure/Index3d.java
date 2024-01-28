@@ -30,11 +30,34 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Index3d(int slice, int row, int col) {
+public record Index3d(int slice, int row, int col) implements Index {
 
     /**
      * Index where slice, row and column are zero.
      */
     public static final Index3d ZERO = new Index3d(0, 0, 0);
+
+    /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensionality() {
+        return 3;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> slice;
+            case 1 -> row;
+            case 2 -> col;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
+    }
 
 }

@@ -29,7 +29,7 @@ package io.jenetics.lattices.structure;
  * @since 3.0
  * @version 3.0
  */
-public record Stride2d(int row, int col) {
+public record Stride2d(int row, int col) implements Stride {
 
     /**
      * Create a new 2-stride.
@@ -45,6 +45,28 @@ public record Stride2d(int row, int col) {
                 "Stride must be positive: [%d, %d].".formatted(row, col)
             );
         }
+    }
+
+    /**
+     * Return the number of dimensions; always 2.
+     *
+     * @return 2
+     */
+    @Override
+    public int dimensionality() {
+        return 2;
+    }
+
+    @Override
+    public int at(int dimension) {
+        return switch (dimension) {
+            case 0 -> row;
+            case 1 -> col;
+            default -> throw new IndexOutOfBoundsException(
+                "Dimension out of range [0..%d): %d."
+                    .formatted(dimensionality(), dimension)
+            );
+        };
     }
 
 }

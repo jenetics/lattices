@@ -22,7 +22,7 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Defines the structure of a 1-d matrix, which is defined by the dimension of
+ * Defines the structure of a 1-d lattice, which is defined by the dimension of
  * the matrix and the index order of the underlying element array. The
  * {@link View1d} function1 is used for <em>manipulating</em> this structure
  * object.
@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.0
  * @version 3.0
  */
-public record Structure1d(Extent1d extent, Layout1d layout) {
+public record Structure1d(Extent1d extent, Layout1d layout) implements Structure {
 
     public Structure1d {
         requireNonNull(extent);
@@ -73,6 +73,16 @@ public record Structure1d(Extent1d extent, Layout1d layout) {
      */
     public Structure1d(int extent) {
         this(new Extent1d(extent));
+    }
+
+    /**
+     * Return the number of dimensions; always 1.
+     *
+     * @return 1
+     */
+    @Override
+    public int dimensionality() {
+        return 1;
     }
 
 }

@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 import java.util.random.RandomGeneratorFactory;
 
 /**
- * Encapsulates the context settings which describes certain rules for numerical
+ * Encapsulates the context settings which describe certain rules for numerical
  * operations. The default context is created with an epsilon of 10<sup>-9</sup>.
  * The default value can be changed with defining a Java <em>property</em> on
  * the command line.
@@ -213,7 +213,7 @@ public class NumericalContext {
      * Executes the given {@code task} with the new numerical {@code context}.
      * The numerical context effects only the task execution. The following
      * example shows how to solve a matrix equation with a different numerical
-     * context then the default one.
+     * context than the default one.
      *
      * <pre>{@code
      * final DoubleMatrix2d A = ...;

@@ -27,17 +27,17 @@ import org.assertj.core.data.Percentage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.jenetics.lattices.Colts;
+import io.jenetics.lattices.MatrixRandom;
+import io.jenetics.lattices.array.DenseDoubleArray;
 import io.jenetics.lattices.grid.DoubleGrid2d;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Loop2d;
+import io.jenetics.lattices.structure.Loop2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Index2d;
 import io.jenetics.lattices.structure.Range2d;
 import io.jenetics.lattices.structure.Stride2d;
 import io.jenetics.lattices.structure.Structure2d;
 import io.jenetics.lattices.structure.View2d;
-import io.jenetics.lattices.Colts;
-import io.jenetics.lattices.MatrixRandom;
 
 /**
  * @author <a href="mailto:franz.wilhelmstoetter@gmail.com">Franz Wilhelmstötter</a>
@@ -50,7 +50,7 @@ public class DoubleMatrix2dTest {
         if (range != null) {
             final var copy = matrix.view(View2d.of(range)).copy();
 
-            Loop2d.of(range).forEach((r, c) -> {
+            Loop2d.forward(range).forEach((r, c) -> {
                 final var i = r - range.start().row();
                 final var j = c - range.start().col();
 
@@ -113,7 +113,7 @@ public class DoubleMatrix2dTest {
         if (range != null) {
             final var view = matrix.view(View2d.of(range));
 
-            Loop2d.of(range).forEach((r, c) -> {
+            Loop2d.forward(range).forEach((r, c) -> {
                 final var i = r - range.start().row();
                 final var j = c - range.start().col();
 
@@ -215,7 +215,7 @@ public class DoubleMatrix2dTest {
         assertThat(A.cols()).isEqualTo(matrix.rows());
         assertThat(A.rows()).isEqualTo(matrix.cols());
 
-        Loop2d.of(range).forEach((r, c) ->
+        Loop2d.forward(range).forEach((r, c) ->
             assertThat(matrix.get(r, c)).isEqualTo(A.get(c, r))
         );
     }
@@ -297,7 +297,7 @@ public class DoubleMatrix2dTest {
     private static void assertEquals(final DoubleMatrix2d a, final DoubleMatrix2D coltA) {
         final var epsilon = Percentage.withPercentage(0.01);
 
-        Loop2d.of(new Range2d(a.extent())).forEach((r, c) ->
+        Loop2d.forward(new Range2d(a.extent())).forEach((r, c) ->
             assertThat(a.get(r, c)).isCloseTo(coltA.getQuick(r, c), epsilon)
         );
     }
@@ -326,7 +326,7 @@ public class DoubleMatrix2dTest {
             })
         );
 
-        final var foo = DoubleMatrix2d.of(
+        final var foo = new DoubleMatrix2d(
             new Extent2d(3, 4),
             1, 2,  3,  4,
             5, 6,  7,  8,

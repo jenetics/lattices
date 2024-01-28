@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Lattice1d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
+import io.jenetics.lattices.lattice.Lattice1d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Structure1d;
 
@@ -44,16 +45,25 @@ import io.jenetics.lattices.structure.Structure1d;
  * @version 3.0
  */
 public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
-    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d<Array.OfDouble, DoubleGrid1d>
+    implements Lattice1d.OfDouble<Array.OfDouble>, Grid1d.OfDouble<DoubleGrid1d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid1d.Factory<DoubleGrid1d> DENSE =
+    public static final Lattice1d.Factory<DoubleGrid1d> DENSE =
         extent -> new DoubleGrid1d(
             new Structure1d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice1d.Factory<DoubleGrid1d> SPARSE =
+        extent -> new DoubleGrid1d(
+            new Structure1d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -65,26 +75,25 @@ public record DoubleGrid1d(Structure1d structure, Array.OfDouble array)
         this(lattice.structure(), lattice.array());
     }
 
-    @Override
-    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
-        return new DoubleGrid1d(structure, array);
-    }
-
     /**
-     * Return a 1-d grid view of the given input {@code values}.
+     * Create a 1-d grid view of the given input {@code values}.
      *
      * @implSpec
      * The given input data is <b>not</b> copied, the returned object is a
      * <em>view</em> onto the given input data.
      *
      * @param values the returned grid
-     * @return a grid view of the given input data
      */
-    public static DoubleGrid1d of(double... values) {
-        return new DoubleGrid1d(
+    public DoubleGrid1d(double... values) {
+        this(
             new Structure1d(new Extent1d(values.length)),
             new DenseDoubleArray(values)
         );
+    }
+
+    @Override
+    public DoubleGrid1d create(Structure1d structure, Array.OfDouble array) {
+        return new DoubleGrid1d(structure, array);
     }
 
 }

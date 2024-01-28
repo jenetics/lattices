@@ -22,6 +22,8 @@ package io.jenetics.lattices.structure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a <em>grid</em> range with the given parameters.
@@ -34,7 +36,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 public record Range3d(Index3d start, Extent3d extent)
-    implements Iterable<Index3d>
+    implements Range, Iterable<Index3d>
 {
 
     public Range3d {
@@ -70,9 +72,69 @@ public record Range3d(Index3d start, Extent3d extent)
         this(Index3d.ZERO, extent);
     }
 
+    /**
+     * Return the number of dimensions; always 3.
+     *
+     * @return 3
+     */
+    @Override
+    public int dimensionality() {
+        return 3;
+    }
+
     @Override
     public Iterator<Index3d> iterator() {
-        return new Index3dIterator(this);
+        @SuppressWarnings("unchecked")
+        final var it = (Iterator<Index3d>)(Object)Range.iterator(this);
+        return it;
+        /*
+        return new Iterator<>() {
+            private final int limit = start.slice() + extent.slices();
+            private int sliceCursor = start.slice();
+            private int rowCursor = start.row();
+            private int colCursor = start.col();
+
+            @Override
+            public boolean hasNext() {
+                return sliceCursor < limit;
+            }
+
+            @Override
+            public Index3d next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                final int nextSlice = sliceCursor;
+                final int nextRow = rowCursor;
+                final int nextCol = colCursor;
+
+                colCursor = nextCol + 1;
+                if (colCursor >= start.col() + extent.cols()) {
+                    colCursor = start.col();
+
+                    rowCursor = nextRow + 1;
+                    if (rowCursor >= start.row() + extent.rows()) {
+                        colCursor = start.col();
+                        rowCursor = start.row();
+
+                        sliceCursor = nextSlice + 1;
+                    }
+                }
+
+                return new Index3d(nextSlice, nextRow, nextCol);
+            }
+        };
+         */
+    }
+
+    /**
+     * Return a new index stream from {@code this} range.
+     *
+     * @return a new index stream from {@code this} range
+     */
+    public Stream<Index3d> indexes() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override

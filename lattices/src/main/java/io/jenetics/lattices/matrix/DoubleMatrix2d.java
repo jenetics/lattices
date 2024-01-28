@@ -25,10 +25,12 @@ import static io.jenetics.lattices.matrix.DenseDoubleMatrix2dMult.isDense;
 
 import java.util.function.DoubleUnaryOperator;
 
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
 import io.jenetics.lattices.grid.Grid2d;
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Lattice2d;
+import io.jenetics.lattices.lattice.Lattice1d;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent1d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
@@ -50,16 +52,25 @@ import io.jenetics.lattices.structure.View2d;
  * @version 3.0
  */
 public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
-    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, DoubleMatrix2d>
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d.OfDouble<DoubleMatrix2d>
 {
 
     /**
      * Factory for creating <em>dense</em> 2-d double matrices.
      */
-    public static final Grid2d.Factory<DoubleMatrix2d> DENSE =
+    public static final Lattice2d.Factory<DoubleMatrix2d> DENSE =
         extent -> new DoubleMatrix2d(
             new Structure2d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> 2-d double matrices.
+     */
+    public static final Lattice2d.Factory<DoubleMatrix2d> SPARSE =
+        extent -> new DoubleMatrix2d(
+            new Structure2d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -69,6 +80,32 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      */
     public DoubleMatrix2d(Lattice2d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 2-d matrix view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 matrix.
+     * <pre>{@code
+     * final var matrix = new DoubleMatrix2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned matrix values
+     * @throws IllegalArgumentException if the desired extent of the matrix
+     *         requires fewer elements than given
+     */
+    public DoubleMatrix2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
     }
 
     @Override
@@ -96,6 +133,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d matrix
      */
+    @Override
     public DoubleMatrix1d project(Projection2d projection) {
         return new DoubleMatrix1d(projection.apply(structure()), array());
     }
@@ -157,8 +195,8 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      *         A.rows() > z.size())}.
      */
     public DoubleMatrix1d mult(
-        DoubleMatrix1d y,
-        DoubleMatrix1d z,
+        Lattice1d.OfDouble<? extends Array.OfDouble> y,
+        Lattice1d.OfDouble<? extends Array.OfDouble> z,
         double alpha,
         double beta,
         boolean transposeA
@@ -168,7 +206,7 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         }
         if (z == null) {
             final var struct = new Structure1d(new Extent1d(rows()));
-            final var elems = array().like(struct.extent().elements());
+            final var elems = array().like(struct.extent().cells());
             return mult(y, new DoubleMatrix1d(struct, elems), alpha, beta, false);
         }
 
@@ -186,14 +224,17 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
             z.set(r, Math.fma(alpha, s, beta*z.get(r)));
         }
 
-        return z;
+        return switch (z) {
+            case DoubleMatrix1d m -> m;
+            default -> new DoubleMatrix1d(z);
+        };
     }
 
     /**
      * Linear algebraic matrix-vector multiplication; {@code z = A * y};
      * Equivalent to {@code return A.mult(y, z, 1, 0);}
      *
-     * @see #mult(DoubleMatrix1d, DoubleMatrix1d, double, double, boolean)
+     * @see #mult(Lattice1d.OfDouble, Lattice1d.OfDouble, double, double, boolean)
      *
      * @param y the source vector.
      * @param z the vector where results are to be stored. Set this parameter to
@@ -201,7 +242,10 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
      *          constructed.
      * @return z, or a newly created result matrix
      */
-    public DoubleMatrix1d mult(DoubleMatrix1d y, DoubleMatrix1d z) {
+    public DoubleMatrix1d mult(
+        Lattice1d.OfDouble<? extends Array.OfDouble> y,
+        Lattice1d.OfDouble<? extends Array.OfDouble> z
+    ) {
         return mult(y, z, 1, (z == null ? 1 : 0), false);
     }
 
@@ -339,36 +383,6 @@ public record DoubleMatrix2d(Structure2d structure, Array.OfDouble array)
         return object == this ||
             object instanceof DoubleMatrix2d matrix &&
             equals(matrix);
-    }
-
-    /**
-     * Return a 2-d matrix view of the given input {@code values}. It is assumed
-     * that the values are given in row-major order. The following example shows
-     * how to create a <em>dense</em> 3x4 matrix.
-     * <pre>{@code
-     * final var matrix = DoubleMatrix2d.of(
-     *     new Extent2d(3, 4),
-     *     1, 2,  3,  4,
-     *     5, 6,  7,  8,
-     *     9, 10, 11, 12
-     * );
-     * }</pre>
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <b>view</b> onto the given input data.
-     *
-     * @param extent the extent of the given values
-     * @param values the returned matrix values
-     * @return a matrix view of the given input data
-     * @throws IllegalArgumentException if the desired extent of the matrix
-     *         requires fewer elements than given
-     */
-    public static DoubleMatrix2d of(Extent2d extent, double... values) {
-        return new DoubleMatrix2d(
-            new Structure2d(extent),
-            new DenseDoubleArray(values)
-        );
     }
 
 }

@@ -19,9 +19,10 @@
  */
 package io.jenetics.lattices.grid;
 
-import io.jenetics.lattices.grid.array.Array;
-import io.jenetics.lattices.grid.array.DenseDoubleArray;
-import io.jenetics.lattices.grid.lattice.Lattice2d;
+import io.jenetics.lattices.array.Array;
+import io.jenetics.lattices.array.DenseDoubleArray;
+import io.jenetics.lattices.array.SparseDoubleArray;
+import io.jenetics.lattices.lattice.Lattice2d;
 import io.jenetics.lattices.structure.Extent2d;
 import io.jenetics.lattices.structure.Projection2d;
 import io.jenetics.lattices.structure.Structure2d;
@@ -45,16 +46,25 @@ import io.jenetics.lattices.structure.Structure2d;
  * @version 3.0
  */
 public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
-    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d<Array.OfDouble, DoubleGrid2d>
+    implements Lattice2d.OfDouble<Array.OfDouble>, Grid2d.OfDouble<DoubleGrid2d>
 {
 
     /**
      * Factory for creating <em>dense</em> grid instances.
      */
-    public static final Grid2d.Factory<DoubleGrid2d> DENSE =
+    public static final Lattice2d.Factory<DoubleGrid2d> DENSE =
         extent -> new DoubleGrid2d(
             new Structure2d(extent),
-            DenseDoubleArray.ofSize(extent.cells())
+            DenseDoubleArray.ofLength(extent.cells())
+        );
+
+    /**
+     * Factory for creating <em>sparse</em> grid instances.
+     */
+    public static final Lattice2d.Factory<DoubleGrid2d> SPARSE =
+        extent -> new DoubleGrid2d(
+            new Structure2d(extent),
+            new SparseDoubleArray(extent.cells())
         );
 
     /**
@@ -64,6 +74,32 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      */
     public DoubleGrid2d(Lattice2d<? extends Array.OfDouble> lattice) {
         this(lattice.structure(), lattice.array());
+    }
+
+    /**
+     * Create a 2-d grid view of the given input {@code values}. It is assumed
+     * that the values are given in row-major order. The following example shows
+     * how to create a <em>dense</em> 3x4 grid.
+     * <pre>{@code
+     * final var grid = new DoubleGrid2d(
+     *     new Extent2d(3, 4),
+     *     1, 2,  3,  4,
+     *     5, 6,  7,  8,
+     *     9, 10, 11, 12
+     * );
+     * }</pre>
+     *
+     * @implSpec
+     * The given input data is <b>not</b> copied, the returned object is a
+     * <b>view</b> onto the given input data.
+     *
+     * @param extent the extent of the given values
+     * @param values the returned grid values
+     * @throws IllegalArgumentException if the desired extent of the grid
+     *         requires fewer elements than given
+     */
+    public DoubleGrid2d(Extent2d extent, double... values) {
+        this(new Structure2d(extent), new DenseDoubleArray(values));
     }
 
     @Override
@@ -78,38 +114,9 @@ public record DoubleGrid2d(Structure2d structure, Array.OfDouble array)
      * @param projection the projection to apply
      * @return a 1-d projection from this 2-d grid
      */
+    @Override
     public DoubleGrid1d project(Projection2d projection) {
         return new DoubleGrid1d(projection.apply(structure()), array());
-    }
-
-    /**
-     * Return a 2-d grid view of the given input {@code values}. It is assumed
-     * that the values are given in row-major order. The following example shows
-     * how to create a <em>dense</em> 3x4 grid.
-     * <pre>{@code
-     * final var grid = DoubleGrid2d.of(
-     *     new Extent2d(3, 4),
-     *     1, 2,  3,  4,
-     *     5, 6,  7,  8,
-     *     9, 10, 11, 12
-     * );
-     * }</pre>
-     *
-     * @implSpec
-     * The given input data is <b>not</b> copied, the returned object is a
-     * <b>view</b> onto the given input data.
-     *
-     * @param extent the extent of the given values
-     * @param values the returned grid values
-     * @return a grid view of the given input data
-     * @throws IllegalArgumentException if the desired extent of the grid
-     *         requires fewer elements than given
-     */
-    public static DoubleGrid2d of(Extent2d extent, double... values) {
-        return new DoubleGrid2d(
-            new Structure2d(extent),
-            new DenseDoubleArray(values)
-        );
     }
 
 }
